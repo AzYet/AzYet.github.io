@@ -1,0 +1,565 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>APUE学习笔记之：进程入门 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="重看APUE最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APUE学习笔记之：进程入门">
+<meta property="og:url" content="http://azyet.github.io/2015/04/16/apue-process-sh/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="重看APUE最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="APUE学习笔记之：进程入门">
+<meta name="twitter:description" content="重看APUE最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/16/apue-process-sh/" title="APUE学习笔记之：进程入门" itemprop="url">APUE学习笔记之：进程入门</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-16T17:12:21.000Z" itemprop="datePublished"> 發表於 2015-04-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#重看APUE"><span class="toc-number">1.</span> <span class="toc-text">重看APUE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程"><span class="toc-number">2.</span> <span class="toc-text">进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="重看APUE">重看APUE</h2><p>最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。<br>最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以为看懂”地浏览过去效果要好。<br><a id="more"></a></p>
+<h2 id="进程">进程</h2><p>这一部分内容是我遇到的第一个觉得比较有意思的程序，今天就写这个吧,下面是一个简单shell的程序。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "apue.h"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span>    buff[MAXLINE];</span><br><span class="line">    pid_t   pid;</span><br><span class="line">    <span class="keyword">int</span>     status;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%%"</span>);       <span class="comment">//打印提示符，两个%%</span></span><br><span class="line">    <span class="keyword">while</span>(fgets(buff,MAXLINE,stdin)!=NULL)&#123;     <span class="comment">//遇到 EOF会返回NULL，所以可以ctrl+D退出这个shell</span></span><br><span class="line">        <span class="keyword">if</span>( (pid = fork()) &lt;<span class="number">0</span> )&#123;                <span class="comment">//尝试fork，返回负则表示失败,如果成功则会产生父进程的copy</span></span><br><span class="line">            err_sys(<span class="string">"failed to fork"</span>);                    </span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;                     <span class="comment">//fork对子进程返回0，以下进入子进程</span></span><br><span class="line">            buff[<span class="built_in">strlen</span>(buff)-<span class="number">1</span>]=<span class="number">0</span>;             <span class="comment">//细节，将回车替换为0</span></span><br><span class="line">            execlp(buff, buff, (<span class="keyword">char</span> *) <span class="number">0</span>);     <span class="comment">//execlp会加载指定程序，并覆盖当前进程数据（也就是说没以下两条指令的事了)</span></span><br><span class="line">            err_ret(<span class="string">"could not exec %s"</span>,buff);  <span class="comment">//如果进入到这里，则说明加载程序失败了(数据没被erase)</span></span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">127</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//return to the main process, 既然是开启了新进程，自然会立刻返回主进程，我们要设置等待</span></span><br><span class="line">        pid = waitpid(pid, &amp;status , <span class="number">0</span>);        <span class="comment">//这个status是子进程的返回状态，这时并没有检查该值</span></span><br><span class="line">        <span class="keyword">if</span>(pid &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            err_sys(<span class="string">"wait pid error"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">"%%"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行效果<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:/data/apue.2e/chen$ ./a.out </span><br><span class="line"><span class="tag">%<span class="title">ls</span></span></span><br><span class="line">a.out  apue.h  error.c  mycat.c  mycatstdio.c  myls.c  mysh.c  pid.c</span><br><span class="line"><span class="tag">%<span class="title">pwd</span></span></span><br><span class="line"><span class="comment">/data/apue.2e/chen</span></span><br><span class="line"><span class="tag">%<span class="title">date</span></span></span><br><span class="line">2015年 04月 17日 星期五 02:08:15 CST</span><br><span class="line"><span class="tag">%</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="总结">总结</h2><p>这个程序有两个比较有意思的地方:</p>
+<ol>
+<li><strong>fork一次调用两次返回。以命令执行成功为例，第一个else中返回0给子进程，waitpid时父进程使用的是另一返回值，即子进程ID。</strong></li>
+<li><strong>execlp会加载指定程序并覆盖当前程序栈，所以可以看到execlp之后并没有判断条件就直接可以报错了</strong></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/APUE/">APUE</a><a href="/tags/exec/">exec</a><a href="/tags/fork/">fork</a><a href="/tags/进程/">进程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/04/16/apue-process-sh/" data-title="APUE学习笔记之：进程入门 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/19/easyWay4IPv6toV4World/" title="无需工具、简单设置，校园网免费出访">
+  <strong>上一篇：</strong><br/>
+  <span>
+  无需工具、简单设置，校园网免费出访</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/15/bootRepair/"  title="重装Windows后的Grub修复">
+ <strong>下一篇：</strong><br/> 
+ <span>重装Windows后的Grub修复
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/04/16/apue-process-sh/" data-title="APUE学习笔记之：进程入门" data-url="http://azyet.github.io/2015/04/16/apue-process-sh/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#重看APUE"><span class="toc-number">1.</span> <span class="toc-text">重看APUE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程"><span class="toc-number">2.</span> <span class="toc-text">进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

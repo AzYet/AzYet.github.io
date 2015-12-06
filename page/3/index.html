@@ -1,0 +1,1083 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="足迹">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AzYet's Notebook">
+<meta property="og:url" content="http://azyet.github.io/page/3/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="足迹">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AzYet's Notebook">
+<meta name="twitter:description" content="足迹">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/24/ipv6TunneltoVps/" title="为VPS创建IPv6隧道" itemprop="url">为VPS创建IPv6隧道</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-25T02:30:31.000Z" itemprop="datePublished"> 發表於 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。</p>
+<p>此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。</p>
+<p>为什么要为VPS创建v6隧道，场景有二：1)利用IPv6从绕过校园网计费网关连接到VPS，进而接入世界；2)IPv4用户也能享用IPv6的PT资源。</p>
+<p>先来看建立v6隧道之前的VPS网络情况，顺带一提我给VPS装的CentOS6系统：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr_selector">[root@localhost ~]</span># <span class="tag">ifconfig</span> </span><br><span class="line"><span class="tag">lo</span>        <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:Local</span> <span class="tag">Loopback</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.0</span><span class="class">.0</span><span class="class">.0</span></span><br><span class="line">          <span class="tag">inet6</span> <span class="tag">addr</span>: <span class="pseudo">::1</span>/<span class="tag">128</span> <span class="tag">Scope</span><span class="pseudo">:Host</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">LOOPBACK</span> <span class="tag">RUNNING</span>  <span class="tag">MTU</span><span class="pseudo">:65536</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br><span class="line">          <span class="tag">RX</span> <span class="tag">packets</span><span class="pseudo">:27661</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">frame</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">TX</span> <span class="tag">packets</span><span class="pseudo">:27661</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">carrier</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">collisions</span><span class="pseudo">:0</span> <span class="tag">txqueuelen</span><span class="pseudo">:0</span> </span><br><span class="line">          <span class="tag">RX</span> <span class="tag">bytes</span><span class="pseudo">:81575090</span> (<span class="number">77.7</span> MiB)  <span class="tag">TX</span> <span class="tag">bytes</span><span class="pseudo">:81575090</span> (<span class="number">77.7</span> MiB)</span><br><span class="line"></span><br><span class="line"><span class="tag">venet0</span>    <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:UNSPEC</span>  <span class="tag">HWaddr</span> <span class="tag">00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">P-t-P</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">Bcast</span><span class="pseudo">:0</span><span class="class">.0</span><span class="class">.0</span><span class="class">.0</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.255</span><span class="class">.255</span><span class="class">.255</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">BROADCAST</span> <span class="tag">POINTOPOINT</span> <span class="tag">RUNNING</span> <span class="tag">NOARP</span>  <span class="tag">MTU</span><span class="pseudo">:1500</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br><span class="line">          <span class="tag">RX</span> <span class="tag">packets</span><span class="pseudo">:156925340</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">frame</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">TX</span> <span class="tag">packets</span><span class="pseudo">:298546103</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:11986</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">carrier</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">collisions</span><span class="pseudo">:0</span> <span class="tag">txqueuelen</span><span class="pseudo">:0</span> </span><br><span class="line">          <span class="tag">RX</span> <span class="tag">bytes</span><span class="pseudo">:157483015316</span> (<span class="number">146.6</span> GiB)  <span class="tag">TX</span> <span class="tag">bytes</span><span class="pseudo">:164615931237</span> (<span class="number">153.3</span> GiB)</span><br><span class="line"></span><br><span class="line"><span class="tag">venet0</span><span class="pseudo">:0</span>  <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:UNSPEC</span>  <span class="tag">HWaddr</span> <span class="tag">00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">P-t-P</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">Bcast</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.255</span><span class="class">.255</span><span class="class">.255</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">BROADCAST</span> <span class="tag">POINTOPOINT</span> <span class="tag">RUNNING</span> <span class="tag">NOARP</span>  <span class="tag">MTU</span><span class="pseudo">:1500</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="隧道申请">隧道申请</h2><p>首先你要有一个隧道服务的提供商，推荐<a href="https://www.tunnelbroker.net/">tunnelbroker.net</a>，本人长期使用，比较稳定。<br>注册完成以后，点击<code>Create Regular Tunnel</code>，在<code>IPv4 Endpoint (Your side)</code>填入你的VPS的IPv4地址，在列表中选择一个离你的VPS最近的Server创建隧道，尽量使延迟最小。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/24/ipv6TunneltoVps/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/VPS/">VPS</a><a href="/tags/网络/">网络</a><a href="/tags/隧道/">隧道</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/24/ipv6TunneltoVps/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/ipv6TunneltoVps/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/24/dynamicProgramming2/" title="动态规划实战（二）：背包问题" itemprop="url">动态规划实战（二）：背包问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-24T11:39:57.000Z" itemprop="datePublished"> 發表於 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>上一节中对动态规划有了一个初步的认识，现在通过更多的例子来加深印象，在网上搜索了一下关于动态规划的经典问题，其中第一个就是所谓“背包问题”，事实上它也很类似上一节中的钢条切割，稍有不同。</p>
+<h2 id="背包问题">背包问题</h2><pre><code>给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价值最高。
+</code></pre><p>不同于上节钢条切割的地方是，物品的重量不是连续的，所以事先并不能知道任意物品组成的总重会的集合。</p>
+<p>为了便于编程实现，将问题具体化，比如使用上一节中的数据，重量价格表P：</p>
+<pre><code>重量：  2    3    4    5    6    7    8    9    10
+价值：  5    8    9   10   17   17   20   24    30
+</code></pre><p>但是上一节中我们的输入不能&gt;10，在背包问题中，没有这种限制。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/24/dynamicProgramming2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/动态规划/">动态规划</a><a href="/tags/算法/">算法</a><a href="/tags/背包问题/">背包问题</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/24/dynamicProgramming2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/dynamicProgramming2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/24/dynamicProgramming/" title="动态规划实战（一）：理解再实现" itemprop="url">动态规划实战（一）：理解再实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-24T09:56:10.000Z" itemprop="datePublished"> 發表於 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>动态规划很像分治法，都是通过分解成子问题并结合其结果来得到原问题的解。区别在于法的子问题不相交，但是动态规划的子问题是重叠的。</p>
+<p>动态规划通常用来求解最优解问题，即在问题的众多可行方案中找出一个（不唯一）最优解。</p>
+<h2 id="钢条切割问题">钢条切割问题</h2><p>将长度为n的钢条切割成若干短钢条出售，切割成本不计，钢条长度与售价关系如下表，求一种售价最大的切割法（含不切割情况）。</p>
+<p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1esfj7uxi75j20h402b0sv.jpg" alt=""></p>
+<h2 id="简单的递归求解">简单的递归求解</h2><p>r(n)表示规模为n问题的最优解，p(i)为长i钢条的售价：</p>
+<p><img src="http://ww1.sinaimg.cn/large/55f247cbgw1esfj8c9txlj206a01m0sk.jpg" alt=""></p>
+<p>以下为Python的代码实现：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">p=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">17</span>,<span class="number">17</span>,<span class="number">20</span>,<span class="number">24</span>,<span class="number">30</span>]</span><br><span class="line"></span><br><span class="line">def <span class="function"><span class="title">cut_rod</span><span class="params">(n,p)</span></span>:</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        return <span class="number">0</span></span><br><span class="line">    q=-<span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> <span class="tag">i</span> <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">1</span>,n+<span class="number">1</span>)</span></span>:</span><br><span class="line">        t= <span class="tag">p</span>[i]+<span class="function"><span class="title">cut_rod</span><span class="params">(n-i,p)</span></span></span><br><span class="line">        <span class="keyword">if</span> t &gt; <span class="tag">q</span>:</span><br><span class="line">            q=t</span><br><span class="line">    return <span class="tag">q</span></span><br><span class="line"></span><br><span class="line">print <span class="function"><span class="title">cut_rod</span><span class="params">(<span class="number">9</span>,p)</span></span></span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/24/dynamicProgramming/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/动态规划/">动态规划</a><a href="/tags/算法/">算法</a><a href="/tags/钢条切割/">钢条切割</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/24/dynamicProgramming/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/dynamicProgramming/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/22/theGreatCannon/" title="The Great Cannon" itemprop="url">The Great Cannon</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-22T14:35:05.000Z" itemprop="datePublished"> 發表於 2015-05-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。</p>
+<p>　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。</p>
+<h2 id="利用百度来操纵百万级电脑发起DDoS">利用百度来操纵百万级电脑发起DDoS</h2><p>　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在线镜像站点，GreatFire.org工程成功地解除中国国内对一些站点的屏蔽。</p>
+<p>　　2015-3-18,项目网站报道前一天遭受了大规模的DOS攻击。这篇文档详细介绍了这次有史以来最大规模的应用层了攻击是如何实施的。</p>
+<p>　　攻击者实现了一种隐秘机制来操作大量的合法流量，境内或境外，来发起和操纵DDOS攻击反审查项目CloundFront和GreatFire.org项目。</p>
+<p>文档揭示了</p>
+<pre><code>访问中国数千网站的全球用户被随机收到恶意代码来实施攻击。
+
+当正常用户加载以下百度服务器dup<span class="class">.baidustatic</span><span class="class">.com</span>, ecomcbjs<span class="class">.jomodns</span><span class="class">.com</span>, cbjs<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>, hm<span class="class">.baidu</span><span class="class">.com</span>, eclick<span class="class">.baidu</span><span class="class">.com</span>, pos<span class="class">.baidu</span><span class="class">.com</span>, cpro<span class="class">.baidu</span><span class="class">.com</span> and hm<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>的资源时，恶意代码以JavaScript的形式发送。
+
+百度的分析代码h.js被替换成恶意代码触发攻击。
+
+恶意代码被无差别地发送给全球任何用户，唯一的目的即发起到CloundFront和GreatFire的攻击
+
+百万级的用户成为攻击目标，转而攻击Amazon的基础设施
+
+窜改发生在来自中国以外的流量访问百度服务器时
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/22/theGreatCannon/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/great-cannon/">great cannon</a><a href="/tags/安全/">安全</a><a href="/tags/网络/">网络</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/22/theGreatCannon/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/22/theGreatCannon/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/21/zookeeperNote7/" title="ZooKeeper学习笔记（七）之方法和解决方案" itemprop="url">ZooKeeper学习笔记（七）之方法和解决方案</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-21T09:41:26.000Z" itemprop="datePublished"> 發表於 2015-05-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="用ZooKeeper构建高级结构">用ZooKeeper构建高级结构</h2><p>　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。</p>
+<p>　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。</p>
+<p>　　所有设计遵循实用原则，特别避免了轮询，计时和任何导致“羊群效应”的事情，避免网络暴发和扩容受限。</p>
+<p>　　还有很多可以想象的有用功能这里没有提到，比如可撤销读写优先级锁。列举的功能也可以以其它方式实现，总之本文只是为了刺激大家的想象力。</p>
+<h2 id="原装可用的功能">原装可用的功能</h2><p>　　<code>目录服务</code>和<code>配置</code>是两大ZooKeeper直接提供的功能，另一个是<code>组员管理</code>，组由znode表示，成员由之下的瞬时node表示，掉线的成员被服务检测到后会自动删除。</p>
+<h2 id="Barrier">Barrier</h2><p>　　分布式系统使用Barrier来阻塞一组进程直到某条件满足。ZooKeeper设计一个barrier node来实现Barrier功能。node存在代表Barrier存在。伪代码如下：</p>
+<pre><code>client调用<span class="keyword">exists</span>并设置watch
+
+如果<span class="keyword">exists</span>返回假，barrier不存在，进程继续
+
+如果<span class="keyword">exists</span>返回真，有barrier，进程阻塞等待watch事件
+
+收到watch事件时重新调用<span class="keyword">exists</span>……直到barrier移除
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/21/zookeeperNote7/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/leader-election/">leader election</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/21/zookeeperNote7/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/21/zookeeperNote7/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/zookeeperNote6/" title="ZooKeeper学习笔记（六）之Java例程" itemprop="url">ZooKeeper学习笔记（六）之Java例程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T16:44:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　之前小节中已经写过快速入门的例程，但在进一步了解了更多的概念之后，需要更多的实践来加深印象。总之理论学习和实践穿插进行在我看来是一种不错的方式，重要的是在参照教程编写代码的同时不要只求快速跑通，而应该与之前的看过的原理结合起来。</p>
+<h2 id="一个简单的Watch客户端">一个简单的Watch客户端</h2><p>　　watch一个znode，用启动和停止特定程序的方式作出回应。</p>
+<h3 id="Requirements">Requirements</h3><ol>
+<li>接收的参数:<blockquote>
+<p> 服务地址<br> 需要watch的znode<br> 可执行程序+参数</p>
+</blockquote>
+</li>
+<li>从zonde中取得数据并运行程序</li>
+<li>如果znode变化，用新的数据重启程序</li>
+<li>如果znode删除，终止程序</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/20/zookeeperNote6/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java例程/">Java例程</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/20/zookeeperNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote6/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/zookeeperNote5/" title="ZooKeeper学习笔记（五）之基本概念-续" itemprop="url">ZooKeeper学习笔记（五）之基本概念-续</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T15:33:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="ACL_权限">ACL 权限</h2><p>ZooKeeper支持以下权限：</p>
+<pre><code><span class="operator"><span class="keyword">CREATE</span> : you can <span class="keyword">create</span> a child node
+
+<span class="keyword">READ</span> : you can <span class="keyword">get</span> <span class="keyword">data</span> <span class="keyword">from</span> a node <span class="keyword">and</span> list its children.
+
+<span class="keyword">WRITE</span> : you can <span class="keyword">set</span> <span class="keyword">data</span> <span class="keyword">for</span> a node
+
+<span class="keyword">DELETE</span> : you can <span class="keyword">delete</span> a child node
+
+ADMIN : you can <span class="keyword">set</span> permissions</span>
+</code></pre><p>　　创建和删除被从写的权限中抽离出来以实现更<strong>细粒度</strong>的控制.    </p>
+<p>　　因为ZooKeeper并无znode拥有者的概念，所以设计了<code>ADMIN</code>权限。ZooKeeper默认所有人拥有excute/lookup权限。</p>
+<h2 id="内建ACL策略">内建ACL策略</h2><p>　　ZooKeeeper有以下内建策略。</p>
+<blockquote>
+<p>   world ： 有唯一id，anyone，表示任何人</p>
+<p>   auth ： 不使用id, 代表认证用户</p>
+<p>   digest ： 用 username:password 来生成 MD5 hash作为id. 认证使用username:password形式的明文， ACL中密码采用base64 编码的密码 的SHA1哈希.</p>
+<p>   ip ：使用client IP 作为id. expression为<code>addr/bits</code>形式.</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/20/zookeeperNote5/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ACL/">ACL</a><a href="/tags/Binding/">Binding</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/20/zookeeperNote5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote5/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/zookeeperNote4/" title="ZooKeeper学习笔记（四）之基本概念" itemprop="url">ZooKeeper学习笔记（四）之基本概念</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="ZooKeeper数据模型">ZooKeeper数据模型</h2><p>　　ZooKeeper拥有一个层级结构的目录空间，非常类似分布式文件系统，唯一的不同是每个<strong>node可同时拥有数据和子node</strong>，即文件同时也是目录。<strong>只使用绝对路径</strong>，总的来说任何Unicode字符都可以作为路径的一部分，但遵循以下约束:</p>
+<blockquote>
+<p>null(\u0000)不能用在path中，因为在C中会导致Binding异常。</p>
+<p>以下字符因为不能很好显示或易让人迷惑，不可用在path中：\u0001 - \u0019 and \u007F - \u009F.</p>
+<p>以下字符也不允许使用： \ud800 -uF8FFF, \uFFF0-uFFFF, \uXFFFE - \uXFFFF (X 代表 1 - E), \uF0000 - \uFFFFF.</p>
+<p>.和..可用，但不能单独用来表示node, 亦即/a/b/./c” or “/a/b/../c都是非法的。</p>
+<p>zookeeper是保留字</p>
+</blockquote>
+<h2 id="ZNodes">ZNodes</h2><p>　　ZooKeeper tree中的每一个Node都指向一个znode, znode维护一个状态结构，结构中包含<code>数据/acl  更新的版本号</code>和<code>时间戳</code>，二者共同用于验证缓存和同步更新。znode每更新一次 ，版本号增加，读取数据时会得到相应的<strong>版本号</strong>，更新数据时也应提供版本号，如果版本号不符，操作失败（注：提供强制模式，会忽略版本号）。</p>
+<p>　　Znode是应用访问最多的实体，有以下两个特性值得关注。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/20/zookeeperNote4/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/watch/">watch</a><a href="/tags/znode/">znode</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/20/zookeeperNote4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote4/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/19/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T17:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p> 这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。</p>
+<h2 id="Barrier">Barrier</h2><p> 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.</p>
+<h3 id="测试代码">测试代码</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> ZKBarrier zkBarrier = <span class="keyword">new</span> ZKBarrier(<span class="string">"dell:2181"</span>, <span class="string">"/testRoot3"</span>, <span class="number">3</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//purge the children under testrRoot</span></span><br><span class="line"></span><br><span class="line">zkBarrier.name = args[<span class="number">0</span>];</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Entering the Barrier"</span>);</span><br><span class="line">zkBarrier.enter();</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Work done, leaving"</span>);</span><br><span class="line">zkBarrier.leave();</span><br><span class="line"><span class="keyword">return</span>;</span><br></pre></td></tr></table></figure>
+<p> 大致的流程如下：</p>
+<pre><code>等待其它进程（总数3）就绪
+开始工作
+等待所有Node删除，退出
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/zookeeperNote3/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/19/zookeeperNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote3/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/19/zookeeperNote2/" title="ZooKeeper学习笔记（二）之开发入门" itemprop="url">ZooKeeper学习笔记（二）之开发入门</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T11:32:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>这一节中我们演示用ZooKeeper创建一个简单的barrier和producer-consumer队列。当然首先你必须有至少一个ZooKeeper Server在运行。</p>
+<h2 id="基类">基类</h2><p>barrier和queue都将用到以下共同代码，构造方法会创建到Server的连接。</p>
+<pre><code>注意：官网教程没有提到，这个基类是要实现Watcher接口的，这样<span class="built_in">process</span>方法才能作为回调方法收到消息
+</code></pre><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> ZooKeeper zk = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">Object</span> mutex = <span class="keyword">new</span> <span class="keyword">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">String</span> root;</span><br><span class="line"></span><br><span class="line">    SyncPrimitive(<span class="keyword">String</span> address)</span><br><span class="line">            <span class="keyword">throws</span> KeeperException, IOException &#123;</span><br><span class="line">        <span class="keyword">if</span>(zk == <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Starting ZK:"</span>);</span><br><span class="line">            zk = <span class="keyword">new</span> ZooKeeper(address, <span class="number">3000</span>, (Watcher) <span class="keyword">this</span>);</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Finished starting ZK: "</span> + zk);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> process(WatcherEvent event) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">void</span> process(WatchedEvent watchedEvent) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>WatchEvent包含的信息有：</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WatchedEvent <span class="keyword">state</span>:SyncConnected type:NodeChildrenChanged path:/testRoot1</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/zookeeperNote2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/19/zookeeperNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

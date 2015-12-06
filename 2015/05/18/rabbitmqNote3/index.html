@@ -1,0 +1,616 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>RabbitMQ学习笔记（三）之订阅与发布 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="这节中我们将学习如何将一个消息传递给多个consummer,所谓的发布/订阅模式。
+Exchange　　是时候学习完整的消息模型了。
+　　回顾一下之前的内容：
+
+producer是产生消息的用户进程。
+Queue是存储消息的缓存
+cunsumer是接收消息的用户进程
+
+　　切记消息从来不是直接发送给queue，实质上多数情况下producer甚至不知道有queue的存在。　　消息是直接发送给Exh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ学习笔记（三）之订阅与发布">
+<meta property="og:url" content="http://azyet.github.io/2015/05/18/rabbitmqNote3/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="这节中我们将学习如何将一个消息传递给多个consummer,所谓的发布/订阅模式。
+Exchange　　是时候学习完整的消息模型了。
+　　回顾一下之前的内容：
+
+producer是产生消息的用户进程。
+Queue是存储消息的缓存
+cunsumer是接收消息的用户进程
+
+　　切记消息从来不是直接发送给queue，实质上多数情况下producer甚至不知道有queue的存在。　　消息是直接发送给Exh">
+<meta property="og:image" content="https://www.rabbitmq.com/img/tutorials/exchanges.png">
+<meta property="og:image" content="https://www.rabbitmq.com/img/tutorials/bindings.png">
+<meta property="og:image" content="https://www.rabbitmq.com/img/tutorials/python-three-overall.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ学习笔记（三）之订阅与发布">
+<meta name="twitter:description" content="这节中我们将学习如何将一个消息传递给多个consummer,所谓的发布/订阅模式。
+Exchange　　是时候学习完整的消息模型了。
+　　回顾一下之前的内容：
+
+producer是产生消息的用户进程。
+Queue是存储消息的缓存
+cunsumer是接收消息的用户进程
+
+　　切记消息从来不是直接发送给queue，实质上多数情况下producer甚至不知道有queue的存在。　　消息是直接发送给Exh">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote3/" title="RabbitMQ学习笔记（三）之订阅与发布" itemprop="url">RabbitMQ学习笔记（三）之订阅与发布</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T13:08:47.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange"><span class="toc-number">1.</span> <span class="toc-text">Exchange</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#临时QUEUE"><span class="toc-number">2.</span> <span class="toc-text">临时QUEUE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#绑定"><span class="toc-number">3.</span> <span class="toc-text">绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#汇总"><span class="toc-number">4.</span> <span class="toc-text">汇总</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-number">4.1.</span> <span class="toc-text">代码</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>　　这节中我们将学习如何将一个消息传递给多个consummer,所谓的发布/订阅模式。</p>
+<h2 id="Exchange">Exchange</h2><p>　　是时候学习完整的消息模型了。</p>
+<p>　　回顾一下之前的内容：</p>
+<ol>
+<li>producer是产生消息的用户进程。</li>
+<li>Queue是存储消息的缓存</li>
+<li>cunsumer是接收消息的用户进程</li>
+</ol>
+<p>　　切记消息从来不是直接发送给queue，实质上多数情况下producer甚至不知道有queue的存在。<br>　　消息是直接发送给Exhange的。Exhange很简单，一方面它从producer接收消息并推送到Queue中，至于是将消息推送到特定的Queue，或所有QUEUE,或丢弃，这取决了Exchange的类型。<br><img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt=""></p>
+<p>　　有以下几种Exchange类型：direct，topic，headers和fanout。<br><a id="more"></a><br>　　我们先看Fanout类型，创建如下的Exchange：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.exchangeDeclare(<span class="string">"logs"</span>, <span class="string">"fanout"</span>);</span><br></pre></td></tr></table></figure>
+<p>　　Fanout非常简单，顾名思义就是广播消息给所有它知道的QUEUE。</p>
+<pre><code>要查看<span class="built_in">Server</span>上的Exchange，可以用如下命令：
+</code></pre><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rabbitmqctl list_exchanges</span><br><span class="line">Listing exchanges ...</span><br><span class="line">    direct</span><br><span class="line">amq<span class="class">.direct</span>  direct</span><br><span class="line">amq<span class="class">.fanout</span>  fanout</span><br><span class="line">amq<span class="class">.headers</span> headers</span><br><span class="line">amq<span class="class">.match</span>   headers</span><br><span class="line">amq<span class="class">.rabbitmq</span><span class="class">.log</span>    topic</span><br><span class="line">amq<span class="class">.rabbitmq</span><span class="class">.trace</span>  topic</span><br><span class="line">amq<span class="class">.topic</span>   topic</span><br></pre></td></tr></table></figure>
+<pre><code>其中smq.*和<span class="default"><span class="keyword">default</span> <span class="container">(<span class="title">unnamed</span>)</span>是系统自动创建的。</span>
+
+匿名<span class="type">Exchange</span>
+之前两节我们没有指定<span class="type">Exchange</span>，而是使用了<span class="string">""</span>作为参数值，就是使用了匿名exchange。
+</code></pre><p>　　回顾消息发布的方法：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish(<span class="string">""</span>, <span class="string">"hello"</span>, <span class="literal">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure></p>
+<p>　　第一个参数就是指定Exchange。</p>
+<p>　　现在我们使用具名的Exchange：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish( <span class="string">"logs"</span>, <span class="string">""</span>, <span class="literal">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure></p>
+<h2 id="临时QUEUE">临时QUEUE</h2><p>　　log案例中，需要接收所有的而不是部分消息，且对旧的消息不感兴趣。</p>
+<p>　　首先，每次连接Server我们需要一个新的Queue，因为Queue名不能重复，所以可以让Server来随机命名。</p>
+<p>　　第二，断开连接中Queue应该自动清空。</p>
+<p>　　当使用无参queueDeclare()中，将创建一个非持久的，专属且自动清空的队列，可用getQueue()返回自动生成的队列名：<br><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> queueName = channel.queueDeclare<span class="literal">()</span>.getQueue<span class="literal">()</span>;</span><br></pre></td></tr></table></figure></p>
+<p>　　返回值是类似<code>amq.gen-JzTY20BRgKO-HjmUJj0wLg</code>的随机字串。</p>
+<h2 id="绑定">绑定</h2><p>现在告诉Exchange将消息发送给Queue，此操作为Bind。<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, <span class="string">"logs"</span>, <span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://www.rabbitmq.com/img/tutorials/bindings.png" alt=""></p>
+<pre><code>可用<span class="escape">`r</span>abbitmqctl list_bindings<span class="escape">`命</span>令查看bind.
+</code></pre><h2 id="汇总">汇总</h2><p>producer的改动在于消息发送到了Exchange名，而不是queue名，在此之前须先声明Exchange，否则不存在的Exchange是非法的。<br>consumer的改动在于多了一个Bind操作，而且使用了匿名的Queue。</p>
+<p><img src="https://www.rabbitmq.com/img/tutorials/python-three-overall.png" alt=""><br>如果没有consumer绑定到这个Exchange，消息就会自动丢失，保证了安全性。</p>
+<h3 id="代码">代码</h3><p>producer<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="keyword">import</span> java.util.Timer;</span><br><span class="line"><span class="keyword">import</span> java.util.TimerTask;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * rabbitmq producer</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> class MQSender &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> QUEUE_NAME = <span class="string">"TEST_QUEUE"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> EXCHANGE_NAME = <span class="string">"TEST_FANOUT_EXCHANGE"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(MQSender.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        logger.debug(args.length + <span class="string">""</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">String</span> arg : args) &#123;</span><br><span class="line">            logger.debug(arg + <span class="string">""</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Connection conn = factory.newConnection();</span><br><span class="line">            <span class="keyword">final</span> Channel channel = conn.createChannel();</span><br><span class="line">            channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"fanout"</span>); <span class="comment">//####################</span></span><br><span class="line">            <span class="built_in">boolean</span> durable = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">String</span> message = <span class="string">"hello world!"</span>;</span><br><span class="line">            Timer timer = <span class="keyword">new</span> Timer();</span><br><span class="line">            timer.schedule(<span class="keyword">new</span> TimerTask() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">                    <span class="built_in">int</span> l = <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>);</span><br><span class="line">                    StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">"hello."</span>);</span><br><span class="line">                    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; l % <span class="number">5</span>; i++) &#123;</span><br><span class="line">                        sb.<span class="built_in">append</span>(<span class="string">"."</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        logger.debug(<span class="string">"sent a message &#123;&#125;"</span>, sb.toString());</span><br><span class="line">                        channel.basicPublish(EXCHANGE_NAME, <span class="string">""</span>, <span class="keyword">null</span>, sb.toString().getBytes());<span class="comment">//########</span></span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, <span class="number">0</span>, <span class="number">2000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>consumer<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">package io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="literal">import</span> com.rabbitmq.client.*;</span><br><span class="line"><span class="literal">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="literal">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="literal">import</span> java.io.IOException;</span><br><span class="line"><span class="dartdoc"><span class="markdown">/**</span><br><span class="line"> * rabbitmq consumer</span><br><span class="line"> *</span><br><span class="line"> */</span></span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MQConsummer</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    private <span class="literal">static</span> <span class="built_in">String</span> EXCHANGE_NAME = <span class="string">"TEST_FANOUT_EXCHANGE"</span>;</span><br><span class="line">    private <span class="literal">static</span> Logger logger = LoggerFactory.getLogger(MQConsummer.<span class="keyword">class</span>);</span><br><span class="line"></span><br><span class="line">    public <span class="literal">static</span> <span class="keyword">void</span> main( <span class="built_in">String</span>[] args )</span><br><span class="line">    &#123;</span><br><span class="line">        ConnectionFactory <span class="literal">factory</span> = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">        <span class="literal">factory</span>.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Connection conn = <span class="literal">factory</span>.newConnection();</span><br><span class="line">            Channel channel = conn.createChannel();</span><br><span class="line">            channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"fanout"</span>);       <span class="comment">//##########</span></span><br><span class="line">            <span class="built_in">String</span> queueName = channel.queueDeclare().getQueue();   <span class="comment">//##########</span></span><br><span class="line">            channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);        <span class="comment">//##########</span></span><br><span class="line">            logger.debug(<span class="string">"waiting for message..."</span>);</span><br><span class="line"></span><br><span class="line">            QueueingConsumer consumer = <span class="keyword">new</span> QueueingConsumer(channel);</span><br><span class="line">            boolean autoAck = <span class="keyword">true</span>;</span><br><span class="line">            channel.basicConsume(queueName, autoAck, consumer);</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                QueueingConsumer.Delivery delivery = consumer.nextDelivery();</span><br><span class="line">                <span class="built_in">String</span> message = <span class="keyword">new</span> <span class="built_in">String</span>(delivery.getBody());</span><br><span class="line">                logger.debug(<span class="string">"received a message &#123;&#125;"</span>,message);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ShutdownSignalException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/订阅与发布/">订阅与发布</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/18/rabbitmqNote3/" data-title="RabbitMQ学习笔记（三）之订阅与发布 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/18/rabbitmqNote4/" title="RabbitMQ学习笔记（四）之消息路由">
+  <strong>上一篇：</strong><br/>
+  <span>
+  RabbitMQ学习笔记（四）之消息路由</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/18/rabbitmqNote2/"  title="RabbitMQ学习笔记（二）之Work Queues">
+ <strong>下一篇：</strong><br/> 
+ <span>RabbitMQ学习笔记（二）之Work Queues
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/18/rabbitmqNote3/" data-title="RabbitMQ学习笔记（三）之订阅与发布" data-url="http://azyet.github.io/2015/05/18/rabbitmqNote3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange"><span class="toc-number">1.</span> <span class="toc-text">Exchange</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#临时QUEUE"><span class="toc-number">2.</span> <span class="toc-text">临时QUEUE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#绑定"><span class="toc-number">3.</span> <span class="toc-text">绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#汇总"><span class="toc-number">4.</span> <span class="toc-text">汇总</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-number">4.1.</span> <span class="toc-text">代码</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

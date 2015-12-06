@@ -1,0 +1,644 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>adb学习笔记(二)之am与pm | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="activity manager （am）　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：
+1am &amp;lt;command&amp;gt;
+　　也要可以不进入shell直接执行命令：
+1adb shell am start -a android.intent.action.VIEW">
+<meta property="og:type" content="article">
+<meta property="og:title" content="adb学习笔记(二)之am与pm">
+<meta property="og:url" content="http://azyet.github.io/2015/06/08/adbLearningNote2/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="activity manager （am）　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：
+1am &amp;lt;command&amp;gt;
+　　也要可以不进入shell直接执行命令：
+1adb shell am start -a android.intent.action.VIEW">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="adb学习笔记(二)之am与pm">
+<meta name="twitter:description" content="activity manager （am）　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：
+1am &amp;lt;command&amp;gt;
+　　也要可以不进入shell直接执行命令：
+1adb shell am start -a android.intent.action.VIEW">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/08/adbLearningNote2/" title="adb学习笔记(二)之am与pm" itemprop="url">adb学习笔记(二)之am与pm</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-08T06:35:01.000Z" itemprop="datePublished"> 發表於 2015-06-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#activity_manager_（am）"><span class="toc-number">1.</span> <span class="toc-text">activity manager （am）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#am命令及参数"><span class="toc-number">1.1.</span> <span class="toc-text">am命令及参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start_[options]_<INTENT>"><span class="toc-number">1.1.1.</span> <span class="toc-text">start [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#startservice_[options]_<INTENT>"><span class="toc-number">1.1.2.</span> <span class="toc-text">startservice [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#force-stop_<PACKAGE>"><span class="toc-number">1.1.3.</span> <span class="toc-text">force-stop <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill_[options]_<PACKAGE>"><span class="toc-number">1.1.4.</span> <span class="toc-text">kill [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill-all"><span class="toc-number">1.1.5.</span> <span class="toc-text">kill-all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#broadcast_[options]_<INTENT>"><span class="toc-number">1.1.6.</span> <span class="toc-text">broadcast [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instrument_[options]_<COMPONENT>"><span class="toc-number">1.1.7.</span> <span class="toc-text">instrument [options] <COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_start_<FILE>"><span class="toc-number">1.1.8.</span> <span class="toc-text">profile start  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_stop_<PROCESS>"><span class="toc-number">1.1.9.</span> <span class="toc-text">profile stop <PROCESS></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dumpheap_[options]_<FILE>"><span class="toc-number">1.1.10.</span> <span class="toc-text">dumpheap [options]  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-debug-app_[options]_<PACKAGE>"><span class="toc-number">1.1.11.</span> <span class="toc-text">set-debug-app [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear-debug-app"><span class="toc-number">1.1.12.</span> <span class="toc-text">clear-debug-app</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_[options]"><span class="toc-number">1.1.13.</span> <span class="toc-text">monitor [options]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#screen-compat_[on|off]_<PACKAGE>"><span class="toc-number">1.1.14.</span> <span class="toc-text">screen-compat [on|off] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#display-size_[reset|<WxH>]"><span class="toc-number">1.1.15.</span> <span class="toc-text">display-size [reset|<WxH>]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-uri_<INTENT>"><span class="toc-number">1.1.16.</span> <span class="toc-text">to-uri <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-intent-uri_<INTENT>"><span class="toc-number">1.1.17.</span> <span class="toc-text">to-intent-uri <INTENT></span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#package_manager_(pm)"><span class="toc-number">2.</span> <span class="toc-text">package manager (pm)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可用命令和参数"><span class="toc-number">2.1.</span> <span class="toc-text">可用命令和参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list_packages_[options]_<FILTER>"><span class="toc-number">2.1.1.</span> <span class="toc-text">list packages [options] <FILTER></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permission-groups"><span class="toc-number">2.1.2.</span> <span class="toc-text">list permission-groups</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permissions_[optiomns]_<GROUP>"><span class="toc-number">2.1.3.</span> <span class="toc-text">list permissions [optiomns] <GROUP></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_instrumentation"><span class="toc-number">2.1.4.</span> <span class="toc-text">list instrumentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_features"><span class="toc-number">2.1.5.</span> <span class="toc-text">list features</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_libraries"><span class="toc-number">2.1.6.</span> <span class="toc-text">list libraries</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_users"><span class="toc-number">2.1.7.</span> <span class="toc-text">list users</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#path_<PACKAGE>"><span class="toc-number">2.1.8.</span> <span class="toc-text">path <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#install_[options]_<path>"><span class="toc-number">2.1.9.</span> <span class="toc-text">install [options] <path></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uninstall_[options]_<PACKAGE>"><span class="toc-number">2.1.10.</span> <span class="toc-text">uninstall [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear_<PACKAGE>"><span class="toc-number">2.1.11.</span> <span class="toc-text">clear <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#enable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.12.</span> <span class="toc-text">enable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.13.</span> <span class="toc-text">disable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable-user_[options]_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.14.</span> <span class="toc-text">disable-user [options] <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#grant_<PACKAGE_PERMISSION>"><span class="toc-number">2.1.15.</span> <span class="toc-text">grant <PACKAGE_PERMISSION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-install-location_<LOCATION>"><span class="toc-number">2.1.16.</span> <span class="toc-text">set-install-location <LOCATION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-install-location"><span class="toc-number">2.1.17.</span> <span class="toc-text">get-install-location</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-permission-enforced_<PERMISSION>_[true|false]"><span class="toc-number">2.1.18.</span> <span class="toc-text">set-permission-enforced <PERMISSION> [true|false]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#trim-caches_<DESIRED_FREE_SPACE>"><span class="toc-number">2.1.19.</span> <span class="toc-text">trim-caches <DESIRED_FREE_SPACE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#create-user_<USER_NAME>"><span class="toc-number">2.1.20.</span> <span class="toc-text">create-user <USER_NAME></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#remove-user_<USER_ID>"><span class="toc-number">2.1.21.</span> <span class="toc-text">remove-user <USER_ID></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-max-users"><span class="toc-number">2.1.22.</span> <span class="toc-text">get-max-users</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="activity_manager_（am）">activity manager （am）</h2><p>　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am &lt;<span class="command"><span class="keyword">command</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>　　也要可以不进入shell直接执行命令：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -<span class="tag">a</span> android<span class="class">.intent</span><span class="class">.action</span><span class="class">.VIEW</span></span><br></pre></td></tr></table></figure>
+<h3 id="am命令及参数">am命令及参数</h3><h4 id="start_[options]_&lt;INTENT&gt;">start [options] &lt;INTENT&gt;</h4><p>　　通过指定Intent启动activity。</p>
+<p>　　options有：</p>
+<p><code>-D</code>      开启debug</p>
+<p><code>-W</code>      等启动结束</p>
+<p><code>--start-profiler &lt;FILE&gt;</code>       启动profiler，发送结果到<code>FILE</code></p>
+<p><code>-P &lt;FILE&gt;</code>             类上，但是profiler在app闲置时停止</p>
+<a id="more"></a>
+<p><code>-R</code>            重启activity <code>&lt;COUNT&gt;</code>次，每次启动前，top activity将结束。</p>
+<p><code>-S</code>            在activity启动前强制停止目标app</p>
+<p><code>--opengl-trace</code>        开启opengl功能trace</p>
+<p><code>--user &lt;USER_ID&gt; | current</code>        指定运行用户，缺省为当前用户</p>
+<h4 id="startservice_[options]_&lt;INTENT&gt;">startservice [options] &lt;INTENT&gt;</h4><p>　　指定INTENT启动Service。<br>　　可用参数：</p>
+<p><code>--user &lt;USER_ID&gt; | current</code>        指定运行用户，缺省为当前用户</p>
+<h4 id="force-stop_&lt;PACKAGE&gt;">force-stop &lt;PACKAGE&gt;</h4><p>　　终止所有该package相关事物（package为app的package名)</p>
+<h4 id="kill_[options]_&lt;PACKAGE&gt;">kill [options] &lt;PACKAGE&gt;</h4><p>　　类上，但是只杀死安全的，不影响用户体验的进程，可选参数有：</p>
+<p><code>--user &lt;USER_ID&gt; | all | current</code>        　　指定进程所属用户，缺省为所有用户</p>
+<h4 id="kill-all">kill-all</h4><p>　　杀死所有后台进程</p>
+<h4 id="broadcast_[options]_&lt;INTENT&gt;">broadcast [options] &lt;INTENT&gt;</h4><p>　　发出一个广播INTENT</p>
+<p>　　可用参数 ：</p>
+<p><code>[--user &lt;USER_ID&gt; | all | current]</code>    　　需要发送给哪个用户，默认为所有</p>
+<h4 id="instrument_[options]_&lt;COMPONENT&gt;">instrument [options] &lt;COMPONENT&gt;</h4><p>　　使用Instrumentation实例开始监听，典型的目标 <component> 是如 <test_package>/<runner_class>的形式.</runner_class></test_package></component></p>
+<p>　　可用参数有：</p>
+<p><code>-r</code>: 打印raw结果（另一为<code>&lt;REPORT_KEY_STREAMRESULT&gt;</code>），搭配<code>[-e perf true]</code>使用生成raw输出以评估性能。</p>
+<p><code>-e &lt;NAME&gt; &lt;VALUE&gt;</code>: 设置参数值，对于测试运行，一种常见形式是<code>-e &lt;testrunner_flag&gt; &lt;value&gt;[,&lt;value&gt;...]</code></p>
+<p><code>-p &lt;FILE&gt;</code>: 将profiling数据写入 <file>.</file></p>
+<p><code>-w</code>: 等待 instrumentation结束后再返回，测试运行必须。</p>
+<p><code>--no-window-animation</code>: 运行时关闭窗口动画.</p>
+<p><code>--user &lt;USER_ID&gt; | current</code>: 　　指定instrumentation运行在哪个用户中，缺省为当前用户</p>
+<h4 id="profile_start_&lt;FILE&gt;">profile start <process> &lt;FILE&gt;</process></h4><p>在进程<process>上运行profile，将结果输出到<file></file></process></p>
+<h4 id="profile_stop_&lt;PROCESS&gt;">profile stop &lt;PROCESS&gt;</h4><p>停止<process>上的profile</process></p>
+<h4 id="dumpheap_[options]_&lt;FILE&gt;">dumpheap [options] <process> &lt;FILE&gt;</process></h4><p>dump进程<process>上的heap到<file></file></process></p>
+<p><code>--user [&lt;USER_ID&gt;|current]</code>: 当提供了<process>时，可以指定USER，缺省为当前用户<br><code>-n</code>: Dump native heap 而不是 managed heap.</process></p>
+<h4 id="set-debug-app_[options]_&lt;PACKAGE&gt;">set-debug-app [options] &lt;PACKAGE&gt;</h4><p>设置debug <package></package></p>
+<p><code>-w</code>: 等待包启动<br><code>--persistent</code>: 记住此值</p>
+<h4 id="clear-debug-app">clear-debug-app</h4><p>清除<code>set-debug-app</code>的设置</p>
+<h4 id="monitor_[options]">monitor [options]</h4><p>开始监测crash和ANR</p>
+<p><code>--gdb</code>: 发现crash/ANR时在指定port启动gdb server</p>
+<h4 id="screen-compat_[on|off]_&lt;PACKAGE&gt;">screen-compat [on|off] &lt;PACKAGE&gt;</h4><p>控制包的<code>screen compatibility</code>模式。</p>
+<h4 id="display-size_[reset|&lt;WxH&gt;]">display-size [reset|&lt;WxH&gt;]</h4><p>覆写android设备的显示尺寸，此命令可以模拟不同尺寸的显示屏，在测试应用时非常有用，例如：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">am</span> <span class="keyword">display</span>-density <span class="number">480</span></span><br></pre></td></tr></table></figure>
+<h4 id="to-uri_&lt;INTENT&gt;">to-uri &lt;INTENT&gt;</h4><p>将Intent的详细参数打印到一个URI</p>
+<h4 id="to-intent-uri_&lt;INTENT&gt;">to-intent-uri &lt;INTENT&gt;</h4><p>将Intent的详细参数打印到一个intent URI</p>
+<h2 id="package_manager_(pm)">package manager (pm)</h2><p>使用pm工作你可以 在设备上安装的软件包上执行动作查询 。</p>
+<p>语法 ：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#adb</span> shell中</span><br><span class="line">pm &lt;command&gt;</span><br><span class="line"></span><br><span class="line">#系统shell中</span><br><span class="line"></span><br><span class="line">adb shell pm uninstall com<span class="class">.example</span><span class="class">.MyApp</span></span><br></pre></td></tr></table></figure>
+<h3 id="可用命令和参数">可用命令和参数</h3><h4 id="list_packages_[options]_&lt;FILTER&gt;">list packages [options] &lt;FILTER&gt;</h4><p>list所有软件包，或者包名中包含FILTER字样的包</p>
+<p><code>-f</code>: 查看相关文件<br><code>-d</code>: 只显示被禁用的包<br><code>-e</code>: 显示启用的包<br><code>-s</code>: 显示系统包<br><code>-3</code>: 显示第三方包<br><code>-i</code>: 查看包installer<br><code>-u</code>: 包含已卸载包<br><code>--user &lt;USER_ID&gt;</code>: 指定查询的用户空间</p>
+<h4 id="list_permission-groups">list permission-groups</h4><p>打印所有已经知权限组</p>
+<h4 id="list_permissions_[optiomns]_&lt;GROUP&gt;">list permissions [optiomns] &lt;GROUP&gt;</h4><p>list所有 或 包含于GROUP中 已知权限<br><code>-g</code>: 按组排序<br><code>-f</code>： 打印所有信息<br><code>-s</code> 打印概要<br><code>-d</code> 只列出危险权限<br><code>-u</code> 只列出用户可见的权限</p>
+<h4 id="list_instrumentation">list instrumentation</h4><p>列出所有测试包</p>
+<p><code>-f</code> 列出测试包的APK文件<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@generic_x86:/ <span class="preprocessor"># pm list instrumentation -f</span></span><br><span class="line"><span class="label">instrumentation:</span>/system/app/EmulatorSmokeTests/EmulatorSmokeTests.apk=<span class="keyword">com</span>.android.emulator.smoketests/android.support.test.runner.AndroidJUnitRunner (target=<span class="keyword">com</span>.android.emulator.smoketests)</span><br><span class="line"><span class="label">instrumentation:</span>/data/app/SmokeTest/SmokeTest.apk=<span class="keyword">com</span>.android.smoketest.tests/<span class="keyword">com</span>.android.smoketest.SmokeTestRunner (target=<span class="keyword">com</span>.android.smoketest)</span><br><span class="line"><span class="label">instrumentation:</span>/data/app/ApiDemos/ApiDemos.apk=<span class="keyword">com</span>.example.android.apis/.app.LocalSampleInstrumentation (target=<span class="keyword">com</span>.example.android.apis)</span><br></pre></td></tr></table></figure></p>
+<p><code>&lt;TARGET_PACKAGE&gt;</code> 只列出指定目标的测试包</p>
+<h4 id="list_features">list features</h4><p>列出系统所有特性</p>
+<h4 id="list_libraries">list libraries</h4><p>列出当前设备支持的所有库</p>
+<h4 id="list_users">list users</h4><p>当前系统中的所有用户</p>
+<h4 id="path_&lt;PACKAGE&gt;">path &lt;PACKAGE&gt;</h4><p>打印指定包的path</p>
+<h4 id="install_[options]_&lt;path&gt;">install [options] &lt;path&gt;</h4><p>将path指定的包安装到系统</p>
+<p>-r 重新安装已存在的包，保留数据<br>-t 允许安装测试包<br><code>-i &lt;INSTALLER_PACKAGE_NAME&gt;</code> 指定Installer<br><code>-s</code> 安装到shared mass storage(如SD卡）</p>
+<p><code>-f</code> 安装到系统内部存储<br><code>-d</code> 允许版本降级</p>
+<h4 id="uninstall_[options]_&lt;PACKAGE&gt;">uninstall [options] &lt;PACKAGE&gt;</h4><p>卸载包<br><code>-k</code> 保留数据和缓存目录</p>
+<h4 id="clear_&lt;PACKAGE&gt;">clear &lt;PACKAGE&gt;</h4><p>删除所有与包相关的数据</p>
+<h4 id="enable_&lt;PACKAGE_OR_COMPONENT&gt;">enable &lt;PACKAGE_OR_COMPONENT&gt;</h4><p>启用package / component,形式为”package/class”</p>
+<h4 id="disable_&lt;PACKAGE_OR_COMPONENT&gt;">disable &lt;PACKAGE_OR_COMPONENT&gt;</h4><p>停用package / component,形式为”package/class”</p>
+<h4 id="disable-user_[options]_&lt;PACKAGE_OR_COMPONENT&gt;">disable-user [options] &lt;PACKAGE_OR_COMPONENT&gt;</h4><p><code>--user &lt;USER_ID&gt;</code>: The user to disable.</p>
+<h4 id="grant_&lt;PACKAGE_PERMISSION&gt;">grant &lt;PACKAGE_PERMISSION&gt;</h4><p>授予包权限，限于包已声明的权限</p>
+<h4 id="set-install-location_&lt;LOCATION&gt;">set-install-location &lt;LOCATION&gt;</h4><p>更改默认安装位置，值为：<br>0 自动<br>1 内部存储<br>2 外部存储</p>
+<blockquote>
+<p>调试用，可能导致应用崩溃或者其它错误</p>
+</blockquote>
+<h4 id="get-install-location">get-install-location</h4><p>返回当前安装位置，返回值见上</p>
+<h4 id="set-permission-enforced_&lt;PERMISSION&gt;_[true|false]">set-permission-enforced &lt;PERMISSION&gt; [true|false]</h4><p>设置指定权限是否应该强制执行</p>
+<h4 id="trim-caches_&lt;DESIRED_FREE_SPACE&gt;">trim-caches &lt;DESIRED_FREE_SPACE&gt;</h4><p>修剪cache文件到指定剩余空间</p>
+<h4 id="create-user_&lt;USER_NAME&gt;">create-user &lt;USER_NAME&gt;</h4><p>创建指定用户，打印uid</p>
+<h4 id="remove-user_&lt;USER_ID&gt;">remove-user &lt;USER_ID&gt;</h4><p>删除用户</p>
+<h4 id="get-max-users">get-max-users</h4><p>设备支持的最大用户数</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/06/08/adbLearningNote2/" data-title="adb学习笔记(二)之am与pm | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/06/08/shortcutsInBash/" title="BASH中的shortcut">
+  <strong>上一篇：</strong><br/>
+  <span>
+  BASH中的shortcut</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/06/08/adbLearningNote1/"  title="adb学习笔记(一)之基本使用">
+ <strong>下一篇：</strong><br/> 
+ <span>adb学习笔记(一)之基本使用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/08/adbLearningNote2/" data-title="adb学习笔记(二)之am与pm" data-url="http://azyet.github.io/2015/06/08/adbLearningNote2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#activity_manager_（am）"><span class="toc-number">1.</span> <span class="toc-text">activity manager （am）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#am命令及参数"><span class="toc-number">1.1.</span> <span class="toc-text">am命令及参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start_[options]_<INTENT>"><span class="toc-number">1.1.1.</span> <span class="toc-text">start [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#startservice_[options]_<INTENT>"><span class="toc-number">1.1.2.</span> <span class="toc-text">startservice [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#force-stop_<PACKAGE>"><span class="toc-number">1.1.3.</span> <span class="toc-text">force-stop <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill_[options]_<PACKAGE>"><span class="toc-number">1.1.4.</span> <span class="toc-text">kill [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill-all"><span class="toc-number">1.1.5.</span> <span class="toc-text">kill-all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#broadcast_[options]_<INTENT>"><span class="toc-number">1.1.6.</span> <span class="toc-text">broadcast [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instrument_[options]_<COMPONENT>"><span class="toc-number">1.1.7.</span> <span class="toc-text">instrument [options] <COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_start_<FILE>"><span class="toc-number">1.1.8.</span> <span class="toc-text">profile start  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_stop_<PROCESS>"><span class="toc-number">1.1.9.</span> <span class="toc-text">profile stop <PROCESS></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dumpheap_[options]_<FILE>"><span class="toc-number">1.1.10.</span> <span class="toc-text">dumpheap [options]  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-debug-app_[options]_<PACKAGE>"><span class="toc-number">1.1.11.</span> <span class="toc-text">set-debug-app [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear-debug-app"><span class="toc-number">1.1.12.</span> <span class="toc-text">clear-debug-app</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_[options]"><span class="toc-number">1.1.13.</span> <span class="toc-text">monitor [options]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#screen-compat_[on|off]_<PACKAGE>"><span class="toc-number">1.1.14.</span> <span class="toc-text">screen-compat [on|off] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#display-size_[reset|<WxH>]"><span class="toc-number">1.1.15.</span> <span class="toc-text">display-size [reset|<WxH>]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-uri_<INTENT>"><span class="toc-number">1.1.16.</span> <span class="toc-text">to-uri <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-intent-uri_<INTENT>"><span class="toc-number">1.1.17.</span> <span class="toc-text">to-intent-uri <INTENT></span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#package_manager_(pm)"><span class="toc-number">2.</span> <span class="toc-text">package manager (pm)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可用命令和参数"><span class="toc-number">2.1.</span> <span class="toc-text">可用命令和参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list_packages_[options]_<FILTER>"><span class="toc-number">2.1.1.</span> <span class="toc-text">list packages [options] <FILTER></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permission-groups"><span class="toc-number">2.1.2.</span> <span class="toc-text">list permission-groups</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permissions_[optiomns]_<GROUP>"><span class="toc-number">2.1.3.</span> <span class="toc-text">list permissions [optiomns] <GROUP></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_instrumentation"><span class="toc-number">2.1.4.</span> <span class="toc-text">list instrumentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_features"><span class="toc-number">2.1.5.</span> <span class="toc-text">list features</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_libraries"><span class="toc-number">2.1.6.</span> <span class="toc-text">list libraries</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_users"><span class="toc-number">2.1.7.</span> <span class="toc-text">list users</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#path_<PACKAGE>"><span class="toc-number">2.1.8.</span> <span class="toc-text">path <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#install_[options]_<path>"><span class="toc-number">2.1.9.</span> <span class="toc-text">install [options] <path></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uninstall_[options]_<PACKAGE>"><span class="toc-number">2.1.10.</span> <span class="toc-text">uninstall [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear_<PACKAGE>"><span class="toc-number">2.1.11.</span> <span class="toc-text">clear <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#enable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.12.</span> <span class="toc-text">enable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.13.</span> <span class="toc-text">disable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable-user_[options]_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.14.</span> <span class="toc-text">disable-user [options] <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#grant_<PACKAGE_PERMISSION>"><span class="toc-number">2.1.15.</span> <span class="toc-text">grant <PACKAGE_PERMISSION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-install-location_<LOCATION>"><span class="toc-number">2.1.16.</span> <span class="toc-text">set-install-location <LOCATION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-install-location"><span class="toc-number">2.1.17.</span> <span class="toc-text">get-install-location</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-permission-enforced_<PERMISSION>_[true|false]"><span class="toc-number">2.1.18.</span> <span class="toc-text">set-permission-enforced <PERMISSION> [true|false]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#trim-caches_<DESIRED_FREE_SPACE>"><span class="toc-number">2.1.19.</span> <span class="toc-text">trim-caches <DESIRED_FREE_SPACE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#create-user_<USER_NAME>"><span class="toc-number">2.1.20.</span> <span class="toc-text">create-user <USER_NAME></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#remove-user_<USER_ID>"><span class="toc-number">2.1.21.</span> <span class="toc-text">remove-user <USER_ID></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-max-users"><span class="toc-number">2.1.22.</span> <span class="toc-text">get-max-users</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

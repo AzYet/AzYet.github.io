@@ -1,0 +1,592 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>通过IPv6“免费”上网 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。
+然而政策如此，短期内没有改变的迹象，只有自己想对策了。
+开发IPv6潜能长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过IPv6“免费”上网">
+<meta property="og:url" content="http://azyet.github.io/2015/04/13/freeNetViaIPv6/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。
+然而政策如此，短期内没有改变的迹象，只有自己想对策了。
+开发IPv6潜能长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1er5kqe08bmj20qk0eltaw.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过IPv6“免费”上网">
+<meta name="twitter:description" content="2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。
+然而政策如此，短期内没有改变的迹象，只有自己想对策了。
+开发IPv6潜能长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/13/freeNetViaIPv6/" title="通过IPv6“免费”上网" itemprop="url">通过IPv6“免费”上网</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-13T17:29:33.000Z" itemprop="datePublished"> 發表於 2015-04-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开发IPv6潜能"><span class="toc-number">1.</span> <span class="toc-text">开发IPv6潜能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#直接使用v6上网"><span class="toc-number">1.1.</span> <span class="toc-text">直接使用v6上网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IPv6配合GoAgent"><span class="toc-number">1.2.</span> <span class="toc-text">IPv6配合GoAgent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绕道境外VM／VPS"><span class="toc-number">1.3.</span> <span class="toc-text">绕道境外VM／VPS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将VPS加入到IPv6网络"><span class="toc-number">2.</span> <span class="toc-text">将VPS加入到IPv6网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过VPS访问IPv4网络"><span class="toc-number">3.</span> <span class="toc-text">通过VPS访问IPv4网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http代理（不推荐）"><span class="toc-number">3.1.</span> <span class="toc-text">http代理（不推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用ssh转发（推荐＊＊＊＊）"><span class="toc-number">3.2.</span> <span class="toc-text">使用ssh转发（推荐＊＊＊＊）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shadowsocks（推荐＊＊＊）"><span class="toc-number">3.3.</span> <span class="toc-text">shadowsocks（推荐＊＊＊）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#openVPN（推荐＊＊＊＊）"><span class="toc-number">3.4.</span> <span class="toc-text">openVPN（推荐＊＊＊＊）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合使用"><span class="toc-number">4.</span> <span class="toc-text">组合使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于手机端"><span class="toc-number">5.</span> <span class="toc-text">关于手机端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于速度"><span class="toc-number">6.</span> <span class="toc-text">关于速度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">7.</span> <span class="toc-text">后记</span></a></li></ol>
+		
+		</div>
+		
+		<p>2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。</p>
+<p>然而政策如此，短期内没有改变的迹象，只有自己想对策了。</p>
+<h2 id="开发IPv6潜能">开发IPv6潜能</h2><p>长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然是运行于IPv4的网络中，而IPv6与v4网络的互通一直不好，所以v6的可用资源少得可怜。</p>
+<hr>
+<p>更新详细教程：  <strong><a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/" target="_blank" rel="external">为VPS创建IPv6隧道</a></strong></p>
+<a id="more"></a>
+<h3 id="直接使用v6上网">直接使用v6上网</h3><p>详细教程：  <strong><a href="http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/" target="_blank" rel="external">为VPS创建IPv6隧道</a></strong></p>
+<p><strong>方法：</strong><br>手动设置DNS64，禁用IPv4，只使用v6栈，或者禁用v4网络的缺省路由等，以免自动跳转到登录页。<br><strong>效果：</strong><br>1.偶尔可以访问部分国内网站，如weibo,youku等，另一部分则不能，估计和DNS的转换有关。<br>2.访问延时很大，因为绕道了国外的NAT64路由，同时也导致一些视频因地区版权问题无法观看。</p>
+<h3 id="IPv6配合GoAgent">IPv6配合GoAgent</h3><p>Google作为技术巨头，拥有大量的v6服务器，而GoAgent应该是最普及的翻土啬工具了，将其设置为v6模式，再配合代理设置，几乎可以访问所有的网页，而且速度还不慢。<br><strong>缺点：</strong><br>只能作为HTTP代理，其它非80的服务无法使用。</p>
+<h3 id="绕道境外VM／VPS">绕道境外VM／VPS</h3><p>这应该是终极的解决方案了，也是我最近正在用的方案,总体来说还不错，流量几乎无限，虽然延迟有点大，但是顺带可以方便地使用google,dropbox,onedrive,github等服务了，总体来说还是比较满意的。<br>这个方案严格来说并不是免费的，但是每月5元左右的花费，除了以上便利之外还能得到一个个人服务器，不管怎么说还是很值得的吧。</p>
+<p>关于VPS的选购，最便宜的应该就是所谓“搬瓦工”bandwagon，作为我邮学子看到这名字不由会心一笑。我选用的方案是500M ram, 5G disk，500G bandwidth，9.9$／year，相当的实惠。付费方式为paypal，可以自己申请一个，淘宝始终不如自己可靠。</p>
+<h2 id="将VPS加入到IPv6网络">将VPS加入到IPv6网络</h2><p>VPS是没有v6地址的，我们需要建立v6-v4的隧道，还好有免费提供的运营商，<a href="tnnelbroker.net">tnnelbroker.net</a>,最后就是VPS并没有IPv6 Module，由于没有独立内核你也不能自己加载，只能使用userspace的程序来建立v6接口，可以到这里下载<a href="https://code.google.com/p/tb-tun/" target="_blank" rel="external">tb_userspace</a>。</p>
+<h2 id="通过VPS访问IPv4网络">通过VPS访问IPv4网络</h2><p>现在你可以用IPv6的方式访问VPS,而VPS是同时有v4地址的，自然就可以以它作为中继访问v4网络的内容。</p>
+<h3 id="http代理（不推荐）">http代理（不推荐）</h3><p>http代理是最传统的方式了，但是其只能代理网页内容，且第三内容容易被检测到，所以并不实用，但是优势是速度快。如果想使用，可以安装squid。</p>
+<h3 id="使用ssh转发（推荐＊＊＊＊）">使用ssh转发（推荐＊＊＊＊）</h3><p><strong>优点</strong><br>架设简单，一句ssh命令就能建立代理；功能比较全面，是socks5代理，配合工具软件基本可实现全局代理；socks5和ssh都是安全性比较高的方式，访问点敏感内容也无妨，但不要滥用，否则一样会被制裁的（了解GFW的强大了吧）。<br><strong><em>linux下建立方式：</em></strong><br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">ssh</span> -qTfNnD 「本地地址:」本地端口 user<span class="variable">@vpsIPv6Address</span></span><br></pre></td></tr></table></figure></p>
+<p>这样你的本地端口就成为socks5代理入口了，本地地址缺省为lo地址，如果设为0或IP的话，其它机器也可以使用（centos还需要添加防火墙规则）。</p>
+<p>如Dropbox之类的客户端自己就带proxy设置，对于无此种设置的，linux下可用proxychains,windows下可以用proxifier（相当强大）。</p>
+<h3 id="shadowsocks（推荐＊＊＊）">shadowsocks（推荐＊＊＊）</h3><p>shadowssocks可以说是目前最稳定的FQ工具了，据说采用了一系列的手段来掩盖流量特征，不容易被墙，使用对称加密，速度很快。</p>
+<p>类似ssh，它也是本地的socks5的代理。</p>
+<h3 id="openVPN（推荐＊＊＊＊）">openVPN（推荐＊＊＊＊）</h3><p>终于来到vpn了，是的这才是最全能的方式，它用隧道的方式将你和VPS连入同一网络，就如同你的电脑网线接进了美国机房，只是网线比较长点。使用虚拟网卡从操作系统底层更改了网络行为，所以即使那些自身无代理设置，也不能被第三方工具设置代理的软件也能自由访问网络了。openVPN完全支持ipv6, 可以在配置中设置协议类型为udp6或者tcp6。但据说已被NB的GFW攻陷，所以尽量不要“干坏事”，否则不明不白地就断网了总是不美。</p>
+<p>openVPN有Linux windows和android版本，苹果未知，因为我没有苹果设备。</p>
+<p><strong>缺点</strong><br>－架设相对复杂，生成证书之类的比较麻烦<br>－完全的全局代理，想访问本地网络需要手动配置路由项</p>
+<h2 id="组合使用">组合使用</h2><p>openVPN结合ssh代理是很好的互补：ssh无需安装，启用只需一句命令，加密好更安全和稳定；VPN无需对应用作设置，使用方便，且对包括无法设置代理的应用（比如steam)都是万能的。我目前就是使用这样的组合，整体体验还不错，如果买的是日本的云机的话，估计综合体验会完全超过本地网络吧。顺便一提的是，bandwagon显示上月用掉了150多G的流量，而校园网流量则还剩余。如果没有ipv6，这得交300元网费了。</p>
+<h2 id="关于手机端">关于手机端</h2><p>google和gmail和paly还是很有需求的，而且既然能免流量，那手机上看看视频也很不错。</p>
+<p>ssh、shdowsocks和openvpn都有手机端应用，个人openVPN和shadowsocks都有使用，感觉都不错，SS配置简单一些，似乎也更省电。</p>
+<h2 id="关于速度">关于速度</h2><p>通过v6与vps的连接速度<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:/data/AzYet.github.io$ ping6 centos6</span><br><span class="line">PING centos6(centos6) <span class="number">56</span> data <span class="keyword">bytes</span></span><br><span class="line"><span class="number">64</span> <span class="keyword">bytes</span> <span class="built_in">from</span> centos6: icmp_seq=<span class="number">1</span> ttl=<span class="number">47</span> <span class="built_in">time</span>=<span class="number">165</span> ms</span><br><span class="line"><span class="number">64</span> <span class="keyword">bytes</span> <span class="built_in">from</span> centos6: icmp_seq=<span class="number">2</span> ttl=<span class="number">47</span> <span class="built_in">time</span>=<span class="number">165</span> ms</span><br><span class="line"><span class="number">64</span> <span class="keyword">bytes</span> <span class="built_in">from</span> centos6: icmp_seq=<span class="number">3</span> ttl=<span class="number">47</span> <span class="built_in">time</span>=<span class="number">165</span> ms</span><br></pre></td></tr></table></figure></p>
+<p>由于绕道了国外的两个站点（隧道入口和VPS），那么就有额外的延时开销，访问国内WEB比较难受（网页包含请求太多），但是对于国外网站基本可以忽略，另外要说明的，虽然延时较大，但是带宽却是几乎无影响的，我终于又可以毫无顾忌地下载大文件，在线看高清电影和视频直播了！至于下载速度，无论国内外资源，飚到4、5MByte/S（相当40M带宽）是很正常的。<br>来一张VPS的网速图：<br><img src="http://ww2.sinaimg.cn/large/55f247cbgw1er5kqe08bmj20qk0eltaw.jpg" alt="连接界面"> </p>
+<h2 id="后记">后记</h2><p>最后本文只能算是一个综述，供大家参照比较，根据自己的需求和环境选择合适的方式。虽然以上提到的内容我都实践过，但是网上不难找到相应的教程，所以并没有记录具体安装配置过程，也许以后更换系统或者更换本子，需要重装服务时，会顺便写下step by step的教程。</p>
+<p><strong>创建v6隧道的详细教程</strong>可以看这里 <a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/" target="_blank" rel="external">为VPS创建IPv6隧道</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/free/">free</a><a href="/tags/vpn/">vpn</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/04/13/freeNetViaIPv6/" data-title="通过IPv6“免费”上网 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/14/openvpnOnDroid/" title="安卓手机端配置OpenVPN via IPv6">
+  <strong>上一篇：</strong><br/>
+  <span>
+  安卓手机端配置OpenVPN via IPv6</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/13/firstPage/"  title="第一个页面">
+ <strong>下一篇：</strong><br/> 
+ <span>第一个页面
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/04/13/freeNetViaIPv6/" data-title="通过IPv6“免费”上网" data-url="http://azyet.github.io/2015/04/13/freeNetViaIPv6/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开发IPv6潜能"><span class="toc-number">1.</span> <span class="toc-text">开发IPv6潜能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#直接使用v6上网"><span class="toc-number">1.1.</span> <span class="toc-text">直接使用v6上网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IPv6配合GoAgent"><span class="toc-number">1.2.</span> <span class="toc-text">IPv6配合GoAgent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绕道境外VM／VPS"><span class="toc-number">1.3.</span> <span class="toc-text">绕道境外VM／VPS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将VPS加入到IPv6网络"><span class="toc-number">2.</span> <span class="toc-text">将VPS加入到IPv6网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过VPS访问IPv4网络"><span class="toc-number">3.</span> <span class="toc-text">通过VPS访问IPv4网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http代理（不推荐）"><span class="toc-number">3.1.</span> <span class="toc-text">http代理（不推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用ssh转发（推荐＊＊＊＊）"><span class="toc-number">3.2.</span> <span class="toc-text">使用ssh转发（推荐＊＊＊＊）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shadowsocks（推荐＊＊＊）"><span class="toc-number">3.3.</span> <span class="toc-text">shadowsocks（推荐＊＊＊）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#openVPN（推荐＊＊＊＊）"><span class="toc-number">3.4.</span> <span class="toc-text">openVPN（推荐＊＊＊＊）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合使用"><span class="toc-number">4.</span> <span class="toc-text">组合使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于手机端"><span class="toc-number">5.</span> <span class="toc-text">关于手机端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于速度"><span class="toc-number">6.</span> <span class="toc-text">关于速度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">7.</span> <span class="toc-text">后记</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

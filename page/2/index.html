@@ -1,0 +1,1054 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="足迹">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AzYet's Notebook">
+<meta property="og:url" content="http://azyet.github.io/page/2/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="足迹">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AzYet's Notebook">
+<meta name="twitter:description" content="足迹">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/03/ubuntuXfce4VNC/" title="ubuntu运行VNC Server无桌面时的解决方案" itemprop="url">ubuntu运行VNC Server无桌面时的解决方案</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-03T13:15:30.000Z" itemprop="datePublished"> 發表於 2015-06-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>配置vnc server实在是一个特别诡异的事，我在不同的ubuntu机器上配置服务时，总是遇到千奇百怪的问题，大部分情况下比较顺利，将<code>~/.vnc/xstartup</code>最后一句<code>x-window-manager&amp;</code>替换为<code>gnome-session&amp;</code>就能顺利地出现桌面，而有些则不行，需要改为<code>gnome-session --session=ubuntu-2d&amp;</code>……</p>
+<h2 id="问题">问题</h2><p>而今天遇到的ubuntu 14.04，则死活不行，用realvnc viewer连接之后，只有灰灰的一个背景，没有桌面，没有terminal。</p>
+<p>查阅了很多博文，有说需要安装<code>gnome-session-fallback</code>的，有说需要安装<code>gdm</code>的，也有用<code>kde</code>的，除了kde我没有尝试，另外两种验证无效，依然只有一个灰色背景。</p>
+<p>最后用xfce4桌面解决，选择些方案一是因为xfce相对较小，gnome-session死活不行的情况下，再将一个kde未免太过兴师动众，xfce我使用过一段时间，是一个相当轻量级的GUI环境，清爽易用，功能一点不含糊。决定之后，一次尝试即成功。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/03/ubuntuXfce4VNC/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/vnc/">vnc</a><a href="/tags/xfce/">xfce</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/03/ubuntuXfce4VNC/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/03/ubuntuXfce4VNC/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/01/ubuntu1404WirelessShare/" title="ubuntu14.04无线共享设置" itemprop="url">ubuntu14.04无线共享设置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-01T12:58:57.000Z" itemprop="datePublished"> 發表於 2015-06-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>在ubuntu中设置无线共享是很方便的，有许多开源的工具可以使用，例如<code>hostapd+dnsmasq</code>，但是升级到14.10之后似乎以前的方法不太适用了，未知是因为否与系统的network-manager冲突的关系。即使如此，不妨就使用network-manager来设置，但是总也不成功。经过一番google，终于找到了一个可行的方案。</p>
+<h2 id="在网络设置中共享">在网络设置中共享</h2><ol>
+<li>点击桌面右上角的网络连接图标，选择最后一项<code>edit connections...</code></li>
+</ol>
+<p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1esow7dhwtcj20b4094ab9.jpg" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/01/ubuntu1404WirelessShare/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/wifi/">wifi</a><a href="/tags/wireless/">wireless</a><a href="/tags/无线共享/">无线共享</a><a href="/tags/网络/">网络</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/01/ubuntu1404WirelessShare/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/01/ubuntu1404WirelessShare/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/hindsightLearningNote3/" title="simics hindsight学习笔记（三）" itemprop="url">simics hindsight学习笔记（三）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-31T02:20:16.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>继续上一节，学习simics hindsight使用，命令行参数部分。</p>
+<h2 id="帮助系统">帮助系统</h2><p>simics常用命令按类别分组，要查看分类，可以输入help。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; <span class="keyword">help</span></span><br><span class="line">[...]</span><br><span class="line">To <span class="built_in">get</span> you started, here <span class="keyword">is</span> <span class="keyword">a</span> <span class="keyword">list</span> of <span class="keyword">command</span> categorie<span class="variable">s:</span></span><br><span class="line">Breakpoints                 Files <span class="built_in">and</span> Directories       Python</span><br><span class="line">CD-ROM                      GUI Real                    Network</span><br><span class="line">Changing Simulated State    Haps                        Registers</span><br></pre></td></tr></table></figure>
+<p>使用<code>help catogory</code>打印该分类下的命令清单：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; help <span class="string">"Changing Simulated State"</span></span><br><span class="line">Commands available <span class="operator">in</span> <span class="operator">the</span> Changing Simulated State category:</span><br><span class="line"></span><br><span class="line">&lt;image&gt;.<span class="built_in">set</span>                     <span class="built_in">set</span> <span class="keyword">bytes</span> <span class="operator">in</span> image <span class="built_in">to</span> specified <span class="built_in">value</span></span><br><span class="line">&lt;memory-<span class="constant">space</span>&gt;.<span class="built_in">load</span>-binary      <span class="built_in">load</span> binary (executable) <span class="built_in">file</span> <span class="keyword">into</span> memory</span><br><span class="line">&lt;memory-<span class="constant">space</span>&gt;.<span class="built_in">load</span>-<span class="built_in">file</span>        <span class="built_in">load</span> <span class="built_in">file</span> <span class="keyword">into</span> memory</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/hindsightLearningNote3/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/hindsightLearningNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote3/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/hindsightLearningNote2/" title="simics hindsight学习笔记（二）" itemprop="url">simics hindsight学习笔记（二）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T15:18:18.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　继续学习simics的使用。</p>
+<h1 id="CLI命令行界面">CLI命令行界面</h1><p>　　simics CLI是一种基于文本的高级用户界面，内置<strong>帮助</strong>系统，上下文敏感可用<strong>tab</strong>补全，支持<strong>脚本</strong>编程，作为hindsight的一部分一起提供。</p>
+<p>　　如果使用了GUI，那么可以通过Control Window的<code>Tools → Command Line Window</code>来启动。Eclipse中位于Console View中。如果未使用GUI，则位于启动simics的shell中。</p>
+<h2 id="调用命令">调用命令</h2><p>　　在命令行中输入命令+参数来使用，可以在reference manual中找到许多例子，以下是两个例子：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SYNOPSIS</span><br><span class="line">    command1 -x -y -small [cpu-<span class="keyword">name</span>] address (<span class="built_in">size</span>|<span class="keyword">name</span>)</span><br><span class="line">SYNOPSIS</span><br><span class="line">    command2 files . . .</span><br></pre></td></tr></table></figure></p>
+<p>　　以<strong>短横线</strong>开头的选项都是flag并且<strong>总是可选</strong>的，flag长度可能不止一个字符，且<strong>不能以-xy</strong>的形式来表示-x -y，位置不敏感，可位于参数列表中的任意位置。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/hindsightLearningNote2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/hindsightLearningNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/hindsightLearningNote1/" title="simics hindsight学习笔记（一）" itemprop="url">simics hindsight学习笔记（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T14:42:23.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="概念">概念</h1><p>　　以下介绍一些关于模拟的基本概念。</p>
+<h2 id="模拟的限制">模拟的限制</h2><p>　　Simics是系统层指令集模拟器，也就是说：</p>
+<pre><code>指令级的模拟，一次执行一个指令
+模拟硬件的二进制接口，任何硬件上运行的软件在<span class="keyword">target</span>上也能运行
+</code></pre><p>　　包括<strong>firmawre,硬件驱动，操作系统</strong>和用户程序在内的任何软件都能在target上运行。</p>
+<p>　　simics的时间系统非常简单，例如它默认所有<strong>指令的执行时间是一样</strong>的，利用这点将可以编写简单程序来区别模拟与真实系统。</p>
+<h2 id="非入侵的观察和调试">非入侵的观察和调试</h2><p>　　Simics有强大的调试和观察功能：</p>
+<pre><code>观察和设置<span class="keyword">*</span><span class="keyword">*</span>register,memory和硬件状态<span class="keyword">*</span><span class="keyword">*</span>
+设置断点和观察点
+以脚本实现上述功能
+</code></pre><p>　　有了上述支持，<strong>无须在target上安装任何调试程序</strong>，因此调试行为也对target及之上的软件是<strong>完全透明</strong>的。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/hindsightLearningNote1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/hindsightLearningNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/simicsProductFamily/" title="Simics产品家族" itemprop="url">Simics产品家族</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T08:42:35.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Simics由多个产品和可选的add-on组成，此文档介绍它们分别是什么，彼此如何交互。</p>
+<h2 id="Simics_HindSight">Simics HindSight</h2><p>　　<strong>软件开发人员</strong>使用的主要/基本的产品，为Simics平台提<strong>供用户接口</strong>和<strong>软件调试接口</strong>。HindSight可以通过<strong>Eclipse</strong>来使用，也可以单独使用。如果单独使用，可以用通用的如<strong>GDB</strong>这样的或者其它<strong>IDE</strong>的软件调试器与之连接。</p>
+<p>　　HindSight提供<strong>脚本编程</strong>、设备和系统登录、低层<strong>Debugging</strong>，<strong>断点</strong>和WatchPoint能力，还提供独有的对调试隐蔽Bug极为有用的<strong>反向执行</strong>能力。</p>
+<p>　　HindSight还提供<strong>save和load</strong>能力，ckeckpoints包含系统（CPU，内存，软件等）状态的所有信息，你可以将其只在到硬盘当中，随时可以还原系统状态。</p>
+<p>　　Simics还提供一个虚拟板卡，所谓的“Quick Start Platform. QSP”，它是一个包含有限合成物和专门模拟设备的简单虚拟平台。用户可以通过它来<strong>上手和熟悉Simics特性</strong>。因为它的设备模型并不与真实物理设备对应，所以不能用它来运行真正的firmware。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/simicsProductFamily/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/simicsProductFamily/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/simicsProductFamily/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/aboutSimics/" title="simics简介" itemprop="url">simics简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T08:40:21.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Simics是一种支持定义、开发和部署数字系统的模拟器，具有快速、准确、可伸缩和扩展的特点，为工程人员提供了新的系统开发途径。Simics是一种完全系统模拟平台，能快速、确定且可控地运行<strong>未经修改的二进制文件</strong>。在硬件昂贵、稀缺甚至不存在时，为早期软件开发和测试提供理想的环境。Simics对Intel内部部门是免费使用的。</p>
+<p>　　Simics可以加速系统设计，软件开发和任何数字系统的部署，不论是简单的CPU还是复杂混合的架构，多平台，<strong>计算机网络系统</strong>。Simics支持混合CPU类型的异构平台，从单CPU到数百SoC通过Ethernet连接的<strong>多机架系统</strong>。Simics提供不限于ARM, H8, MIPS, SPARC, SH, TI C64, and IA (x86）架构模型及周边系统。</p>
+<h2 id="完全系统模拟">完全系统模拟</h2><p>　　Simics可以模拟任何数字系统，基本的CPU+内存，定制的FPGA或ASIC，单个的板卡或插满板卡的机架，大型复杂的混合架构系统模型可以由现成的若干处理器家庭，数百计的IO设备和标准通信，背板和网络协议组成。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/aboutSimics/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/aboutSimics/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/aboutSimics/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/28/6stagesInLinuxBootProcess/" title="Linux启动过程中的6个阶段" itemprop="url">Linux启动过程中的6个阶段</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-28T16:46:48.000Z" itemprop="datePublished"> 發表於 2015-05-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>认识Linux的启动过程对每一个Linux使用者和管理员都是必要的，它能使你一幅清晰的Linux如何工作的图景。本文会介绍按下电源到登录提示出现过程中都经历了哪些过程。下图会给你一个简洁明了的整体认识。</p>
+<p>简要启动过程：</p>
+<pre><code><span class="bullet">1. </span>按下电源键
+<span class="bullet">2. </span>CPU跳到BIOS
+<span class="bullet">3. </span>BIOS运行POST
+<span class="bullet">4. </span>寻找第一个可启动设备
+<span class="bullet">5. </span>加载执行MBR
+<span class="bullet">6. </span>加载OS
+<span class="bullet">7. </span>用户提示符
+</code></pre><p>以下是Linux启动过程中的详细阶段。</p>
+<pre><code>1） 系统启动（硬件）
+2） <span class="keyword">Boot</span> Loader阶段1（MBR加载）
+3） <span class="keyword">Boot</span> Loader阶段2（GRUB加载）
+4） Kernel
+5） INIT
+6） 用户提示符
+</code></pre><h2 id="阶段1：系统启动">阶段1：系统启动</h2><p>CPU加电后执行的第一个指令就是将控制交给BIOS进行开机自检，BIOS会执行两个任务：</p>
+<pre><code>执行<span class="keyword">POST</span>
+选择第一个可启动设备
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/28/6stagesInLinuxBootProcess/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/bootloader/">bootloader</a><a href="/tags/grub/">grub</a><a href="/tags/init/">init</a><a href="/tags/启动流程/">启动流程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/28/6stagesInLinuxBootProcess/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/28/6stagesInLinuxBootProcess/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/27/androidBootProcess/" title="android启动流程" itemprop="url">android启动流程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-27T17:23:24.000Z" itemprop="datePublished"> 發表於 2015-05-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>什么是Zygot,init.rc,和Linux的启动过程有什么区别等。</p>
+<h2 id="通电与系统启动">通电与系统启动</h2><p>电源接通以后，Boot Rom从一个写入硬件的预定义的地址开始执行，它会<strong>加载BootLoader</strong>到内存中执行。</p>
+<p>（注：类似PC的BIOS）</p>
+<h2 id="BootLoader">BootLoader</h2><p>这是一个在android之前运行的小程序，它不是android的一部分，是厂商设置锁的其它限制的地方。</p>
+<p>(注：类似Linux的Grub)</p>
+<p>Bootloader分两步执行，首先它检测外部Ram并加载一个第二步中要用到的程序。</p>
+<p>第二步中，bootloader安装内核运行需要的<strong>网络、内存</strong>等，它为kernel的特定功能提供<strong>配置参数</strong>或者<strong>输入</strong>。</p>
+<p>bootloader可以在这里找到：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;android <span class="keyword">source</span>&gt;<span class="regexp">/bootable/</span>bootloader<span class="regexp">/legacy/u</span>sbloader</span><br></pre></td></tr></table></figure>
+<p>legacy的loader包含两个重要部分：</p>
+<pre><code><span class="number">1</span>. init<span class="class">.s</span>:: 初始化栈，置零BSS segment和调用main.c中的<span class="function"><span class="title">call_main</span><span class="params">()</span></span>。
+<span class="number">2</span>. main<span class="class">.c</span>:: 初始化硬件（硬件，主板，键盘，控制台）和创建Linux tags
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/27/androidBootProcess/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Zygote/">Zygote</a><a href="/tags/android/">android</a><a href="/tags/bootloader/">bootloader</a><a href="/tags/启动流程/">启动流程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/27/androidBootProcess/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/27/androidBootProcess/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/26/ipCommandInLinux/" title="Linux下的ip命令" itemprop="url">Linux下的ip命令</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-26T16:58:38.000Z" itemprop="datePublished"> 發表於 2015-05-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>linux下的<code>ip</code>命令有点类似<code>ifconfig</code>命令，但是更强大，且有意取代它。使用ip命令可以完成多项网络管理操作，ifconfig是net-tools工具下的一个命令，而这个工具已经多年没有维护，已不建议使用的，而iproute2保留并增强了它的许多功能。</p>
+<p>许多的Linux发行版都已经内置了iproute2工具集。</p>
+<h2 id="IP地址相关操作">IP地址相关操作</h2><p>ip命令使用CIDR格式来表示MASK，更直观也更方便输入，不用输入长串的255了。</p>
+<h3 id="显示IP">显示IP</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">chen<span class="annotation">@vaio</span>:~$ ip addr show eth0</span><br><span class="line"><span class="number">2</span>: <span class="string">eth0:</span> &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="number">1500</span> qdisc pfifo_fast state UP group <span class="keyword">default</span> qlen <span class="number">1000</span></span><br><span class="line">    link/ether <span class="number">30</span>:<span class="string">f9:</span><span class="string">ed:</span><span class="string">fe:</span><span class="number">66</span>:<span class="number">4</span>d brd <span class="string">ff:</span><span class="string">ff:</span><span class="string">ff:</span><span class="string">ff:</span><span class="string">ff:</span>ff</span><br><span class="line">    inet <span class="number">10.210</span>.106.20/<span class="number">27</span> brd <span class="number">10.210</span>.106.31 scope global eth0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 <span class="number">2001</span>:<span class="string">da8:</span><span class="number">215</span>:<span class="string">fa50:</span><span class="string">a55d:</span><span class="number">8</span><span class="string">c14:</span><span class="number">6748</span>:xxxx/<span class="number">64</span> scope global temporary dynamic </span><br><span class="line">       valid_lft <span class="number">569852</span>sec preferred_lft <span class="number">50852</span>sec</span><br><span class="line">    inet6 <span class="number">2001</span>:<span class="string">da8:</span><span class="number">215</span>:<span class="string">fa50:</span><span class="number">32</span><span class="string">f9:</span><span class="string">edff:</span><span class="string">fefe:</span>xxxx/<span class="number">64</span> scope global mngtmpaddr noprefixroute dynamic </span><br><span class="line">       valid_lft <span class="number">2591880</span>sec preferred_lft <span class="number">604680</span>sec</span><br><span class="line">    inet6 <span class="string">fe80:</span>:<span class="number">32</span><span class="string">f9:</span><span class="string">edff:</span><span class="string">fefe:</span><span class="number">664</span>d/<span class="number">64</span> scope link </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+<h3 id="增加或删除IP">增加或删除IP</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">ip</span> addr add <span class="number">192.168.0.193</span>/<span class="number">24</span> dev wlan0</span><br><span class="line"></span><br><span class="line">ip addr del <span class="number">192.168.0.193</span>/<span class="number">24</span> dev wlan0</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/26/ipCommandInLinux/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ip/">ip</a><a href="/tags/网络/">网络</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/26/ipCommandInLinux/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/26/ipCommandInLinux/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

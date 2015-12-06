@@ -1,0 +1,620 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="sqlite3通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。sqliste3包含很多有用的命令，如.dump可以打印数据库内容，.schema可以打印现在table的sql create声明，而且执行的速度很快。
+你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它">
+<meta property="og:url" content="http://azyet.github.io/2015/06/10/adbLearningNote3/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="sqlite3通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。sqliste3包含很多有用的命令，如.dump可以打印数据库内容，.schema可以打印现在table的sql create声明，而且执行的速度很快。
+你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它">
+<meta name="twitter:description" content="sqlite3通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。sqliste3包含很多有用的命令，如.dump可以打印数据库内容，.schema可以打印现在table的sql create声明，而且执行的速度很快。
+你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/10/adbLearningNote3/" title="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它" itemprop="url">adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-10T07:29:59.000Z" itemprop="datePublished"> 發表於 2015-06-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite3"><span class="toc-number">1.</span> <span class="toc-text">sqlite3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#屏幕录制"><span class="toc-number">2.</span> <span class="toc-text">屏幕录制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#screenrecord选项"><span class="toc-number">2.1.</span> <span class="toc-text">screenrecord选项</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#—help"><span class="toc-number">2.1.1.</span> <span class="toc-text">—help</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#—size_<WIDTHxHEIGHT>"><span class="toc-number">2.1.2.</span> <span class="toc-text">—size <WIDTHxHEIGHT></span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#—bit-rate_<RATE>"><span class="toc-number">2.2.</span> <span class="toc-text">—bit-rate <RATE></span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#—time-limit_<TIME>"><span class="toc-number">2.2.1.</span> <span class="toc-text">—time-limit <TIME></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#—rotate"><span class="toc-number">2.2.2.</span> <span class="toc-text">—rotate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#—verbose"><span class="toc-number">2.2.3.</span> <span class="toc-text">—verbose</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Monkey"><span class="toc-number">3.</span> <span class="toc-text">Monkey</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它shell命令"><span class="toc-number">4.</span> <span class="toc-text">其它shell命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dumpsys"><span class="toc-number">4.1.</span> <span class="toc-text">dumpsys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dumpstate"><span class="toc-number">4.2.</span> <span class="toc-text">dumpstate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logcat_[option]…_[filter-spec]…"><span class="toc-number">4.3.</span> <span class="toc-text">logcat [option]… [filter-spec]…</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dmesg"><span class="toc-number">4.4.</span> <span class="toc-text">dmesg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#start/stop"><span class="toc-number">4.5.</span> <span class="toc-text">start/stop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启logcat"><span class="toc-number">5.</span> <span class="toc-text">开启logcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭adb_server"><span class="toc-number">6.</span> <span class="toc-text">关闭adb server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#无线使用"><span class="toc-number">7.</span> <span class="toc-text">无线使用</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="sqlite3">sqlite3</h2><p>通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。<code>sqliste3</code>包含很多有用的命令，如<code>.dump</code>可以打印数据库内容，<code>.schema</code>可以打印现在table的sql create声明，而且执行的速度很快。</p>
+<p>你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目录：<code>/data/data/&lt;package_name&gt;/databases/</code></p>
+<p>以下是一个例子：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">adb -<span class="keyword">s</span> emulator-<span class="number">5554</span> <span class="keyword">shell</span></span><br><span class="line"># sqlite3 /data/data/<span class="keyword">com</span>.example.google.rss.rssexample/databases/rssitems.db</span><br><span class="line">SQLite <span class="keyword">version</span> <span class="number">3.3</span>.<span class="number">12</span></span><br><span class="line">Enter <span class="string">".help"</span> <span class="keyword">for</span> instructions</span><br><span class="line">.... enter commands, then <span class="keyword">quit</span>...</span><br><span class="line">sqlite&gt; .<span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+<p>进入sqlite3后就可以使用sqlite3的命令了,退出可使用<code>exit</code>或者<code>ctrl+d</code>.</p>
+<a id="more"></a>
+<h2 id="屏幕录制">屏幕录制</h2><p><code>screenrecord</code>命令是一个用以录制android 4.4以上版本的设备显示的shell工具,将activity显示录入mpeg4文件中,你可以拿来当作视频展示用.也可用于录制视频宣传和教程.</p>
+<p>其命令格式如下</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>adb shell screenrecord /sdcard/demo.mp4</span><br></pre></td></tr></table></figure>
+<p>使用ctrl+c来停止录制,或者3分钟后自动结束,或者可以用<code>--set-limit</code>来设定超时时间.</p>
+<p>以下是录制与下载视频文件的过程<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ adb <span class="built_in">shell</span></span><br><span class="line"><span class="built_in">shell</span>@ $ screenrecord <span class="comment">--verbose /sdcard/demo.mp4</span></span><br><span class="line">(press Ctrl-C <span class="built_in">to</span> <span class="built_in">stop</span>)</span><br><span class="line"><span class="built_in">shell</span>@ $ exit</span><br><span class="line">$ adb pull /sdcard/demo.mp4</span><br></pre></td></tr></table></figure></p>
+<p>screenrecord使用设备的显示分辨率和方向作为默认值,也可设定为任意支持的分辨率和比特率. </p>
+<p>你应该知道的screenrecord局限:</p>
+<ol>
+<li>有些设备可能不能以原生的分辨率录制,如果遇到问题可以高低分辨率再尝试</li>
+<li>不支持录制屏幕旋转,如果录制中发生旋转,那么录像中的部分屏幕将被切除.</li>
+<li>无声音</li>
+</ol>
+<h3 id="screenrecord选项">screenrecord选项</h3><h4 id="—help">—help</h4><p>打印帮助</p>
+<h4 id="—size_&lt;WIDTHxHEIGHT&gt;">—size &lt;WIDTHxHEIGHT&gt;</h4><h3 id="—bit-rate_&lt;RATE&gt;">—bit-rate &lt;RATE&gt;</h3><p>设定比特率,默认为4Mb/s,如<code>screenrecord --bit-rate 6000000 /sdcard/demo.mp4</code></p>
+<h4 id="—time-limit_&lt;TIME&gt;">—time-limit &lt;TIME&gt;</h4><p>设置录制时间,单位秒,默认为180s.</p>
+<h4 id="—rotate">—rotate</h4><p>将输出旋转90度,试验特性</p>
+<h4 id="—verbose">—verbose</h4><p>在CLI中打印日志,如果不设置运行时将无任何输出.</p>
+<h2 id="Monkey">Monkey</h2><p>UI/Application Exerciser  Monkey是一个测试用的程序,它能产生大量伪随机但可重复的用户动作,如点击,按压,手势以及一些系统级的事件.</p>
+<p>简单的使用命令如下,它将打开应用,发送500个随机操作.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell monkey -v -<span class="tag">p</span> your<span class="class">.package</span><span class="class">.name</span> <span class="number">500</span></span><br></pre></td></tr></table></figure>
+<p>更详细的文档参见<a href="http://developer.android.com/tools/help/monkey.html" target="_blank" rel="external"> UI/Application Exerciser Monkey</a></p>
+<h2 id="其它shell命令">其它shell命令</h2><p>以下操作会列出所有可用shell命令<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="keyword">shell</span> <span class="keyword">ls</span> /<span class="built_in">system</span>/bin</span><br></pre></td></tr></table></figure></p>
+<p>大部命令都有帮助信息.</p>
+<p>下表列出最常用的5个命令的简介.</p>
+<h3 id="dumpsys">dumpsys</h3><p>dump系统数据到屏幕</p>
+<h3 id="dumpstate">dumpstate</h3><p>dump状态到文件</p>
+<h3 id="logcat_[option]…_[filter-spec]…">logcat [option]… [filter-spec]…</h3><p>打开系统和应用的log并输出到屏幕</p>
+<h3 id="dmesg">dmesg</h3><p>打印kernel的调试信息</p>
+<h3 id="start/stop">start/stop</h3><p>开始(停止执行)一个设备实例</p>
+<h2 id="开启logcat">开启logcat</h2><p>安卓的日志系统提供一种收集和查看系统调试信息的机制. 来自应用的系统不同部分的日志被缓存到一个环形的系列日志中,可以被logcat命令查看和过滤.</p>
+<p>logcat的基本用法为:</p>
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="atom">adb</span>] <span class="atom">logcat</span> [<span class="atom">option</span>] ... [<span class="atom">filter</span>-<span class="atom">spec</span>] ...</span><br></pre></td></tr></table></figure>
+<h2 id="关闭adb_server">关闭adb server</h2><p>在一些情况下可能需要关闭adb server再启动,比如失去响应时,重启可能会解决问题.</p>
+<p>使用kill-server命令可以终止server, 再次使用adb命令会自动启动server.</p>
+<h2 id="无线使用">无线使用</h2><p>adb通常通过USB使用,但是也可以使用WIFI连接.</p>
+<ol>
+<li>将设备和adb主机连接到同一wifi下,但并不一定所有的wifi都适合, 也许还需要配置合适的防火墙规则.</li>
+<li>将设备用USB连接到主机</li>
+<li><p>确保adb以usb方式运行</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb usb</span><br><span class="line">restarting <span class="flow">in</span> USB <span class="built_in">mode</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过usb连接设备</p>
+</li>
+<li><p>将adb主机以tcpip方式重启</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb tcpip <span class="number">5555</span></span><br><span class="line">restarting <span class="flow">in</span> TCP <span class="built_in">mode</span> port: <span class="number">5555</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看设备的ip</p>
+</li>
+<li><p>将adb主机连接到设备</p>
+<figure class="highlight ruleslanguage"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb connect <span class="array">#.</span><span class="array">#.</span><span class="array">#.</span>#</span><br><span class="line">connected to <span class="array">#.</span><span class="array">#.</span><span class="array">#.</span>#:<span class="number">5555</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>断开usb,确认连接正常</p>
+</li>
+</ol>
+<p>如果连接断开,确认双方wifi正常,重新执行<code>connect</code>动作,如果不成功,则可以<code>kill-server</code>再从头来一次.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/andorid/">andorid</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/06/10/adbLearningNote3/" data-title="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/06/10/repoLearningNote/" title="repo命令参考手册">
+  <strong>上一篇：</strong><br/>
+  <span>
+  repo命令参考手册</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/06/08/shortcutsInBash/"  title="BASH中的shortcut">
+ <strong>下一篇：</strong><br/> 
+ <span>BASH中的shortcut
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/10/adbLearningNote3/" data-title="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它" data-url="http://azyet.github.io/2015/06/10/adbLearningNote3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite3"><span class="toc-number">1.</span> <span class="toc-text">sqlite3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#屏幕录制"><span class="toc-number">2.</span> <span class="toc-text">屏幕录制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#screenrecord选项"><span class="toc-number">2.1.</span> <span class="toc-text">screenrecord选项</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#—help"><span class="toc-number">2.1.1.</span> <span class="toc-text">—help</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#—size_<WIDTHxHEIGHT>"><span class="toc-number">2.1.2.</span> <span class="toc-text">—size <WIDTHxHEIGHT></span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#—bit-rate_<RATE>"><span class="toc-number">2.2.</span> <span class="toc-text">—bit-rate <RATE></span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#—time-limit_<TIME>"><span class="toc-number">2.2.1.</span> <span class="toc-text">—time-limit <TIME></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#—rotate"><span class="toc-number">2.2.2.</span> <span class="toc-text">—rotate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#—verbose"><span class="toc-number">2.2.3.</span> <span class="toc-text">—verbose</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Monkey"><span class="toc-number">3.</span> <span class="toc-text">Monkey</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它shell命令"><span class="toc-number">4.</span> <span class="toc-text">其它shell命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dumpsys"><span class="toc-number">4.1.</span> <span class="toc-text">dumpsys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dumpstate"><span class="toc-number">4.2.</span> <span class="toc-text">dumpstate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logcat_[option]…_[filter-spec]…"><span class="toc-number">4.3.</span> <span class="toc-text">logcat [option]… [filter-spec]…</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dmesg"><span class="toc-number">4.4.</span> <span class="toc-text">dmesg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#start/stop"><span class="toc-number">4.5.</span> <span class="toc-text">start/stop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启logcat"><span class="toc-number">5.</span> <span class="toc-text">开启logcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭adb_server"><span class="toc-number">6.</span> <span class="toc-text">关闭adb server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#无线使用"><span class="toc-number">7.</span> <span class="toc-text">无线使用</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

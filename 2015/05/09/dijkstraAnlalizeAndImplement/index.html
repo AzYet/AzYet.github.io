@@ -1,0 +1,591 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>最短路径dijkstra算法实践：理解再实现 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。　　　　以下面的图为测试样本：
+ 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最短路径dijkstra算法实践：理解再实现">
+<meta property="og:url" content="http://azyet.github.io/2015/05/09/dijkstraAnlalizeAndImplement/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。　　　　以下面的图为测试样本：
+ 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最短路径dijkstra算法实践：理解再实现">
+<meta name="twitter:description" content="之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。　　　　以下面的图为测试样本：
+ 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/09/dijkstraAnlalizeAndImplement/" title="最短路径dijkstra算法实践：理解再实现" itemprop="url">最短路径dijkstra算法实践：理解再实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-09T07:24:25.000Z" itemprop="datePublished"> 發表於 2015-05-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初始状态"><span class="toc-number">1.</span> <span class="toc-text">初始状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对单个点的处理"><span class="toc-number">2.</span> <span class="toc-text">对单个点的处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完成算法（使用队列）"><span class="toc-number">3.</span> <span class="toc-text">完成算法（使用队列）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#记录路径"><span class="toc-number">4.</span> <span class="toc-text">记录路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。<br>　　<br>　　以下面的图为测试样本：</p>
+<p> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""><br>　　<br>　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于之前的记录，则更新记录；直到所有点都被遍历。<br>　　<a id="more"></a><br>　　依旧，为了方便，使用python语言，图用边的集合来表示：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">g</span> = [(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="number">6</span>), (<span class="string">"A"</span>, <span class="string">"C"</span>, <span class="number">3</span>), (<span class="string">"B"</span>, <span class="string">"C"</span>, <span class="number">2</span>), (<span class="string">"B"</span>, <span class="string">"D"</span>, <span class="number">5</span>), (<span class="string">"C"</span>, <span class="string">"D"</span>, <span class="number">3</span>), (<span class="string">"C"</span>, <span class="string">"E"</span>, <span class="number">4</span>), (<span class="string">"D"</span>, <span class="string">"F"</span>, <span class="number">3</span>),</span><br><span class="line">     (<span class="string">"D"</span>, <span class="string">"E"</span>, <span class="number">2</span>), (<span class="string">"E"</span>, <span class="string">"F"</span>, <span class="number">6</span>)]</span><br></pre></td></tr></table></figure></p>
+<p>　　</p>
+<h2 id="初始状态">初始状态</h2><p>　　从A开始探测，则已知距离d(A,A) = 0 。 </p>
+<h2 id="对单个点的处理">对单个点的处理</h2><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">map=</span>&#123;<span class="string">"A"</span>:<span class="number">0</span>&#125; <span class="comment">#初始记录</span></span><br><span class="line"><span class="comment">#对点"A"进行处理</span></span><br><span class="line">for e <span class="keyword">in</span> g:                 <span class="comment">#遍历所有边 (e = edge)</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"A"</span> <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:       <span class="comment">#与A相连的边</span></span><br><span class="line">        <span class="variable">d =</span> <span class="built_in">map</span>[<span class="string">"A"</span>]+e[<span class="number">2</span>]   <span class="comment">#计算距离</span></span><br><span class="line">        <span class="comment">#添加记录（初始map为空，暂不考虑记录已存在的情况）</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">"A"</span> == e[<span class="number">0</span>]:     <span class="comment">#无向边，需要确定另一顶点名称</span></span><br><span class="line">            <span class="built_in">map</span>[e[<span class="number">1</span>]] = d</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">map</span>[e[<span class="number">0</span>]] = d</span><br><span class="line">print <span class="built_in">map</span></span><br></pre></td></tr></table></figure>
+<p>输出<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'A'</span>: <span class="number">0</span>, <span class="string">'C'</span>: <span class="number">3</span>, <span class="string">'B'</span>: <span class="number">6</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　一轮探测完以后，记录中新增了B C两点及它们与起点A的距离 ，那么接下来就要对B，C依次进行同样的处理了，随后对与B,C相连的点的处理……直到所有点处理完。</p>
+<h2 id="完成算法（使用队列）">完成算法（使用队列）</h2><p>　　对旧有代码进行改造：</p>
+<blockquote>
+<ol>
+<li>将新探测到的点加入队列（待处理对象）</li>
+<li>更新记录时与旧有记录作比较</li>
+</ol>
+</blockquote>
+<p>　　增加以上功能后的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">map=&#123;<span class="string">"A"</span>:<span class="number">0</span>&#125;</span><br><span class="line">vp = Queue.Queue(maxsize=<span class="number">0</span>)             <span class="comment">#新建队列</span></span><br><span class="line">vp.put(<span class="string">"A"</span>)                             <span class="comment">#初始化待处理点，将“A”加入队列</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">not</span> vp.empty()):                  <span class="comment">#队列不为空，执行</span></span><br><span class="line">    v=vp.get()                          <span class="comment">#取队首点v（vertex）</span></span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> g:                         <span class="comment">#遍历边集</span></span><br><span class="line">        <span class="keyword">if</span> v <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:                 <span class="comment">#边e与v相连        </span></span><br><span class="line">            d = map[v]+e[<span class="number">2</span>]             <span class="comment">#计算A经由v到达v1的距离     </span></span><br><span class="line">            <span class="keyword">if</span> v == e[<span class="number">0</span>]:               <span class="comment">#无向边，需要确定另一顶点v1</span></span><br><span class="line">                v1 = e[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                v1 = e[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> v1 <span class="keyword">not</span> <span class="keyword">in</span> map:     <span class="comment">#v1不在记录中（新探测到的点）</span></span><br><span class="line">                vp.put(v1)        <span class="comment">#v1加入队列尾（待处理点）</span></span><br><span class="line">                map[v1] = d       <span class="comment">#新增记录</span></span><br><span class="line">            <span class="keyword">elif</span> d &lt; map[v1]:     <span class="comment">#v1已在记录中，但新路径更短</span></span><br><span class="line">                map[v1] = d       <span class="comment">#更新记录</span></span><br><span class="line"><span class="keyword">print</span> map</span><br></pre></td></tr></table></figure>
+<p>输出为：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'A'</span>: <span class="number">0</span>, <span class="string">'C'</span>: <span class="number">3</span>, <span class="string">'B'</span>: <span class="number">5</span>, <span class="string">'E'</span>: <span class="number">7</span>, <span class="string">'D'</span>: <span class="number">6</span>, <span class="string">'F'</span>: <span class="number">9</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将图拿来确认一下正确性。（算法到此已可算完成了。）<br> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""></p>
+<h2 id="记录路径">记录路径</h2><p>　　以上只是输出了最短距离，但并没有记录路径，再稍微改造一下，并改以B为起点，并增加一些打印信息，方便了解算法运行过程：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">map=</span>&#123;<span class="string">"B"</span>:[<span class="string">"B"</span>,<span class="number">0</span>]&#125;</span><br><span class="line"><span class="variable">vp =</span> Queue.Queue(<span class="variable">maxsize=</span><span class="number">0</span>)</span><br><span class="line">vp.put(<span class="string">"B"</span>)</span><br><span class="line"><span class="comment">#first step</span></span><br><span class="line">while(not vp.empty()):</span><br><span class="line">    <span class="variable">v=</span>vp.get()                          <span class="comment">#对待处理点v，执行</span></span><br><span class="line">    print <span class="string">"dealing with: "</span>+v</span><br><span class="line">    for e <span class="keyword">in</span> g:                         <span class="comment">#遍历边集</span></span><br><span class="line">        <span class="keyword">if</span> v <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:                 <span class="comment">#与v相连的边</span></span><br><span class="line">            <span class="variable">d =</span> <span class="built_in">map</span>[v][<span class="number">1</span>]+e[<span class="number">2</span>]          <span class="comment">#计算距离</span></span><br><span class="line">            <span class="keyword">if</span> <span class="variable">v =</span>= e[<span class="number">0</span>]:               <span class="comment">#无向边，需要确定另一顶点v1</span></span><br><span class="line">                <span class="variable">v1 =</span> e[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="variable">v1 =</span> e[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> v1 not <span class="keyword">in</span> <span class="built_in">map</span>:                   <span class="comment">#v1不在记录中</span></span><br><span class="line">                print <span class="string">"adding :"</span>+v1</span><br><span class="line">                <span class="built_in">map</span>[v1] = [<span class="built_in">map</span>[v][<span class="number">0</span>]+v1,d]       <span class="comment">#加入记录</span></span><br><span class="line">                print <span class="built_in">map</span></span><br><span class="line">                vp.put(v1)                      <span class="comment">#将v1加入待处理点</span></span><br><span class="line">            elif d &lt; <span class="built_in">map</span>[v1][<span class="number">1</span>]:                <span class="comment">#已有记录，但新路径更短</span></span><br><span class="line">                print <span class="string">"update :"</span>+v1</span><br><span class="line">                <span class="built_in">map</span>[v1] = [<span class="built_in">map</span>[v][<span class="number">0</span>]+v1,d]       <span class="comment">#更新记录</span></span><br><span class="line">                print <span class="built_in">map</span></span><br></pre></td></tr></table></figure></p>
+<p>输出为：<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">B</span> </span><br><span class="line"><span class="atom">adding</span> :<span class="name">A</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BA'</span>, <span class="number">6</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>]&#125;</span><br><span class="line"><span class="atom">adding</span> :<span class="name">C</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BA'</span>, <span class="number">6</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>]&#125;</span><br><span class="line"><span class="atom">adding</span> :<span class="name">D</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BA'</span>, <span class="number">6</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>]&#125;</span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">A</span></span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">C</span></span><br><span class="line"><span class="atom">update</span> :<span class="name">A</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BCA'</span>, <span class="number">5</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>]&#125;</span><br><span class="line"><span class="atom">adding</span> :<span class="name">E</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BCA'</span>, <span class="number">5</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'E'</span>: [<span class="string">'BCE'</span>, <span class="number">6</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>]&#125;</span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">D</span></span><br><span class="line"><span class="atom">adding</span> :<span class="name">F</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BCA'</span>, <span class="number">5</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'E'</span>: [<span class="string">'BCE'</span>, <span class="number">6</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>], <span class="string">'F'</span>: [<span class="string">'BDF'</span>, <span class="number">8</span>]&#125;</span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">E</span></span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">F</span></span><br></pre></td></tr></table></figure></p>
+<p>再次将图拿来确认一下正确性。<br> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""><br>算法至此完成。</p>
+<h2 id="总结">总结</h2><p>　　dijkstar算法的正确性是如何保证的呢？因为算法在任一时刻，都保证了：</p>
+<blockquote>
+<ol>
+<li>记录中的项是已探明路径中的最短路径。起始状态，结论显然成立：到自身距离为0。</li>
+<li>探测了与所有当前点相邻的点（发现所有新路径）。对于新探测到的点，第一条路径也是唯一路径，自然是已知最短的；对于已有记录的点，则用更短路径（如果有）来更新；从而再次保证了1的成立。</li>
+</ol>
+</blockquote>
+<p>　　当所有点都处理完，所有路径探明，记录自然就成为了到达所有点的最短路径。所以dijkstra算法其实是一个遍历所有路径，保留最小值的算法，只是选用了一个比较巧妙的遍历方式。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/dijkstra/">dijkstra</a><a href="/tags/图论/">图论</a><a href="/tags/最短路径/">最短路径</a><a href="/tags/算法/">算法</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/09/dijkstraAnlalizeAndImplement/" data-title="最短路径dijkstra算法实践：理解再实现 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/09/hex2decStr/" title="C语言笔试题：十六与十进制字符串转换">
+  <strong>上一篇：</strong><br/>
+  <span>
+  C语言笔试题：十六与十进制字符串转换</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/08/quickSortDesignAndImplement/"  title="快速排序实战：理解再实现">
+ <strong>下一篇：</strong><br/> 
+ <span>快速排序实战：理解再实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/09/dijkstraAnlalizeAndImplement/" data-title="最短路径dijkstra算法实践：理解再实现" data-url="http://azyet.github.io/2015/05/09/dijkstraAnlalizeAndImplement/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初始状态"><span class="toc-number">1.</span> <span class="toc-text">初始状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对单个点的处理"><span class="toc-number">2.</span> <span class="toc-text">对单个点的处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完成算法（使用队列）"><span class="toc-number">3.</span> <span class="toc-text">完成算法（使用队列）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#记录路径"><span class="toc-number">4.</span> <span class="toc-text">记录路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

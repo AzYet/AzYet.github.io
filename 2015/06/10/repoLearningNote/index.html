@@ -1,0 +1,634 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>repo命令参考手册 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="repo用法的基本形式为:
+1repo &amp;lt;COMMAND&amp;gt; &amp;lt;OPTIONS&amp;gt;
+可选项在[]中表示,例如许多命令接收一个项目列表作为参数,你可以通过一组名字或者p本地源目录的path来指定项目列表.12repo sync [&amp;lt;PROJECT0&amp;gt; &amp;lt;PROJECT1&amp;gt; &amp;lt;PROJECTN&amp;gt;]repo sync [&amp;lt;/PATH/TO/P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="repo命令参考手册">
+<meta property="og:url" content="http://azyet.github.io/2015/06/10/repoLearningNote/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="repo用法的基本形式为:
+1repo &amp;lt;COMMAND&amp;gt; &amp;lt;OPTIONS&amp;gt;
+可选项在[]中表示,例如许多命令接收一个项目列表作为参数,你可以通过一组名字或者p本地源目录的path来指定项目列表.12repo sync [&amp;lt;PROJECT0&amp;gt; &amp;lt;PROJECT1&amp;gt; &amp;lt;PROJECTN&amp;gt;]repo sync [&amp;lt;/PATH/TO/P">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1eszc4xc4ilj20o40fvtbl.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="repo命令参考手册">
+<meta name="twitter:description" content="repo用法的基本形式为:
+1repo &amp;lt;COMMAND&amp;gt; &amp;lt;OPTIONS&amp;gt;
+可选项在[]中表示,例如许多命令接收一个项目列表作为参数,你可以通过一组名字或者p本地源目录的path来指定项目列表.12repo sync [&amp;lt;PROJECT0&amp;gt; &amp;lt;PROJECT1&amp;gt; &amp;lt;PROJECTN&amp;gt;]repo sync [&amp;lt;/PATH/TO/P">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/10/repoLearningNote/" title="repo命令参考手册" itemprop="url">repo命令参考手册</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-10T09:51:59.000Z" itemprop="datePublished"> 發表於 2015-06-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#help"><span class="toc-number">1.</span> <span class="toc-text">help</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init"><span class="toc-number">2.</span> <span class="toc-text">init</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sync"><span class="toc-number">3.</span> <span class="toc-text">sync</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#upload"><span class="toc-number">4.</span> <span class="toc-text">upload</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#diff"><span class="toc-number">5.</span> <span class="toc-text">diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#download"><span class="toc-number">6.</span> <span class="toc-text">download</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#forall"><span class="toc-number">7.</span> <span class="toc-text">forall</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prune"><span class="toc-number">8.</span> <span class="toc-text">prune</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#start"><span class="toc-number">9.</span> <span class="toc-text">start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#status"><span class="toc-number">10.</span> <span class="toc-text">status</span></a></li></ol>
+		
+		</div>
+		
+		<p>repo用法的基本形式为:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span> <span class="tag">&lt;<span class="title">OPTIONS</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</span></span><br><span class="line">repo sync <span class="annotation">[&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="help">help</h2><p>使用<code>help</code>命令可以获得最新的帮助文档,由各子命令来组织.</p>
+<p>你也可以查看子命令的帮助<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo help <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="init">init</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ repo init -u &lt;URL&gt; <span class="annotation">[&lt;OPTIONS&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>在当前目录安装repo, 将创建一个<code>.repo</code>目录,内含源代码的git仓库和标准android manifest 文件, 同时还有一个<code>manifest.xml</code>文件,指向<code>.repo/manifests/</code>目录中的定manifest.<br>参数:</p>
+<p><code>-u</code> URL,指定manifest位置</p>
+<p><code>-m</code> 选择仓库中的manifest文件,缺省为<code>default.xml</code></p>
+<p><code>-b</code> 指定revision, 如一个特定的manifest分支. </p>
+<blockquote>
+<p>repo的其它命令需要在.repo的父目录或者某一子目录中执行</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="sync">sync</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>下载新更改,并更新本地环境中的工作文件,如果不带参数,将同步所有的项目的所有文件.</p>
+<p>当运行repo sync时,会执行以下操作:</p>
+<ol>
+<li>如果之前未进行过同步,那么等同于git clone, 所有远程的分支都被复制到本地.</li>
+<li>如果之前同步过,那么等同于:<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote update </span><br><span class="line">git rebase origin/<span class="tag">&lt;<span class="title">BRANCH</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>其中<code>&lt;branch&gt;</code>指当前本地目录所有的分支, 如果本地分支没有track远程分支,则不会同步. </p>
+</blockquote>
+<ol>
+<li>如果rebase发生冲突, 需要使用git命令来Fix冲突,如<code>git rebase --continue</code>.</li>
+</ol>
+<p>sync成功之后, 指定项目中的代码更新到最新.</p>
+<p>选项:</p>
+<p><code>-d</code> 将指定的项目切换回指定的manifest revision, 当项目处于topic分支,但需要manifest revision时有用</p>
+<p><code>-s</code> sync到一个已知的良好的build, 由当前manifest中的<code>manifest-server</code>元素指定.</p>
+<p><code>-f</code> 当某个project同步失败时继续sync</p>
+<h2 id="upload">upload</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo upload <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>repo会比较指定项目的本地和远程最新更新,提示你<strong>选择</strong>尚未提交的项目</p>
+<p>选择完成以后,repo会将项目的所有commit上通过<strong>HTTPS</strong>传到<strong>gerrit</strong>,你需要设置<strong>认证</strong>信息.访问此处<a href="https://android-review.googlesource.com/new-password" target="_blank" rel="external">Password Generator</a>可以生成一对新的username/password对.</p>
+<p>当gerrit收到对象数据时, 会将每个commit转换为修改,这样review人员可以对每一处评论. 如果想合并commit,可以在upload前执行<code>git rebase -i</code>操作.</p>
+<p>如果upload时不指定项目列表,它会搜寻所有项目更改.</p>
+<p>如果upload之后要更改编辑,可以使用<code>git rebase -i</code>和<code>git commit --amend</code>来更新本地commit,之后:</p>
+<ul>
+<li>确认当前branch是要提交的branch</li>
+<li>对序列中每个要提交的commit,在括号中输入gerrit修改id</li>
+</ul>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Replacing <span class="keyword">from</span> branch foo </span><br><span class="line">[ <span class="number">3021</span> ] <span class="number">35</span>f2596c Refactor part <span class="keyword">of</span> GetUploadableBranches <span class="keyword">to</span> lookup one specific...</span><br><span class="line">[ <span class="number">2829</span> ] ec18b4ba Update proto client <span class="keyword">to</span> support patch <span class="keyword">set</span> replacments </span><br><span class="line"># Insert change numbers <span class="keyword">in</span> the brackets <span class="keyword">to</span> <span class="keyword">add</span> a <span class="keyword">new</span> patch <span class="keyword">set</span>.</span><br><span class="line"># <span class="keyword">To</span> <span class="keyword">create</span> a <span class="keyword">new</span> change <span class="keyword">record</span>, leave the brackets <span class="keyword">empty</span>.</span><br></pre></td></tr></table></figure>
+<p>上传完成后,修改将会有附加的Patch集.</p>
+<h2 id="diff">diff</h2><p>基于git diff, 显示commit和当前工作树的修改.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo diff <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="download">download</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo download <span class="tag">&lt;<span class="title">TARGET</span>&gt;</span> <span class="tag">&lt;<span class="title">CHANGE</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>下载指定的修改并应用到工作目录中.</p>
+<p>如download 23823号修改到本地目录<code>platform/framworks/base/</code></p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>repo download platform/build <span class="number">23823</span></span><br></pre></td></tr></table></figure>
+<p>repo sync会移除通过download检索过的修改, 你可也以切换远程分支<code>git checkout m/master</code></p>
+<blockquote>
+<p>从Gerrit看到修改到用户可以下载,是有一小段延迟的,因为冗余备份的缘故.</p>
+</blockquote>
+<h2 id="forall">forall</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo forall <span class="annotation">[&lt;PROJECT_LIST&gt;]</span> -c &lt;COMMAND&gt;</span><br></pre></td></tr></table></figure>
+<p>在指定的项目中逐个执行<code>&lt;command&gt;</code>, 可以使用以下环境变量 </p>
+<p><code>REPO_PROJECT</code> 设置唯一的项目名<br><code>REPO_PATH</code> 相对client root的相对路径<br><code>REPO_REMOTE</code> manifest中的远程系统名<br><code>REPO_LREV</code> manifest中的revision name翻译到本地tracking分支，当需要传递manifest的revision到本地执行的git命令的使用。<br><code>REPO_RREV</code> 等于manifest中的revision name。</p>
+<p>选项：</p>
+<p><code>-c</code> 需要执行的命令与参数，由/bin/sh解释<br><code>-p</code> 在显示执行结果前打印项目headers, 通过bind管道到命令的Stdin , stdout和stderr来实现<br><code>-v</code> 显示stderr信息</p>
+<h2 id="prune">prune</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo prune <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>修剪/删除已经合并的topic</p>
+<h2 id="start">start</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo start &lt;BRANCH_NAME&gt; <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>从manifest中指定的revision<strong>创建</strong>一个新<strong>分支</strong></p>
+<p><code>&lt;BRANCH_NAME&gt;</code> 应该是对该分支将要做的修改的简短描述，如果不确定，应该填入分支名字。</p>
+<p><code>&lt;PROJECT_LIST&gt;</code> 指定哪些项目将参与此topic分支</p>
+<blockquote>
+<p><code>.</code>  是<strong>当前工作目录</strong>所有项目的简写</p>
+</blockquote>
+<h2 id="status">status</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo status <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>将当前工作树与列表中的每个项目的HEAD所在进行比较，并以行概要的形式打印每个文件的不同。</p>
+<p>如果只打印当前项目的diff信息，直接运行<code>repo status</code><br><img src="http://ww4.sinaimg.cn/large/55f247cbgw1eszc4xc4ilj20o40fvtbl.jpg" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/android/">android</a><a href="/tags/repo/">repo</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/06/10/repoLearningNote/" data-title="repo命令参考手册 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/06/20/configureAndMakeInstall/" title="configure和make install背后的故事">
+  <strong>上一篇：</strong><br/>
+  <span>
+  configure和make install背后的故事</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/06/10/adbLearningNote3/"  title="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它">
+ <strong>下一篇：</strong><br/> 
+ <span>adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/10/repoLearningNote/" data-title="repo命令参考手册" data-url="http://azyet.github.io/2015/06/10/repoLearningNote/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#help"><span class="toc-number">1.</span> <span class="toc-text">help</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init"><span class="toc-number">2.</span> <span class="toc-text">init</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sync"><span class="toc-number">3.</span> <span class="toc-text">sync</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#upload"><span class="toc-number">4.</span> <span class="toc-text">upload</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#diff"><span class="toc-number">5.</span> <span class="toc-text">diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#download"><span class="toc-number">6.</span> <span class="toc-text">download</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#forall"><span class="toc-number">7.</span> <span class="toc-text">forall</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prune"><span class="toc-number">8.</span> <span class="toc-text">prune</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#start"><span class="toc-number">9.</span> <span class="toc-text">start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#status"><span class="toc-number">10.</span> <span class="toc-text">status</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

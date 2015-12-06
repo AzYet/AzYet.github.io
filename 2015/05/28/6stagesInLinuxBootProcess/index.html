@@ -1,0 +1,622 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux启动过程中的6个阶段 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="认识Linux的启动过程对每一个Linux使用者和管理员都是必要的，它能使你一幅清晰的Linux如何工作的图景。本文会介绍按下电源到登录提示出现过程中都经历了哪些过程。下图会给你一个简洁明了的整体认识。
+简要启动过程：
+1. 按下电源键
+2. CPU跳到BIOS
+3. BIOS运行POST
+4. 寻找第一个可启动设备
+5. 加载执行MBR
+6. 加载OS
+7. 用户提示符
+以下是Linux启动过程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux启动过程中的6个阶段">
+<meta property="og:url" content="http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="认识Linux的启动过程对每一个Linux使用者和管理员都是必要的，它能使你一幅清晰的Linux如何工作的图景。本文会介绍按下电源到登录提示出现过程中都经历了哪些过程。下图会给你一个简洁明了的整体认识。
+简要启动过程：
+1. 按下电源键
+2. CPU跳到BIOS
+3. BIOS运行POST
+4. 寻找第一个可启动设备
+5. 加载执行MBR
+6. 加载OS
+7. 用户提示符
+以下是Linux启动过程">
+<meta property="og:image" content="http://i2.wp.com/www.linuxnix.com/wp-content/uploads/2013/04/Linux-Booting-process.png?resize=958%2C650">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux启动过程中的6个阶段">
+<meta name="twitter:description" content="认识Linux的启动过程对每一个Linux使用者和管理员都是必要的，它能使你一幅清晰的Linux如何工作的图景。本文会介绍按下电源到登录提示出现过程中都经历了哪些过程。下图会给你一个简洁明了的整体认识。
+简要启动过程：
+1. 按下电源键
+2. CPU跳到BIOS
+3. BIOS运行POST
+4. 寻找第一个可启动设备
+5. 加载执行MBR
+6. 加载OS
+7. 用户提示符
+以下是Linux启动过程">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/28/6stagesInLinuxBootProcess/" title="Linux启动过程中的6个阶段" itemprop="url">Linux启动过程中的6个阶段</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-28T16:46:48.000Z" itemprop="datePublished"> 發表於 2015-05-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段1：系统启动"><span class="toc-number">1.</span> <span class="toc-text">阶段1：系统启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POST"><span class="toc-number">1.1.</span> <span class="toc-text">POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择启动设备"><span class="toc-number">1.2.</span> <span class="toc-text">选择启动设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段2：MBR加载"><span class="toc-number">2.</span> <span class="toc-text">阶段2：MBR加载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是MBR"><span class="toc-number">2.1.</span> <span class="toc-text">什么是MBR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主Bootloader程序"><span class="toc-number">2.1.1.</span> <span class="toc-text">主Bootloader程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分区表"><span class="toc-number">2.1.2.</span> <span class="toc-text">分区表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#magic_number"><span class="toc-number">2.1.3.</span> <span class="toc-text">magic number</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段3：GRUB加载"><span class="toc-number">3.</span> <span class="toc-text">阶段3：GRUB加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段4：kernel"><span class="toc-number">4.</span> <span class="toc-text">阶段4：kernel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段5：INIT"><span class="toc-number">5.</span> <span class="toc-text">阶段5：INIT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段6：用户提示符"><span class="toc-number">6.</span> <span class="toc-text">阶段6：用户提示符</span></a></li></ol>
+		
+		</div>
+		
+		<p>认识Linux的启动过程对每一个Linux使用者和管理员都是必要的，它能使你一幅清晰的Linux如何工作的图景。本文会介绍按下电源到登录提示出现过程中都经历了哪些过程。下图会给你一个简洁明了的整体认识。</p>
+<p>简要启动过程：</p>
+<pre><code><span class="bullet">1. </span>按下电源键
+<span class="bullet">2. </span>CPU跳到BIOS
+<span class="bullet">3. </span>BIOS运行POST
+<span class="bullet">4. </span>寻找第一个可启动设备
+<span class="bullet">5. </span>加载执行MBR
+<span class="bullet">6. </span>加载OS
+<span class="bullet">7. </span>用户提示符
+</code></pre><p>以下是Linux启动过程中的详细阶段。</p>
+<pre><code>1） 系统启动（硬件）
+2） <span class="keyword">Boot</span> Loader阶段1（MBR加载）
+3） <span class="keyword">Boot</span> Loader阶段2（GRUB加载）
+4） Kernel
+5） INIT
+6） 用户提示符
+</code></pre><h2 id="阶段1：系统启动">阶段1：系统启动</h2><p>CPU加电后执行的第一个指令就是将控制交给BIOS进行开机自检，BIOS会执行两个任务：</p>
+<pre><code>执行<span class="keyword">POST</span>
+选择第一个可启动设备
+</code></pre><a id="more"></a>
+<h3 id="POST">POST</h3><p>POST是一个检查硬件可用性的进程，BIOS保存着上次启动时的硬件列表，它会向每一个硬件（包括新加入的硬件）发送一个脉冲并监测是否有回复，从而确定可用性，并更新硬件列表。</p>
+<h3 id="选择启动设备">选择启动设备</h3><p>从设备列表中选择第一个可启动设备，并将控制移交CPU。如果找不到可用启动设备，则会报错<code>No boot device found</code></p>
+<h2 id="阶段2：MBR加载">阶段2：MBR加载</h2><p>CPU重新获得控制后，将执行启动设备的MBR，MRB只有512Byte，位于HDD的开头或尾部，这取决于制造商。</p>
+<h3 id="什么是MBR">什么是MBR</h3><p>MBR(Master Boot recorder)包含以下信息：</p>
+<pre><code>主BootLoader程序 <span class="number">446</span><span class="keyword">Byte</span>
+分区表 <span class="number">64</span><span class="keyword">Byte</span>
+Magic <span class="keyword">Number</span> <span class="number">2</span><span class="keyword">Byte</span>
+</code></pre><h4 id="主Bootloader程序">主Bootloader程序</h4><p>提供Bootloader信息与实际程序的硬盘位置，帮助CPU加载第二阶段的bootloader。</p>
+<h4 id="分区表">分区表</h4><p>分区表信息，如分区的起始位置，大小，类型（主/逻辑等），每个分区需要16字节，这就是最多只有4个主分区的原因。</p>
+<h4 id="magic_number">magic number</h4><p>作为校验码，MBR损坏时可以用来恢复。</p>
+<p>当CPU知道以上这些信息后，它将读取第一部分来加载第二阶段的Bootloader。</p>
+<h2 id="阶段3：GRUB加载">阶段3：GRUB加载</h2><p>MBR会将GRUB加载进内存，GRUB位于紧接MBR的30KByte中，CPU读取其中的信息并显示GRUB菜单，加载用户选择的Kernel进入内存并移交控制，如果设置了超时，也会自动选择默认选项。</p>
+<h2 id="阶段4：kernel">阶段4：kernel</h2><p>Kernel是操作系统的核心，它是硬件和软件的协调者。Kernel加载入内存后会一直驻留到系统关闭，Kernel启动后的第一个任务是运行init进程</p>
+<h2 id="阶段5：INIT">阶段5：INIT</h2><p>这是启动过程中的主要阶段。</p>
+<p>init进程是所有Linux进程的root/parent进程，它运行的第一个进程是一个位于<code>/etc/rc.d/rc.sysinit</code>的脚本，它将检查所有系统properties，硬件，显示 ， SELinux，加载内核模块，检查和mount文件系统等。根据不同的运行级别，脚本会启动/停止各种进程来运行系统并使之可用。init进程读取/etc/inittab，它是一个定义系统程序启动的初始化表。init会一个run level接一个run level地启动对应的脚本。脚本的内容保存在/etc目录下的/<code>/etc/rc0.d</code>—<code>/etc/rc6.d</code>。</p>
+<p>当init进程完成托管的run level到达/etc/inittab中定义的默认run level时，它将运行另一个脚本 <code>/etc/rc.local</code>，这是init甚至整个启动过程中的最后一个命令。当所有这些完成以后，控制交还给kernel.</p>
+<h2 id="阶段6：用户提示符">阶段6：用户提示符</h2><p>这其实不算是启动过程，列在此处只是为了帮助理解。kernel重获控制后将运行多个<code>getty</code>实例等待console的login并产生一个用户Shell进程用于登录。</p>
+<p><img src="http://i2.wp.com/www.linuxnix.com/wp-content/uploads/2013/04/Linux-Booting-process.png?resize=958%2C650" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/bootloader/">bootloader</a><a href="/tags/grub/">grub</a><a href="/tags/init/">init</a><a href="/tags/启动流程/">启动流程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/" data-title="Linux启动过程中的6个阶段 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/30/aboutSimics/" title="simics简介">
+  <strong>上一篇：</strong><br/>
+  <span>
+  simics简介</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/27/androidBootProcess/"  title="android启动流程">
+ <strong>下一篇：</strong><br/> 
+ <span>android启动流程
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/28/6stagesInLinuxBootProcess/" data-title="Linux启动过程中的6个阶段" data-url="http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段1：系统启动"><span class="toc-number">1.</span> <span class="toc-text">阶段1：系统启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POST"><span class="toc-number">1.1.</span> <span class="toc-text">POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择启动设备"><span class="toc-number">1.2.</span> <span class="toc-text">选择启动设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段2：MBR加载"><span class="toc-number">2.</span> <span class="toc-text">阶段2：MBR加载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是MBR"><span class="toc-number">2.1.</span> <span class="toc-text">什么是MBR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主Bootloader程序"><span class="toc-number">2.1.1.</span> <span class="toc-text">主Bootloader程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分区表"><span class="toc-number">2.1.2.</span> <span class="toc-text">分区表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#magic_number"><span class="toc-number">2.1.3.</span> <span class="toc-text">magic number</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段3：GRUB加载"><span class="toc-number">3.</span> <span class="toc-text">阶段3：GRUB加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段4：kernel"><span class="toc-number">4.</span> <span class="toc-text">阶段4：kernel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段5：INIT"><span class="toc-number">5.</span> <span class="toc-text">阶段5：INIT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阶段6：用户提示符"><span class="toc-number">6.</span> <span class="toc-text">阶段6：用户提示符</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

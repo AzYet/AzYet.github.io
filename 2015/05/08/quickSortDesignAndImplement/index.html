@@ -1,0 +1,598 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>快速排序实战：理解再实现 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="快速排序，算法经典。我这里要做的，就是分析其设计思想并一步步来实现它。
+分治法　　快速排序采用的是“分治法”，其英文名现能体现其特点”divide and conquer”，分割&amp;amp;征服。具体到本算法是这样的：（以数组从小到大排序为例）
+
+
+从数组是选取一个基准数，根据大于或小于该基准数将元素分列到数组左右两端
+对上一步分割出的左右两子数组再次执行步骤1
+循环递归，直到子数组长度为1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速排序实战：理解再实现">
+<meta property="og:url" content="http://azyet.github.io/2015/05/08/quickSortDesignAndImplement/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="快速排序，算法经典。我这里要做的，就是分析其设计思想并一步步来实现它。
+分治法　　快速排序采用的是“分治法”，其英文名现能体现其特点”divide and conquer”，分割&amp;amp;征服。具体到本算法是这样的：（以数组从小到大排序为例）
+
+
+从数组是选取一个基准数，根据大于或小于该基准数将元素分列到数组左右两端
+对上一步分割出的左右两子数组再次执行步骤1
+循环递归，直到子数组长度为1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="快速排序实战：理解再实现">
+<meta name="twitter:description" content="快速排序，算法经典。我这里要做的，就是分析其设计思想并一步步来实现它。
+分治法　　快速排序采用的是“分治法”，其英文名现能体现其特点”divide and conquer”，分割&amp;amp;征服。具体到本算法是这样的：（以数组从小到大排序为例）
+
+
+从数组是选取一个基准数，根据大于或小于该基准数将元素分列到数组左右两端
+对上一步分割出的左右两子数组再次执行步骤1
+循环递归，直到子数组长度为1">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/08/quickSortDesignAndImplement/" title="快速排序实战：理解再实现" itemprop="url">快速排序实战：理解再实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-08T10:47:03.000Z" itemprop="datePublished"> 發表於 2015-05-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分治法"><span class="toc-number">1.</span> <span class="toc-text">分治法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#左右划分的实现"><span class="toc-number">2.</span> <span class="toc-text">左右划分的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#递归调用"><span class="toc-number">3.</span> <span class="toc-text">递归调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能比较"><span class="toc-number">4.</span> <span class="toc-text">性能比较</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　快速排序，算法经典。我这里要做的，就是分析其设计思想并一步步来实现它。</p>
+<h2 id="分治法">分治法</h2><p>　　快速排序采用的是“分治法”，其英文名现能体现其特点”divide and conquer”，分割&amp;征服。具体到本算法是这样的：<br>（以数组从小到大排序为例）</p>
+<blockquote>
+<ol>
+<li>从数组是选取一个基准数，根据大于或小于该基准数将元素分列到数组左右两端</li>
+<li>对上一步分割出的左右两子数组再次执行步骤1</li>
+<li>循环递归，直到子数组长度为1</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<p>　　以上如何体现出“分治”了呢？每操作一次，虽然单个元素并不有序，但左右两块是有序的（左边都小于基准数，右边都大于基准数），这就是conquer,继续对左右子数组进行同样操作，直到左右两块都是单个元素，这就是divide。</p>
+<h2 id="左右划分的实现">左右划分的实现</h2><p>　　好的，既然思路已经有了，我们就来一步步实现吧，为了方便，依然使用Python。第一步将是关键的部分，以下是代码：（所有的说明全在注释里了）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">__author__ = <span class="string">'chen'</span></span><br><span class="line"><span class="comment">#事先用随机函数生成的数组</span></span><br><span class="line">a = [<span class="number">92</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">42</span>, <span class="number">24</span>, <span class="number">23</span>, <span class="number">5</span>, <span class="number">38</span>, <span class="number">95</span>, <span class="number">10</span>, <span class="number">42</span>, <span class="number">26</span>, <span class="number">81</span>, <span class="number">58</span>, <span class="number">17</span>, <span class="number">78</span>, <span class="number">14</span>, <span class="number">30</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">61</span>]</span><br><span class="line"><span class="comment">#以上函数级完成算法步骤1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">qs</span><span class="params">(a, s, e)</span>:</span>        <span class="comment">#a数组，s排序起始点，e排序结束点</span></span><br><span class="line">    <span class="keyword">print</span> a[s: e + <span class="number">1</span>]   <span class="comment">#排印操作前的数组</span></span><br><span class="line">    i = s               <span class="comment">#左起始位：头</span></span><br><span class="line">    j = e               <span class="comment">#右起始位：尾</span></span><br><span class="line">    k = (s + e) / <span class="number">2</span>     <span class="comment">#以中间元素作为基准数（可任取）</span></span><br><span class="line">    m = a[k]            <span class="comment">#移动基准数到变量m（此时可视k位置为空缺）</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"standard num : a[%d]=%d"</span>%(k,m)   <span class="comment">#打印调试信息</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#此实现从头部开始（尾部亦可）</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; j:</span><br><span class="line">        <span class="keyword">while</span> a[i] &lt; m <span class="keyword">and</span> i &lt; j:   <span class="comment">#找到大于基准数m的元素</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        a[k] = a[i]                 <span class="comment">#将其移动到空缺位（初值为基准数地址）</span></span><br><span class="line">        k = i                       <span class="comment">#元素已经移走，标注此处为空缺位</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#从尾部开始，寻找一个小于m的数来填充空缺</span></span><br><span class="line">        <span class="keyword">while</span> a[j] &gt;= m <span class="keyword">and</span> i &lt; j:      <span class="comment">#找到小于m的元素的地址</span></span><br><span class="line">            j -= <span class="number">1</span>                      </span><br><span class="line">        a[k] = a[j]                     <span class="comment">#将其移动到空缺位</span></span><br><span class="line">        k = j                           <span class="comment">#更新空缺位，此时一个循环结束，下个循环继续从头部开始……</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#直到i，j相遇一次左右分列完成</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"end at no.%d"</span>%i</span><br><span class="line">    a[i] = m            <span class="comment">#记得将基准数放回空缺</span></span><br><span class="line">    <span class="keyword">print</span> a[s:e + <span class="number">1</span>]    <span class="comment">#打印一次操作后的数组</span></span><br><span class="line"></span><br><span class="line">qs(a, <span class="number">0</span>, len(a) - <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>　　运行，输出如下 ：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">92</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">42</span>, <span class="number">24</span>, <span class="number">23</span>, <span class="number">5</span>, <span class="number">38</span>, <span class="number">95</span>, <span class="number">10</span>, <span class="number">42</span>, <span class="number">26</span>, <span class="number">81</span>, <span class="number">58</span>, <span class="number">17</span>, <span class="number">78</span>, <span class="number">14</span>, <span class="number">30</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">61</span>]</span><br><span class="line">standard num : a[<span class="number">10</span>]=<span class="number">42</span>      <span class="comment">#基准数</span></span><br><span class="line"><span class="keyword">end</span> <span class="keyword">at</span> no.11.               <span class="comment">#i，j相遇位置（结束位）</span></span><br><span class="line">[<span class="number">30</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">23</span>, <span class="number">5</span>, <span class="number">38</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">26</span>, <span class="number">42</span>, <span class="number">81</span>, <span class="number">58</span>, <span class="number">92</span>, <span class="number">78</span>, <span class="number">95</span>, <span class="number">42</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">61</span>]</span><br></pre></td></tr></table></figure>
+<p>　　可以看到，虽然看起来还是杂乱无章，但是以11号元素（42）为分割，左右分别是小于和大于（等于）它的数。</p>
+<h2 id="递归调用">递归调用</h2><p>　　至此步骤1就已经完成了，2,3实质为一步，只需要在函数qs(a,s,e)最后加上如下语句即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对左右子数组继续同样操作</span></span><br><span class="line">    <span class="keyword">if</span> i&gt;s:     <span class="comment">#左子数组长为1则结束，否则继续</span></span><br><span class="line">        qs(a,s,i)</span><br><span class="line">    <span class="keyword">if</span> i &lt; e-<span class="number">1</span>:   <span class="comment">#右子数组长为1则结束，否则继续</span></span><br><span class="line">        qs(a,i+<span class="number">1</span>,e)</span><br></pre></td></tr></table></figure></p>
+<p>　　在文件最后加上<code>print a</code>之后，输出如下 ：（为了便于阅读，删除了部分输出）<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">92</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">42</span>, <span class="number">24</span>, <span class="number">23</span>, <span class="number">5</span>, <span class="number">38</span>, <span class="number">95</span>, <span class="number">10</span>, <span class="number">42</span>, <span class="number">26</span>, <span class="number">81</span>, <span class="number">58</span>, <span class="number">17</span>, <span class="number">78</span>, <span class="number">14</span>, <span class="number">30</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">61</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">10</span>]=<span class="number">42</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">11</span>] = <span class="number">26</span></span><br><span class="line">[<span class="number">30</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">23</span>, <span class="number">5</span>, <span class="number">38</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">26</span>, <span class="number">42</span>, <span class="number">81</span>, <span class="number">58</span>, <span class="number">92</span>, <span class="number">78</span>, <span class="number">95</span>, <span class="number">42</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">61</span>]</span><br><span class="line"></span><br><span class="line">[<span class="number">30</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">23</span>, <span class="number">5</span>, <span class="number">38</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">26</span>, <span class="number">42</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">5</span>]=<span class="number">23</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">4</span>] = <span class="number">24</span></span><br><span class="line">[<span class="number">10</span>, <span class="number">17</span>, <span class="number">5</span>, <span class="number">14</span>, <span class="number">23</span>, <span class="number">30</span>, <span class="number">24</span>, <span class="number">38</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">42</span>]</span><br><span class="line"></span><br><span class="line">[<span class="number">10</span>, <span class="number">17</span>, <span class="number">5</span>, <span class="number">14</span>, <span class="number">23</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">2</span>]=<span class="number">5</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">0</span>] = <span class="number">10</span></span><br><span class="line">[<span class="number">5</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">23</span>]</span><br><span class="line"></span><br><span class="line">[<span class="number">17</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">23</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">2</span>]=<span class="number">10</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">1</span>] = <span class="number">17</span></span><br><span class="line">[<span class="number">10</span>, <span class="number">17</span>, <span class="number">14</span>, <span class="number">23</span>]</span><br><span class="line"></span><br><span class="line">[<span class="number">17</span>, <span class="number">14</span>, <span class="number">23</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">3</span>]=<span class="number">14</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">2</span>] = <span class="number">17</span></span><br><span class="line">[<span class="number">14</span>, <span class="number">17</span>, <span class="number">23</span>]</span><br><span class="line"></span><br><span class="line">[<span class="number">17</span>, <span class="number">23</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">3</span>]=<span class="number">17</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">3</span>] = <span class="number">17</span></span><br><span class="line">[<span class="number">17</span>, <span class="number">23</span>]</span><br><span class="line"></span><br><span class="line">[<span class="number">30</span>, <span class="number">24</span>, <span class="number">38</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">42</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">8</span>]=<span class="number">26</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">6</span>] = <span class="number">24</span></span><br><span class="line">[<span class="number">24</span>, <span class="number">26</span>, <span class="number">38</span>, <span class="number">30</span>, <span class="number">27</span>, <span class="number">26</span>, <span class="number">42</span>]</span><br><span class="line">……</span><br><span class="line">[<span class="number">81</span>, <span class="number">58</span>, <span class="number">92</span>, <span class="number">78</span>, <span class="number">95</span>, <span class="number">42</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">61</span>]</span><br><span class="line"><span class="atom">standard</span> <span class="atom">num</span> : <span class="atom">a</span>[<span class="number">16</span>]=<span class="number">95</span></span><br><span class="line"><span class="atom">end</span> <span class="atom">at</span> <span class="atom">a</span>[<span class="number">20</span>] = <span class="number">61</span></span><br><span class="line">[<span class="number">81</span>, <span class="number">58</span>, <span class="number">92</span>, <span class="number">78</span>, <span class="number">61</span>, <span class="number">42</span>, <span class="number">55</span>, <span class="number">83</span>, <span class="number">95</span>]</span><br><span class="line">……</span><br><span class="line"></span><br><span class="line">[<span class="number">5</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">17</span>, <span class="number">23</span>, <span class="number">24</span>, <span class="number">26</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">30</span>, <span class="number">38</span>, <span class="number">42</span>, <span class="number">42</span>, <span class="number">55</span>, <span class="number">58</span>, <span class="number">61</span>, <span class="number">78</span>, <span class="number">81</span>, <span class="number">83</span>, <span class="number">92</span>, <span class="number">95</span>]</span><br></pre></td></tr></table></figure></p>
+<p>　　这样快速排序就完成了。实际实现的过程中遇到了一些小问题（毕竟程序一次写对的机率不大），主要是子数组的划分和循环结束的判定条件。</p>
+<p>　　最好在划分子数组前加上<code>if e-s&gt;1:</code>的判定条件，即：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> e - s &gt; <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">if</span> i &gt; s:</span><br><span class="line">        qs(a, s, i)</span><br><span class="line">    <span class="keyword">if</span> i &lt; e - <span class="number">1</span>:</span><br><span class="line">        qs(a, i + <span class="number">1</span>, e)</span><br></pre></td></tr></table></figure></p>
+<p>即可以优化算法（避免某些二元数组排序两遍）又可以避免出错（陷入死循环）。</p>
+<h2 id="性能比较">性能比较</h2><p>　　那么快速排序到底有多快？写了一个简单地冒泡法与之比较：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def <span class="function"><span class="title">bubble</span><span class="params">(b)</span></span>:</span><br><span class="line">    <span class="keyword">for</span> <span class="tag">i</span> <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">0</span>, len(b)</span></span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">0</span>, len(b)</span></span> - <span class="tag">i</span> - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="tag">b</span>[j] &gt; <span class="tag">b</span>[j + <span class="number">1</span>]:</span><br><span class="line">                <span class="tag">b</span>[j], <span class="tag">b</span>[j + <span class="number">1</span>] = <span class="tag">b</span>[j + <span class="number">1</span>], <span class="tag">b</span>[j]</span><br></pre></td></tr></table></figure></p>
+<p>　　以相同的测试数组大小为20000,其代码与结果如下：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">a</span> = []</span><br><span class="line"><span class="keyword">for</span> i <span class="operator">in</span> range(<span class="number">0</span>, <span class="number">20000</span>):</span><br><span class="line">    <span class="operator">a</span>.append(<span class="built_in">random</span>.randint(<span class="number">0</span>, <span class="number">20000</span>))</span><br><span class="line">b = <span class="operator">a</span>[:]</span><br><span class="line"></span><br><span class="line"><span class="built_in">start</span>  = <span class="built_in">time</span>.<span class="built_in">time</span>()</span><br><span class="line">qs(<span class="operator">a</span>, <span class="number">0</span>, <span class="built_in">len</span>(<span class="operator">a</span>) - <span class="number">1</span>)</span><br><span class="line"><span class="function"><span class="keyword">end</span>  = <span class="title">time</span>.<span class="title">time</span>()</span></span><br><span class="line">print <span class="function"><span class="keyword">end</span> -<span class="title">start</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">start</span>  = <span class="built_in">time</span>.<span class="built_in">time</span>()</span><br><span class="line">bubble(b)</span><br><span class="line"><span class="function"><span class="keyword">end</span>  = <span class="title">time</span>.<span class="title">time</span>()</span></span><br><span class="line">print <span class="function"><span class="keyword">end</span> -<span class="title">start</span></span></span><br><span class="line"></span><br><span class="line">print <span class="operator">a</span>[<span class="number">0</span>:<span class="number">11</span>],<span class="operator">a</span>[-<span class="number">11</span>:-<span class="number">1</span>]</span><br><span class="line">print b[<span class="number">0</span>:<span class="number">11</span>],b[-<span class="number">11</span>:-<span class="number">1</span>]</span><br></pre></td></tr></table></figure></p>
+<p>输出如下 ：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.0928180217743</span></span><br><span class="line"><span class="number">35.1762809753</span></span><br><span class="line">[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>] [<span class="number">19985</span>, <span class="number">19988</span>, <span class="number">19989</span>, <span class="number">19989</span>, <span class="number">19992</span>, <span class="number">19993</span>, <span class="number">19993</span>, <span class="number">19993</span>, <span class="number">19996</span>, <span class="number">19997</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>] [<span class="number">19985</span>, <span class="number">19988</span>, <span class="number">19989</span>, <span class="number">19989</span>, <span class="number">19992</span>, <span class="number">19993</span>, <span class="number">19993</span>, <span class="number">19993</span>, <span class="number">19996</span>, <span class="number">19997</span>]</span><br></pre></td></tr></table></figure></p>
+<p>　　输出一致，但时间分别是0.093s和35.176s,差了300倍还多，可见 n*log(n) 与 n^2 的差异是十分明显的，而且随着输入规模的增加会更明显。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/快速排序/">快速排序</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/08/quickSortDesignAndImplement/" data-title="快速排序实战：理解再实现 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/09/dijkstraAnlalizeAndImplement/" title="最短路径dijkstra算法实践：理解再实现">
+  <strong>上一篇：</strong><br/>
+  <span>
+  最短路径dijkstra算法实践：理解再实现</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/06/windowsLoginSameSMBHostWithDiffUser/"  title="Windows以不同用户名接入同一文件共享服务器">
+ <strong>下一篇：</strong><br/> 
+ <span>Windows以不同用户名接入同一文件共享服务器
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/08/quickSortDesignAndImplement/" data-title="快速排序实战：理解再实现" data-url="http://azyet.github.io/2015/05/08/quickSortDesignAndImplement/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分治法"><span class="toc-number">1.</span> <span class="toc-text">分治法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#左右划分的实现"><span class="toc-number">2.</span> <span class="toc-text">左右划分的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#递归调用"><span class="toc-number">3.</span> <span class="toc-text">递归调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能比较"><span class="toc-number">4.</span> <span class="toc-text">性能比较</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

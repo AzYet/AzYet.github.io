@@ -1,0 +1,653 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>单元测试之JUnit学习笔记 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。
+单元测试，一致性测试和性能测试单元测试单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。
+被测试的代码比例也叫做覆盖率。
+单元测试只针对一小段代码（类，方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单元测试之JUnit学习笔记">
+<meta property="og:url" content="http://azyet.github.io/2015/05/18/junitNote1/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。
+单元测试，一致性测试和性能测试单元测试单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。
+被测试的代码比例也叫做覆盖率。
+单元测试只针对一小段代码（类，方法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单元测试之JUnit学习笔记">
+<meta name="twitter:description" content="JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。
+单元测试，一致性测试和性能测试单元测试单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。
+被测试的代码比例也叫做覆盖率。
+单元测试只针对一小段代码（类，方法">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T03:59:40.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单元测试，一致性测试和性能测试"><span class="toc-number">1.</span> <span class="toc-text">单元测试，一致性测试和性能测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单元测试"><span class="toc-number">1.1.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一致性测试"><span class="toc-number">1.2.</span> <span class="toc-text">一致性测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#性能测试"><span class="toc-number">1.3.</span> <span class="toc-text">性能测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建高效的测试"><span class="toc-number">2.</span> <span class="toc-text">构建高效的测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#术语"><span class="toc-number">3.</span> <span class="toc-text">术语</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fixture"><span class="toc-number">3.1.</span> <span class="toc-text">Fixture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#[行为|状态]测试"><span class="toc-number">3.2.</span> <span class="toc-text">[行为|状态]测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试的结构"><span class="toc-number">4.</span> <span class="toc-text">测试的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java测试的结构"><span class="toc-number">4.1.</span> <span class="toc-text">Java测试的结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试哪些内容"><span class="toc-number">4.2.</span> <span class="toc-text">测试哪些内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对旧有代码测试"><span class="toc-number">4.3.</span> <span class="toc-text">对旧有代码测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用JUnit"><span class="toc-number">5.</span> <span class="toc-text">如何使用JUnit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Junit例程"><span class="toc-number">6.</span> <span class="toc-text">Junit例程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JUnit命名规范"><span class="toc-number">7.</span> <span class="toc-text">JUnit命名规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Junit在Maven中的命名规范"><span class="toc-number">8.</span> <span class="toc-text">Junit在Maven中的命名规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JUnit测试集"><span class="toc-number">9.</span> <span class="toc-text">JUnit测试集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从命令行运行测试"><span class="toc-number">10.</span> <span class="toc-text">从命令行运行测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建基本的测试代码"><span class="toc-number">11.</span> <span class="toc-text">构建基本的测试代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JUnit中的Annotation"><span class="toc-number">11.1.</span> <span class="toc-text">JUnit中的Annotation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#断言语句"><span class="toc-number">12.</span> <span class="toc-text">断言语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试执行顺序"><span class="toc-number">13.</span> <span class="toc-text">测试执行顺序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven中JUnit练习"><span class="toc-number">14.</span> <span class="toc-text">Maven中JUnit练习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建Maven工程"><span class="toc-number">14.1.</span> <span class="toc-text">创建Maven工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个Java类"><span class="toc-number">14.2.</span> <span class="toc-text">创建一个Java类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建JUnit测试"><span class="toc-number">14.3.</span> <span class="toc-text">创建JUnit测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven_test"><span class="toc-number">14.4.</span> <span class="toc-text">maven test</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附：完整代码"><span class="toc-number">15.</span> <span class="toc-text">附：完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POM文件"><span class="toc-number">15.1.</span> <span class="toc-text">POM文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#被测试类"><span class="toc-number">15.2.</span> <span class="toc-text">被测试类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试类"><span class="toc-number">15.3.</span> <span class="toc-text">测试类</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。</p>
+<h2 id="单元测试，一致性测试和性能测试">单元测试，一致性测试和性能测试</h2><h3 id="单元测试">单元测试</h3><p>单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。</p>
+<p>被测试的代码比例也叫做覆盖率。</p>
+<p>单元测试只针对一小段代码（类，方法），外部依赖应该被移除，例如用测试框架模拟外部依赖。</p>
+<p>单元测试并不适合复杂的UI或组件交互，这部分工作属于一致性测试。</p>
+<h3 id="一致性测试">一致性测试</h3><p>旨在测试组件或组件间的一致性，有时也称为功能测试。</p>
+<p>这种测试将用例转化为测试集，例如模拟一个用户与应用交互。</p>
+<h3 id="性能测试">性能测试</h3><p>反复进行基准测试。</p>
+<a id="more"></a>
+<h2 id="构建高效的测试">构建高效的测试</h2><p>单元测试可以让你方便地了解单元逻辑是否正常。每次build或者修改之后运行单元测试可以帮助你检测修改可能引入的regression/退化（bug或性能下降）。高的测试覆盖率可以让你避免开发过程中的许多人工测试。</p>
+<p>一致性测试可确保系统的工作正常，也能减少密集的手工测试。性能测试能保证系统在高负荷下正常工作。</p>
+<h2 id="术语">术语</h2><h3 id="Fixture">Fixture</h3><p>测试时软件的设定状态，作为运行测试的基准</p>
+<h3 id="[行为|状态]测试">[行为|状态]测试</h3><p>行为测试不检查返回值，只关注在特定输入时相关方法的运行情况。</p>
+<p>状态测试 关注返回结果的正确性。</p>
+<p>如果是算法或者系统功能测试，一般需要状态测试。典型的测试环境是尽量模拟相关变量，抽离测试对象与环境的交互，并检查对象的状态。</p>
+<h2 id="测试的结构">测试的结构</h2><h3 id="Java测试的结构">Java测试的结构</h3><p>典型的单元测试是独立于源文件的单独目录甚至单独的项目。</p>
+<h3 id="测试哪些内容">测试哪些内容</h3><p>关于此并无定论，有人认为所有语句都该被测试。</p>
+<p>通常忽略琐碎的代码是无妨的，比如getter and settter这类简单的赋值和返回。应该为项目中关键、复杂的代码进行测试。单元测试也能让你避免在引入新特性时对原有功能产生影响。</p>
+<h3 id="对旧有代码测试">对旧有代码测试</h3><p>如果接手的工程中没有测试代码，最好为错误经常发生的部分写测试，这样就能集中精力去做项目的关键部分。</p>
+<h2 id="如何使用JUnit">如何使用JUnit</h2><p>测试类中包含一个只用于测试的方法，测试方法用@org.junit.Test标注。在这个方法中使用Junit框架提供的方法对目标代码的实际运行结果与期望值进行确认。</p>
+<h2 id="Junit例程">Junit例程</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@org.junit.Test</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> multiplicationOfZeroIntegersShouldReturnZero() &#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// MyClass is tested</span></span><br><span class="line">   MyClass tester = <span class="keyword">new</span> MyClass();</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Tests</span></span><br><span class="line">   assertEquals(<span class="string">"10 x 0 must be 0"</span>, <span class="number">0</span>, tester.<span class="keyword">multiply</span>(<span class="number">10</span>, <span class="number">0</span>));</span><br><span class="line">   assertEquals(<span class="string">"0 x 10 must be 0"</span>, <span class="number">0</span>, tester.<span class="keyword">multiply</span>(<span class="number">0</span>, <span class="number">10</span>));</span><br><span class="line">   assertEquals(<span class="string">"0 x 0 must be 0"</span>, <span class="number">0</span>, tester.<span class="keyword">multiply</span>(<span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JUnit命名规范">JUnit命名规范</h2><p><code>测试类</code>一般用<code>被测试类</code>+Tests来命名。</p>
+<p>should常用于测试方法名，如<code>ordersShouldBeCreated</code>，<code>menuShouldGetActive</code>，以增强可读性。</p>
+<p>总之，测试名应该尽量表明测试进行的内容，而不必去看代码。</p>
+<h2 id="Junit在Maven中的命名规范">Junit在Maven中的命名规范</h2><p>Maven自动生成Test后缀的测试类。</p>
+<h2 id="JUnit测试集">JUnit测试集</h2><p>如果你有几个测试类，你可以将其组合成一个测试集，测试集会运行其下的所有测试类。</p>
+<p>以下演示了一个包含两个测试类的测试集，如果想增加测试类，可以添加至<code>@Suite.SuiteClasses statement</code>.</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.vogella.junit.first;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.junit.runners.Suite;</span><br><span class="line"><span class="keyword">import</span> org.junit.runners.Suite.SuiteClasses;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@RunWith</span>(Suite.<span class="keyword">class</span>)</span><br><span class="line"><span class="annotation">@SuiteClasses</span>(&#123; MyClassTest.<span class="keyword">class</span>, MySecondClassTest.<span class="keyword">class</span> &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AllTests</span> &#123;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试集可以嵌套。</p>
+<h2 id="从命令行运行测试">从命令行运行测试</h2><p>You can also run your JUnit tests outside Eclipse via standard Java code. Build frameworks like Apache Maven or Gradle in combination with a Continuous Integration Server (like Hudson or Jenkins) are typically used to execute tests automatically on a regular basis.</p>
+<p><code>org.junit.runner.JUnitCore</code>类提供<code>runClasses()</code>方法，允许运行一个或多个测试类。返回值为<code>org.junit.runner.Result</code>对象，包含测试结果信息。</p>
+<p>以下为演示代码，它会执行测试类并在console打印可能的错误信息。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">package de.vogella.junit.first;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.runner.<span class="type">JUnitCore</span>;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.<span class="type">Result</span>;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.notification.<span class="type">Failure</span>;</span><br><span class="line"></span><br><span class="line">public class <span class="type">MyTestRunner</span> &#123;</span><br><span class="line">  public <span class="keyword">static</span> <span class="type">void</span> main(<span class="type">String</span>[] args) &#123;</span><br><span class="line">    <span class="type">Result</span> <span class="literal">result</span> = <span class="type">JUnitCore</span>.runClasses(<span class="type">MyClassTest</span>.class);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Failure</span> failure : <span class="literal">result</span>.getFailures()) &#123;</span><br><span class="line">      <span class="type">System</span>.<span class="keyword">out</span>.println(failure.toString());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上类可以像任何Java类一样从命令行运行，你只需要添加相应Jar到classpath即可。</p>
+<h2 id="构建基本的测试代码">构建基本的测试代码</h2><h3 id="JUnit中的Annotation">JUnit中的Annotation</h3><p>Junit4以上版本使用annotation标识方法和配置测试的运行，以下是常用相关annotation的简要说明。</p>
+<pre><code><span class="variable">@Test</span>   <span class="comment">//此方法为测试方法. </span>
+public void <span class="function">method</span>()
+
+<span class="variable">@Test</span> (expected = Exception.class) <span class="comment">//标识可能抛出的异常</span>
+
+<span class="variable">@Test</span>(timeout=<span class="number">100</span>)  <span class="comment">//超过指定时间，测试失败。</span>
+
+<span class="variable">@Before</span>             <span class="comment">//该方法在每次测试前运行，用来准备测试环境，如读取输入数据，初始化类等。 </span>
+public void <span class="function">method</span>()
+
+<span class="variable">@After</span>              <span class="comment">//方法在测试后运行，用来清理，如删除临时文件，恢复初始设置，释放内存等。 </span>
+public void <span class="function">method</span>()
+
+<span class="variable">@BeforeClass</span>            <span class="comment">//方法在所有测试前运行一次，用来执行费时任务，如连接数据库。必须是Static方法。 </span>
+public static void <span class="function">method</span>()    
+
+<span class="variable">@AfterClass</span>             <span class="comment">//方法在所有测试完成后执行一次，用来清理，如断开数据库连接，必须是Static方法。 </span>
+public static void <span class="function">method</span>()    
+
+<span class="variable">@Ignore</span> or <span class="variable">@Ignore</span>(<span class="string">"禁用原因"</span>)      <span class="comment">//忽略指定测试方法，用于测试类尚未准备好等情况，使用时最好标明忽略的原因。    </span>
+</code></pre><h2 id="断言语句">断言语句</h2><p>JUnit的<code>Assert</code>类提供一些静态方法用于测试某些条件。一般以assert开头，参数分别为<code>错误信息</code>，<code>期望值</code>，<code>实际值</code>。如果期望与实际不符，将抛出<code>AssertionException</code>异常。</p>
+<p>以下给出这类方法的概览，[]中的参数为可选，类型为String。</p>
+<pre><code><span class="function"><span class="title">fail</span><span class="params">(message)</span></span> 让方法失败。可用于确认某部分代码未被运行，或在测试类完成前人为返回失败结果，message参数可选。
+
+<span class="function"><span class="title">assertTrue</span><span class="params">([message,] boolean condition)</span></span>    确认布尔为真。
+
+<span class="function"><span class="title">assertFalse</span><span class="params">([message,] boolean condition)</span></span>    确认布尔为假
+
+<span class="function"><span class="title">assertEquals</span><span class="params">([message,] expected, actual)</span></span>    确认返回=期望，数组等比较的是地址而非内容。
+
+<span class="function"><span class="title">assertEquals</span><span class="params">([message,] expected, actual, tolerance)</span></span>    测试浮点数相等。
+
+<span class="function"><span class="title">assertNull</span><span class="params">([message,] object)</span></span>    对象为NULL
+
+<span class="function"><span class="title">assertNotNull</span><span class="params">([message,] object)</span></span>    对象非NULL
+
+<span class="function"><span class="title">assertSame</span><span class="params">([message,] expected, actual)</span></span>    变量指向同一个目标.
+
+<span class="function"><span class="title">assertNotSame</span><span class="params">([message,] expected, actual)</span></span>    变量指向不同目标
+</code></pre><p>注意在message中提供可读的信息，以帮助识别错误和之后的修正，特别是测试与开发是不同人负责时。</p>
+<h2 id="测试执行顺序">测试执行顺序</h2><p>JUnit会假定所有测试方法可以任意顺序执行，优良的测试设计应该可以任意顺序执行，也就是说，一个测试不应该依赖其它测试。</p>
+<p>Junit 4.11允许你用Annoation以字母顺序对测试方法进行排序，使用方法为用<code>@FixMethodOrder(MethodSorters.NAME_ASCENDING)</code>来标注方法。</p>
+<pre><code>注意缺省情况会使用固定但不可预期的顺序，对应参数为<span class="escape">`M</span>ethodSorters.DEFAULT<span class="escape">`，</span>也可以使用<span class="escape">`M</span>ethodSorters.JVM<span class="escape">`，</span>代表JVM的默认方式，每次运行顺序会不同。
+</code></pre><h2 id="Maven中JUnit练习">Maven中JUnit练习</h2><h3 id="创建Maven工程">创建Maven工程</h3><p>使用<code>mvn archetype:generate</code>创建一个简单工程，可以将自动生成的类名重命名，如果使用IDE，也会将测试类一起重命名。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">├── pom<span class="class">.xml</span></span><br><span class="line">└── src</span><br><span class="line">    ├── main</span><br><span class="line">    │   └── java</span><br><span class="line">    │       └── io</span><br><span class="line">    │           └── github</span><br><span class="line">    │               └── azyet</span><br><span class="line">    │                   └── Calculator<span class="class">.java</span></span><br><span class="line">    └── test</span><br><span class="line">        └── java</span><br><span class="line">            └── io</span><br><span class="line">                └── github</span><br><span class="line">                    └── azyet</span><br><span class="line">                        └── CalculatorTest.java</span><br></pre></td></tr></table></figure></p>
+<h3 id="创建一个Java类">创建一个Java类</h3><p>将模块类更名，添加内容</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">multiply</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// the following is just an example</span></span><br><span class="line">    <span class="keyword">if</span> (x &gt; <span class="number">999</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"X should be less than 1000"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> x / y;       <span class="comment">//故意留出错误</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建JUnit测试">创建JUnit测试</h3><p>Maven会自动创建测试类，我们只需在类中添加方法即可，注意测试方法必须以小写的<code>test</code>开头，否则<code>mvn test</code>不会调用 该方法。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Test</span>(expected = IllegalArgumentException.class)</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">testExceptionIsThrown</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Calculator tester = <span class="keyword">new</span> Calculator();</span><br><span class="line">    tester.multiply(<span class="number">100</span>, <span class="number">5</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">testMultiply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Calculator tester = <span class="keyword">new</span> Calculator();</span><br><span class="line">    assertEquals(<span class="string">"10 x 5 must be 50"</span>, <span class="number">50</span>, tester.multiply(<span class="number">10</span>, <span class="number">5</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="maven_test">maven test</h3><p>运行<code>mvn test</code>，以下是部分输出：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">-------------------------------------------------------</span><br><span class="line"> T E S T S</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">Picked up <span class="string">JAVA_TOOL_OPTIONS:</span> -<span class="string">javaagent:</span><span class="regexp">/usr/</span>share<span class="regexp">/java/</span>jayatanaag.jar </span><br><span class="line">Running io.github.azyet.CalculatorTest</span><br><span class="line">Tests <span class="string">run:</span> <span class="number">3</span>, <span class="string">Failures:</span> <span class="number">1</span>, <span class="string">Errors:</span> <span class="number">1</span>, <span class="string">Skipped:</span> <span class="number">0</span>, Time <span class="string">elapsed:</span> <span class="number">0.146</span> sec &lt;&lt;&lt; FAILURE!</span><br><span class="line">……</span><br><span class="line"><span class="string">Results :</span></span><br><span class="line"></span><br><span class="line">Failed <span class="string">tests:</span>   testMultiply(io.github.azyet.CalculatorTest): <span class="number">10</span> x <span class="number">5</span> must be <span class="number">50</span> <span class="string">expected:</span>&lt;<span class="number">50</span>&gt; but <span class="string">was:</span>&lt;<span class="number">2</span>&gt;</span><br><span class="line"></span><br><span class="line">Tests <span class="keyword">in</span> <span class="string">error:</span> </span><br><span class="line">  testExceptionIsThrown(io.github.azyet.CalculatorTest): X should be less than <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">Tests <span class="string">run:</span> <span class="number">3</span>, <span class="string">Failures:</span> <span class="number">1</span>, <span class="string">Errors:</span> <span class="number">1</span>, <span class="string">Skipped:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD FAILURE</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total <span class="string">time:</span> <span class="number">3.107</span> s</span><br><span class="line">[INFO] Finished <span class="string">at:</span> <span class="number">2015</span>-<span class="number">05</span>-<span class="number">19</span><span class="string">T16:</span><span class="number">40</span>:<span class="number">52</span>+<span class="number">08</span>:<span class="number">00</span></span><br><span class="line">[INFO] Final <span class="string">Memory:</span> <span class="number">15</span>M/<span class="number">229</span>M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure></p>
+<p>测试没有通过，错误原因及错误栈都打印在日志中。</p>
+<p>修改源文件，让参数小于1000,将<code>multiply</code>中的<code>return x / y;</code>换成<code>return x * y;</code>,再次运行：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">-------------------------------------------------------</span><br><span class="line"> T E S T S</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">Picked up <span class="string">JAVA_TOOL_OPTIONS:</span> -<span class="string">javaagent:</span><span class="regexp">/usr/</span>share<span class="regexp">/java/</span>jayatanaag.jar </span><br><span class="line">Running io.github.azyet.CalculatorTest</span><br><span class="line">Tests <span class="string">run:</span> <span class="number">3</span>, <span class="string">Failures:</span> <span class="number">0</span>, <span class="string">Errors:</span> <span class="number">0</span>, <span class="string">Skipped:</span> <span class="number">0</span>, Time <span class="string">elapsed:</span> <span class="number">0.151</span> sec</span><br><span class="line"></span><br><span class="line"><span class="string">Results :</span></span><br><span class="line"></span><br><span class="line">Tests <span class="string">run:</span> <span class="number">3</span>, <span class="string">Failures:</span> <span class="number">0</span>, <span class="string">Errors:</span> <span class="number">0</span>, <span class="string">Skipped:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total <span class="string">time:</span> <span class="number">2.842</span> s</span><br><span class="line">[INFO] Finished <span class="string">at:</span> <span class="number">2015</span>-<span class="number">05</span>-<span class="number">19</span><span class="string">T16:</span><span class="number">45</span>:<span class="number">44</span>+<span class="number">08</span>:<span class="number">00</span></span><br><span class="line">[INFO] Final <span class="string">Memory:</span> <span class="number">14</span>M/<span class="number">200</span>M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure></p>
+<p>这一次测试通过了。</p>
+<h2 id="附：完整代码">附：完整代码</h2><h3 id="POM文件">POM文件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">project</span> <span class="attribute">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span> <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">         <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="title">modelVersion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>io.github.azyet<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>JUnitLearning<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="title">packaging</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">name</span>&gt;</span>JUnitLearning<span class="tag">&lt;/<span class="title">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="title">url</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="title">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="title">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="被测试类">被测试类</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Hello world!</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Calculator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">multiply</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// the following is just an example</span></span><br><span class="line">        <span class="keyword">if</span> (x &gt; <span class="number">999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"X should be less than 1000"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x * y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试类">测试类</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> junit.framework.<span class="type">TestCase</span>;</span><br><span class="line"><span class="keyword">import</span> junit.framework.<span class="type">TestSuite</span>;</span><br><span class="line"><span class="keyword">import</span> org.junit.<span class="type">Test</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Unit test for simple Calculator.</span><br><span class="line"> */</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">CalculatorTest</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">TestCase</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * Create the test case</span><br><span class="line">     *</span><br><span class="line">     */</span></span><br><span class="line">    <span class="annotation">@Test</span>(expected = <span class="type">IllegalArgumentException</span>.<span class="keyword">class</span>)</span><br><span class="line">    public void testExceptionIsThrown() &#123;</span><br><span class="line">        <span class="type">Calculator</span> tester = <span class="keyword">new</span> <span class="type">Calculator</span>();</span><br><span class="line">        tester.multiply(<span class="number">100</span>, <span class="number">5</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Test</span></span><br><span class="line">    public void testMultiply() &#123;</span><br><span class="line">        <span class="type">Calculator</span> tester = <span class="keyword">new</span> <span class="type">Calculator</span>();</span><br><span class="line">        assertEquals(<span class="string">"10 x 5 must be 50"</span>, <span class="number">50</span>, tester.multiply(<span class="number">10</span>, <span class="number">5</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * @return the suite of tests being tested</span><br><span class="line">     */</span></span><br><span class="line">    public static <span class="type">TestSuite</span> suite() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="type">TestSuite</span>(<span class="type">CalculatorTest</span>.<span class="keyword">class</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JUnit/">JUnit</a><a href="/tags/Maven/">Maven</a><a href="/tags/单元测试/">单元测试</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/18/junitNote1/" data-title="单元测试之JUnit学习笔记 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/19/zookeeperNote1/" title="ZooKeeper学习笔记（一）之概览">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ZooKeeper学习笔记（一）之概览</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/18/rabbitmqNote6/"  title="RabbitMQ学习笔记（六）之RPC">
+ <strong>下一篇：</strong><br/> 
+ <span>RabbitMQ学习笔记（六）之RPC
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/18/junitNote1/" data-title="单元测试之JUnit学习笔记" data-url="http://azyet.github.io/2015/05/18/junitNote1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单元测试，一致性测试和性能测试"><span class="toc-number">1.</span> <span class="toc-text">单元测试，一致性测试和性能测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单元测试"><span class="toc-number">1.1.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一致性测试"><span class="toc-number">1.2.</span> <span class="toc-text">一致性测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#性能测试"><span class="toc-number">1.3.</span> <span class="toc-text">性能测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建高效的测试"><span class="toc-number">2.</span> <span class="toc-text">构建高效的测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#术语"><span class="toc-number">3.</span> <span class="toc-text">术语</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fixture"><span class="toc-number">3.1.</span> <span class="toc-text">Fixture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#[行为|状态]测试"><span class="toc-number">3.2.</span> <span class="toc-text">[行为|状态]测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试的结构"><span class="toc-number">4.</span> <span class="toc-text">测试的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java测试的结构"><span class="toc-number">4.1.</span> <span class="toc-text">Java测试的结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试哪些内容"><span class="toc-number">4.2.</span> <span class="toc-text">测试哪些内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对旧有代码测试"><span class="toc-number">4.3.</span> <span class="toc-text">对旧有代码测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用JUnit"><span class="toc-number">5.</span> <span class="toc-text">如何使用JUnit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Junit例程"><span class="toc-number">6.</span> <span class="toc-text">Junit例程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JUnit命名规范"><span class="toc-number">7.</span> <span class="toc-text">JUnit命名规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Junit在Maven中的命名规范"><span class="toc-number">8.</span> <span class="toc-text">Junit在Maven中的命名规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JUnit测试集"><span class="toc-number">9.</span> <span class="toc-text">JUnit测试集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从命令行运行测试"><span class="toc-number">10.</span> <span class="toc-text">从命令行运行测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建基本的测试代码"><span class="toc-number">11.</span> <span class="toc-text">构建基本的测试代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JUnit中的Annotation"><span class="toc-number">11.1.</span> <span class="toc-text">JUnit中的Annotation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#断言语句"><span class="toc-number">12.</span> <span class="toc-text">断言语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试执行顺序"><span class="toc-number">13.</span> <span class="toc-text">测试执行顺序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven中JUnit练习"><span class="toc-number">14.</span> <span class="toc-text">Maven中JUnit练习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建Maven工程"><span class="toc-number">14.1.</span> <span class="toc-text">创建Maven工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个Java类"><span class="toc-number">14.2.</span> <span class="toc-text">创建一个Java类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建JUnit测试"><span class="toc-number">14.3.</span> <span class="toc-text">创建JUnit测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven_test"><span class="toc-number">14.4.</span> <span class="toc-text">maven test</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附：完整代码"><span class="toc-number">15.</span> <span class="toc-text">附：完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POM文件"><span class="toc-number">15.1.</span> <span class="toc-text">POM文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#被测试类"><span class="toc-number">15.2.</span> <span class="toc-text">被测试类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试类"><span class="toc-number">15.3.</span> <span class="toc-text">测试类</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

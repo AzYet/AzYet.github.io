@@ -1,0 +1,649 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>android启动流程 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="什么是Zygot,init.rc,和Linux的启动过程有什么区别等。
+通电与系统启动电源接通以后，Boot Rom从一个写入硬件的预定义的地址开始执行，它会加载BootLoader到内存中执行。
+（注：类似PC的BIOS）
+BootLoader这是一个在android之前运行的小程序，它不是android的一部分，是厂商设置锁的其它限制的地方。
+(注：类似Linux的Grub)
+Bootload">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android启动流程">
+<meta property="og:url" content="http://azyet.github.io/2015/05/27/androidBootProcess/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="什么是Zygot,init.rc,和Linux的启动过程有什么区别等。
+通电与系统启动电源接通以后，Boot Rom从一个写入硬件的预定义的地址开始执行，它会加载BootLoader到内存中执行。
+（注：类似PC的BIOS）
+BootLoader这是一个在android之前运行的小程序，它不是android的一部分，是厂商设置锁的其它限制的地方。
+(注：类似Linux的Grub)
+Bootload">
+<meta property="og:image" content="https://community.freescale.com/servlet/JiveServlet/downloadImage/102-102546-6-15666/chart2.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android启动流程">
+<meta name="twitter:description" content="什么是Zygot,init.rc,和Linux的启动过程有什么区别等。
+通电与系统启动电源接通以后，Boot Rom从一个写入硬件的预定义的地址开始执行，它会加载BootLoader到内存中执行。
+（注：类似PC的BIOS）
+BootLoader这是一个在android之前运行的小程序，它不是android的一部分，是厂商设置锁的其它限制的地方。
+(注：类似Linux的Grub)
+Bootload">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/27/androidBootProcess/" title="android启动流程" itemprop="url">android启动流程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-27T17:23:24.000Z" itemprop="datePublished"> 發表於 2015-05-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#通电与系统启动"><span class="toc-number">1.</span> <span class="toc-text">通电与系统启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BootLoader"><span class="toc-number">2.</span> <span class="toc-text">BootLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内核"><span class="toc-number">3.</span> <span class="toc-text">内核</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Blinder"><span class="toc-number">3.1.</span> <span class="toc-text">Blinder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ashmem"><span class="toc-number">3.2.</span> <span class="toc-text">ashmem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pmem"><span class="toc-number">3.3.</span> <span class="toc-text">pmem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logger"><span class="toc-number">3.4.</span> <span class="toc-text">logger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wakelocks"><span class="toc-number">3.5.</span> <span class="toc-text">wakelocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#oom_handling"><span class="toc-number">3.6.</span> <span class="toc-text">oom handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#alarm_manager"><span class="toc-number">3.7.</span> <span class="toc-text">alarm manager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RAM_CONSOLE"><span class="toc-number">3.8.</span> <span class="toc-text">RAM_CONSOLE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#USB_gadget_driver_for_ADB"><span class="toc-number">3.9.</span> <span class="toc-text">USB gadget driver for ADB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yaffs_flash_filesystem"><span class="toc-number">3.10.</span> <span class="toc-text">yaffs flash filesystem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init进程"><span class="toc-number">4.</span> <span class="toc-text">init进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zygote_and_Dalvik"><span class="toc-number">5.</span> <span class="toc-text">Zygote and Dalvik</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统服务"><span class="toc-number">6.</span> <span class="toc-text">系统服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#核心服务："><span class="toc-number">6.1.</span> <span class="toc-text">核心服务：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它服务："><span class="toc-number">6.2.</span> <span class="toc-text">其它服务：</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>什么是Zygot,init.rc,和Linux的启动过程有什么区别等。</p>
+<h2 id="通电与系统启动">通电与系统启动</h2><p>电源接通以后，Boot Rom从一个写入硬件的预定义的地址开始执行，它会<strong>加载BootLoader</strong>到内存中执行。</p>
+<p>（注：类似PC的BIOS）</p>
+<h2 id="BootLoader">BootLoader</h2><p>这是一个在android之前运行的小程序，它不是android的一部分，是厂商设置锁的其它限制的地方。</p>
+<p>(注：类似Linux的Grub)</p>
+<p>Bootloader分两步执行，首先它检测外部Ram并加载一个第二步中要用到的程序。</p>
+<p>第二步中，bootloader安装内核运行需要的<strong>网络、内存</strong>等，它为kernel的特定功能提供<strong>配置参数</strong>或者<strong>输入</strong>。</p>
+<p>bootloader可以在这里找到：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;android <span class="keyword">source</span>&gt;<span class="regexp">/bootable/</span>bootloader<span class="regexp">/legacy/u</span>sbloader</span><br></pre></td></tr></table></figure>
+<p>legacy的loader包含两个重要部分：</p>
+<pre><code><span class="number">1</span>. init<span class="class">.s</span>:: 初始化栈，置零BSS segment和调用main.c中的<span class="function"><span class="title">call_main</span><span class="params">()</span></span>。
+<span class="number">2</span>. main<span class="class">.c</span>:: 初始化硬件（硬件，主板，键盘，控制台）和创建Linux tags
+</code></pre><a id="more"></a>
+<h2 id="内核">内核</h2><p>和Linux的内核加载相似。启动后开始安装cache和被保护的内存，调度和加载驱动。完成系统安装后，开始寻找init文件。</p>
+<p>Linux中的kernel处理所有操作系统进程，例如内存管理，任务调度，IPC和整体系统控制。分两步进行，首先内核（单个压缩文件）被读入内存并解压，一些基础功能如基本内存管理被安装。之后控制最终被移交给主要的kernel启动进程。当Kernel功能完全时（kernel加载和执行也是它自身启动的一部分），Kernel寻找并运行Init进程，它会安装用户空间、用户环境和login时需要的进程。此时Kernel可以终结，服从其它进程的调用。</p>
+<p>和Linux的kernel有何不同？以下是android对kernel作的修改和附加：</p>
+<h3 id="Blinder">Blinder</h3><p>android的<strong>IPC</strong>机制和<strong>RPC</strong>系统</p>
+<h3 id="ashmem">ashmem</h3><p>“Android Shared Memory”. 新的<strong>共享内存</strong>分配器，和POSIXS的SHM类似但是行为不同，有简化的<strong>基于文件的API</strong>。</p>
+<h3 id="pmem">pmem</h3><p>“process memory allocator”。 用于管理在用户空间与内核空间中共享的连续的大块物理内存。</p>
+<h3 id="logger">logger</h3><p>logcat命令的内核支持</p>
+<h3 id="wakelocks">wakelocks</h3><p>用于电源管理文件，它<strong>保持系统唤醒</strong>，直到wakelock被释放。</p>
+<h3 id="oom_handling">oom handling</h3><p>在可用<strong>内存低时结束进程</strong></p>
+<h3 id="alarm_manager">alarm manager</h3><p>用户空间在需要时<strong>唤醒内核</strong></p>
+<h3 id="RAM_CONSOLE">RAM_CONSOLE</h3><p>允许将内核的printk消息缓存到RAM中，以使得消息可以在出现kernel panic后在下次内核调用时能被看到。</p>
+<h3 id="USB_gadget_driver_for_ADB">USB gadget driver for ADB</h3><h3 id="yaffs_flash_filesystem">yaffs flash filesystem</h3><h2 id="init进程">init进程</h2><p>第一个进程，属于root，所有进程之父。它有两个职责：</p>
+<pre><code><span class="number">1</span>. 加载目录，例如/sys ， /<span class="keyword">proc</span>
+
+<span class="number">2</span>. 运行**init.rc**脚本
+</code></pre><p>android有特殊的init.rc规则和格式，详细信息可以参考<strong><a href="https://community.freescale.com/docs/DOC-102537" target="_blank" rel="external">What is inside the init.rc and what is it used for.</a></strong></p>
+<p>此时终于可以看到Android的logo了。</p>
+<h2 id="Zygote_and_Dalvik">Zygote and Dalvik</h2><p>我们知道在java中每个应用都会在内在中建立一个单独的VM，在Android中每个app的VM都应该尽可能地快速运行。但是如果每个app都运行一个Dalvik虚拟机，会消耗相当多地内存。</p>
+<p>为了克服这个问题，android有一个zygote系统，它使得dalvik之间可以<strong>共享代码</strong>，减少内在消耗和启动时间。zygote是一个在系统开机时启动的<strong>虚拟机</strong>进程，预加载和初始化<strong>核心类库</strong>。</p>
+<p>Zygote加载过程：</p>
+<pre><code><span class="number">1</span>.加载Zygote的init类：
+&lt;android source&gt;/frameworks/base/core/java/com/android/internal/os/ZygoteInit<span class="class">.java</span>
+
+<span class="number">2</span>. <span class="function"><span class="title">registerZygoteSocket</span><span class="params">()</span></span> :: 为Zygote命令连接注册一个服务socket
+
+<span class="number">3</span>. <span class="function"><span class="title">preloadClasses</span><span class="params">()</span></span>:: 一个简单的文本文件，包含需要预加载的类列表，位于 &lt;android source&gt;/framework/base
+
+<span class="number">4</span>. <span class="function"><span class="title">preloadResources</span><span class="params">()</span></span>:: 所有包含于android.R中的文件将被此方法加载。
+</code></pre><p>此时，你会看到启动动画。</p>
+<h2 id="系统服务">系统服务</h2><p>上述步骤完成以后，<strong>Zygote</strong>将fork新进程来运行运行<strong>系统服务</strong>。</p>
+<h3 id="核心服务：">核心服务：</h3><ul>
+<li>Starting power manager</li>
+<li>Creating the Activity Manager</li>
+<li>Starting telephony registry</li>
+<li>Starting package manager</li>
+<li>Set activity manager service as system process</li>
+<li>Starting context manager</li>
+<li>Starting system contact providers</li>
+<li>Starting battery service</li>
+<li>Starting alarm manager</li>
+<li>Starting sensor service</li>
+<li>Starting window manager</li>
+<li>Starting Bluetooth service</li>
+<li>Starting mount service</li>
+</ul>
+<h3 id="其它服务：">其它服务：</h3><ul>
+<li>status bar service</li>
+<li>hardware service</li>
+<li>NetStat service</li>
+<li>connectivity service</li>
+<li>Notification Manager</li>
+<li>DeviceStorageMonitor service</li>
+<li>Location Manager</li>
+<li>Search Service</li>
+<li>Clipboard Service</li>
+<li>checkin service</li>
+<li>Wallpaper service</li>
+<li>Audio Service</li>
+<li>HeadsetObserver</li>
+<li>AdbSettingsObserver</li>
+</ul>
+<p>至此系统启动完成，系统服务已经运行在内在当中。如果需要分析Android启动过程，可以用ABD logcat工具来得到启动过程中的的事件。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb logcat -<span class="keyword">d</span> -b events | grep <span class="keyword">boot</span></span><br><span class="line">adb logcat -<span class="keyword">d</span> | grep preload</span><br></pre></td></tr></table></figure>
+<p><img src="https://community.freescale.com/servlet/JiveServlet/downloadImage/102-102546-6-15666/chart2.jpg" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Zygote/">Zygote</a><a href="/tags/android/">android</a><a href="/tags/bootloader/">bootloader</a><a href="/tags/启动流程/">启动流程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/27/androidBootProcess/" data-title="android启动流程 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/28/6stagesInLinuxBootProcess/" title="Linux启动过程中的6个阶段">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Linux启动过程中的6个阶段</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/26/ipCommandInLinux/"  title="Linux下的ip命令">
+ <strong>下一篇：</strong><br/> 
+ <span>Linux下的ip命令
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/27/androidBootProcess/" data-title="android启动流程" data-url="http://azyet.github.io/2015/05/27/androidBootProcess/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#通电与系统启动"><span class="toc-number">1.</span> <span class="toc-text">通电与系统启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BootLoader"><span class="toc-number">2.</span> <span class="toc-text">BootLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内核"><span class="toc-number">3.</span> <span class="toc-text">内核</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Blinder"><span class="toc-number">3.1.</span> <span class="toc-text">Blinder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ashmem"><span class="toc-number">3.2.</span> <span class="toc-text">ashmem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pmem"><span class="toc-number">3.3.</span> <span class="toc-text">pmem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logger"><span class="toc-number">3.4.</span> <span class="toc-text">logger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wakelocks"><span class="toc-number">3.5.</span> <span class="toc-text">wakelocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#oom_handling"><span class="toc-number">3.6.</span> <span class="toc-text">oom handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#alarm_manager"><span class="toc-number">3.7.</span> <span class="toc-text">alarm manager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RAM_CONSOLE"><span class="toc-number">3.8.</span> <span class="toc-text">RAM_CONSOLE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#USB_gadget_driver_for_ADB"><span class="toc-number">3.9.</span> <span class="toc-text">USB gadget driver for ADB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yaffs_flash_filesystem"><span class="toc-number">3.10.</span> <span class="toc-text">yaffs flash filesystem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init进程"><span class="toc-number">4.</span> <span class="toc-text">init进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zygote_and_Dalvik"><span class="toc-number">5.</span> <span class="toc-text">Zygote and Dalvik</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统服务"><span class="toc-number">6.</span> <span class="toc-text">系统服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#核心服务："><span class="toc-number">6.1.</span> <span class="toc-text">核心服务：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它服务："><span class="toc-number">6.2.</span> <span class="toc-text">其它服务：</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

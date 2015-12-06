@@ -1,0 +1,635 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ZooKeeper学习笔记（七）之方法和解决方案 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="用ZooKeeper构建高级结构　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。
+　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。
+　　所有设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper学习笔记（七）之方法和解决方案">
+<meta property="og:url" content="http://azyet.github.io/2015/05/21/zookeeperNote7/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="用ZooKeeper构建高级结构　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。
+　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。
+　　所有设">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper学习笔记（七）之方法和解决方案">
+<meta name="twitter:description" content="用ZooKeeper构建高级结构　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。
+　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。
+　　所有设">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/21/zookeeperNote7/" title="ZooKeeper学习笔记（七）之方法和解决方案" itemprop="url">ZooKeeper学习笔记（七）之方法和解决方案</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-21T09:41:26.000Z" itemprop="datePublished"> 發表於 2015-05-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#用ZooKeeper构建高级结构"><span class="toc-number">1.</span> <span class="toc-text">用ZooKeeper构建高级结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原装可用的功能"><span class="toc-number">2.</span> <span class="toc-text">原装可用的功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Barrier"><span class="toc-number">3.</span> <span class="toc-text">Barrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#双Barrier"><span class="toc-number">3.1.</span> <span class="toc-text">双Barrier</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#队列"><span class="toc-number">4.</span> <span class="toc-text">队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优先级队列"><span class="toc-number">4.1.</span> <span class="toc-text">优先级队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁"><span class="toc-number">5.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#共享锁"><span class="toc-number">5.1.</span> <span class="toc-text">共享锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取读共享锁"><span class="toc-number">5.1.1.</span> <span class="toc-text">获取读共享锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取写共享锁"><span class="toc-number">5.1.2.</span> <span class="toc-text">获取写共享锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可回收锁"><span class="toc-number">5.2.</span> <span class="toc-text">可回收锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二阶段提交"><span class="toc-number">6.</span> <span class="toc-text">二阶段提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#领袖选举_leader_election"><span class="toc-number">7.</span> <span class="toc-text">领袖选举 leader election</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="用ZooKeeper构建高级结构">用ZooKeeper构建高级结构</h2><p>　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。</p>
+<p>　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。</p>
+<p>　　所有设计遵循实用原则，特别避免了轮询，计时和任何导致“羊群效应”的事情，避免网络暴发和扩容受限。</p>
+<p>　　还有很多可以想象的有用功能这里没有提到，比如可撤销读写优先级锁。列举的功能也可以以其它方式实现，总之本文只是为了刺激大家的想象力。</p>
+<h2 id="原装可用的功能">原装可用的功能</h2><p>　　<code>目录服务</code>和<code>配置</code>是两大ZooKeeper直接提供的功能，另一个是<code>组员管理</code>，组由znode表示，成员由之下的瞬时node表示，掉线的成员被服务检测到后会自动删除。</p>
+<h2 id="Barrier">Barrier</h2><p>　　分布式系统使用Barrier来阻塞一组进程直到某条件满足。ZooKeeper设计一个barrier node来实现Barrier功能。node存在代表Barrier存在。伪代码如下：</p>
+<pre><code>client调用<span class="keyword">exists</span>并设置watch
+
+如果<span class="keyword">exists</span>返回假，barrier不存在，进程继续
+
+如果<span class="keyword">exists</span>返回真，有barrier，进程阻塞等待watch事件
+
+收到watch事件时重新调用<span class="keyword">exists</span>……直到barrier移除
+</code></pre><a id="more"></a>    
+<h3 id="双Barrier">双Barrier</h3><p>　　双Barrier用来同步一次计算的开始和结束，当足够多的进程加入barrier，计算开始，完成后离开Barrier。这个前面已经有过实例就不细说了。</p>
+<p>　　为提高效率，可以在进程中选出一个lowest进程，其它进程设置watch它，而loweset设置watch任意node，这样每次删除操作最多只通知一个进程，队了lowest删除会通知所有进程。</p>
+<h2 id="队列">队列</h2><p>　　分布式队列是一种常见的数据结构，首先指定一个znode为队列节点，client调用create在此节点上创建以queue-开头的节点，同时设置ephemeral和sequence标识，这样node的path末就会自动添加一个递增的数字。需要从队列中取元素的进程调用getChildren并设置watch，从数字最小的node开始处理，直到队列为空，再次设置watch并等待。</p>
+<h3 id="优先级队列">优先级队列</h3><p>　　稍加改动即可，首先在节点命名改为queue-xx-的形式，xx代表优先级，其次就是每次收到通知都要重新获取子node列表。</p>
+<h2 id="锁">锁</h2><p>　　完全分布式的同步锁，意味着在任意时间点都不会有两个client认为自己获得了同一个锁。</p>
+<p>　　首先定义一个锁znode，想获取锁的client执行以下操作：</p>
+<pre><code><span class="bullet">1. </span>在锁znode下创建瞬时、序列节点
+
+<span class="bullet">2. </span>getChildren，不watch（避免羊群效应）
+
+<span class="bullet">3. </span>如果1中的节点序列号最小，获得锁，结束流程;
+
+<span class="bullet">4. </span>调用exists，watch序列号小于自己的最近的子node，设置watch
+
+<span class="bullet">5. </span>如果返回为假，转到2,如果真，等待watch事件后转到2
+</code></pre><p>　　释放锁则只需要删除上述1中创建的znode即可。</p>
+<p>　　注意事项：</p>
+<pre><code>子znode删除只会唤醒一个进程，因为每个znode只被一个进程watch，从而避免了羊群效应
+
+没有polling超时
+
+这种实现方式便于查看锁的竞争，<span class="keyword">break</span>和<span class="keyword">debug</span>相关问题
+</code></pre><h3 id="共享锁">共享锁</h3><p>　　共享锁（S锁）：共享 (S) 用于不更改或不更新数据的操作（<strong>只读操作</strong>），如 SELECT 语句。</p>
+<p>　　如果事务T对数据A加上共享锁后，则<strong>其他事务</strong>只能对A<strong>再加共享锁</strong>，不能加排他锁。获准共享锁的事务只能读数据，不能修改数据。    </p>
+<p>　　对上述实现进行一定修改可以实现共享锁：</p>
+<h4 id="获取读共享锁">获取读共享锁</h4><pre><code><span class="bullet">1. </span>create以read-开头的瞬时序列znode
+
+<span class="bullet">2. </span>getChildren，无watch
+
+<span class="bullet">3. </span>如果无以write-开头的znode，有较小的read- znode，获取锁，结束算法
+
+<span class="bullet">4. </span>exists watch最近的较小的write- znode  
+
+<span class="bullet">5. </span>如果返回为假，回到2
+
+<span class="bullet">6. </span>等待watch事件后回到2
+</code></pre><h4 id="获取写共享锁">获取写共享锁</h4><pre><code><span class="bullet">1. </span>create以write-开头的瞬时序列znode
+
+<span class="bullet">2. </span>getChildren，无watch
+
+<span class="bullet">3. </span>如果无较小的znode，获取锁，结束算法
+
+<span class="bullet">4. </span>exists watch最近的较小znode  
+
+<span class="bullet">5. </span>如果返回为假，回到2
+
+<span class="bullet">6. </span>等待watch事件后回到2
+</code></pre><blockquote>
+<p>以上方法看起来似乎可能导致羊群效应，当很多read进程等待一个write进程的时候。实际上这样是合理的，因为上述read进程将被一起释放。羊群效应指的是实际只有一个（或少量）进程能继续时，大量进程被唤醒。    </p>
+</blockquote>
+<h3 id="可回收锁">可回收锁</h3><p>　　以上述算法稍作修改可实现可回收共享锁。步骤1中，create之后马上getData并watch。收到相应事件后再次getData并查找“unlock”字串，表示它必须释放锁。这是因为根据这个共享锁算法，你可以通过对加锁的znode执行setData（“unlock”）来请求拥有锁的进程释放。</p>
+<p>　　这个算法要求持有锁的进程同意释放锁，这很重要，特别是如果持有者需要在释放之前执行一些操作。当然你也可以强制实现可回收锁，如果持有者在一定时间后没有释放锁（删除znode），允许请求者删除该znode。</p>
+<h2 id="二阶段提交">二阶段提交</h2><p>　　一种允许分布式系统中的所有client同意要么提交事务，要么退出的算法。</p>
+<p>　　协调者先创建一个事务znode，例如/app/tx, 再为每个参与者创建相应的子znode，例如/app/tx/s-i，内容未定义。当参与者从协调者处收到事务时，参与者read所有子znode并设置watch，之后执行具体的事务逻辑，完成之后通过write各自投票commit or abort到各自对应的znode, 完成之后其它参与者会收到通知，所有参与者投票后，就可以决定最终结果了。注意在有部分参与都投abort的情况下，有些参与都可以更早决定abort。（类似逻辑运算的提前结束）</p>
+<p>　　协调者的职责是创建znode，根据znode决定结果，传播事务到参与者（可以通过写znode实现）。以上实现有两个缺点，第一上消息复杂性，为O(n^2)；二是无法通过ephemeral方式侦测参与者的失效，因为znode不是参与者创建的。</p>
+<p>　　要解决第一个问题，可以在事务znode更改时只通知协调者，在作出决定后再通知参与者。这种方式可扩容，但较慢，因为所有的通信要通过协调者。</p>
+<p>　　关于第二个问题，可以让协调者通知参与者自己创建相应的znode。</p>
+<h2 id="领袖选举_leader_election">领袖选举 leader election</h2><p>　　可以通过SEQUENCE|EPHEMERA标签来简单实现，每个进程都在如/election的路径下创建自己的znode，然后znode最小的进程即为leader。</p>
+<p>　　当然还需要watch leader的失效，以方便重新选出新的最小znode的leader。比较繁琐的方式是让所有的进程watch leader，这将导致羊群效应：一旦leader失效要向所有的进程发送通告，每个进程都要执行getChildren选出最小znode，如果进程数量巨大将导致ZooKeeper瞬间的大量操作。为了这种情况，避免watch相邻的较小znode即可。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/leader-election/">leader election</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/21/zookeeperNote7/" data-title="ZooKeeper学习笔记（七）之方法和解决方案 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/22/theGreatCannon/" title="The Great Cannon">
+  <strong>上一篇：</strong><br/>
+  <span>
+  The Great Cannon</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/20/zookeeperNote6/"  title="ZooKeeper学习笔记（六）之Java例程">
+ <strong>下一篇：</strong><br/> 
+ <span>ZooKeeper学习笔记（六）之Java例程
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/21/zookeeperNote7/" data-title="ZooKeeper学习笔记（七）之方法和解决方案" data-url="http://azyet.github.io/2015/05/21/zookeeperNote7/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#用ZooKeeper构建高级结构"><span class="toc-number">1.</span> <span class="toc-text">用ZooKeeper构建高级结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原装可用的功能"><span class="toc-number">2.</span> <span class="toc-text">原装可用的功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Barrier"><span class="toc-number">3.</span> <span class="toc-text">Barrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#双Barrier"><span class="toc-number">3.1.</span> <span class="toc-text">双Barrier</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#队列"><span class="toc-number">4.</span> <span class="toc-text">队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优先级队列"><span class="toc-number">4.1.</span> <span class="toc-text">优先级队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锁"><span class="toc-number">5.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#共享锁"><span class="toc-number">5.1.</span> <span class="toc-text">共享锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取读共享锁"><span class="toc-number">5.1.1.</span> <span class="toc-text">获取读共享锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取写共享锁"><span class="toc-number">5.1.2.</span> <span class="toc-text">获取写共享锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可回收锁"><span class="toc-number">5.2.</span> <span class="toc-text">可回收锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二阶段提交"><span class="toc-number">6.</span> <span class="toc-text">二阶段提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#领袖选举_leader_election"><span class="toc-number">7.</span> <span class="toc-text">领袖选举 leader election</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

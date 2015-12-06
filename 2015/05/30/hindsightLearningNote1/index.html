@@ -1,0 +1,680 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>simics hindsight学习笔记（一） | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="概念　　以下介绍一些关于模拟的基本概念。
+模拟的限制　　Simics是系统层指令集模拟器，也就是说：
+指令级的模拟，一次执行一个指令
+模拟硬件的二进制接口，任何硬件上运行的软件在target上也能运行
+　　包括firmawre,硬件驱动，操作系统和用户程序在内的任何软件都能在target上运行。
+　　simics的时间系统非常简单，例如它默认所有指令的执行时间是一样的，利用这点将可以编写简单程序来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="simics hindsight学习笔记（一）">
+<meta property="og:url" content="http://azyet.github.io/2015/05/30/hindsightLearningNote1/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="概念　　以下介绍一些关于模拟的基本概念。
+模拟的限制　　Simics是系统层指令集模拟器，也就是说：
+指令级的模拟，一次执行一个指令
+模拟硬件的二进制接口，任何硬件上运行的软件在target上也能运行
+　　包括firmawre,硬件驱动，操作系统和用户程序在内的任何软件都能在target上运行。
+　　simics的时间系统非常简单，例如它默认所有指令的执行时间是一样的，利用这点将可以编写简单程序来">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="simics hindsight学习笔记（一）">
+<meta name="twitter:description" content="概念　　以下介绍一些关于模拟的基本概念。
+模拟的限制　　Simics是系统层指令集模拟器，也就是说：
+指令级的模拟，一次执行一个指令
+模拟硬件的二进制接口，任何硬件上运行的软件在target上也能运行
+　　包括firmawre,硬件驱动，操作系统和用户程序在内的任何软件都能在target上运行。
+　　simics的时间系统非常简单，例如它默认所有指令的执行时间是一样的，利用这点将可以编写简单程序来">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/hindsightLearningNote1/" title="simics hindsight学习笔记（一）" itemprop="url">simics hindsight学习笔记（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T14:42:23.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟的限制"><span class="toc-number">1.1.</span> <span class="toc-text">模拟的限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非入侵的观察和调试"><span class="toc-number">1.2.</span> <span class="toc-text">非入侵的观察和调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟的时间"><span class="toc-number">1.3.</span> <span class="toc-text">模拟的时间</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令行工具"><span class="toc-number">2.</span> <span class="toc-text">命令行工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟模式"><span class="toc-number">2.1.</span> <span class="toc-text">模拟模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行指定模式"><span class="toc-number">2.1.1.</span> <span class="toc-text">命令行指定模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GUI方式指定模式"><span class="toc-number">2.1.2.</span> <span class="toc-text">GUI方式指定模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#normal_mode"><span class="toc-number">2.1.3.</span> <span class="toc-text">normal mode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stall模式"><span class="toc-number">2.1.4.</span> <span class="toc-text">stall模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令选项"><span class="toc-number">2.2.</span> <span class="toc-text">命令选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级选项"><span class="toc-number">2.3.</span> <span class="toc-text">高级选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境变量"><span class="toc-number">2.4.</span> <span class="toc-text">环境变量</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="概念">概念</h1><p>　　以下介绍一些关于模拟的基本概念。</p>
+<h2 id="模拟的限制">模拟的限制</h2><p>　　Simics是系统层指令集模拟器，也就是说：</p>
+<pre><code>指令级的模拟，一次执行一个指令
+模拟硬件的二进制接口，任何硬件上运行的软件在<span class="keyword">target</span>上也能运行
+</code></pre><p>　　包括<strong>firmawre,硬件驱动，操作系统</strong>和用户程序在内的任何软件都能在target上运行。</p>
+<p>　　simics的时间系统非常简单，例如它默认所有<strong>指令的执行时间是一样</strong>的，利用这点将可以编写简单程序来区别模拟与真实系统。</p>
+<h2 id="非入侵的观察和调试">非入侵的观察和调试</h2><p>　　Simics有强大的调试和观察功能：</p>
+<pre><code>观察和设置<span class="keyword">*</span><span class="keyword">*</span>register,memory和硬件状态<span class="keyword">*</span><span class="keyword">*</span>
+设置断点和观察点
+以脚本实现上述功能
+</code></pre><p>　　有了上述支持，<strong>无须在target上安装任何调试程序</strong>，因此调试行为也对target及之上的软件是<strong>完全透明</strong>的。</p>
+<a id="more"></a>
+<h2 id="模拟的时间">模拟的时间</h2><pre><code>可以在<span class="keyword">target</span>无察觉的情况下暂停系统
+也可以保存和恢复状态（checkpoint）
+可反向执行，对定位bug和调试非常有用
+</code></pre><p>　　以上对任何target系统适用，无论是简单系统还是计算网络。</p>
+<h1 id="命令行工具">命令行工具</h1><p>　　本节介绍simics的命令行选项及环境变量。</p>
+<p>　　从命令行启动simics，在<strong>工程目录</strong>下运行：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">project</span>]$ .<span class="regexp">/simics targets/m</span>pc8641-simple<span class="regexp">/mpc8641d-simple-linux.simics</span></span><br></pre></td></tr></table></figure>
+<p>　　simics也可以在目录下启动，以无项目状态运行，但是并不推荐。</p>
+<p>　　以上命令将运行指定脚本，它将以缺省配置启动<code>MPC8641-Simple</code>机器。</p>
+<h2 id="模拟模式">模拟模式</h2><p>　　模拟模式（simulation mode）用来控制可获得的特性：<code>instruction and data profiling</code>, <code>memory timing</code>。最佳性能模式无以上特性的，simics以<strong>独立处理器</strong>形式实现，这也是simics的缺省模式。</p>
+<h3 id="命令行指定模式">命令行指定模式</h3><p>fast / stall<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">simics<span class="class">.bat</span> -stall ...</span><br><span class="line"></span><br><span class="line">simics<span class="class">.bat</span> -fast ...</span><br></pre></td></tr></table></figure></p>
+<p>　　不能在运行时改变模式，可以<strong>先保存再更换模式加载</strong></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; <span class="built_in">write</span>-configuration <span class="keyword">at</span>-workload-<span class="built_in">start</span>.ckpt</span><br><span class="line">simics&gt; quit</span><br><span class="line"></span><br><span class="line">$ ./simics -stall -c <span class="keyword">at</span>-workload-<span class="built_in">start</span>.ckpt</span><br></pre></td></tr></table></figure>
+<h3 id="GUI方式指定模式">GUI方式指定模式</h3><p><code>Simics Control</code>窗口中，选择<code>Edit</code> → <code>Preferences</code>→<br><code>Startup</code></p>
+<p>　　更改此处将导<strong>致默认模式更改</strong>。如果需要在<strong>运行中更改</strong>模式，同时可以先<strong>保存checkpoint再load</strong>：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">File</span> → <span class="keyword">Save</span> Checkpoint <span class="keyword">As</span>. . . </span><br><span class="line"><span class="keyword">File</span> → <span class="keyword">Open</span> Checkpoint</span><br></pre></td></tr></table></figure>
+<h3 id="normal_mode">normal mode</h3><p>　　快速模式，为<strong>模拟器风格</strong>的使用而优化，以下特性将不可用：</p>
+<pre><code>Instruction <span class="literal">and</span> <span class="built_in">data</span> profiling 
+
+Attaching timing<span class="attribute">-models</span> <span class="literal">and</span> snoop devices <span class="keyword">to</span> memory spaces，意味着tracing <span class="literal">and</span> <span class="keyword">cache</span>模块未正常工作，无法stall。
+</code></pre><h3 id="stall模式">stall模式</h3><p>　　内存计时模式，支持stalling和Instruction and data profiling </p>
+<blockquote>
+<p>注意：不是所有的处理器模型都完全支持以上功能</p>
+</blockquote>
+<h2 id="命令选项">命令选项</h2><p>　　以下是simics启动时可用的常用选项：</p>
+<pre><code>-<span class="ruby">h 
+</span>    简短help
+
+-<span class="ruby">obscure
+</span>    打印高级命令行flags的概要并退出
+
+-<span class="ruby">no-win
+</span>    禁用外部窗口。这将阻止target控制台窗口和任何外部窗口打开
+    只是将窗口隐藏，并不改变模拟行为，通常在批处理时使用，通常也会更快
+
+-<span class="ruby">gui
+</span>    以CLI形式运行，但允许gui打开窗口
+
+-<span class="ruby">no-gui
+</span>    CLI形式运行，不打开窗口，除非用CLI命令指定
+
+-<span class="ruby">no-log
+</span>    &lt;deprecated&gt;不记录CLI命令到log文件
+
+-<span class="ruby">log
+</span>    &lt;deprecated&gt;记录CLI命令到log文件`˜/.simics/4.8/log`
+    默认开启，可被用户偏好关闭
+
+-<span class="ruby">log-file <span class="constant">FILE</span>
+</span>    指定log文件位置
+
+-<span class="ruby">v, -version, --version, -v-short
+</span>    打印版本号，build时使用的编译器和编译计时参数            
+
+-<span class="ruby">license-file <span class="constant">FILE</span>
+</span>    指定许可文件，会覆盖环境变量`SIMICS_LICENSE_FILE `
+
+-<span class="ruby">readme
+</span>    打印README信息
+
+-<span class="ruby">license
+</span>    打印默认license信息
+
+-<span class="ruby">batch-mode
+</span>    批处理模式。在命令执行完成或者错误会退出，返回相应的返回码（0/1）。
+    此模式下的命令不会被记录到log中
+
+-<span class="ruby">verbose
+</span>    打印执行过程中的详细信息
+    相反的参数是-quiet，缺省为二者之中
+
+-<span class="ruby">fast
+</span>    缺省模式，会覆盖偏好中的设置
+
+-<span class="ruby">stall
+</span>    打开stall模式
+
+-<span class="ruby">q，-quiet
+</span>    打印较少的信息，在批处理时有用。如果想更安静，可以指定-no-copyright
+    simics缺省输出就很少，所以这个参数作用并不是很大
+
+-<span class="ruby">c <span class="constant">FILE</span>
+</span>    加载配置文件，相当于在启动后执行read-configuration命令
+    如果是命令的最后一个选项,-c可省略
+
+-<span class="ruby">x
+</span>    历史兼容原因保留，无作用
+
+-<span class="ruby">p <span class="constant">FILE</span>
+</span>    运行python文件中代码
+
+-<span class="ruby">e <span class="constant">COMMAND</span>
+</span>    执行CLI命令，相当在命令提示符中输入命令
+</code></pre><h2 id="高级选项">高级选项</h2><p>……略……//or TODO</p>
+<h2 id="环境变量">环境变量</h2><p>　　可以改变simics运行行为，都是可选项，一般不需要手动设置。</p>
+<pre><code><span class="constant">S</span>IMICS_HOST
+    覆盖simics检测到的<span class="keyword">host</span>类型，值必须是包含<span class="keyword">host</span>-specific files的目录或simics安装目录，典型格式为arch-os,例如linux32
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/30/hindsightLearningNote1/" data-title="simics hindsight学习笔记（一） | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/30/hindsightLearningNote2/" title="simics hindsight学习笔记（二）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  simics hindsight学习笔记（二）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/30/simicsProductFamily/"  title="Simics产品家族">
+ <strong>下一篇：</strong><br/> 
+ <span>Simics产品家族
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/30/hindsightLearningNote1/" data-title="simics hindsight学习笔记（一）" data-url="http://azyet.github.io/2015/05/30/hindsightLearningNote1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟的限制"><span class="toc-number">1.1.</span> <span class="toc-text">模拟的限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非入侵的观察和调试"><span class="toc-number">1.2.</span> <span class="toc-text">非入侵的观察和调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟的时间"><span class="toc-number">1.3.</span> <span class="toc-text">模拟的时间</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令行工具"><span class="toc-number">2.</span> <span class="toc-text">命令行工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟模式"><span class="toc-number">2.1.</span> <span class="toc-text">模拟模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行指定模式"><span class="toc-number">2.1.1.</span> <span class="toc-text">命令行指定模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GUI方式指定模式"><span class="toc-number">2.1.2.</span> <span class="toc-text">GUI方式指定模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#normal_mode"><span class="toc-number">2.1.3.</span> <span class="toc-text">normal mode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stall模式"><span class="toc-number">2.1.4.</span> <span class="toc-text">stall模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令选项"><span class="toc-number">2.2.</span> <span class="toc-text">命令选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级选项"><span class="toc-number">2.3.</span> <span class="toc-text">高级选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境变量"><span class="toc-number">2.4.</span> <span class="toc-text">环境变量</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

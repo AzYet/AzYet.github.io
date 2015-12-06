@@ -1,0 +1,593 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="Openstack允许不同租户创建自己的网络，并通过租户自己的Router连接到外网。网络是允许重叠的，即不同租户都可以创建了192.168.1.0/24这个网段，都有一个192.168.1.1的IP，这样就需要在底层实现对不同租户网络的隔离。
+　　Neutron（openstack中的网络管理模块)实现隔离的方式不止一种（根据不同的plugin而不同），我只讨论我所配置的Openstack（应该">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题">
+<meta property="og:url" content="http://azyet.github.io/2014/04/01/OvsNeutronPluginConflictsWithSDNController/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="Openstack允许不同租户创建自己的网络，并通过租户自己的Router连接到外网。网络是允许重叠的，即不同租户都可以创建了192.168.1.0/24这个网段，都有一个192.168.1.1的IP，这样就需要在底层实现对不同租户网络的隔离。
+　　Neutron（openstack中的网络管理模块)实现隔离的方式不止一种（根据不同的plugin而不同），我只讨论我所配置的Openstack（应该">
+<meta property="og:image" content="http://images.cnitblog.com/i/468588/201404/021110023129310.png">
+<meta property="og:image" content="http://images.cnitblog.com/i/468588/201404/012325156717619.png">
+<meta property="og:image" content="http://images.cnitblog.com/i/468588/201404/012323033591674.png">
+<meta property="og:image" content="http://images.cnitblog.com/i/468588/201404/012329031873977.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题">
+<meta name="twitter:description" content="Openstack允许不同租户创建自己的网络，并通过租户自己的Router连接到外网。网络是允许重叠的，即不同租户都可以创建了192.168.1.0/24这个网段，都有一个192.168.1.1的IP，这样就需要在底层实现对不同租户网络的隔离。
+　　Neutron（openstack中的网络管理模块)实现隔离的方式不止一种（根据不同的plugin而不同），我只讨论我所配置的Openstack（应该">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/04/01/OvsNeutronPluginConflictsWithSDNController/" title="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题" itemprop="url">[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2014-04-01T12:00:00.000Z" itemprop="datePublished"> 發表於 2014-04-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			
+		
+		</div>
+		
+		<p>　　Openstack允许不同租户创建自己的网络，并通过租户自己的Router连接到外网。网络是允许重叠的，即不同租户都可以创建了192.168.1.0/24这个网段，都有一个192.168.1.1的IP，这样就需要在底层实现对不同租户网络的隔离。</p>
+<p>　　Neutron（openstack中的网络管理模块)实现隔离的方式不止一种（根据不同的plugin而不同），我只讨论我所配置的Openstack（应该也是最觉的配置方式之一）的情况，即OVS_Neutron_Plugin，即选用Open vSwith作为虚拟网桥的方式，对处于不同物理节点上的ovs bridge，采用GRE隧道的方式连接（另外一种是Vlan）。</p>
+<p>　　根据查看Neutron相关部分代码和实验验证，得知Neutron是通过Vlan的方式来作网络隔离的，这一点也不意外。下表列出了某计算节点上br-int的端口配置情况，可以看到不同的网络分配了不同的tag值，这里的tag就是Vlan ID,所有从这些port进入的数据都会被加上相应的Vlan ID在交换机里传输和处理，不同的Vlan的端口是不会接收到其它Vlan的数据的，这样就在一个物理节点为解决了隔离问题。<br><a id="more"></a><br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@compute1:~# ovs-vsctl show</span><br><span class="line">a9505710-<span class="number">5</span>f04-<span class="number">4</span>e25-<span class="number">88</span>a5-<span class="number">03</span>b04a367393</span><br><span class="line">    Bridge br-<span class="keyword">int</span></span><br><span class="line">        Port <span class="string">"qvo29608ccb-bb"</span></span><br><span class="line">            tag: <span class="number">2</span></span><br><span class="line">            <span class="keyword">Interface</span> <span class="string">"qvo29608ccb-bb"</span></span><br><span class="line">        Port br-<span class="keyword">int</span></span><br><span class="line">            <span class="keyword">Interface</span> br-<span class="keyword">int</span></span><br><span class="line">                type: internal</span><br><span class="line">        Port <span class="string">"qvocaad8131-1c"</span></span><br><span class="line">            tag: <span class="number">1</span></span><br><span class="line">            <span class="keyword">Interface</span> <span class="string">"qvocaad8131-1c"</span></span><br><span class="line">        Port <span class="string">"qvoae9adf7e-04"</span></span><br><span class="line">            tag: <span class="number">3</span></span><br><span class="line">            <span class="keyword">Interface</span> <span class="string">"qvoae9adf7e-04"</span></span><br><span class="line">        Port patch-tun</span><br><span class="line">            <span class="keyword">Interface</span> patch-tun</span><br><span class="line">                type: patch</span><br><span class="line">                <span class="keyword">options</span>: &#123;peer=patch-<span class="keyword">int</span>&#125;</span><br><span class="line">        Port <span class="string">"qvo222d72f1-80"</span></span><br><span class="line">            tag: <span class="number">1</span></span><br><span class="line">            <span class="keyword">Interface</span> <span class="string">"qvo222d72f1-80"</span></span><br><span class="line">        Port <span class="string">"qvo68d15feb-77"</span></span><br><span class="line">            tag: <span class="number">3</span></span><br><span class="line">            <span class="keyword">Interface</span> <span class="string">"qvo68d15feb-77"</span></span><br><span class="line">    ovs_version: <span class="string">"2.0.0"</span></span><br></pre></td></tr></table></figure></p>
+<p>　　为什么说只是在一个物理节点上解决了隔离问题，因为Neutron为同一个网络在不同的物理节点上（比如控制节点和计算节点）上分配的Vlan ID是不一样的，这样做的原因我想一是为了部署的灵活，更重要的是为了充分地利用Vlan资源。因为Vlan ID最大只能到4096，在复杂的云网络中是比较稀缺的资源，不同的物理节点上自由分配Vlan ID可以使资源的利用最大化，特别是在系统的物理节点非常多的情况下。</p>
+<p>　　那么既然不同物理节点的Vlan分配不一致，但是不同物理节点上的虚拟网络必须要保持一致，这就需要一个翻译的过程。前面已经提到，不同节点间的虚拟网络是通过GRE隧道连接的，这个翻译正是在数据进出隧道的时候完成的。我们可以看Neutron在某计算节点的br-tun桥中为此而下属OpenFlow流规则。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@compute1:~<span class="comment"># ovs-ofctl dump-flows br-tun |grep "vlan"</span></span><br><span class="line"><span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1302.92</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">4</span>, <span class="variable">n_bytes=</span><span class="number">300</span>, <span class="variable">idle_age=</span><span class="number">1285</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x1 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">3</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"><span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1304.725</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">3</span>, <span class="variable">n_bytes=</span><span class="number">210</span>, <span class="variable">idle_age=</span><span class="number">1290</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x3 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">1</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"><span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1303.878</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">6</span>, <span class="variable">n_bytes=</span><span class="number">468</span>, <span class="variable">idle_age=</span><span class="number">1288</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x4 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">2</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"><span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1303.035</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1303</span>, <span class="variable">hard_age=</span><span class="number">1302</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">3</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x1,output:<span class="number">2</span></span><br><span class="line"><span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1303.994</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1303</span>, <span class="variable">hard_age=</span><span class="number">1302</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">2</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x4,output:<span class="number">2</span></span><br><span class="line"><span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1304.784</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1304</span>, <span class="variable">hard_age=</span><span class="number">1302</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">1</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x3,output:<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>　　可以看到此Openstack下有三个租户网络，以粗体部分为例，解释一下这些流规则的语义：第4条规则，当有vlan id = 3的数据准备进入隧道离开本节点到达对岸节点的时候，将会去掉原有的Vlan ID，而加上tun id =1;第1条规则，则是相反的操作，当有tun id=1的数据从隧道出来的时候，将会为其加上vlan id=3，再由下一级流表进行后续处理，这样就在一个节点上完成了vlan id=3 &lt;—&gt; tun id=1的翻译（转换）。</p>
+<p>　　我们再来看此隧道对面的节点（为控制节点）的隧道又是如何配置的呢？</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@controller:~<span class="comment"># ovs-ofctl dump-flows br-tun |grep vlan</span></span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1398.155</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1398</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x1 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">1</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1397.476</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1397</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x5 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">2</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1396.634</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1396</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x3 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">4</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1397.033</span>s, <span class="variable">table=</span><span class="number">2</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1397</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">tun_id=</span><span class="number">0</span>x4 <span class="variable">actions=</span>mod_vlan_vid:<span class="number">3</span>,resubmit(,<span class="number">10</span>)</span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1396.687</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">4</span>, <span class="variable">n_bytes=</span><span class="number">300</span>, <span class="variable">idle_age=</span><span class="number">1385</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">4</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x3,output:<span class="number">2</span></span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1397.139</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">6</span>, <span class="variable">n_bytes=</span><span class="number">468</span>, <span class="variable">idle_age=</span><span class="number">1383</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">3</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x4,output:<span class="number">2</span></span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1397.537</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">0</span>, <span class="variable">n_bytes=</span><span class="number">0</span>, <span class="variable">idle_age=</span><span class="number">1397</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">2</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x5,output:<span class="number">2</span></span><br><span class="line"> <span class="variable">cookie=</span><span class="number">0</span>x0, <span class="variable">duration=</span><span class="number">1398.218</span>s, <span class="variable">table=</span><span class="number">21</span>, <span class="variable">n_packets=</span><span class="number">4</span>, <span class="variable">n_bytes=</span><span class="number">300</span>, <span class="variable">idle_age=</span><span class="number">1380</span>, <span class="variable">priority=</span><span class="number">1</span>,<span class="variable">dl_vlan=</span><span class="number">1</span> <span class="variable">actions=</span>strip_vlan,set_tunnel:<span class="number">0</span>x1,output:<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>　　可以看到在控制节点上，将tun id 1 翻译成了vlan id =1，证明在不同的物理节点上为不同的网络分配Vlan确实是不同的。</p>
+<p>　　下图是Neutron实现整个隔离过程的总结，两台虚拟机属于同一虚拟网络，但它们在各自的节点上分配的Vlan Id却不同，对过各自的Tunnel交换机对Vlan &lt;—&gt; GRE的转换，实现一致性。</p>
+<p><img src="http://images.cnitblog.com/i/468588/201404/021110023129310.png" alt=""></p>
+<p>　　接下来将分析一旦OVS网桥接上SDN控制器将是什么情况。从某种意义上，我们也可以说Neutron其实就是一个SDN的控制器，因为通过它可以进行端口的创建和删除，流规则的配置等操作，但是可惜的是它不是通过开放的OpenFlow和OF-Config来实现这些操作的，而是通过OVS特有的接口OVSDB的方式来实现的。对研究OpenFlow的人来说，常常需要将Neutron所创建的这些OVS Bridge连接上OpenFlow的控制器。这里选用的是Floodlight，它是Big Switch公司控制器的开源版，当OVS Bridge连上Openflow控制器之后，它就由一个OpenFlow hybrid的混合交换机变成一个Openflow交换机，它的行为就遵从OpenFlow协议的规范，在每个交换机里的流规则不再是一条简单的Normal动作通配一切，而是由控制器对每一条流的源/目的等信息进行解析再根据策略实时下发转发规则，这对网络流量的行为监控和管理都十分有利。但在下发任何规则之前，Floodlight将会将接入的交换机原有的规则全部清空（也许也可以保留或者部分保留，待研究，但这不是根本问题）。</p>
+<p>　　清空规则对tunnel的影响是最大的，如前所示Neutron为了保证网络的隔离和不同物理节点上虚拟网络的连续性，在br-tun的bridge上配置了一系列的转换规则，清除这些规则意味着转换关系的丢失。如果只是转换关系的丢失，我们完全可以通过控制器再次添加相同的OpenFlow流来弥补，但关键的问题还不在于此。前面提到Neutron为每一个租户网络分配了不同的Vlan，属于某个租户网络的Port都统一打上了对应的Vlan tag，以使每一个出现在网络中的数据帧都有对应的vlan标记。但是这种为交换机access port加上vlan tag就可以为数据包自动加上相应vlan标记的方式是传统网络设备的特性，并不是OpenFlow规范所支持的内容，也就是说，前面提到过的OVS Bridge上的tag（如下），在OVS作为OpenFlow交换机的时候是无意义的（除非使用非OpenFlow规范内的Normal动作）。　　<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Bridge <span class="keyword">br</span>-<span class="keyword">int</span></span><br><span class="line">　　Port <span class="string">"qvo68d15feb-77"</span></span><br><span class="line">            <span class="keyword">ta</span><span class="variable">g:</span> <span class="number">3</span></span><br><span class="line">            Interface <span class="string">"qvo68d15feb-77"</span></span><br></pre></td></tr></table></figure></p>
+<p> 　　也就是说，一旦将OVS Bridge连上控制器，由虚拟主机进入交换机中的数据包将不再被加上Vlan tag，网络隔离被破坏。事实上我们也可以从wireshark抓取的GRE封装包来印证，这是未连接控制器的数据时，由Vlan3的虚拟机发出的数据包。可以看到只有Gre隧道的key=0x1，而封装的以太帧中也没有Vlan信息（进入br-int时应是有的，但是进入tunnel的时候被strip_vlan动作去掉了，参见前文），符合前面的分析。</p>
+<p><img src="http://images.cnitblog.com/i/468588/201404/012325156717619.png" alt=""></p>
+<p>　　而一旦连接上控制器，数据包没有Vlan信息（进入br-int就没有），Gre key =0（没有相应的规则添加tun id了），亦即不再有任何标识来隔离不同网络。</p>
+<p><img src="http://images.cnitblog.com/i/468588/201404/012323033591674.png" alt=""></p>
+<p> 　　更进一步地，为了证明我们的分析，现在只将br-tun连接控制器，这时我们可以看到数据包变成了如下情况：</p>
+<p><img src="http://images.cnitblog.com/i/468588/201404/012329031873977.png" alt=""></p>
+<p>　　因为控制器清除了br-tun上的转换信息，所以隧道数据gre key = 0，没有被设置，但是br-int并没有连接控制器，它依然是一个openflow hybrid的交换机，里面只有一条规则，即对所有数据包执行Normal动作，OpenFlow对Normal没有规范，完全由厂商自行设计实现，代表传统转发行为，所以它端口的vlan tag依然有效，GRE封装的以太帧类型是802.1Q（即Vlan），其ID=3。</p>
+<p>　　至此，问题的根源已经明了，那就是ovs端口上的tag标签只是一种传统交换机的特性，不是OpenFlow规范里的内容。虽然OVS是我们最常用的虚拟OpenFlow交换机，但是它却远不只是一个OpenFlow交换机，它还支持许多传统交换机的功能，比如设置Mirror，它也有自己特性，比如OVSDB接口。而端口的Vlan tag刚好是一个OpenFlow之外的特性。</p>
+<p>　　事实上我们查看OpenFLow的协议文档（1.3.2版本）关于端口配置的部分（7.2.1节：Port Structures）：</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">enum ofp_port_config &#123;</span><br><span class="line">    <span class="variable">OFPPC_PORT_DOWN =</span> <span class="number">1</span> &lt;&lt; <span class="number">0</span>, <span class="comment">/* Port is administratively down. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_RECV =</span> <span class="number">1</span> &lt;&lt; <span class="number">2</span>, <span class="comment">/* Drop all packets received by port. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_FWD =</span> <span class="number">1</span> &lt;&lt; <span class="number">5</span>, <span class="comment">/* Drop packets forwarded to port. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_PACKET_IN =</span> <span class="number">1</span> &lt;&lt; <span class="number">6</span> <span class="comment">/* Do not send packet-in msgs for port. */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>　　较早的1.0版本的OpenFlow中对Port的描述为</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Flags to indicate behavior of the physical port. These flags are</span><br><span class="line">* used in ofp_phy_port to describe the current configuration. They are</span><br><span class="line">* used in the ofp_port_mod message to configure the port's behavior.</span><br><span class="line">*/</span></span><br><span class="line">enum ofp_port_config &#123;</span><br><span class="line">    <span class="variable">OFPPC_PORT_DOWN =</span> <span class="number">1</span> &lt;&lt; <span class="number">0</span>, <span class="comment">/* Port is administratively down. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_STP =</span> <span class="number">1</span> &lt;&lt; <span class="number">1</span>, <span class="comment">/* Disable 802.1D spanning tree on port. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_RECV =</span> <span class="number">1</span> &lt;&lt; <span class="number">2</span>, <span class="comment">/* Drop all packets except 802.1D spanning tree packets. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_RECV_STP =</span> <span class="number">1</span> &lt;&lt; <span class="number">3</span>, <span class="comment">/* Drop received 802.1D STP packets. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_FLOOD =</span> <span class="number">1</span> &lt;&lt; <span class="number">4</span>, <span class="comment">/* Do not include this port when flooding. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_FWD =</span> <span class="number">1</span> &lt;&lt; <span class="number">5</span>, <span class="comment">/* Drop packets forwarded to port. */</span></span><br><span class="line">    <span class="variable">OFPPC_NO_PACKET_IN =</span> <span class="number">1</span> &lt;&lt; <span class="number">6</span> <span class="comment">/* Do not send packet-in msgs for port. */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>都没有关于Vlan的对应设置，也印证了OFport没有Vlan tag功能的结论。</p>
+<p>　　这里需要强调的是，并没有说OpenFlow不支持VLAN，大家都知道OpenFlow的Match里是有Vlan ID和Vlan codepoint等项匹配的。这里所说的只是OpenFlow定义的交换机端口里没有关于Vlan的配置项，而Match和Action里则都有相应的内容。</p>
+<p>　　其实OVS_Neutron_plugin本来就是为OVS设计而不是为控制器设计的，强行为其加上控制器会破坏其功能也就不中为怪了。就我已知Neutron有过为Floodlight设计的Plugin，但是功能较为简单，代码更新状况不是很好，可能也与早期的OF功能比较简单有关系；另外还有ryu控制器的Plugin，但是我没有特别调查过不是特别了解。</p>
+<p>　　如果一定要在控制器环境下使用Vlan来进行隔离，暂时想到两种思路，一是使数据进入OVS之前就为其加上Vlan tag，比如通过Linux Bridge，这应该是一种较为简单有效的方式，但是需要修改Neutron；另外一种就是在控制器上修改，使每个Port的动作都附加上额外的Mod_vlan（Strip Vlan）动作，但是这需要控制器对云环境有感知能力，即需要知道Port对应的网络才行。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GRE/">GRE</a><a href="/tags/Openflow/">Openflow</a><a href="/tags/SDN/">SDN</a><a href="/tags/open/">open</a><a href="/tags/openstack/">openstack</a><a href="/tags/vlan/">vlan</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/网络隔离/">网络隔离</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2014/04/01/OvsNeutronPluginConflictsWithSDNController/" data-title="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/05/21/usefulTagsForMavenPomFile/" title="[maven]POM文件中的一些常用标签和m2eclipse插件的安装">
+  <strong>上一篇：</strong><br/>
+  <span>
+  [maven]POM文件中的一些常用标签和m2eclipse插件的安装</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/03/04/checkOFPortAndMAClinkedIn/"  title="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC">
+ <strong>下一篇：</strong><br/> 
+ <span>[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2014/04/01/OvsNeutronPluginConflictsWithSDNController/" data-title="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题" data-url="http://azyet.github.io/2014/04/01/OvsNeutronPluginConflictsWithSDNController/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

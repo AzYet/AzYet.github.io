@@ -1,0 +1,598 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ZooKeeper学习笔记（三）之开发入门-续 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。
+Barrier 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.
+测试代码12345678910 ZKBarrier zkBarrier = new ZKBarrier(&quot;dell:2181&quot;, &quot;/testRoot3&quot;, 3); //purge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper学习笔记（三）之开发入门-续">
+<meta property="og:url" content="http://azyet.github.io/2015/05/19/zookeeperNote3/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。
+Barrier 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.
+测试代码12345678910 ZKBarrier zkBarrier = new ZKBarrier(&quot;dell:2181&quot;, &quot;/testRoot3&quot;, 3); //purge">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper学习笔记（三）之开发入门-续">
+<meta name="twitter:description" content="这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。
+Barrier 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.
+测试代码12345678910 ZKBarrier zkBarrier = new ZKBarrier(&quot;dell:2181&quot;, &quot;/testRoot3&quot;, 3); //purge">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/19/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T17:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Barrier"><span class="toc-number">1.</span> <span class="toc-text">Barrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码"><span class="toc-number">1.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志输出设置"><span class="toc-number">1.2.</span> <span class="toc-text">日志输出设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行结果与分析"><span class="toc-number">1.3.</span> <span class="toc-text">运行结果与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Queue"><span class="toc-number">2.</span> <span class="toc-text">Queue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码-1"><span class="toc-number">2.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出与分析"><span class="toc-number">2.2.</span> <span class="toc-text">输出与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附完整代码"><span class="toc-number">3.</span> <span class="toc-text">附完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SysncPrimitive"><span class="toc-number">3.1.</span> <span class="toc-text">SysncPrimitive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkQueue"><span class="toc-number">3.2.</span> <span class="toc-text">zkQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkBarrier"><span class="toc-number">3.3.</span> <span class="toc-text">zkBarrier</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p> 这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。</p>
+<h2 id="Barrier">Barrier</h2><p> 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.</p>
+<h3 id="测试代码">测试代码</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> ZKBarrier zkBarrier = <span class="keyword">new</span> ZKBarrier(<span class="string">"dell:2181"</span>, <span class="string">"/testRoot3"</span>, <span class="number">3</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//purge the children under testrRoot</span></span><br><span class="line"></span><br><span class="line">zkBarrier.name = args[<span class="number">0</span>];</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Entering the Barrier"</span>);</span><br><span class="line">zkBarrier.enter();</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Work done, leaving"</span>);</span><br><span class="line">zkBarrier.leave();</span><br><span class="line"><span class="keyword">return</span>;</span><br></pre></td></tr></table></figure>
+<p> 大致的流程如下：</p>
+<pre><code>等待其它进程（总数3）就绪
+开始工作
+等待所有Node删除，退出
+</code></pre><a id="more"></a>
+<h3 id="日志输出设置">日志输出设置</h3><p>enter方法中有如下打印语句：</p>
+<p>监听也是在enter方法中设置的<code>List&lt;String&gt; list = zk.getChildren(root, true);</code>第二个参数<code>True</code>代表监听root Node，Node的任何更新都会被通知.</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; <span class="keyword">list</span> = (ArrayList&lt;String&gt;) zk.getChildren(root, true);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">list</span>.size() &gt; 0) &#123;</span><br><span class="line"></span><br><span class="line">    System.<span class="keyword">out</span>.<span class="keyword">print</span>(<span class="keyword">list</span>.size()+<span class="string">" children: "</span>);</span><br><span class="line">    <span class="keyword">for</span> (String s : <span class="keyword">list</span>) &#123;</span><br><span class="line">        System.<span class="keyword">out</span>.<span class="keyword">print</span>(s + <span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.<span class="keyword">out</span>.<span class="keyword">print</span>(<span class="string">"\n"</span>);</span><br></pre></td></tr></table></figure>
+<p>每次收到消息，即打印children node, 数量到达3时， 将进入工作阶段。</p>
+<p>leave方法中也有类似日志输出，当数量为0时，退出程序。</p>
+<h3 id="运行结果与分析">运行结果与分析</h3><p>首先运行nodej进程，再依次运行node1 和node2进程。</p>
+<p>nodej输出：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Entering the Barrier</span><br><span class="line"><span class="number">1</span> <span class="string">children:</span> nodej </span><br><span class="line"><span class="number">2</span> <span class="string">children:</span> node1 nodej </span><br><span class="line"><span class="number">3</span> <span class="string">children:</span> node2 node1 nodej </span><br><span class="line">time to work!!!</span><br><span class="line">Work done, leaving</span><br><span class="line"><span class="number">1</span><span class="string">children:</span> node1</span><br></pre></td></tr></table></figure>
+<p>Node1输出：</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">Entering</span> <span class="function_or_atom">the</span> <span class="variable">Barrier</span></span><br><span class="line"><span class="number">2</span> <span class="function_or_atom">children</span>: <span class="function_or_atom">node1</span> <span class="function_or_atom">nodej</span> </span><br><span class="line"><span class="number">3</span> <span class="function_or_atom">children</span>: <span class="function_or_atom">node2</span> <span class="function_or_atom">node1</span> <span class="function_or_atom">nodej</span> </span><br><span class="line"><span class="function_or_atom">time</span> <span class="function_or_atom">to</span> <span class="function_or_atom">work</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span></span><br><span class="line"><span class="variable">Work</span> <span class="function_or_atom">done</span>, <span class="function_or_atom">leaving</span></span><br></pre></td></tr></table></figure>
+<p>Node2 输出:</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">Entering</span> <span class="function_or_atom">the</span> <span class="variable">Barrier</span></span><br><span class="line"><span class="number">3</span> <span class="function_or_atom">children</span>: <span class="function_or_atom">node2</span> <span class="function_or_atom">node1</span> <span class="function_or_atom">nodej</span> </span><br><span class="line"><span class="function_or_atom">time</span> <span class="function_or_atom">to</span> <span class="function_or_atom">work</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span></span><br><span class="line"><span class="variable">Work</span> <span class="function_or_atom">done</span>, <span class="function_or_atom">leaving</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，Nodej Node1 Node2依次进入Barrier。每次有Node进入，在线的Node都会收到消息（广播），打印信息。当Node2进入时，达到预定数量3, 所有进程退出enter方法开始进入工作状态（只是打印一句日志），完成后开始进入退出状态。退出时，每个进程删除自己对应的Node，但是并不立即退出方法，而是待到所有Node删除后才返回。</p>
+<pre><code>这里测试模拟的工作时间很短，过程中出现过问题，即Node2刚创建，Node1 Nodej结束等待并瞬间工作完毕，删除自身Node，导致Node2尚未进入工作状态，因而将一直在等待。加一句<span class="function"><span class="title">sleep</span><span class="params">(<span class="number">1000</span>)</span></span>延长工作时间可解决。实际应用中如果任务运行时间很短，也需要考虑这个问题。
+</code></pre><p>通过以上机制，分布式的三个进程实现了同时开始工作和同时退出，也就是达到了协同的效果。</p>
+<h2 id="Queue">Queue</h2><p>我们之前介绍了RabbitMQ，它是一个专门的AMQP应用，使用ZooKeeper的znode的有序性，也可以实现类似的功能。</p>
+<h3 id="测试代码-1">测试代码</h3><p>依然采用了main方法来测试：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ZKQueue zkQueue = <span class="keyword">new</span> ZKQueue(<span class="string">"dell:2181"</span>, <span class="string">"/queueRoot1"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (zkQueue == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (args.length == <span class="number">1</span>) &#123;</span><br><span class="line">    zkQueue.produce(Integer.parseInt(args[<span class="number">0</span>]));</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"node value is:"</span> + zkQueue.consume());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>无参时作为consumer一直监听消息，有参时作为producer发送参数值（整数）。
+</code></pre><h3 id="输出与分析">输出与分析</h3><p>producer：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar target/zkQueue-<span class="number">1.0</span>-SNAPSHOT<span class="class">.jar</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">$ java -jar target/zkQueue-<span class="number">1.0</span>-SNAPSHOT<span class="class">.jar</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line">$ java -jar target/zkQueue-<span class="number">1.0</span>-SNAPSHOT<span class="class">.jar</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>consumer</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Going <span class="built_in">to</span> <span class="built_in">wait</span></span><br><span class="line">node name: element0000000003</span><br><span class="line">Temporary <span class="built_in">value</span>: /queueRoot1/element0000000003</span><br><span class="line">node <span class="built_in">value</span> is:<span class="number">1</span></span><br><span class="line">Going <span class="built_in">to</span> <span class="built_in">wait</span></span><br><span class="line">node name: element0000000004</span><br><span class="line">Temporary <span class="built_in">value</span>: /queueRoot1/element0000000004</span><br><span class="line">node <span class="built_in">value</span> is:<span class="number">2</span></span><br><span class="line">Going <span class="built_in">to</span> <span class="built_in">wait</span></span><br><span class="line">node name: element0000000005</span><br><span class="line">Temporary <span class="built_in">value</span>: /queueRoot1/element0000000005</span><br><span class="line">node <span class="built_in">value</span> is:<span class="number">5</span></span><br><span class="line">Going <span class="built_in">to</span> <span class="built_in">wait</span></span><br></pre></td></tr></table></figure>
+<p>这里我们可以看到，当创建模式为<code>EPHEMERAL_SEQUENTIAL</code>时，ZooKeeper会为节点名自动添加序号，对应是创建的顺序。因为只有一个producer，任务也简单，所以Node数总是1。如果有多个consumer，上述代码就会出错，因为消息是广播的，获取节点数据之后二者都会执行删除操作。可见它用来实现1对1的通信还是比较便捷的，但如果要实现工作队列来在多个线程中分发任务，实现并行处理和负载平衡，就不是很方便。</p>
+<h2 id="附完整代码">附完整代码</h2><p>实质上一节的代码有一些小Bug，这里附上完整的代码</p>
+<h3 id="SysncPrimitive">SysncPrimitive</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.KeeperException;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.WatchedEvent;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.Watcher;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.ZooKeeper;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.proto.WatcherEvent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by chen on 15-5-19.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> class SyncPrimitive implements Watcher &#123;</span><br><span class="line">    <span class="keyword">static</span> ZooKeeper zk = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">Object</span> mutex = <span class="keyword">new</span> <span class="keyword">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">String</span> root;</span><br><span class="line"></span><br><span class="line">    SyncPrimitive(<span class="keyword">String</span> address)</span><br><span class="line">            <span class="keyword">throws</span> KeeperException, IOException &#123;</span><br><span class="line">        <span class="keyword">if</span> (zk == <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Starting ZK:"</span>);</span><br><span class="line">            zk = <span class="keyword">new</span> ZooKeeper(address, <span class="number">3000</span>, (Watcher) <span class="keyword">this</span>);</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Finished starting ZK: "</span> + zk);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> process(WatchedEvent watchedEvent) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="zkQueue">zkQueue</h3><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">package io.github.azyet;</span><br><span class="line"></span><br><span class="line">import org.apache.zookeeper.CreateMode;</span><br><span class="line">import org.apache.zookeeper.KeeperException;</span><br><span class="line">import org.apache.zookeeper.ZooDefs;</span><br><span class="line">import org.apache.zookeeper.data.Stat;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.nio.ByteBuffer;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">/<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> Hello world!</span><br><span class="line"> <span class="keyword">*</span>/</span><br><span class="line">public class ZKQueue extends SyncPrimitive &#123;</span><br><span class="line"></span><br><span class="line">    ZKQueue(String address, String name)</span><br><span class="line">            throws KeeperException, InterruptedException, IOException &#123;</span><br><span class="line">        super(address);</span><br><span class="line">        this.root = name;</span><br><span class="line">        // Create ZK node name</span><br><span class="line">        if (zk != null) &#123;</span><br><span class="line">            Stat s = zk.exists(root, false);</span><br><span class="line">            if (s == null) &#123;</span><br><span class="line">                zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Add element to the queue.</span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> <span class="comment">@param i</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> <span class="comment">@return</span></span><br><span class="line">     <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line"></span><br><span class="line">    boolean produce(int i) throws KeeperException, InterruptedException &#123;</span><br><span class="line">        ByteBuffer b = ByteBuffer.allocate(4);</span><br><span class="line">        byte[] value;</span><br><span class="line"></span><br><span class="line">//      Add child with value i</span><br><span class="line">        b.putInt(i);</span><br><span class="line">        value = b.array();</span><br><span class="line">        zk.create(root + <span class="string">"/element"</span>, value, ZooDefs.Ids.OPEN_ACL_UNSAFE,</span><br><span class="line">                CreateMode.EPHEMERAL_SEQUENTIAL);</span><br><span class="line"></span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Remove first element from the queue.</span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> <span class="comment">@return</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> <span class="comment">@throws KeeperException</span></span><br><span class="line">     <span class="keyword">*</span> <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> <span class="comment">@throws InterruptedException</span></span><br><span class="line">     <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line">    int consume() throws KeeperException, InterruptedException &#123;</span><br><span class="line">        int retvalue = -1;</span><br><span class="line">        Stat stat = null;</span><br><span class="line"></span><br><span class="line">// Get the first element available</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            synchronized (mutex) &#123;</span><br><span class="line">                List<span class="variable">&lt;String&gt;</span> list = zk.getChildren(root, true);</span><br><span class="line">                if (list.isEmpty()) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"Going to wait"</span>);</span><br><span class="line">                    mutex.wait();</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    for (String s : list) &#123;</span><br><span class="line">                        System.out.println(<span class="string">"node name: "</span> + s);</span><br><span class="line">                    &#125;</span><br><span class="line">                    Integer min = new Integer(list.get(0).substring(7));</span><br><span class="line">                    String minName = list.get(0);</span><br><span class="line">                    for (String s : list) &#123;</span><br><span class="line">                        Integer tempValue = new Integer(s.substring(7));</span><br><span class="line">                        if (tempValue <span class="variable">&lt; min) &#123;</span><br><span class="line">                            min = tempValue;</span><br><span class="line">                            minName = s;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.println("Temporary value: " + root + "/" + minName);</span><br><span class="line">                    byte[] b = zk.getData(root + "/" + minName, false, stat);</span><br><span class="line">                    zk.delete(root + "/" + minName, 0);</span><br><span class="line">                    ByteBuffer buffer = ByteBuffer.wrap(b);</span><br><span class="line">                    retvalue = buffer.getInt();</span><br><span class="line"></span><br><span class="line">                    return retvalue;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String args[]) throws KeeperException, InterruptedException, IOException &#123;</span><br><span class="line">        ZKQueue zkQueue = new ZKQueue("dell:2181", "/queueRoot1");</span><br><span class="line"></span><br><span class="line">        if (zkQueue == null) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (args.length == 1) &#123;</span><br><span class="line">            zkQueue.produce(Integer.parseInt(args[0]));</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            while (true) &#123;</span><br><span class="line">                System.out.println("node value is:" + zkQueue.consume());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="zkBarrier">zkBarrier</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.CreateMode;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.KeeperException;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.ZooDefs;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.data.Stat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.InetAddress;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Hello world!</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> class ZKBarrier extends SyncPrimitive &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">String</span> root;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">String</span> name;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">int</span> <span class="built_in">size</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * ****** Barrier constructor</span><br><span class="line">     * ******</span><br><span class="line">     * ****** @param address</span><br><span class="line">     * ****** @param name</span><br><span class="line">     * ****** @param size</span><br><span class="line">     *******/</span></span><br><span class="line">    ZKBarrier(<span class="keyword">String</span> address, <span class="keyword">String</span> rootNode, <span class="built_in">int</span> <span class="built_in">size</span>)</span><br><span class="line">            <span class="keyword">throws</span> KeeperException, InterruptedException, IOException &#123;</span><br><span class="line">        <span class="keyword">super</span>(address);</span><br><span class="line">        <span class="keyword">this</span>.root = rootNode;</span><br><span class="line">        <span class="keyword">this</span>.<span class="built_in">size</span> = <span class="built_in">size</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create barrier node</span></span><br><span class="line">        <span class="keyword">if</span> (zk != <span class="keyword">null</span>) &#123;</span><br><span class="line">            Stat s = zk.exists(<span class="keyword">this</span>.root, <span class="keyword">false</span>);</span><br><span class="line">            <span class="keyword">if</span> (s == <span class="keyword">null</span>) &#123;</span><br><span class="line">                zk.create(<span class="keyword">this</span>.root, <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">0</span>], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// My node name</span></span><br><span class="line">        name = <span class="keyword">new</span> <span class="keyword">String</span>(InetAddress.getLocalHost().getCanonicalHostName().toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">boolean</span> enter() <span class="keyword">throws</span> KeeperException, InterruptedException &#123;</span><br><span class="line">        zk.create(root + <span class="string">"/"</span> + name, <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">0</span>], ZooDefs.Ids.OPEN_ACL_UNSAFE,</span><br><span class="line">                CreateMode.EPHEMERAL);</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">                List&lt;<span class="keyword">String</span>&gt; list = zk.getChildren(root, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">                System.out.<span class="built_in">print</span>(list.<span class="built_in">size</span>()+<span class="string">" children: "</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">String</span> s : list) &#123;</span><br><span class="line">                    System.out.<span class="built_in">print</span>(s+<span class="string">" "</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.<span class="built_in">print</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (list.<span class="built_in">size</span>() &lt; <span class="built_in">size</span>) &#123;</span><br><span class="line">                    mutex.wait();</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.out.<span class="built_in">println</span>(<span class="string">"time to work!!!"</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * ****** Wait until all reach barrier</span><br><span class="line">     * ******</span><br><span class="line">     * ****** @return</span><br><span class="line">     * ****** @throws KeeperException</span><br><span class="line">     * ****** @throws InterruptedException</span><br><span class="line">     *******/</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">boolean</span> leave() <span class="keyword">throws</span> KeeperException, InterruptedException &#123;</span><br><span class="line">        zk.delete(root + <span class="string">"/"</span> + name, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">                ArrayList&lt;<span class="keyword">String</span>&gt; list = (ArrayList&lt;<span class="keyword">String</span>&gt;) zk.getChildren(root, <span class="keyword">true</span>);</span><br><span class="line">                <span class="keyword">if</span> (list.<span class="built_in">size</span>() &gt; <span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line">                    System.out.<span class="built_in">print</span>(list.<span class="built_in">size</span>()+<span class="string">" children: "</span>);</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">String</span> s : list) &#123;</span><br><span class="line">                        System.out.<span class="built_in">print</span>(s + <span class="string">" "</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                    System.out.<span class="built_in">print</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">                    mutex.wait();</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"input node name"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ZKBarrier zkBarrier = <span class="keyword">new</span> ZKBarrier(<span class="string">"dell:2181"</span>, <span class="string">"/testRoot3"</span>, <span class="number">3</span>);</span><br><span class="line">            <span class="comment">//purge the children under testrRoot</span></span><br><span class="line"></span><br><span class="line">            zkBarrier.name = args[<span class="number">0</span>];</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Entering the Barrier"</span>);</span><br><span class="line">            zkBarrier.enter();</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Work done, leaving"</span>);</span><br><span class="line">            zkBarrier.leave();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (KeeperException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/19/zookeeperNote3/" data-title="ZooKeeper学习笔记（三）之开发入门-续 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/20/zookeeperNote4/" title="ZooKeeper学习笔记（四）之基本概念">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ZooKeeper学习笔记（四）之基本概念</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/19/zookeeperNote2/"  title="ZooKeeper学习笔记（二）之开发入门">
+ <strong>下一篇：</strong><br/> 
+ <span>ZooKeeper学习笔记（二）之开发入门
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/19/zookeeperNote3/" data-title="ZooKeeper学习笔记（三）之开发入门-续" data-url="http://azyet.github.io/2015/05/19/zookeeperNote3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Barrier"><span class="toc-number">1.</span> <span class="toc-text">Barrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码"><span class="toc-number">1.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志输出设置"><span class="toc-number">1.2.</span> <span class="toc-text">日志输出设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行结果与分析"><span class="toc-number">1.3.</span> <span class="toc-text">运行结果与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Queue"><span class="toc-number">2.</span> <span class="toc-text">Queue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码-1"><span class="toc-number">2.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出与分析"><span class="toc-number">2.2.</span> <span class="toc-text">输出与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附完整代码"><span class="toc-number">3.</span> <span class="toc-text">附完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SysncPrimitive"><span class="toc-number">3.1.</span> <span class="toc-text">SysncPrimitive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkQueue"><span class="toc-number">3.2.</span> <span class="toc-text">zkQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkBarrier"><span class="toc-number">3.3.</span> <span class="toc-text">zkBarrier</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

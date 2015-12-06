@@ -1,0 +1,575 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ZooKeeper学习笔记（一）之概览 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。
+什么是ZooKeeperZookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper学习笔记（一）之概览">
+<meta property="og:url" content="http://azyet.github.io/2015/05/19/zookeeperNote1/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。
+什么是ZooKeeperZookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理">
+<meta property="og:image" content="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&modificationDate=1295027310000&api=v2">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper学习笔记（一）之概览">
+<meta name="twitter:description" content="ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。
+什么是ZooKeeperZookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/19/zookeeperNote1/" title="ZooKeeper学习笔记（一）之概览" itemprop="url">ZooKeeper学习笔记（一）之概览</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T09:56:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是ZooKeeper"><span class="toc-number">1.</span> <span class="toc-text">什么是ZooKeeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeepr概览"><span class="toc-number">2.</span> <span class="toc-text">ZooKeepr概览</span></a></li></ol>
+		
+		</div>
+		
+		<p>ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。</p>
+<h2 id="什么是ZooKeeper">什么是ZooKeeper</h2><p>Zookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理的复杂。</p>
+<pre><code>naming <span class="keyword">service</span> 也称<span class="literal">directory</span> <span class="keyword">service</span>.
+</code></pre><p>协同一个分布式系统就像管理一个动物园。</p>
+<p>ZooKeeper致力于将上述服务的必要部分提取成一组非常简单的集中协同服务API。服务本身就是分布式和高可靠的。一致性、组管理和presence协议将由服务提供，应用不必自己来实现。应用程序使用特定服务由ZooKeeper特定组件和应用程序特定convention组成。ZooKeeper提供的配方将表明这些简单服务可以用来构建强大的抽象。</p>
+<p>ZooKeeper本身有C和Java的实现，并提供多种Client绑定，含Python Ruby和Go。</p>
+<h2 id="ZooKeepr概览">ZooKeepr概览</h2><p>ZooKeeper允许分布式进程通过共享的层级的数据注册命令空间（类似文件系统）来相互协同。不同于文件系统的是，ZooKeeper为Client提供<strong>高吞吐量，低延时，高可用和顺序严格</strong>的znode存取。高性能全ZooKeeper可被用在大型的分布式系统。高可靠保证ZooKeeper不会成为系统的单点命门。严格的顺序使复杂的同步单元可在Client上实施。命名空间则非常类似标准的文件系统。</p>
+<p><img src="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&amp;modificationDate=1295027310000&amp;api=v2" alt=""></p>
+<a id="more"></a>
+<p>name是一系列用/分隔的的路径元素，命名空间中的每一个zonode由path来唯一标识。每个znode都有比它少一个路径元素前缀的父node，除了root（/）无父node之外。和文件系统一样，如果一个znode没有子znode，它可以被删除。</p>
+<p>与文件系统最大的区别是每个znode都可以有数据与之关联（文件可以包含目录，反之亦然），每个znode只能拥有有限数据。ZooKeeper被设计来保存协同数据，配置，位置信息等。这类数据通常以KB为单位或者更小，总之被用于保存单个<strong>体积较小</strong>的数据。</p>
+<p>服务本身由运行于多个主机上的Copy组成，这些机器维护一个保存于<strong>内存</strong>中的<strong>数据树镜像</strong>，以及存于持久存储中的一个<strong>事务日志</strong>和<strong>快照</strong>。因为数据保存在内存中，ZooKeeper可以做到高吞吐低延时，局限在于容量受限于内存大小，这也是ZooKeeper选择保存较小体积数据的原因。</p>
+<p>组成ZooKeeper的Server进程必须彼此知悉，只要多数Server可用，服务就可用。Client也必须知道Servers的信息，并使用Server列表创建一个指向服务的Handle。Client只连接到一个ZooKeeper Server，通过<strong>TCP连接</strong>来发送请求，获得响应，监听事件及维持心跳，如果连接断开，Client会连接另一个Server。当Client首次连接到服务时，Server为其创建一个<strong>会话</strong>，如果Client需要连接到另一个Server，该会话会在另一个Server间重新建立。</p>
+<p>Client发送的<strong>Read</strong>请求在与之连接的Server<strong>本地</strong>处理，如果read请求注册了<strong>监听（watch）</strong>znode，监听也在本地处理。<strong>Write</strong>请求将会发送到所有Server并在<strong>协同</strong>后响应，<strong>同步（sync）</strong>请求也会被转发到所有Server，但并不需要协同。所以Read请求是随Server数量增多而吞吐量增加的，Write则相反。</p>
+<p>ZooKeeper对顺序是非常重视的，几乎是强迫症（obsessive–compulsive disorder）式的。所有更新完全有序化，实际上Zookeeper为每次更新都加上唯一的、能反映顺序的数字印记（zxid：Zookeeper transaction id）。Read与更新之间也是有序的，read的响应也会被与之连接的Server加上最新（latest）的zxid。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/概览/">概览</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/19/zookeeperNote1/" data-title="ZooKeeper学习笔记（一）之概览 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/19/zookeeperNote2/" title="ZooKeeper学习笔记（二）之开发入门">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ZooKeeper学习笔记（二）之开发入门</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/18/junitNote1/"  title="单元测试之JUnit学习笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>单元测试之JUnit学习笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/19/zookeeperNote1/" data-title="ZooKeeper学习笔记（一）之概览" data-url="http://azyet.github.io/2015/05/19/zookeeperNote1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是ZooKeeper"><span class="toc-number">1.</span> <span class="toc-text">什么是ZooKeeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeepr概览"><span class="toc-number">2.</span> <span class="toc-text">ZooKeepr概览</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

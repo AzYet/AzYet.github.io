@@ -1,0 +1,584 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>配置NAT使内网服务对外网可见 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。
+　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置NAT使内网服务对外网可见">
+<meta property="og:url" content="http://azyet.github.io/2015/05/11/natInnerServiceToPublic/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。
+　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="配置NAT使内网服务对外网可见">
+<meta name="twitter:description" content="情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。
+　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/11/natInnerServiceToPublic/" title="配置NAT使内网服务对外网可见" itemprop="url">配置NAT使内网服务对外网可见</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-11T09:33:58.000Z" itemprop="datePublished"> 發表於 2015-05-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#选定端口"><span class="toc-number">1.</span> <span class="toc-text">选定端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启IP转发功能"><span class="toc-number">2.</span> <span class="toc-text">开启IP转发功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNAT"><span class="toc-number">3.</span> <span class="toc-text">DNAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试与分析"><span class="toc-number">4.</span> <span class="toc-text">测试与分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SNAT"><span class="toc-number">5.</span> <span class="toc-text">SNAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。</p>
+<p>　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要将虚拟机8000服务映射到宿主机外网IP 10.103.25.248的某端口上上，这就是端口映射，亦即PNAT。</p>
+<h2 id="选定端口">选定端口</h2><p>　　查看宿主机端口占用情况：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@dell</span><span class="symbol">:~</span><span class="comment"># sudo lsof -i:8000</span></span><br><span class="line"><span class="constant">COMMAND </span> <span class="constant">PID </span>      <span class="constant">USER </span>  <span class="constant">FD </span>  <span class="constant">TYPE DEVICE SIZE/OFF NODE NAME</span></span><br><span class="line">java    <span class="number">2466</span> confluence   <span class="number">37</span>u  <span class="constant">IPv6 </span> <span class="number">23593</span>      0t<span class="number">0</span>  <span class="constant">TCP </span><span class="symbol">localhost:</span><span class="number">8000</span> (<span class="constant">LISTEN)</span></span><br></pre></td></tr></table></figure></p>
+<p>　　8000已被使用，选择使用空闲的8880端口，即实现10.103.25.248：8880 &lt;===&gt; 192.168.83.131:8000的映射。<br><a id="more"></a></p>
+<h2 id="开启IP转发功能">开启IP转发功能</h2><p>　　在配置iptables实现NAT之前，enable ip forwarding是前提。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net<span class="class">.ipv4</span><span class="class">.ip_forward</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="DNAT">DNAT</h2><p>　　DNAT为目的地址翻译缩写，在IP包进行内核路由之前，将其目的地址改写，再送入路由表进行匹配。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">iptables</span> -t nat -A PREROUTING -d <span class="number">10.103.25.248</span> -p tcp --dport <span class="number">8880</span> -j DNAT --to-destination <span class="number">192.168.83.131:8000</span></span><br></pre></td></tr></table></figure></p>
+<p>-t指定nat表，-A添加到PREROUTING链末， -d指定目的地址，-p 指定TCP协议，—dport目的端口，-j选择DNAT操作，—to-destination指定改写后的IP和端口。</p>
+<p>　　注意这里同时<strong>隐含了反向操作</strong>，对源自IP和端口为192.168.83.131：8000的TCP数据包进行源IP：端口改写。</p>
+<p>　　此时已经能够成功连接了。</p>
+<p>　　再来查看iptable的nat表：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@dell:~<span class="comment"># iptables -L PREROUTING  -nvx --line-numbers -t nat </span></span><br><span class="line">Chain PREROUTING (policy ACCEPT <span class="number">1626</span> packets, <span class="number">278608</span> <span class="keyword">bytes</span>)</span><br><span class="line"><span class="built_in">num</span>      pkts      <span class="keyword">bytes</span> target     prot opt <span class="operator">in</span>     out     source               destination         </span><br><span class="line"><span class="number">1</span>           <span class="number">9</span>      <span class="number">540</span> DNAT       tcp  <span class="comment">--  *      *       0.0.0.0/0            10.103.25.248        tcp dpt:8880 to:192.168.83.131:8000</span></span><br></pre></td></tr></table></figure>
+<h2 id="测试与分析">测试与分析</h2><p>　　相应的规则已经添加进来了，现在从另一台10.210.106.20的机器访问10.103.25.248:8880试试<code>wget 10.103.25.248:8880</code>：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chen<span class="variable">@vaio</span><span class="symbol">:~</span><span class="variable">$ </span>wget <span class="number">10.103</span>.<span class="number">25.248</span><span class="symbol">:</span><span class="number">8880</span></span><br><span class="line">--<span class="number">2015</span>-<span class="number">05</span>-<span class="number">11</span> <span class="number">19</span><span class="symbol">:</span><span class="number">21</span><span class="symbol">:</span><span class="number">23</span>--  <span class="symbol">http:</span>/<span class="regexp">/10.103.25.248:8880/</span></span><br><span class="line"><span class="constant">Connecting </span>to <span class="number">10.103</span>.<span class="number">25.248</span><span class="symbol">:</span><span class="number">8880</span>...</span><br></pre></td></tr></table></figure>
+<p>　　并未能连接上，是DNAT失败吗？在运行8000服务的虚拟机上用tcpdump来诊断一下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">53.575588</span> IP <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span> &gt; <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span>: Flags [S], seq <span class="number">404138411</span>, win <span class="number">29200</span>, options [mss <span class="number">1460</span>,sackOK,TS val <span class="number">26590957</span> ecr <span class="number">0</span>,nop,wscale <span class="number">7</span>], length <span class="number">0</span></span><br><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">53.575683</span> IP <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span> &gt; <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span>: Flags [S.], seq <span class="number">683540265</span>, ack <span class="number">404138412</span>, win <span class="number">14480</span>, options [mss <span class="number">1460</span>,sackOK,TS val <span class="number">345476707</span> ecr <span class="number">26590957</span>,nop,wscale <span class="number">7</span>], length <span class="number">0</span></span><br><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">53.575974</span> IP <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span> &gt; <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span>: Flags [R], seq <span class="number">404138412</span>, win <span class="number">32767</span>, length <span class="number">0</span></span><br><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">55.579521</span> IP <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span> &gt; <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span>: Flags [S], seq <span class="number">404138411</span>, win <span class="number">29200</span>, options [mss <span class="number">1460</span>,sackOK,TS val <span class="number">26591458</span> ecr <span class="number">0</span>,nop,wscale <span class="number">7</span>], length <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>　　可以8000端口是收到了来自10.210.106.20的访问请求的（SYN），并且也有应答（SYN，ACK），但是为什么没有连接上呢？因为虚拟机并没有到达10.210.106.20的路由，即使网络能到达，但是返回数据包的src_ip是192.168.83.131,而client请求的是10.103.25.248，会被client当作错误的数据包丢弃。</p>
+<h2 id="SNAT">SNAT</h2><p>　　所以还需要进行一次SNAT，将连接请求的源IP改为宿主机的内网IP：192.168.83.1。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">iptables</span> -t nat -A POSTROUTING -d <span class="number">192.168.83.131</span> -p tcp --dport <span class="number">8000</span> -j SNAT --to-source <span class="number">192.168.83.1</span></span><br></pre></td></tr></table></figure></p>
+<p>　　以上命令执行的操作是：目的IP和端口为192.168.83.131：8000的TCP数据包从路由表出来之后，改写其源IP的192.168.83.1。同时<strong>隐含了反向操作</strong>，对源自IP和端口为192.168.83.131：8000的TCP数据包进行目的IP还原。<br>　　此时已经能够成功连接了。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:~$ wget <span class="number">10.103</span>.<span class="number">25.248</span>:<span class="number">8880</span></span><br><span class="line">--<span class="number">2015</span>-<span class="number">05</span>-<span class="number">11</span> <span class="number">19</span>:<span class="number">17</span>:<span class="number">42</span>--  http:<span class="comment">//10.103.25.248:8880/</span></span><br><span class="line">Connecting to <span class="number">10.103</span>.<span class="number">25.248</span>:<span class="number">8880</span>... connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">200</span> OK</span><br><span class="line">Length: <span class="number">5659</span> (<span class="number">5.5</span>K) [text/html]</span><br><span class="line">Saving to: ‘index<span class="class">.html</span>.<span class="number">6</span>’</span><br><span class="line"></span><br><span class="line">index<span class="class">.html</span>.<span class="number">6</span>        <span class="number">100%</span>[=====================&gt;]   <span class="number">5.53</span>K  --.-KB/s   <span class="keyword">in</span> <span class="number">0.002s</span> </span><br><span class="line"></span><br><span class="line"><span class="number">2015</span>-<span class="number">05</span>-<span class="number">11</span> <span class="number">19</span>:<span class="number">17</span>:<span class="number">42</span> (<span class="number">3.00</span> MB/s) - ‘index<span class="class">.html</span>.<span class="number">6</span>’ saved [<span class="number">5659</span>/<span class="number">5659</span>]</span><br></pre></td></tr></table></figure></p>
+<p>　　此时的nat表为<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@dell:~<span class="comment"># iptables -L   -nvx --line-numbers -t nat </span></span><br><span class="line">Chain PREROUTING (policy ACCEPT <span class="number">999</span> packets, <span class="number">260994</span> <span class="keyword">bytes</span>)</span><br><span class="line"><span class="built_in">num</span>      pkts      <span class="keyword">bytes</span> target     prot opt <span class="operator">in</span>     out     source               destination         </span><br><span class="line"><span class="number">1</span>          <span class="number">28</span>     <span class="number">1680</span> DNAT       tcp  <span class="comment">--  *      *       0.0.0.0/0            10.103.25.248        tcp dpt:8880 to:192.168.83.131:8000</span></span><br><span class="line">……</span><br><span class="line">Chain POSTROUTING (policy ACCEPT <span class="number">55</span> packets, <span class="number">3630</span> <span class="keyword">bytes</span>)</span><br><span class="line"><span class="built_in">num</span>      pkts      <span class="keyword">bytes</span> target     prot opt <span class="operator">in</span>     out     source               destination         </span><br><span class="line"><span class="number">1</span>           <span class="number">1</span>       <span class="number">60</span> SNAT       tcp  <span class="comment">--  *      *       0.0.0.0/0            192.168.83.131       tcp dpt:8000 to:192.168.83.1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="总结">总结</h2><p>　　如果不计较原理，实质操作只有三步：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#开启ip转发</span><br><span class="line">sysctl net<span class="class">.ipv4</span><span class="class">.ip_forward</span>=<span class="number">1</span></span><br><span class="line"><span class="id">#DNAT</span></span><br><span class="line">iptables -t nat -A PREROUTING -d <span class="number">10.103</span>.<span class="number">25.248</span> -<span class="tag">p</span> tcp --dport <span class="number">8880</span> -j DNAT --to-destination <span class="number">192.168</span>.<span class="number">83.131</span>:<span class="number">8000</span></span><br><span class="line"><span class="id">#SNAT</span></span><br><span class="line">iptables -t nat -A POSTROUTING -d <span class="number">192.168</span>.<span class="number">83.131</span> -<span class="tag">p</span> tcp --dport <span class="number">8000</span> -j SNAT --to-source <span class="number">192.168</span>.<span class="number">83.1</span></span><br></pre></td></tr></table></figure></p>
+<p>　　其它注意事项有：</p>
+<ol>
+<li>centos开启新服务时需要添加iptables规则开放相应端口（默认规则为拒绝）。</li>
+<li>如果想对本机同一IP使用端口映射，以上方法依次适用，但是要注意lo的特殊性：访问127.0.0.1和本机IP不经过PREROUTING链，那么需要在OUTPUT链上作转换<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">iptables</span> -t nat -A OUTPUT -d <span class="number">127.0.0.1</span>,<span class="number">10.210.106.20</span> -p tcp --dport <span class="number">2222</span> -j DNAT --to <span class="number">127.0.0.1:22</span></span><br><span class="line"><span class="comment"># 或者 </span></span><br><span class="line">iptables -t nat -A OUTPUT -d <span class="number">127.0.0.1</span>,<span class="number">10.210.106.20</span> -p tcp --dport <span class="number">2222</span> -j REDIRECT --to-port <span class="number">22</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/NAT/">NAT</a><a href="/tags/内外/">内外</a><a href="/tags/外网/">外网</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/11/natInnerServiceToPublic/" data-title="配置NAT使内网服务对外网可见 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/15/LinkedListReverseAndLocateMid/" title="链表反转与寻找中间结点">
+  <strong>上一篇：</strong><br/>
+  <span>
+  链表反转与寻找中间结点</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/10/heapSortAnalizeAndImplement/"  title="堆排序实战：理解再实现">
+ <strong>下一篇：</strong><br/> 
+ <span>堆排序实战：理解再实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/11/natInnerServiceToPublic/" data-title="配置NAT使内网服务对外网可见" data-url="http://azyet.github.io/2015/05/11/natInnerServiceToPublic/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#选定端口"><span class="toc-number">1.</span> <span class="toc-text">选定端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开启IP转发功能"><span class="toc-number">2.</span> <span class="toc-text">开启IP转发功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNAT"><span class="toc-number">3.</span> <span class="toc-text">DNAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试与分析"><span class="toc-number">4.</span> <span class="toc-text">测试与分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SNAT"><span class="toc-number">5.</span> <span class="toc-text">SNAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

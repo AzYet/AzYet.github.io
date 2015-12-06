@@ -1,0 +1,1047 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="足迹">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AzYet's Notebook">
+<meta property="og:url" content="http://azyet.github.io/page/4/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="足迹">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AzYet's Notebook">
+<meta name="twitter:description" content="足迹">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/19/zookeeperNote1/" title="ZooKeeper学习笔记（一）之概览" itemprop="url">ZooKeeper学习笔记（一）之概览</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T09:56:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。</p>
+<h2 id="什么是ZooKeeper">什么是ZooKeeper</h2><p>Zookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理的复杂。</p>
+<pre><code>naming <span class="keyword">service</span> 也称<span class="literal">directory</span> <span class="keyword">service</span>.
+</code></pre><p>协同一个分布式系统就像管理一个动物园。</p>
+<p>ZooKeeper致力于将上述服务的必要部分提取成一组非常简单的集中协同服务API。服务本身就是分布式和高可靠的。一致性、组管理和presence协议将由服务提供，应用不必自己来实现。应用程序使用特定服务由ZooKeeper特定组件和应用程序特定convention组成。ZooKeeper提供的配方将表明这些简单服务可以用来构建强大的抽象。</p>
+<p>ZooKeeper本身有C和Java的实现，并提供多种Client绑定，含Python Ruby和Go。</p>
+<h2 id="ZooKeepr概览">ZooKeepr概览</h2><p>ZooKeeper允许分布式进程通过共享的层级的数据注册命令空间（类似文件系统）来相互协同。不同于文件系统的是，ZooKeeper为Client提供<strong>高吞吐量，低延时，高可用和顺序严格</strong>的znode存取。高性能全ZooKeeper可被用在大型的分布式系统。高可靠保证ZooKeeper不会成为系统的单点命门。严格的顺序使复杂的同步单元可在Client上实施。命名空间则非常类似标准的文件系统。</p>
+<p><img src="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&amp;modificationDate=1295027310000&amp;api=v2" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/zookeeperNote1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/概览/">概览</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/19/zookeeperNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T03:59:40.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。</p>
+<h2 id="单元测试，一致性测试和性能测试">单元测试，一致性测试和性能测试</h2><h3 id="单元测试">单元测试</h3><p>单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。</p>
+<p>被测试的代码比例也叫做覆盖率。</p>
+<p>单元测试只针对一小段代码（类，方法），外部依赖应该被移除，例如用测试框架模拟外部依赖。</p>
+<p>单元测试并不适合复杂的UI或组件交互，这部分工作属于一致性测试。</p>
+<h3 id="一致性测试">一致性测试</h3><p>旨在测试组件或组件间的一致性，有时也称为功能测试。</p>
+<p>这种测试将用例转化为测试集，例如模拟一个用户与应用交互。</p>
+<h3 id="性能测试">性能测试</h3><p>反复进行基准测试。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/junitNote1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JUnit/">JUnit</a><a href="/tags/Maven/">Maven</a><a href="/tags/单元测试/">单元测试</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/junitNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/junitNote1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote6/" title="RabbitMQ学习笔记（六）之RPC" itemprop="url">RabbitMQ学习笔记（六）之RPC</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T18:30:00.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>第二节中我们学习了如何使用工作队列来在多个工作进程中分发费时的任务。</p>
+<p>但是如果我们需要运行一个远程的函数并且需要等待返回结果会怎样？这是一种完全不同的机制，通常叫做RPC（Remote Procedure Call）远程方法调用。</p>
+<p>这一节中我们将使用RabbitMQ来建造一个RPC系统：一个Client和一个可扩容的RPC Server。因为没有真正值得分布式化的任务，我们用Fibonacci数列来代替。</p>
+<h2 id="Client接口">Client接口</h2><p>为了演示RPC Service是如何使用的，我们将编写一个简单的Client类。它提供一个名为call的方法，发出RPC请求并在返回之前阻塞。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">FibonacciRpcClient</span> fibonacciRpc = new <span class="type">FibonacciRpcClient</span>();   </span><br><span class="line"><span class="type">String</span> <span class="literal">result</span> = fibonacciRpc.call(<span class="string">"4"</span>);</span><br><span class="line"><span class="type">System</span>.<span class="keyword">out</span>.println( <span class="string">"fib(4) is "</span> + <span class="literal">result</span>);</span><br></pre></td></tr></table></figure>
+<pre><code>注：虽然RPC很常见，但也备受批评。问题在于程序无法得知调用的方法是远程（较慢）还是本地，这种模糊将导致系统不可预期以及不必要的额外调试复杂度，可能导致不可维护的<span class="escape">`意</span>面代码<span class="escape">`。</span>
+确保方法远程或本地的明确性，作好文档。使组件之间的依赖关系清晰。处理异常情况，比如RPC不可用。存疑时尽量避免使用RPC。如果可能，使用异步方式，用状态转移代替阻塞。
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote6/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/RPC/">RPC</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote6/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote5/" title="RabbitMQ学习笔记（五）之Topics" itemprop="url">RabbitMQ学习笔记（五）之Topics</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T16:48:00.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>上一节中，使用Dircet Exchange结合routingKey及bindingKey可以实现选择性地接收消息。但是它也有局限性，无法基于多种尺度来路由。</p>
+<p>比如说日志系统中我们可能不仅希望根据级别，还希望根据日志发出者的身份来进行路由。比如<code>syslog unix</code>工具，就是根据severity和facility(auth/cron/kern…)来进行路由的。</p>
+<p>这各方式更具灵活性，比如我想接收来自cron的Error信息和来自Kern的所有信息。</p>
+<p>要实现这样的功能我们需要学习更复杂的Topic exchange。</p>
+<h2 id="Topic_exchange">Topic exchange</h2><p>发送给topic exchange的信息的routingKey必须是一个word的list，用.号分隔。习惯上用一些能够代表消息特征单词来作为word，比如<code>stock.usd.nyse</code>是一个合法的routingKey。word不限个数，但总长不能超过255 Byte。</p>
+<p>bindingKey也必须是这样的形式，而路由逻辑则和Direct方式相似，消息将被发送给所有bindingKey和RoutingKey匹配的队列。但是有两wildcard：</p>
+<pre><code>\* 能替换成任何一个(单个)<span class="literal">word</span>
+# 能替换成任意（0-<span class="keyword">n</span>）个<span class="literal">word</span>
+</code></pre><p><img src="https://www.rabbitmq.com/img/tutorials/python-five.png" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote5/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Topic-Exchange/">Topic Exchange</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote5/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote4/" title="RabbitMQ学习笔记（四）之消息路由" itemprop="url">RabbitMQ学习笔记（四）之消息路由</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T14:18:00.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。</p>
+<h2 id="Bindings">Bindings</h2><p>上一节已经提到Binding，代码如下：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<p>Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。</p>
+<p>Binding可以添加额外的路由参数，为免混淆，这里称为bindingKey。以下是使用BindingKey来绑定：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">"black"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>BindingKey的解释取决于Exchange类型，fanout类Exchange直接无视BindingKey.</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote4/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/消息路由/">消息路由</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote4/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote3/" title="RabbitMQ学习笔记（三）之订阅与发布" itemprop="url">RabbitMQ学习笔记（三）之订阅与发布</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T13:08:47.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　这节中我们将学习如何将一个消息传递给多个consummer,所谓的发布/订阅模式。</p>
+<h2 id="Exchange">Exchange</h2><p>　　是时候学习完整的消息模型了。</p>
+<p>　　回顾一下之前的内容：</p>
+<ol>
+<li>producer是产生消息的用户进程。</li>
+<li>Queue是存储消息的缓存</li>
+<li>cunsumer是接收消息的用户进程</li>
+</ol>
+<p>　　切记消息从来不是直接发送给queue，实质上多数情况下producer甚至不知道有queue的存在。<br>　　消息是直接发送给Exhange的。Exhange很简单，一方面它从producer接收消息并推送到Queue中，至于是将消息推送到特定的Queue，或所有QUEUE,或丢弃，这取决了Exchange的类型。<br><img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt=""></p>
+<p>　　有以下几种Exchange类型：direct，topic，headers和fanout。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote3/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/订阅与发布/">订阅与发布</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote3/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote2/" title="RabbitMQ学习笔记（二）之Work Queues" itemprop="url">RabbitMQ学习笔记（二）之Work Queues</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T10:20:49.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　本节中我们将新建Work Queue用来在多个工作进程间分发比较耗时的任务。</p>
+<p>　　work queue的主要意图就是避免立即处理资源密集的任务并等待它完成，而是安排它稍后处理。将任务封闭为消息发送给queue，后台的工作进程会取得这个消息并处理它，如果有多个工作进程，它们分担任务。</p>
+<p>　　这种理念在web应用中非常有用，特别是在当无法在一个短时间窗内完成复杂请求时。</p>
+<h2 id="准备工作">准备工作</h2><p>　　方便起见，我们将使用Thread.sleep()来代替一个真正的费时任务，使用<code>.</code>号来代表处理时长，比如消息<code>hello...</code>表示任务将费时3秒。</p>
+<p>　　对上一节的producer进行改动，使之能发送随机时长的任务。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Work-Queues/">Work Queues</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/18/rabbitmqNote/" title="RabbitMQ学习笔记（一）之HelloWorld" itemprop="url">RabbitMQ学习笔记（一）之HelloWorld</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T09:35:59.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　rabbitmq是AMQP的一种实现，可为分布式系统提供可靠的消息通信机制。它从生产者接收消息，并将其传递给消费者，并可二者之间可以提供路由、缓冲和存留功能。</p>
+<p><code>queue</code>一个无限缓冲，可以存储任意多的消息。多个<code>producer</code>可以将消息发送给同一queue，多个<code>consumer</code>也可以从同一queue接收消息。<br><img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt=""></p>
+<p>　　在使用RabbitMQ之前，需要有RabbitMQ-server,如果是ubuntu，可以用如下命令安装</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> rabbitmq-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="Hello_World!">Hello World!</h2><p>　　以下使用Java编写一个Hello world例程，包含两个程序，一个producer和一个consumer。</p>
+<p>　　如果使用Maven工具，可以在pom.xml添加如下的依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.rabbitmq<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>amqp-client<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.5.2<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/15/detectLoopInLinkedList/" title="检测并定位链表中的环" itemprop="url">检测并定位链表中的环</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-15T17:48:19.000Z" itemprop="datePublished"> 發表於 2015-05-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　之前一篇写了如何反转链表以及定位链表的中点，现在来一个稍微复杂点的问题。</p>
+<p>　　这个面试题是我第一次参加实习生笔试时遇到的，当时并没有解出来。题目要求是检测单向链表是否存在环，并且只用常数的额外存储空间。</p>
+<p>　　简单直接的办法自然是将每一个指针记录下来，并且和新出现的节点的next指针比较，如果next指向之前出现过的节点，说明有环。但是这种方法需要至少线性的空间，不符合题目要求。而且每次都需要查找比较，性能很低。或者使用hash表，则空间消耗较list更大。</p>
+<p>　　出来之后我就开始搜索了，解法很好懂，但是如果没有学习过相关算法，要靠自己想出来还是挺有难度的。</p>
+<p>　　解法的奥秘全在下面这张图里了。</p>
+<p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1es5gz9vgovj20mt08jjsq.jpg" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/15/detectLoopInLinkedList/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/检测/">检测</a><a href="/tags/环/">环</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/链表/">链表</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/15/detectLoopInLinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/detectLoopInLinkedList/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/15/ObjectAndXmlInServlet/" title="Java对象与xml的相互转换" itemprop="url">Java对象与xml的相互转换</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-15T16:17:29.000Z" itemprop="datePublished"> 發表於 2015-05-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Rest API中使用最多的参数类型是Json和xml，而在之前的项目一直接触的也是Json，实际上我也认为Json更简洁更直观。但是最近导师和某研究院签了一个合作项目，对方的前端使用的是xml，所以我也跟着查找了一下java对象与xml的转换方法。</p>
+<p>　　Servlet是自带json和xml两种返回格式的，在Get时返回xml非常简单,使用annotation指定xml即可。
+　　</p>
+<h2 id="GET">GET</h2><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Get(<span class="string">"xml"</span>)</span><br><span class="line"><span class="keyword">public</span> Object handleGetRequest() &#123;</span><br><span class="line">    <span class="keyword">log</span><span class="built_in">.</span>debug(<span class="string">"received a Get Request"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">new</span> <span class="keyword">Order</span>(<span class="string">"id123"</span>,<span class="string">"user1"</span>,<span class="literal">new</span> <span class="built_in">Date</span>(),<span class="string">"scan"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/15/ObjectAndXmlInServlet/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/servlet/">servlet</a><a href="/tags/xml/">xml</a><a href="/tags/对象/">对象</a><a href="/tags/转换/">转换</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/15/ObjectAndXmlInServlet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/ObjectAndXmlInServlet/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

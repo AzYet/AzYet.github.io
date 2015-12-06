@@ -1,0 +1,639 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ZooKeeper学习笔记（五）之基本概念-续 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="ACL 权限ZooKeeper支持以下权限：
+CREATE : you can create a child node
+
+READ : you can get data from a node and list its children.
+
+WRITE : you can set data for a node
+
+DELETE : you can delete a child node
+
+ADMI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper学习笔记（五）之基本概念-续">
+<meta property="og:url" content="http://azyet.github.io/2015/05/20/zookeeperNote5/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="ACL 权限ZooKeeper支持以下权限：
+CREATE : you can create a child node
+
+READ : you can get data from a node and list its children.
+
+WRITE : you can set data for a node
+
+DELETE : you can delete a child node
+
+ADMI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper学习笔记（五）之基本概念-续">
+<meta name="twitter:description" content="ACL 权限ZooKeeper支持以下权限：
+CREATE : you can create a child node
+
+READ : you can get data from a node and list its children.
+
+WRITE : you can set data for a node
+
+DELETE : you can delete a child node
+
+ADMI">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/zookeeperNote5/" title="ZooKeeper学习笔记（五）之基本概念-续" itemprop="url">ZooKeeper学习笔记（五）之基本概念-续</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T15:33:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL_权限"><span class="toc-number">1.</span> <span class="toc-text">ACL 权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内建ACL策略"><span class="toc-number">2.</span> <span class="toc-text">内建ACL策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C_client_API"><span class="toc-number">2.1.</span> <span class="toc-text">C client API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以下是标准ID："><span class="toc-number">2.2.</span> <span class="toc-text">以下是标准ID：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client标准ACL"><span class="toc-number">2.3.</span> <span class="toc-text">Client标准ACL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL相关操作"><span class="toc-number">3.</span> <span class="toc-text">ACL相关操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一致性保证"><span class="toc-number">4.</span> <span class="toc-text">一致性保证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列一致性"><span class="toc-number">4.1.</span> <span class="toc-text">序列一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原子性Atomicity"><span class="toc-number">4.2.</span> <span class="toc-text">原子性Atomicity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单系统镜像"><span class="toc-number">4.3.</span> <span class="toc-text">单系统镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可靠性"><span class="toc-number">4.4.</span> <span class="toc-text">可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间线_/_Timeliness"><span class="toc-number">4.5.</span> <span class="toc-text">时间线 / Timeliness</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Binding"><span class="toc-number">5.</span> <span class="toc-text">Binding</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java_Binding"><span class="toc-number">5.1.</span> <span class="toc-text">Java Binding</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="ACL_权限">ACL 权限</h2><p>ZooKeeper支持以下权限：</p>
+<pre><code><span class="operator"><span class="keyword">CREATE</span> : you can <span class="keyword">create</span> a child node
+
+<span class="keyword">READ</span> : you can <span class="keyword">get</span> <span class="keyword">data</span> <span class="keyword">from</span> a node <span class="keyword">and</span> list its children.
+
+<span class="keyword">WRITE</span> : you can <span class="keyword">set</span> <span class="keyword">data</span> <span class="keyword">for</span> a node
+
+<span class="keyword">DELETE</span> : you can <span class="keyword">delete</span> a child node
+
+ADMIN : you can <span class="keyword">set</span> permissions</span>
+</code></pre><p>　　创建和删除被从写的权限中抽离出来以实现更<strong>细粒度</strong>的控制.    </p>
+<p>　　因为ZooKeeper并无znode拥有者的概念，所以设计了<code>ADMIN</code>权限。ZooKeeper默认所有人拥有excute/lookup权限。</p>
+<h2 id="内建ACL策略">内建ACL策略</h2><p>　　ZooKeeeper有以下内建策略。</p>
+<blockquote>
+<p>   world ： 有唯一id，anyone，表示任何人</p>
+<p>   auth ： 不使用id, 代表认证用户</p>
+<p>   digest ： 用 username:password 来生成 MD5 hash作为id. 认证使用username:password形式的明文， ACL中密码采用base64 编码的密码 的SHA1哈希.</p>
+<p>   ip ：使用client IP 作为id. expression为<code>addr/bits</code>形式.</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="C_client_API">C client API</h3><pre><code><span class="keyword">const</span> <span class="keyword">int</span> ZOO_PERM_READ; <span class="comment">//can read node’s value and list its children</span>
+<span class="keyword">const</span> <span class="keyword">int</span> ZOO_PERM_WRITE;<span class="comment">// can set the node’s value</span>
+<span class="keyword">const</span> <span class="keyword">int</span> ZOO_PERM_CREATE; <span class="comment">//can create children</span>
+<span class="keyword">const</span> <span class="keyword">int</span> ZOO_PERM_DELETE;<span class="comment">// can delete children</span>
+<span class="keyword">const</span> <span class="keyword">int</span> ZOO_PERM_ADMIN; <span class="comment">//can execute set_acl()</span>
+<span class="keyword">const</span> <span class="keyword">int</span> ZOO_PERM_ALL;<span class="comment">// all of the above flags OR’d together</span>
+</code></pre><h3 id="以下是标准ID：">以下是标准ID：</h3><pre><code><span class="keyword">struct</span> Id ZOO_ANYONE_ID_U<span class="built_in">NSAFE</span>; <span class="comment">//(‘world’,’anyone’)</span>
+<span class="keyword">struct</span> Id ZOO_AUTH_IDS;<span class="comment">// (‘auth’,’’)</span>
+
+其中ZOO_AUTH_IDS 中的空<span class="keyword">id</span>代表 “creator”.
+</code></pre><h3 id="Client标准ACL">Client标准ACL</h3><pre><code><span class="keyword">struct</span> ACL_vector ZOO_OPEN_ACL_U<span class="built_in">NSAFE</span>; <span class="comment">//(ZOO_PERM_ALL,ZOO_ANYONE_ID_UNSAFE)</span>
+<span class="keyword">struct</span> ACL_vector ZOO_READ_ACL_U<span class="built_in">NSAFE</span>;<span class="comment">// (ZOO_PERM_READ, ZOO_ANYONE_ID_UNSAFE)</span>
+<span class="keyword">struct</span> ACL_vector ZOO_CREATOR_ALL_ACL; <span class="comment">//(ZOO_PERM_ALL,ZOO_AUTH_IDS)</span>
+</code></pre><p>　　<code>ZOO_OPEN_ACL_UNSAFE</code> 完全开放权限. <code>ZOO_READ_ACL_UNSAFE</code> 只读. <code>CREATE_ALL_ACL</code> 对znode创建者完全开放权限. </p>
+<h2 id="ACL相关操作">ACL相关操作</h2><blockquote>
+<p>int zoo_add_auth (zhandle_t <em>zh,const char</em> scheme,const char<em> cert, int certLen, void_completion_t completion, const void </em>data);<br>应用通过<code>zoo_add_auth</code>完成认证，如果想应用不同的schema和id，可以多次调用该函数。<br>&gt;<br>int zoo_create (zhandle_t <em>zh, const char </em>path, const char <em>value,int valuelen, const struct ACL_vector </em>acl, int flags,char <em>realpath, int max_realpath_len);<br>创建node,acl参数是一个代表znode授权的List<br>&gt;<br>int zoo_get_acl (zhandle_t </em>zh, const char <em>path,struct ACL_vector </em>acl, struct Stat <em>stat);<br>返回ACL信息<br>&gt;<br>int zoo_set_acl (zhandle_t </em>zh, const char <em>path, int version,const struct ACL_vector </em>acl);<br>必须且有ADMIN权限才能执行，更新ACL设置</p>
+</blockquote>
+<h2 id="一致性保证">一致性保证</h2><h3 id="序列一致性">序列一致性</h3><p>　　更新操作的执行顺序等于指令发送的顺序</p>
+<h3 id="原子性Atomicity">原子性Atomicity</h3><p>　　只有成功或失败，没有半完成的可能。</p>
+<h3 id="单系统镜像">单系统镜像</h3><p>　　client看到的内容与其连接到的具体Server无关</p>
+<h3 id="可靠性">可靠性</h3><p>　　更新完成后，效果会保持到一下次更新前，包含以下两层含义：</p>
+<pre><code>如果<span class="keyword">client</span>得到成功的返回码，意味着操作生效。有时<span class="keyword">client</span>并不知道操作是否成功（网络延迟等），系统会尽量完成操作，但正确的返回码才能确认操作成功的唯一标识。
+
+<span class="keyword">client</span>看到的任何更新，即使系统从错误中恢复也都不会回滚。
+</code></pre><h3 id="时间线_/_Timeliness">时间线 / Timeliness</h3><p>　　client对系统的视图在一定限度内（十秒级）是保持更新的，如果更新不能发送给client, client将检测到服务过期。</p>
+<p>　　利用这种一致性可以方便地在client端构建高级功能，例如leader选拔，barrier，队列和可撤销读写锁。</p>
+<pre><code>注，ZooKeeper并不提供以下保障
+ZooKeeper并不保证每个实例是实时的，不同的<span class="keyword">client</span>对系统的视图可能不一致。由于延时的存在，某一<span class="keyword">client</span>可能在另一<span class="keyword">client</span>得到通知之前已经完成了更改。如果要确保<span class="keyword">client</span>得到最新的数据，在read之间应该执行sync操作。
+
+所以ZooKeeper本身并不保证更改在所有Server中同时发生，但ZooKeeper的基元可用于构建提供<span class="keyword">client</span>同步的高级功能。
+</code></pre><h2 id="Binding">Binding</h2><p>　　ZooKeeper提供两种语言的client库，c和java。</p>
+<h3 id="Java_Binding">Java Binding</h3><p>　　由两个package组成，<code>org.apache.zookeeper</code> 和 <code>org.apache.zookeeper.data</code>，其它的包用于构成内部或者是以上两个包的一部分。<code>org.apache.zookeeper.data</code>完全由container组成。</p>
+<p>　　一般主要使用的是ZooKeeper类，它的两个构造方法只差一个可选的session id 和 password参数. ZooKeeper支持跨进程间的会话恢复。进程可以保存会话到永久存储，重启和恢复程序中更早的实例使用过的会话。</p>
+<p>　　创建ZooKeeper对象的同时也新建了两个线程，<strong>io线程</strong>和<strong>event线程</strong>。所有的io在io线程中进行，所有的回调在event线程中进行。会话维持如心跳在IO线程完成，所有<strong>异步方法的响应和watch处理</strong>在事件线程中完成。这样设计的考虑有：</p>
+<p>　　所有异步调用完成的回调 和 watch的回调都被设计为有序的，一次一个。调用者可以自由做任何事，回调不阻塞IO线程和同步调用。<br>　　<br>　　同步调用可能不会以相同的顺序返回，例如假设一个client执行如下操作：发出一个read /a 的异步请求同时设置watch，在请求完成的回调中执行同步的read /a 操作（不算好的例子，但是完全合法）。<br>    如果在两次read间 /a 有变化，client库 在同步read操作收到响应之前 会收到watch事件，但因为异步操作的完成回调会阻塞事件队列（event thread），同步的read将 在watch事件处理之前 返回新的 /a 值。</p>
+<p>　　最后，关闭操作的规则十分直接：当ZooKeeper对象被关闭或者收到一个致命错误事件 (SESSION_EXPIRED and AUTH_FAILED)，ZooKeeper对象变成无效的。关闭时，两个线程被终止，之后任何对handle的访问都是未被定义的行为，应该避免。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ACL/">ACL</a><a href="/tags/Binding/">Binding</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/20/zookeeperNote5/" data-title="ZooKeeper学习笔记（五）之基本概念-续 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/20/zookeeperNote6/" title="ZooKeeper学习笔记（六）之Java例程">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ZooKeeper学习笔记（六）之Java例程</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/20/zookeeperNote4/"  title="ZooKeeper学习笔记（四）之基本概念">
+ <strong>下一篇：</strong><br/> 
+ <span>ZooKeeper学习笔记（四）之基本概念
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/20/zookeeperNote5/" data-title="ZooKeeper学习笔记（五）之基本概念-续" data-url="http://azyet.github.io/2015/05/20/zookeeperNote5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL_权限"><span class="toc-number">1.</span> <span class="toc-text">ACL 权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内建ACL策略"><span class="toc-number">2.</span> <span class="toc-text">内建ACL策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C_client_API"><span class="toc-number">2.1.</span> <span class="toc-text">C client API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以下是标准ID："><span class="toc-number">2.2.</span> <span class="toc-text">以下是标准ID：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client标准ACL"><span class="toc-number">2.3.</span> <span class="toc-text">Client标准ACL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL相关操作"><span class="toc-number">3.</span> <span class="toc-text">ACL相关操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一致性保证"><span class="toc-number">4.</span> <span class="toc-text">一致性保证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列一致性"><span class="toc-number">4.1.</span> <span class="toc-text">序列一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原子性Atomicity"><span class="toc-number">4.2.</span> <span class="toc-text">原子性Atomicity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单系统镜像"><span class="toc-number">4.3.</span> <span class="toc-text">单系统镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可靠性"><span class="toc-number">4.4.</span> <span class="toc-text">可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间线_/_Timeliness"><span class="toc-number">4.5.</span> <span class="toc-text">时间线 / Timeliness</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Binding"><span class="toc-number">5.</span> <span class="toc-text">Binding</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java_Binding"><span class="toc-number">5.1.</span> <span class="toc-text">Java Binding</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
