@@ -11,15 +11,15 @@
     
 
     
-    <meta name="description" content="足迹">
+    <meta name="description" content="milestones">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AzYet's Notebook">
 <meta property="og:url" content="http://azyet.github.io/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="足迹">
+<meta property="og:description" content="milestones">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AzYet's Notebook">
-<meta name="twitter:description" content="足迹">
+<meta name="twitter:description" content="milestones">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -46,7 +46,7 @@
 			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
-				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
@@ -97,9 +97,9 @@
         
         <h2 id="Regex_in_C">Regex in C</h2><p>　　正则表达式在处理文本方面十分强大，几乎稍微复杂一些的文本操作都会用到，而在python和java中使用regex都十分方便，其实Linux中的C也提供也标准库<regex.h>，使用也不会很复杂。遗憾的是功能较java和python的regex库要少，缺乏替换等功能，需要使用者自己去实现。<br>　　在Linux下输入<code>man regcomp</code>就可以查看所有与regex相关的函数的说明了,以下是一些关键信息的摘要，如果使用中遇到问题请自行查阅manual。</p>
 <h2 id="编译模式">编译模式</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>　　regcomp用来编译文本regex生成匹配规则，执行结果保存在regex_t结构的preg参数中，执行成功时返回0。<br>　　由于使用java,python较多，下意识地将C函数库与java、python类库比较，C语言中常常使用结构体来实现OOP语言中与对象类似的功能。但是C语言函数调用使用值传递，且结构体与数组的定义形式与普通变量相同，数据都保存在栈中，而不是堆中（java所有的对象和数组都是new操作建立的，保存于堆中），所以常常看到将指针作为参数传入函数，但实际担当的是传递结果的角色。</p>
+<p>　　regcomp用来编译文本regex生成匹配规则，执行结果保存在<code>regex_t</code>结构的<code>preg</code>参数中，执行成功时返回0。<br>　　由于使用java,python较多，下意识地将C函数库与java、python类库比较，C语言中常常使用结构体来实现OOP语言中与对象类似的功能。但是C语言函数调用使用值传递，且结构体与数组的定义形式与普通变量相同，数据都保存在栈中，而不是堆中（java所有的对象和数组都是<code>new</code>操作建立的，保存于堆中），所以常常看到将指针作为参数传入函数，但实际担当的是传递结果的角色。</p>
 <h2 id="执行匹配">执行匹配</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regexec</span><span class="params">(<span class="keyword">const</span> regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="built_in">string</span>, size_t nmatch,</span><br><span class="line">           regmatch_t pmatch[], <span class="keyword">int</span> eflags)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>　　正egexec将匹配规则与目标文本进行匹配，并将匹配结果保存在regmatch_t的结构数组pmatch[]中。<br>
+<p>　　<code>regexec</code>将匹配规则与目标文本进行匹配，并将匹配结果保存在<code>regmatch_t</code>的结构数组<code>pmatch[]</code>中。<br>
         
         
         <p class="article-more-link">

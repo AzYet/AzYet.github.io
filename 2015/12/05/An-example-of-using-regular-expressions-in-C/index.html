@@ -46,7 +46,7 @@
 			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
-				<h2 class="blog-motto">一些日常，没有复杂的东西</h2>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
@@ -102,13 +102,13 @@
 		
 		<h2 id="Regex_in_C">Regex in C</h2><p>　　正则表达式在处理文本方面十分强大，几乎稍微复杂一些的文本操作都会用到，而在python和java中使用regex都十分方便，其实Linux中的C也提供也标准库<regex.h>，使用也不会很复杂。遗憾的是功能较java和python的regex库要少，缺乏替换等功能，需要使用者自己去实现。<br>　　在Linux下输入<code>man regcomp</code>就可以查看所有与regex相关的函数的说明了,以下是一些关键信息的摘要，如果使用中遇到问题请自行查阅manual。</regex.h></p>
 <h2 id="编译模式">编译模式</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>　　regcomp用来编译文本regex生成匹配规则，执行结果保存在regex_t结构的preg参数中，执行成功时返回0。<br>　　由于使用java,python较多，下意识地将C函数库与java、python类库比较，C语言中常常使用结构体来实现OOP语言中与对象类似的功能。但是C语言函数调用使用值传递，且结构体与数组的定义形式与普通变量相同，数据都保存在栈中，而不是堆中（java所有的对象和数组都是new操作建立的，保存于堆中），所以常常看到将指针作为参数传入函数，但实际担当的是传递结果的角色。</p>
+<p>　　regcomp用来编译文本regex生成匹配规则，执行结果保存在<code>regex_t</code>结构的<code>preg</code>参数中，执行成功时返回0。<br>　　由于使用java,python较多，下意识地将C函数库与java、python类库比较，C语言中常常使用结构体来实现OOP语言中与对象类似的功能。但是C语言函数调用使用值传递，且结构体与数组的定义形式与普通变量相同，数据都保存在栈中，而不是堆中（java所有的对象和数组都是<code>new</code>操作建立的，保存于堆中），所以常常看到将指针作为参数传入函数，但实际担当的是传递结果的角色。</p>
 <h2 id="执行匹配">执行匹配</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regexec</span><span class="params">(<span class="keyword">const</span> regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="built_in">string</span>, size_t nmatch,</span><br><span class="line">           regmatch_t pmatch[], <span class="keyword">int</span> eflags)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>　　正egexec将匹配规则与目标文本进行匹配，并将匹配结果保存在regmatch_t的结构数组pmatch[]中。<br><a id="more"></a></p>
-<h3 id="匹配结果">匹配结果</h3><p>　　正regmatch_t的结构如下：<br><figure class="highlight thrift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    regoff_t rm_so;</span><br><span class="line">    regoff_t rm_eo;</span><br><span class="line">&#125; regmatch_t;</span><br></pre></td></tr></table></figure></p>
-<p>　　rm_so,rm_eo分别记录了匹配成功字段的起始（第一个匹配字符）和结束点（结尾的下一个字符）的偏移量。</p>
-<p>　　正模式中如果有分组存在，那么将以类似$&amp;,$1,$2…的顺序将结果存储到regmatch_t数组中。</p>
-<h2 id="错误信息收集">错误信息收集</h2><p>　　正当compile或execute出错时，可以使用以下函数获取错误信息。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">size_t <span class="title">regerror</span><span class="params">(<span class="keyword">int</span> errcode, <span class="keyword">const</span> regex_t *preg, <span class="keyword">char</span> *errbuf,</span><br><span class="line">               size_t errbuf_size)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>　　<code>regexec</code>将匹配规则与目标文本进行匹配，并将匹配结果保存在<code>regmatch_t</code>的结构数组<code>pmatch[]</code>中。<br><a id="more"></a></p>
+<h3 id="匹配结果">匹配结果</h3><p>　　正<code>regmatch_t</code>的结构如下：<br><figure class="highlight thrift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    regoff_t rm_so;</span><br><span class="line">    regoff_t rm_eo;</span><br><span class="line">&#125; regmatch_t;</span><br></pre></td></tr></table></figure></p>
+<p>　　<code>rm_so</code>,<code>rm_eo</code>分别记录了匹配成功字段的起始（第一个匹配字符）和结束点（结尾的下一个字符）的偏移量。</p>
+<p>　　正模式中如果有分组存在，那么将以类似$&amp;,$1,$2…的顺序将结果存储到<code>regmatch_t</code>数组中。</p>
+<h2 id="错误信息收集">错误信息收集</h2><p>　　当compile或execute出错时，可以使用以下函数获取错误信息。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">size_t <span class="title">regerror</span><span class="params">(<span class="keyword">int</span> errcode, <span class="keyword">const</span> regex_t *preg, <span class="keyword">char</span> *errbuf,</span><br><span class="line">               size_t errbuf_size)</span></span>;</span><br></pre></td></tr></table></figure></p>
 <p>　　正参数中需要提供错误码和一个字符数组缓存，返回错误信息的长度。</p>
 <p>　　正操作完成后，记得匹配模式的内存空间。</p>
 <h2 id="释放空间">释放空间</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">regfree</span><span class="params">(regex_t *preg)</span></span>;</span><br></pre></td></tr></table></figure>

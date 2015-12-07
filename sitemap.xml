@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2015/12/05/An-example-of-using-regular-expressions-in-C/</loc>
+    <lastmod>2015-12-07T15:29:32.414Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/04/14/freeNetViaIPv6/</loc>
     <lastmod>2015-12-06T14:45:38.284Z</lastmod>
   </url>
@@ -9,11 +14,6 @@
   <url>
     <loc>http://azyet.github.io/2015/04/17/apue-process-sh/</loc>
     <lastmod>2015-12-06T14:43:34.332Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/12/05/An-example-of-using-regular-expressions-in-C/</loc>
-    <lastmod>2015-12-06T13:23:41.276Z</lastmod>
   </url>
   
   <url>
