@@ -82,6 +82,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/07/basicAptCommands/" title="包管理之apt-get和apt-cache的基本命令" itemprop="url">包管理之apt-get和apt-cache的基本命令</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-07T17:57:22.000Z" itemprop="datePublished"> 發表於 2015-06-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　本方介绍如何在Debian/Ubuntu系统中快速地使用apt工具安装、卸载和查询软件包。</p>
+<h2 id="什么是apt-cache">什么是apt-cache</h2><p>　　这个命对搜索软件包缓存非常有用，简单地说，它就是用来搜索和收集软件包信息，查找可安装包的。 下面介绍5个基本命令</p>
+<h3 id="pkgnames-查询安装包名">pkgnames-查询安装包名</h3><p>　　如果要显示所有可安装包信息，可以用以下命令</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo apt-cache pkgnames</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">account</span>-plugin-yahoojp</span><br><span class="line"><span class="title">ceph</span>-fuse</span><br><span class="line"><span class="title">dvd</span>+rw-tools</span><br><span class="line"><span class="title">e3</span></span><br><span class="line"><span class="title">gnome</span>-commander-<span class="typedef"><span class="keyword">data</span></span></span><br><span class="line"><span class="title">grub</span>-gfxpayload-lists</span><br><span class="line"><span class="title">gweled</span></span><br><span class="line"><span class="title">libannotation</span>-indexer-java-doc</span><br><span class="line"><span class="title">libboost</span>-timer-dev</span><br><span class="line"><span class="title">libdune</span>-istl-dev</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/07/basicAptCommands/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Ubuntu/">Ubuntu</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/07/basicAptCommands/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/07/basicAptCommands/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/03/ubuntuXfce4VNC/" title="ubuntu运行VNC Server无桌面时的解决方案" itemprop="url">ubuntu运行VNC Server无桌面时的解决方案</a>
   </h1>
   <p class="article-author">By
@@ -669,69 +732,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/26/ipCommandInLinux/" title="Linux下的ip命令" itemprop="url">Linux下的ip命令</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-26T16:58:38.000Z" itemprop="datePublished"> 發表於 2015-05-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>linux下的<code>ip</code>命令有点类似<code>ifconfig</code>命令，但是更强大，且有意取代它。使用ip命令可以完成多项网络管理操作，ifconfig是net-tools工具下的一个命令，而这个工具已经多年没有维护，已不建议使用的，而iproute2保留并增强了它的许多功能。</p>
-<p>许多的Linux发行版都已经内置了iproute2工具集。</p>
-<h2 id="IP地址相关操作">IP地址相关操作</h2><p>ip命令使用CIDR格式来表示MASK，更直观也更方便输入，不用输入长串的255了。</p>
-<h3 id="显示IP">显示IP</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">chen<span class="annotation">@vaio</span>:~$ ip addr show eth0</span><br><span class="line"><span class="number">2</span>: <span class="string">eth0:</span> &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="number">1500</span> qdisc pfifo_fast state UP group <span class="keyword">default</span> qlen <span class="number">1000</span></span><br><span class="line">    link/ether <span class="number">30</span>:<span class="string">f9:</span><span class="string">ed:</span><span class="string">fe:</span><span class="number">66</span>:<span class="number">4</span>d brd <span class="string">ff:</span><span class="string">ff:</span><span class="string">ff:</span><span class="string">ff:</span><span class="string">ff:</span>ff</span><br><span class="line">    inet <span class="number">10.210</span>.106.20/<span class="number">27</span> brd <span class="number">10.210</span>.106.31 scope global eth0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 <span class="number">2001</span>:<span class="string">da8:</span><span class="number">215</span>:<span class="string">fa50:</span><span class="string">a55d:</span><span class="number">8</span><span class="string">c14:</span><span class="number">6748</span>:xxxx/<span class="number">64</span> scope global temporary dynamic </span><br><span class="line">       valid_lft <span class="number">569852</span>sec preferred_lft <span class="number">50852</span>sec</span><br><span class="line">    inet6 <span class="number">2001</span>:<span class="string">da8:</span><span class="number">215</span>:<span class="string">fa50:</span><span class="number">32</span><span class="string">f9:</span><span class="string">edff:</span><span class="string">fefe:</span>xxxx/<span class="number">64</span> scope global mngtmpaddr noprefixroute dynamic </span><br><span class="line">       valid_lft <span class="number">2591880</span>sec preferred_lft <span class="number">604680</span>sec</span><br><span class="line">    inet6 <span class="string">fe80:</span>:<span class="number">32</span><span class="string">f9:</span><span class="string">edff:</span><span class="string">fefe:</span><span class="number">664</span>d/<span class="number">64</span> scope link </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
-<h3 id="增加或删除IP">增加或删除IP</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">ip</span> addr add <span class="number">192.168.0.193</span>/<span class="number">24</span> dev wlan0</span><br><span class="line"></span><br><span class="line">ip addr del <span class="number">192.168.0.193</span>/<span class="number">24</span> dev wlan0</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/26/ipCommandInLinux/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ip/">ip</a><a href="/tags/网络/">网络</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/26/ipCommandInLinux/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/26/ipCommandInLinux/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -788,15 +788,11 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -812,23 +808,27 @@
 			
 		
 			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+				<li><a href="/tags/启动盘/" title="启动盘">启动盘<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+				<li><a href="/tags/链表/" title="链表">链表<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+				<li><a href="/tags/动态规划/" title="动态规划">动态规划<sup>2</sup></a></li>
 			
 		
 		</ul>
