@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2015/12/10/OSTEP-vm-intro/</loc>
+    <lastmod>2015-12-11T08:00:49.823Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/12/10/value-passing-in-c-programming/</loc>
     <lastmod>2015-12-10T15:11:48.518Z</lastmod>
   </url>
@@ -34,11 +39,6 @@
   <url>
     <loc>http://azyet.github.io/2015/06/20/configureAndMakeInstall/</loc>
     <lastmod>2015-12-04T00:24:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
@@ -328,6 +328,11 @@
   
   <url>
     <loc>http://azyet.github.io/2015/05/15/ObjectAndXmlInServlet/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   

@@ -1,0 +1,606 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>OSTEP学习笔记-内存虚拟化 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="近日在粗读操作系统相关书籍，接触到的一些知识点说起来在其它类似“微机原理”，“C程序设计”，“UNIX环境高级编程”的书中隐约都有接触，但是没有这么系统，总的来说收获还不错，粗略记录些摘要权当笔记。
+内存虚拟化　　无论是进程与进程之间，还是进程与OS之间的内存，都不应该互相干涉。进程之前内存存在干涉会导致运行错误，而进程干涉OS内存将直接导致系统崩溃等严重后果。　　所以最好的方式是进行虚拟化，实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSTEP学习笔记-内存虚拟化">
+<meta property="og:url" content="http://azyet.github.io/2015/12/10/OSTEP-vm-intro/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="近日在粗读操作系统相关书籍，接触到的一些知识点说起来在其它类似“微机原理”，“C程序设计”，“UNIX环境高级编程”的书中隐约都有接触，但是没有这么系统，总的来说收获还不错，粗略记录些摘要权当笔记。
+内存虚拟化　　无论是进程与进程之间，还是进程与OS之间的内存，都不应该互相干涉。进程之前内存存在干涉会导致运行错误，而进程干涉OS内存将直接导致系统崩溃等严重后果。　　所以最好的方式是进行虚拟化，实现">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1eyvia5b5ouj20c6032wel.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1eyvijel3p7j20ic075dga.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OSTEP学习笔记-内存虚拟化">
+<meta name="twitter:description" content="近日在粗读操作系统相关书籍，接触到的一些知识点说起来在其它类似“微机原理”，“C程序设计”，“UNIX环境高级编程”的书中隐约都有接触，但是没有这么系统，总的来说收获还不错，粗略记录些摘要权当笔记。
+内存虚拟化　　无论是进程与进程之间，还是进程与OS之间的内存，都不应该互相干涉。进程之前内存存在干涉会导致运行错误，而进程干涉OS内存将直接导致系统崩溃等严重后果。　　所以最好的方式是进行虚拟化，实现">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/10/OSTEP-vm-intro/" title="OSTEP学习笔记-内存虚拟化" itemprop="url">OSTEP学习笔记-内存虚拟化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-10T18:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存虚拟化"><span class="toc-number">1.</span> <span class="toc-text">内存虚拟化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分类"><span class="toc-number">2.</span> <span class="toc-text">内存分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关API"><span class="toc-number">3.</span> <span class="toc-text">相关API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常见错误"><span class="toc-number">3.1.</span> <span class="toc-text">常见错误</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现机制"><span class="toc-number">4.</span> <span class="toc-text">实现机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段"><span class="toc-number">5.</span> <span class="toc-text">分段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MMU如何区别segment"><span class="toc-number">6.</span> <span class="toc-text">MMU如何区别segment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共享内存"><span class="toc-number">7.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存碎片"><span class="toc-number">8.</span> <span class="toc-text">内存碎片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自由空间的表示"><span class="toc-number">8.1.</span> <span class="toc-text">自由空间的表示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本空间管理策略"><span class="toc-number">9.</span> <span class="toc-text">基本空间管理策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Segregated_Lists"><span class="toc-number">9.1.</span> <span class="toc-text">Segregated Lists</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#binary_buddy_allocator"><span class="toc-number">9.2.</span> <span class="toc-text">binary buddy allocator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它"><span class="toc-number">9.3.</span> <span class="toc-text">其它</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>　　近日在粗读操作系统相关书籍，接触到的一些知识点说起来在其它类似“微机原理”，“C程序设计”，“UNIX环境高级编程”的书中隐约都有接触，但是没有这么系统，总的来说收获还不错，粗略记录些摘要权当笔记。</p>
+<h2 id="内存虚拟化">内存虚拟化</h2><p>　　无论是进程与进程之间，还是进程与OS之间的内存，都不应该互相干涉。进程之前内存存在干涉会导致运行错误，而进程干涉OS内存将直接导致系统崩溃等严重后果。<br>　　所以最好的方式是进行虚拟化，实现隔离，互相给出独立的内存空间，需要做到考虑三点<br>1、透明。<br>　　隔离必需对进程透明，进程不需要关系内存地址是否虚拟。保证程序设计的简洁性（无需关心内存类型、起始地址等）。<br>2、效率。<br>　　虚拟化不应该消耗太多的时间性能和额外存储空间。<br>3、安全<br>　　进程必须不能越界，保证隔离效果。</p>
+<blockquote>
+<p>隔离是一种常用思想，例如理论上microkernels微内核就比monolithic kernel单内核更稳定。是不是想到了kernel pannic :-）</p>
+</blockquote>
+<p>　　实际上只有OS能够访问实际的物理地址，进程使用的全是虚拟地址，也就是我们用C程序打印的指针值，都是虚拟地址。<br><a id="more"></a></p>
+<h2 id="内存分类">内存分类</h2><p>　　大致上一个进程的内存可以分别三块：</p>
+<blockquote>
+<ul>
+<li>静态数据</li>
+<li>堆</li>
+<li>栈</li>
+</ul>
+</blockquote>
+<p>　　实际可以更细分，静态数据包包含了代码、常量等。但对当前问题我们只需要如此分类即可。</p>
+<p>　　静态数据的空间是固定的，运行期间不会变化；堆空间是由程序员显式管理的，而栈是由系统自动管理（自动变量、调用栈等）的。后两者在运行时是变化的，通常将二者的一个置于靠近顶部，一个置于底部，两者共同向中增长，这样能达到最大的利用率。</p>
+<h2 id="相关API">相关API</h2><p>　　C提供<code>malloc</code>和<code>free</code>两个函数来操作堆。通常会用<code>sizeof</code>操作符来搭配<code>malloc</code>使用，之所以称共为操作符，是因为它在编译时就能转换为数值。<br>　　<code>free</code>理论上只能传入<code>malloc</code>得到的指针。</p>
+<h3 id="常见错误">常见错误</h3><ul>
+<li>忘记释放<br>　　如果是即将结束的小程序，系统会自动清理进程内存。但如果是长时间运行的程序，那么就会造成系统内存的严重消耗。总之为了养成好的编程习惯，一定每次都搬运释放。</li>
+<li>分配空间过小<br>　　这将导致一些不容易发现的问题，因为往往能正常编译甚至运行，但无法保证何时会出现错误。<ul>
+<li>忘记初始化<br><code>malloc</code>得到的内存数据是未知的，未初始化之前不要使用。</li>
+<li>忘记分配<br>只声明了指针却未<code>alloc</code>内存空间，非常低级的错误！</li>
+<li>过早释放<br>进程会重新分配利用释放的空间，此时操作可能导致严重错误。</li>
+<li>多次释放<br>将会导致未定义行为，通常结果就是程序崩溃！</li>
+<li>释放错误<br>使用非<code>malloc</code>返回的指针释放空间，后果有点类似多重释放。</li>
+</ul>
+</li>
+</ul>
+<p>可见内存管理对于C程序的重要性，于是也有许多强大的工具诞生，如<code>purify</code>和<code>valgrind</code>，利用好这些工具将大大提高工作效率。</p>
+<p>　　最后<code>malloc</code>、<code>free</code>都不是<code>system call</code>，它们只是<code>lib</code>,是基于<code>system call</code>（如<code>brk</code>,<code>sbrk</code>能更改break值即堆尾地址）封装的。</p>
+<p>　　其它还有<code>calloc</code> <code>realloc</code> <code>mmap</code>等相关API。</p>
+<h2 id="实现机制">实现机制</h2><p>　　实现这种虚拟化其实比想象中的还要简单：地址翻译。这主要是基于硬件实现的，每个CPU都有一个MMU，维持两个寄存器<code>base</code>,<code>bound</code>,它们分别代表虚拟地址与物理地址之间的offset以及分配到的内存大小。而操作这对寄存器是需要<code>kernel mode</code>权限的，一旦越界会产生异常，控制权就会回到OS手中。<br>　　当进程访问虚拟地址时，CPU会将虚拟地址与<code>base</code>相加，得到真实地址，当然还会与<code>bound</code>比对确认是否越界。</p>
+<h2 id="分段">分段</h2><p>　　这种简单的虚拟化有一个严重的问题：空间浪费。进程需要的内存大小是未知且变化的，但上述方式只能一次性分配足够的内存，而实际运行中往往会大部分处于闲置状态，也就是<code>sparse address space</code>。解决这个问题的方式也不复杂：分段。</p>
+<p>　　所谓分段就是将静态、堆、栈分别用三对<code>base</code>,<code>bound</code>寄存器来翻译，也就是三者可以独立分配，这样堆与栈就不用担心增长方面的问题，可按实际使用量占有空间。<br>　　比如在C程序中，如果指针操作不当，就可能出现著名的<code>Segmentation fault</code>错误。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdlib.h&gt;</span></span><br><span class="line">main()&#123;</span><br><span class="line">    <span class="keyword">int</span> *pi = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    *(pi - <span class="number">100</span>) = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译运行<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$cc</span> seg<span class="class">.c</span></span><br><span class="line">$ ./<span class="tag">a</span><span class="class">.out</span></span><br><span class="line">Segmentation fault (core dumped)</span><br></pre></td></tr></table></figure></p>
+<h2 id="MMU如何区别segment">MMU如何区别segment</h2><p>　　处理器如何知道进程的虚拟地址应与三个<code>base</code>中的哪个相加呢？有不同的实现方法。<br>1、显式分段<br>　　根据地址大小分割。例如如果分割3段，那么可以将前两位作为分段标识：<code>00</code>为<code>code</code>,<code>01</code>为<code>heap</code>,<code>10</code>为<code>stack</code>。剩余的位则作为offset与<code>base</code>相加。<br>　　这样分割会导致<code>11</code>区段空闲，所以有些系统将<code>code</code>，<code>heap</code>合并共用一段，只用1位区别<code>segment</code>。<br>2、隐性分段<br>　　根据地址来源决定分段，比如如果来自PC，那么是<code>code</code>，如果是栈+偏移或基本指针得到，则为<code>stack</code>段，其它归为<code>heap</code>。</p>
+<h2 id="共享内存">共享内存</h2><p>　　<code>code share</code>在当今的OS中也有在使用，实现的原理是为内存添加<code>rwx</code>(读写执行）标识，只读内容可以在进程间共享而不用担心破坏隔离。当然检测内存操作是否违规也要增加相应的操作。</p>
+<h2 id="内存碎片">内存碎片</h2><p>　　不断地为进程分区<code>segment</code>会导致<code>fragmentation</code>。一种解决方案是“碎片整理”，暂停进程，复制数据并更新<code>MMU</code>中的寄存器。这种方式开销较高，更常用的方法是依赖科学的分配算法来尽量减小碎片化。<br>　　但是就像CPU调度算法一样，虽然实现方式繁多，但是没有一个是完美的，所有算法还在不停地进化当中。</p>
+<h3 id="自由空间的表示">自由空间的表示</h3><p>　　可以用一个类似链表结构来表示。下图表示了两个长度为10的空闲段，即<code>0-&gt;9</code>, <code>20-&gt;29</code>，它们中间有一个<code>10-&gt;19</code>长度为10的已使用段。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvia5b5ouj20c6032wel.jpg" alt=""><br>　　如果要分配一个&lt;10的空间，比如5，那么将一个节点分割（此处使用第二个为例），其中原起始地址<code>addr</code>作为<code>malloc</code>返回，并更新链表节点，比如将第二个节点更新为<code>addr:25</code>,<code>len=5</code>。</p>
+<p>　　在调用<code>free()</code>函数的时候，并没有传入长度值，系统使用了额外的内存空间来记录区块信息，所以<code>malloc</code>时实际会消耗少量额外字节。<br><img src="http://ww3.sinaimg.cn/large/55f247cbgw1eyvijel3p7j20ic075dga.jpg" alt=""><br><code>ptr</code>是<code>malloc</code>返回值，<code>free</code>操作时，使用<code>ptr-sizeof(header_t)</code>就能得到头信息，<code>size</code>记录了区块大小，<code>magic</code>用于校验<code>ptr</code>有效性（确实是<code>malloc</code>分配出去的，而不是任意值）。</p>
+<p>　　另外<code>free</code>操作时，系统会检查相邻的区块是否可以合并，从而提供更大单块可分配空间。</p>
+<p>　　最后需要指出的是，这些管理工作都是由库执行的。</p>
+<h2 id="基本空间管理策略">基本空间管理策略</h2><ol>
+<li>Best Fit<br>　　遍历所有节点找出空间足够同时最小的空闲段用于分配</li>
+<li>Worse Fit<br>　　遍历所有节点找出空间最大的空闲段用于分配。（挺奇怪不是吗？这样做初衷是让让碎片尽量少，但实际表现往往糟糕）</li>
+<li>First Fit<br>　　使用第一个找到的空闲段。因为不需要遍历，所以速度佳，但频繁操作列表前段，所以节点的排序方式很重要。比如按地址大小排序方便合并操作。</li>
+<li>Next Fit<br>　　上述方法的改进型，使用第二个空闲段。性能基本相同，但可使空间分配遍布整个空闲列表。</li>
+</ol>
+<p>　　以上都是原始的管理策略，与实际OS管理方式差别很大。</p>
+<h3 id="Segregated_Lists">Segregated Lists</h3><p>　　这是一种已有一段历史的方式：为最常出现的size的空间请求设计专门的allocator,因为大小固定，速度和防碎片化方面有很好表现。但需要安排好特定size和其它通用请求间内存的分配问题。</p>
+<p>　　例如<code>kernel</code>启动时，会分配许多<code>object cache</code>作为<code>lock</code>,<code>inode</code>等的存储，于是它们分别属于不同的特定size的<code>segregated list</code>。当特定size的内存配额用完时，也可以向通用allocator请求<code>slabs</code> of memory,反向亦可。<code>slab</code> allocator还会预留一些自由的初始化对象，以避免高消耗的频繁初始化/析构过程。</p>
+<h3 id="binary_buddy_allocator">binary buddy allocator</h3><p>　　此设计针对碎片处理设计。初时将整个内存看作2^n次大小，当内存请求到来时，找到区块大小为2^k （0 &lt; k &lt; n） 中<code>samllest fit</code>大小块进行分配。从而也不可避免的存在内部碎片化问题（分配大小与实际使用大小不一致）。<br>　　此方式强大在于free时可以方便地检查相邻区块（地址只有一位有效位不同）是否空闲，是则合并，如此递归。</p>
+<h3 id="其它">其它</h3><p>　　使用列表扩展性差，特别遍历效率低。因而经常会用数据结构的复杂度来换取时间性能，比如平衡二叉树、伸展树或者半序树等。<br>　　另外多线程设计和多核系统的流行也使得相关方面的内存分配工作研究很多。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/12/10/OSTEP-vm-intro/" data-title="OSTEP学习笔记-内存虚拟化 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/12/10/value-passing-in-c-programming/"  title="C语言的参数传递与返回值">
+ <strong>下一篇：</strong><br/> 
+ <span>C语言的参数传递与返回值
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/12/10/OSTEP-vm-intro/" data-title="OSTEP学习笔记-内存虚拟化" data-url="http://azyet.github.io/2015/12/10/OSTEP-vm-intro/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存虚拟化"><span class="toc-number">1.</span> <span class="toc-text">内存虚拟化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分类"><span class="toc-number">2.</span> <span class="toc-text">内存分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关API"><span class="toc-number">3.</span> <span class="toc-text">相关API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常见错误"><span class="toc-number">3.1.</span> <span class="toc-text">常见错误</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现机制"><span class="toc-number">4.</span> <span class="toc-text">实现机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段"><span class="toc-number">5.</span> <span class="toc-text">分段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MMU如何区别segment"><span class="toc-number">6.</span> <span class="toc-text">MMU如何区别segment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共享内存"><span class="toc-number">7.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存碎片"><span class="toc-number">8.</span> <span class="toc-text">内存碎片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自由空间的表示"><span class="toc-number">8.1.</span> <span class="toc-text">自由空间的表示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本空间管理策略"><span class="toc-number">9.</span> <span class="toc-text">基本空间管理策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Segregated_Lists"><span class="toc-number">9.1.</span> <span class="toc-text">Segregated Lists</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#binary_buddy_allocator"><span class="toc-number">9.2.</span> <span class="toc-text">binary buddy allocator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它"><span class="toc-number">9.3.</span> <span class="toc-text">其它</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
