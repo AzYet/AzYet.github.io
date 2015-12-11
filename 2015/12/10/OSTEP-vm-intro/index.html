@@ -108,7 +108,7 @@
 		<p>　　近日在粗读操作系统相关书籍，接触到的一些知识点说起来在其它类似“微机原理”，“C程序设计”，“UNIX环境高级编程”的书中隐约都有接触，但是没有这么系统，总的来说收获还不错，粗略记录些摘要权当笔记。</p>
 <h2 id="内存虚拟化">内存虚拟化</h2><p>　　无论是进程与进程之间，还是进程与OS之间的内存，都不应该互相干涉。进程之前内存存在干涉会导致运行错误，而进程干涉OS内存将直接导致系统崩溃等严重后果。<br>　　所以最好的方式是进行虚拟化，实现隔离，互相给出独立的内存空间，需要做到考虑三点<br>1、透明。<br>　　隔离必需对进程透明，进程不需要关系内存地址是否虚拟。保证程序设计的简洁性（无需关心内存类型、起始地址等）。<br>2、效率。<br>　　虚拟化不应该消耗太多的时间性能和额外存储空间。<br>3、安全<br>　　进程必须不能越界，保证隔离效果。</p>
 <blockquote>
-<p>隔离是一种常用思想，例如理论上microkernels微内核就比monolithic kernel单内核更稳定。是不是想到了kernel pannic :-）</p>
+<p>隔离是一种常用思想，例如理论上<code>microkernels</code>微内核就比<code>monolithic kernel</code>单内核更稳定。是不是想到了<code>kernel pannic</code> :-）</p>
 </blockquote>
 <p>　　实际上只有OS能够访问实际的物理地址，进程使用的全是虚拟地址，也就是我们用C程序打印的指针值，都是虚拟地址。<br><a id="more"></a></p>
 <h2 id="内存分类">内存分类</h2><p>　　大致上一个进程的内存可以分别三块：</p>
@@ -188,6 +188,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页">
+  <strong>上一篇：</strong><br/>
+  <span>
+  OSTEP学习笔记-分页</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/12/10/value-passing-in-c-programming/"  title="C语言的参数传递与返回值">
@@ -227,7 +235,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>24</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>25</sup></a></li>
 			
 		
 			
@@ -239,11 +247,19 @@
 			
 		
 			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -255,11 +271,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -267,7 +279,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -275,11 +287,11 @@
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
 			
 		
 			
@@ -287,19 +299,15 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+				<li><a href="/tags/校园网/" title="校园网">校园网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bootloader/" title="bootloader">bootloader<sup>2</sup></a></li>
 			
 		
 			

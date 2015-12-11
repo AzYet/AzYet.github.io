@@ -4,27 +4,30 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>无需工具、简单设置，校园网免费出访 | AzYet&#39;s Notebook</title>
+    <title>OSTEP学习笔记-分页 | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="之前写过一篇关于校园网绕过计费访问外网的小文，虽然罗列了1234…各种方法，但是言之不详。现在就来详细介绍其中最简单实用不需要任何额外资源的方法：IPv6直接上网，这种方法既不需要到国外租VPS，也不需要下载什么软件，直接在电脑上简单设置，一步搞定。废话不多说，先来效果图：这是我线看1080P的视频时的下行网速，请直接看右下角，10MB/s的速度，全是IPv6的连接，也就意味着不计流量。">
+    <meta name="description" content="setmentation因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的page frame，每一个frame可包含一个虚拟内存空间中的page。
+　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。
+　　OS维护一个per-process的结构page table，保存着虚拟p">
 <meta property="og:type" content="article">
-<meta property="og:title" content="无需工具、简单设置，校园网免费出访">
-<meta property="og:url" content="http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/index.html">
+<meta property="og:title" content="OSTEP学习笔记-分页">
+<meta property="og:url" content="http://azyet.github.io/2015/12/10/OSTEP-paging-intro/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="之前写过一篇关于校园网绕过计费访问外网的小文，虽然罗列了1234…各种方法，但是言之不详。现在就来详细介绍其中最简单实用不需要任何额外资源的方法：IPv6直接上网，这种方法既不需要到国外租VPS，也不需要下载什么软件，直接在电脑上简单设置，一步搞定。废话不多说，先来效果图：这是我线看1080P的视频时的下行网速，请直接看右下角，10MB/s的速度，全是IPv6的连接，也就意味着不计流量。">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1eraxc4py7rj211y0ko14l.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbjw1eraycsm436j20d10dcq4o.jpg">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1erayhxubl4j20hu0g8jst.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbjw1erayx0eaf6j20fo055aak.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1eraznwaco8j20rk0ggacm.jpg">
+<meta property="og:description" content="setmentation因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的page frame，每一个frame可包含一个虚拟内存空间中的page。
+　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。
+　　OS维护一个per-process的结构page table，保存着虚拟p">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1eyw1oj9raej20uz05d3zy.jpg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="无需工具、简单设置，校园网免费出访">
-<meta name="twitter:description" content="之前写过一篇关于校园网绕过计费访问外网的小文，虽然罗列了1234…各种方法，但是言之不详。现在就来详细介绍其中最简单实用不需要任何额外资源的方法：IPv6直接上网，这种方法既不需要到国外租VPS，也不需要下载什么软件，直接在电脑上简单设置，一步搞定。废话不多说，先来效果图：这是我线看1080P的视频时的下行网速，请直接看右下角，10MB/s的速度，全是IPv6的连接，也就意味着不计流量。">
+<meta name="twitter:title" content="OSTEP学习笔记-分页">
+<meta name="twitter:description" content="setmentation因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的page frame，每一个frame可包含一个虚拟内存空间中的page。
+　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。
+　　OS维护一个per-process的结构page table，保存着虚拟p">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -85,14 +88,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/19/easyWay4IPv6toV4World/" title="无需工具、简单设置，校园网免费出访" itemprop="url">无需工具、简单设置，校园网免费出访</a>
+      <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-19T07:24:38.000Z" itemprop="datePublished"> 發表於 2015-04-19</time>
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
     
   </p>
 </header>
@@ -101,25 +104,44 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实战"><span class="toc-number">2.</span> <span class="toc-text">实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置DNS64"><span class="toc-number">2.1.</span> <span class="toc-text">设置DNS64</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux_设置"><span class="toc-number">2.1.1.</span> <span class="toc-text">Linux 设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows设置"><span class="toc-number">2.1.2.</span> <span class="toc-text">Windows设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由设置"><span class="toc-number">2.2.</span> <span class="toc-text">路由设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux_下删除缺省路由"><span class="toc-number">2.2.1.</span> <span class="toc-text">Linux 下删除缺省路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows下删除缺省路由"><span class="toc-number">2.2.2.</span> <span class="toc-text">Windows下删除缺省路由</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">3.</span> <span class="toc-text">其它</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址翻译"><span class="toc-number">1.</span> <span class="toc-text">地址翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Page_Table_Entry_(PTE)"><span class="toc-number">2.</span> <span class="toc-text">Page Table Entry (PTE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-number">3.</span> <span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#translation-lookaside_buffer（TLB）"><span class="toc-number">4.</span> <span class="toc-text">translation-lookaside buffer（TLB）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB基本算法"><span class="toc-number">4.1.</span> <span class="toc-text">TLB基本算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB结构"><span class="toc-number">4.2.</span> <span class="toc-text">TLB结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context_switch时TLB的处理"><span class="toc-number">4.3.</span> <span class="toc-text">context switch时TLB的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现实中的TLB"><span class="toc-number">4.4.</span> <span class="toc-text">现实中的TLB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAM并非RAM"><span class="toc-number">5.</span> <span class="toc-text">RAM并非RAM</span></a></li></ol>
 		
 		</div>
 		
-		<p>之前写过一篇关于校园网绕过计费访问外网的小文，虽然罗列了1234…各种方法，但是言之不详。现在就来详细介绍其中最简单实用不需要任何额外资源的方法：<strong>IPv6直接上网</strong>，这种方法既不需要到国外租VPS，也不需要下载什么软件，直接在电脑上简单设置，一步搞定。<br>废话不多说，先来效果图：这是我线看1080P的视频时的下行网速，请直接看右下角，<strong>10MB/s</strong>的速度，全是IPv6的连接，也就意味着<strong>不计流量</strong>。<br><img src="http://ww4.sinaimg.cn/large/55f247cbjw1eraxc4py7rj211y0ko14l.jpg" alt="download speed"><br><a id="more"></a></p>
-<h2 id="原理">原理</h2><p>感兴趣的人大概不多，我尽量简单地说下基本原理：IPv6和传统的IPv4采用是两套不同的地址空间，所以它们是<strong>互相隔离的</strong>（相当于语言不通），但要打通它们也并不复杂：<strong>地址翻译</strong>就可以了。即通过一个特殊的网关设备将IPv4和IPv6的地址作一个双向的映射，比如我在IPv6的网内访问weibo.com，我访问v6地址<strong>2001:778:0:ffff:64:0:7286:50a2</strong>就相当于访问V4网络里的<strong>114.134.80.162</strong>（weibo服务器的地址）。那么这个代理网关就是<strong>NAT64 server</strong>。但电脑怎么知道这个IPv6地址呢，这正是这篇文章的关键，<strong>DNS64 server</strong> 。DNS64会将v4网络域名（大部分网站是没有IPv6域名的）解析成IPv6地址，和NAT64一起完成沟通IPv6与IPv4网络的任务。<br>如果算一下weibo.com的v4与v6地址的后32位，你会发现它是一样的：）</p>
-<h2 id="实战">实战</h2><p>好的，废话说完了，开始动手吧。</p>
-<h3 id="设置DNS64">设置DNS64</h3><p>这里我们使用HE提供的DNS64 server：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2001<span class="pseudo">:778</span><span class="pseudo">::37</span></span><br><span class="line">2001<span class="pseudo">:df8</span><span class="pseudo">:0</span><span class="pseudo">:7</span><span class="pseudo">::1</span></span><br></pre></td></tr></table></figure></p>
-<p>将IPv6的DNS由自动获取改为以上值</p>
-<h4 id="Linux_设置">Linux 设置</h4><p><img src="http://ww2.sinaimg.cn/large/55f247cbjw1eraycsm436j20d10dcq4o.jpg" alt="Linux settings"></p>
-<h4 id="Windows设置">Windows设置</h4><p><img src="http://ww4.sinaimg.cn/large/55f247cbjw1erayhxubl4j20hu0g8jst.jpg" alt="windows settings"></p>
-<h3 id="路由设置">路由设置</h3><p>我们的电脑都是IPv6与IPv4双栈的，不指定协议版的情况下，会缺省使用v4的网络，所以我们要将v4的缺省路由删除，使之走IPv6协议栈，否则你一打开网页，就跳到校园网关登录页了。<br>另外还可以禁用IPv4的DNS，这样也可以防止系统使用v4访问网络。<br>以上这些设置，都不能彻底解决系统选择v4的问题，某些情况下依然会有问题，最直接的方法还是直接禁用IPv4，这样操作最简单也最彻底，但是缺点是你也访问不了校内的v4网络了，比如我要用RealVNC连接实验室的服务器就连不了，因为这个软件不支持IPv6。</p>
-<h4 id="Linux_下删除缺省路由">Linux 下删除缺省路由</h4><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> ip route del <span class="default"><span class="keyword">default</span></span></span><br></pre></td></tr></table></figure>
-<h4 id="Windows下删除缺省路由">Windows下删除缺省路由</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">route</span> delete <span class="number">0.0.0.0</span> mask <span class="number">0.0.0.0</span></span><br></pre></td></tr></table></figure>
-<p>好的，你打开浏览器试一下，是不是可以打开网页了？<br>至此全部操作就完成了，赶快去看在线视频吧，是不是憋好久了:D</p>
-<h2 id="其它">其它</h2><p>如果要能访问校内的v4网站如BBS，你还要加上我校局域网的路由项，如果是Linux：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> ip route add <span class="number">10.0.0.0</span>/<span class="number">8</span> via <span class="number">10.210.106.1</span></span><br></pre></td></tr></table></figure></p>
-<p>注意10.210.106.1是我宿舍的网关，不同的地方不一样，请自己替换<br>windows也作类似操作即可<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">route</span> add <span class="number">10.0.0.0</span> mask <span class="number">255.0.0.0</span> <span class="number">10.210.106.1</span></span><br></pre></td></tr></table></figure></p>
-<p>这时候来看一下我们的IP：<br><img src="http://ww2.sinaimg.cn/large/55f247cbjw1erayx0eaf6j20fo055aak.jpg" alt="ip address"><br>已经是国外的IP了，这是我们在v4网络的出口地址，也就是NAT64 server的v4 pool中的地址。</p>
-<p>也就是无形中，我们over wall了，google, github, dropbox都可以用了。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eraznwaco8j20rk0ggacm.jpg" alt="dropbox connected"><br>不过请不要干坏事，访问下google便利下学习工作就行了，免得我们的NAT和DNS Server万一被封，就要哭瞎了，因为到此大家也看出来了，这两东西才是关键，而这样的资源，要再找出一套来，不容易。</p>
+		<p>　　<code>setmentation</code>因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的<code>page frame</code>，每一个<code>frame</code>可包含一个虚拟内存空间中的<code>page</code>。</p>
+<p>　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。</p>
+<p>　　OS维护一个<code>per-process</code>的结构<code>page table</code>，保存着虚拟page映射到物理frame的地址翻译。</p>
+<h2 id="地址翻译">地址翻译</h2><p>　　将虚拟内存地址分割为<code>virtual page number</code> (VPN)和offset两部分。前者代表page号，后者为page内偏移量。通过page table将VPN替换为对应的<code>physical frame number</code>(PFN),从而可以得到真实的物理地址。</p>
+<p>　　对于一个真实的32位系统，page大小为4K，那么VPN数量为2^20 = 1MB,假设每个page需要4byte信息，那么每个page table大小为4M, 如果系统中有100个进程，那么光page table就要消耗400MB空间。显然这个大小是不可能置于CPU寄存器的，只能放置在内存中（依然很大）。</p>
+<h2 id="Page_Table_Entry_(PTE)">Page Table Entry (PTE)</h2><p>　　最简单的形式就是<code>linear page table</code>,用一人数组来存储，其中下标为VPN，内容为PTE。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg" alt=""></p>
+<a id="more"></a>
+<p>　　关于部分字母含义见下。</p>
+<ol>
+<li>valid标识。<br>　　将进程堆与栈间空白的所有page都标识为invalid，从而无需为之分配frame,节省了内存空间。</li>
+<li>protection bit(R/W)。<br>　　读写执行(rwx)标识，如果非法操作就会触发到达OS的trap。</li>
+<li>present bit（P）<br>　　位于内存or磁盘</li>
+<li>dirty（D）bit/reference（access） bit(A)<br>　　载入内存后是否被修改/存取。后者可以用于衡量page的popularity</li>
+<li>U/S<br>　　User / supervisor 权限，user mode是否可存取</li>
+</ol>
+<h2 id="开销">开销</h2><p>　　大体过程如下</p>
+<ol>
+<li>计算PTE地址。通过位移得到VPN，再<code>VPN*sizeof(PTE)</code></li>
+<li>计算实际地址。<code>PTE.PFE &lt;&lt; PFE_SHIFT | (VA &amp;OFFSET_MASK)</code><br>　　当然实际还包含一些标识位的校验。</li>
+</ol>
+<h2 id="translation-lookaside_buffer（TLB）">translation-lookaside buffer（TLB）</h2><p>要想page可行，必须地址翻译铁够快。和往常一样，这同样是由硬件支持来实现的,MMU中添加address-translation cache来进行翻译工作，甚至不需要参考page table.</p>
+<h3 id="TLB基本算法">TLB基本算法</h3><ol>
+<li>查TLB是否保存了当前VPN的翻译PTE，如果是则从中取出PFN，位移page位长后再并加上Offset就得到了物理地址PA。</li>
+<li>如果未有对应PTE，则需要从page table中取出并更新TLB，再次执行1。（不仅要读取内存，且有额外操作，开销较大）</li>
+</ol>
+<p>　　所以TLB如果要效率高，就必须缓存的PTE命中率必须高。 </p>
+<p>　　那么TLB miss时谁来处理？即可以是硬件也可以是软件（OS）。CISC的x86是硬件完全的，只需要设定page table的起始地址到指定寄存器。而RISC的MIPS等是由软件实现的，当miss发生时，cpu保存当前PC（更新tlb后会retry）并产生trap返回到OS处理。<br>软件实现具有简单、灵活的特点。</p>
+<h3 id="TLB结构">TLB结构</h3><p>　　TLB中保存有32、64、128不等的条目，它们<code>fully associative</code>, 可以并行地查找。条目内容如下：</p>
+<pre><code>VPN <span class="string">| PFN | other bits</span>
+</code></pre><h3 id="context_switch时TLB的处理">context switch时TLB的处理</h3><p>　　因为<code>page table</code>是每进程不同的，所以在环境切换时一定确保二者不混淆。最简单的办法是切换时清除TLB，硬件架构可以通过重设page table base register实现。<br>　　也可以在TLB中添加ASID address space identifier，或者理解为进程ID，这样可以同时保存多个进程的PTE而不致混淆，但是同时CPU必须知道当前运行的进程ID，所以环境切换时必须设定相应的寄存器。</p>
+<h3 id="现实中的TLB">现实中的TLB</h3><p>　　图中的是<code>MIPS R4000</code>的<code>TLB　Entry</code>, 32bit寻址，page大小4kb，也就是1M个page，实际TLB中VPN却只有19位，因为只有一半user process可用，另一半归于OS。</p>
+<p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1eyw1oj9raej20uz05d3zy.jpg" alt=""></p>
+<p>　　PFN却有24位，因而支持64GB的物理内存。G代表此地址是所有进程共享的如<code>code share</code>等。ASID只有8位；共有32或者64个这样的entry，少部分是OS专有的，用来指向关键的代码和数据如TLB miss时的处理等。<br>CPU同时提供一些配套的指令来操作TLB，如TLBP查找指定条目，TLBR读取条目内容、TLBWI修改指定条目等，当然这些指令也都是kernel mode才有权限执行的。</p>
+<h2 id="RAM并非RAM">RAM并非RAM</h2><p>　　RAM的意义为读取任意地址速度相同，但是通过page和TLB虚拟化之后，这一特性并不100%成立了，特别是当频繁跨度很大的操作地址时，开销可能会意外地大。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -128,7 +150,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/DNS64/">DNS64</a><a href="/tags/IPv6/">IPv6</a><a href="/tags/NAT64/">NAT64</a><a href="/tags/外网/">外网</a><a href="/tags/校园网/">校园网</a>
+  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
   </div>
 
 </div>
@@ -137,7 +159,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/" data-title="无需工具、简单设置，校园网免费出访 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2015/12/10/OSTEP-paging-intro/" data-title="OSTEP学习笔记-分页 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -150,19 +172,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/04/20/basicConceptsAboutSecuirty/" title="密钥、签名和证书的作用">
-  <strong>上一篇：</strong><br/>
-  <span>
-  密钥、签名和证书的作用</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/04/17/apue-process-sh/"  title="APUE学习笔记之：进程入门">
+<a href="/2015/12/10/OSTEP-vm-intro/"  title="OSTEP学习笔记-内存虚拟化">
  <strong>下一篇：</strong><br/> 
- <span>APUE学习笔记之：进程入门
+ <span>OSTEP学习笔记-内存虚拟化
 </span>
 </a>
 </div>
@@ -171,7 +185,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/19/easyWay4IPv6toV4World/" data-title="无需工具、简单设置，校园网免费出访" data-url="http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/"></div>
+	<div class="ds-thread" data-thread-key="2015/12/10/OSTEP-paging-intro/" data-title="OSTEP学习笔记-分页" data-url="http://azyet.github.io/2015/12/10/OSTEP-paging-intro/"></div>
 </section>
 
 
@@ -181,7 +195,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实战"><span class="toc-number">2.</span> <span class="toc-text">实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置DNS64"><span class="toc-number">2.1.</span> <span class="toc-text">设置DNS64</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux_设置"><span class="toc-number">2.1.1.</span> <span class="toc-text">Linux 设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows设置"><span class="toc-number">2.1.2.</span> <span class="toc-text">Windows设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由设置"><span class="toc-number">2.2.</span> <span class="toc-text">路由设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux_下删除缺省路由"><span class="toc-number">2.2.1.</span> <span class="toc-text">Linux 下删除缺省路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows下删除缺省路由"><span class="toc-number">2.2.2.</span> <span class="toc-text">Windows下删除缺省路由</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">3.</span> <span class="toc-text">其它</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址翻译"><span class="toc-number">1.</span> <span class="toc-text">地址翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Page_Table_Entry_(PTE)"><span class="toc-number">2.</span> <span class="toc-text">Page Table Entry (PTE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-number">3.</span> <span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#translation-lookaside_buffer（TLB）"><span class="toc-number">4.</span> <span class="toc-text">translation-lookaside buffer（TLB）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB基本算法"><span class="toc-number">4.1.</span> <span class="toc-text">TLB基本算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB结构"><span class="toc-number">4.2.</span> <span class="toc-text">TLB结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context_switch时TLB的处理"><span class="toc-number">4.3.</span> <span class="toc-text">context switch时TLB的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现实中的TLB"><span class="toc-number">4.4.</span> <span class="toc-text">现实中的TLB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAM并非RAM"><span class="toc-number">5.</span> <span class="toc-text">RAM并非RAM</span></a></li></ol>
  
   </div>
 

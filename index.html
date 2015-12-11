@@ -82,6 +82,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　<code>setmentation</code>因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的<code>page frame</code>，每一个<code>frame</code>可包含一个虚拟内存空间中的<code>page</code>。</p>
+<p>　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。</p>
+<p>　　OS维护一个<code>per-process</code>的结构<code>page table</code>，保存着虚拟page映射到物理frame的地址翻译。</p>
+<h2 id="地址翻译">地址翻译</h2><p>　　将虚拟内存地址分割为<code>virtual page number</code> (VPN)和offset两部分。前者代表page号，后者为page内偏移量。通过page table将VPN替换为对应的<code>physical frame number</code>(PFN),从而可以得到真实的物理地址。</p>
+<p>　　对于一个真实的32位系统，page大小为4K，那么VPN数量为2^20 = 1MB,假设每个page需要4byte信息，那么每个page table大小为4M, 如果系统中有100个进程，那么光page table就要消耗400MB空间。显然这个大小是不可能置于CPU寄存器的，只能放置在内存中（依然很大）。</p>
+<h2 id="Page_Table_Entry_(PTE)">Page Table Entry (PTE)</h2><p>　　最简单的形式就是<code>linear page table</code>,用一人数组来存储，其中下标为VPN，内容为PTE。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/10/OSTEP-paging-intro/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/10/OSTEP-paging-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/10/OSTEP-paging-intro/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/10/OSTEP-vm-intro/" title="OSTEP学习笔记-内存虚拟化" itemprop="url">OSTEP学习笔记-内存虚拟化</a>
   </h1>
   <p class="article-author">By
@@ -98,7 +162,7 @@
         <p>　　近日在粗读操作系统相关书籍，接触到的一些知识点说起来在其它类似“微机原理”，“C程序设计”，“UNIX环境高级编程”的书中隐约都有接触，但是没有这么系统，总的来说收获还不错，粗略记录些摘要权当笔记。</p>
 <h2 id="内存虚拟化">内存虚拟化</h2><p>　　无论是进程与进程之间，还是进程与OS之间的内存，都不应该互相干涉。进程之前内存存在干涉会导致运行错误，而进程干涉OS内存将直接导致系统崩溃等严重后果。<br>　　所以最好的方式是进行虚拟化，实现隔离，互相给出独立的内存空间，需要做到考虑三点<br>1、透明。<br>　　隔离必需对进程透明，进程不需要关系内存地址是否虚拟。保证程序设计的简洁性（无需关心内存类型、起始地址等）。<br>2、效率。<br>　　虚拟化不应该消耗太多的时间性能和额外存储空间。<br>3、安全<br>　　进程必须不能越界，保证隔离效果。</p>
 <blockquote>
-<p>隔离是一种常用思想，例如理论上microkernels微内核就比monolithic kernel单内核更稳定。是不是想到了kernel pannic :-）</p>
+<p>隔离是一种常用思想，例如理论上<code>microkernels</code>微内核就比<code>monolithic kernel</code>单内核更稳定。是不是想到了<code>kernel pannic</code> :-）</p>
 </blockquote>
 <p>　　实际上只有OS能够访问实际的物理地址，进程使用的全是虚拟地址，也就是我们用C程序打印的指针值，都是虚拟地址。<br>
         
@@ -666,74 +730,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/08/adbLearningNote2/" title="adb学习笔记(二)之am与pm" itemprop="url">adb学习笔记(二)之am与pm</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-08T06:35:01.000Z" itemprop="datePublished"> 發表於 2015-06-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="activity_manager_（am）">activity manager （am）</h2><p>　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am &lt;<span class="command"><span class="keyword">command</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>　　也要可以不进入shell直接执行命令：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -<span class="tag">a</span> android<span class="class">.intent</span><span class="class">.action</span><span class="class">.VIEW</span></span><br></pre></td></tr></table></figure>
-<h3 id="am命令及参数">am命令及参数</h3><h4 id="start_[options]_&lt;INTENT&gt;">start [options] &lt;INTENT&gt;</h4><p>　　通过指定Intent启动activity。</p>
-<p>　　options有：</p>
-<p><code>-D</code>      开启debug</p>
-<p><code>-W</code>      等启动结束</p>
-<p><code>--start-profiler &lt;FILE&gt;</code>       启动profiler，发送结果到<code>FILE</code></p>
-<p><code>-P &lt;FILE&gt;</code>             类上，但是profiler在app闲置时停止</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/08/adbLearningNote2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/08/adbLearningNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/08/adbLearningNote2/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -754,7 +750,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>24</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>25</sup></a></li>
 			
 		
 			
@@ -766,11 +762,19 @@
 			
 		
 			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -782,11 +786,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -794,7 +794,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -802,11 +802,11 @@
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
 			
 		
 			
@@ -814,19 +814,15 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+				<li><a href="/tags/校园网/" title="校园网">校园网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bootloader/" title="bootloader">bootloader<sup>2</sup></a></li>
 			
 		
 			

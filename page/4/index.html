@@ -82,6 +82,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/20/zookeeperNote4/" title="ZooKeeper学习笔记（四）之基本概念" itemprop="url">ZooKeeper学习笔记（四）之基本概念</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="ZooKeeper数据模型">ZooKeeper数据模型</h2><p>　　ZooKeeper拥有一个层级结构的目录空间，非常类似分布式文件系统，唯一的不同是每个<strong>node可同时拥有数据和子node</strong>，即文件同时也是目录。<strong>只使用绝对路径</strong>，总的来说任何Unicode字符都可以作为路径的一部分，但遵循以下约束:</p>
+<blockquote>
+<p>null(\u0000)不能用在path中，因为在C中会导致Binding异常。</p>
+<p>以下字符因为不能很好显示或易让人迷惑，不可用在path中：\u0001 - \u0019 and \u007F - \u009F.</p>
+<p>以下字符也不允许使用： \ud800 -uF8FFF, \uFFF0-uFFFF, \uXFFFE - \uXFFFF (X 代表 1 - E), \uF0000 - \uFFFFF.</p>
+<p>.和..可用，但不能单独用来表示node, 亦即/a/b/./c” or “/a/b/../c都是非法的。</p>
+<p>zookeeper是保留字</p>
+</blockquote>
+<h2 id="ZNodes">ZNodes</h2><p>　　ZooKeeper tree中的每一个Node都指向一个znode, znode维护一个状态结构，结构中包含<code>数据/acl  更新的版本号</code>和<code>时间戳</code>，二者共同用于验证缓存和同步更新。znode每更新一次 ，版本号增加，读取数据时会得到相应的<strong>版本号</strong>，更新数据时也应提供版本号，如果版本号不符，操作失败（注：提供强制模式，会忽略版本号）。</p>
+<p>　　Znode是应用访问最多的实体，有以下两个特性值得关注。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/20/zookeeperNote4/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/watch/">watch</a><a href="/tags/znode/">znode</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/20/zookeeperNote4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote4/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/19/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
   </h1>
   <p class="article-author">By
@@ -665,70 +733,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/18/rabbitmqNote/" title="RabbitMQ学习笔记（一）之HelloWorld" itemprop="url">RabbitMQ学习笔记（一）之HelloWorld</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-18T09:35:59.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　rabbitmq是AMQP的一种实现，可为分布式系统提供可靠的消息通信机制。它从生产者接收消息，并将其传递给消费者，并可二者之间可以提供路由、缓冲和存留功能。</p>
-<p><code>queue</code>一个无限缓冲，可以存储任意多的消息。多个<code>producer</code>可以将消息发送给同一queue，多个<code>consumer</code>也可以从同一queue接收消息。<br><img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt=""></p>
-<p>　　在使用RabbitMQ之前，需要有RabbitMQ-server,如果是ubuntu，可以用如下命令安装</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> rabbitmq-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
-<h2 id="Hello_World!">Hello World!</h2><p>　　以下使用Java编写一个Hello world例程，包含两个程序，一个producer和一个consumer。</p>
-<p>　　如果使用Maven工具，可以在pom.xml添加如下的依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.rabbitmq<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>amqp-client<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.5.2<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/18/rabbitmqNote/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/18/rabbitmqNote/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
@@ -749,7 +753,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>24</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>25</sup></a></li>
 			
 		
 			
@@ -761,11 +765,19 @@
 			
 		
 			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -777,11 +789,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -789,7 +797,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -797,11 +805,11 @@
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
 			
 		
 			
@@ -809,19 +817,15 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/u盘/" title="u盘">u盘<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/外网/" title="外网">外网<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+				<li><a href="/tags/校园网/" title="校园网">校园网<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bootloader/" title="bootloader">bootloader<sup>2</sup></a></li>
 			
 		
 			
