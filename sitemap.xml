@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2015/12/14/CSAPP-linking-and-tools/</loc>
+    <lastmod>2015-12-14T07:32:59.386Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/12/13/OSTEP-smaller-page-table/</loc>
+    <lastmod>2015-12-14T03:00:37.861Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/12/10/OSTEP-paging-intro/</loc>
     <lastmod>2015-12-11T13:56:17.547Z</lastmod>
   </url>
@@ -44,16 +54,6 @@
   <url>
     <loc>http://azyet.github.io/2015/06/20/configureAndMakeInstall/</loc>
     <lastmod>2015-12-04T00:24:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
@@ -177,12 +177,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
+    <loc>http://azyet.github.io/2015/05/26/ipCommandInLinux/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/21/insAndconfigVlcCentos/</loc>
+    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -342,12 +342,22 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/26/ipCommandInLinux/</loc>
+    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/04/21/insAndconfigVlcCentos/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   

@@ -1,0 +1,573 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>静态链接与动态链接 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="刚刚看完了CSAPP的linking一章，试着简单回顾一下。
+　　C语言允许将工程分为多个文件单独管理和编译，这对模块化编程是很好地支持。Linking则将多个代码与数据片断连接起来成为一个完整的可很执行程序。
+　　需要注意多个文件中定义同名（数据类型可同可不同）全局变量是允许的，只要它们最多只有一个进行了初始化，这其实是一个很容易导致运行时才发现错误的特性，所以有时候可以使用gcc参数-warn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="静态链接与动态链接">
+<meta property="og:url" content="http://azyet.github.io/2015/12/14/CSAPP-linking-and-tools/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="刚刚看完了CSAPP的linking一章，试着简单回顾一下。
+　　C语言允许将工程分为多个文件单独管理和编译，这对模块化编程是很好地支持。Linking则将多个代码与数据片断连接起来成为一个完整的可很执行程序。
+　　需要注意多个文件中定义同名（数据类型可同可不同）全局变量是允许的，只要它们最多只有一个进行了初始化，这其实是一个很容易导致运行时才发现错误的特性，所以有时候可以使用gcc参数-warn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="静态链接与动态链接">
+<meta name="twitter:description" content="刚刚看完了CSAPP的linking一章，试着简单回顾一下。
+　　C语言允许将工程分为多个文件单独管理和编译，这对模块化编程是很好地支持。Linking则将多个代码与数据片断连接起来成为一个完整的可很执行程序。
+　　需要注意多个文件中定义同名（数据类型可同可不同）全局变量是允许的，只要它们最多只有一个进行了初始化，这其实是一个很容易导致运行时才发现错误的特性，所以有时候可以使用gcc参数-warn">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/14/CSAPP-linking-and-tools/" title="静态链接与动态链接" itemprop="url">静态链接与动态链接</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-14T09:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#compiler_driver"><span class="toc-number">1.</span> <span class="toc-text">compiler driver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#库函数"><span class="toc-number">2.</span> <span class="toc-text">库函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态链接"><span class="toc-number">3.</span> <span class="toc-text">动态链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　刚刚看完了CSAPP的<code>linking</code>一章，试着简单回顾一下。</p>
+<p>　　C语言允许将工程分为多个文件单独管理和编译，这对模块化编程是很好地支持。<code>Linking</code>则将多个代码与数据片断连接起来成为一个完整的可很执行程序。</p>
+<p>　　需要注意多个文件中定义同名（数据类型可同可不同）全局变量是允许的，只要它们最多只有一个进行了初始化，这其实是一个很容易导致运行时才发现错误的特性，所以有时候可以使用<code>gcc</code>参数<code>-warn-common</code>来提示这些同名的全局变量。</p>
+<h2 id="compiler_driver">compiler driver</h2><p>　　假设一个工程包含两个文件<code>swap.c</code>和<code>main.c</code>，我们可以将它们一起编译为一个可执行文件<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main<span class="class">.c</span> swap<span class="class">.c</span> -o myapp</span><br></pre></td></tr></table></figure></p>
+<p>　　这其中其它包含了预处理、汇编、编译和链接的过程，我们可以将它们分开执行。<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpp <span class="keyword">main</span>.c tmp/<span class="keyword">main</span>.i</span><br></pre></td></tr></table></figure></p>
+<p>　　如果包含了标准库，一般会生成一个很大的文本文件。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">835</span> <span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">funlockfile</span> <span class="params">(FILE *__stream)</span> __<span class="title">attribute__</span> <span class="params">((__nothrow__ , __leaf__)</span>)</span>;</span><br><span class="line"><span class="number">836</span> <span class="preprocessor"># 943 "/usr/include/stdio.h" 3 4</span></span><br><span class="line"><span class="number">837</span></span><br><span class="line"><span class="number">838</span> <span class="preprocessor"># 3 "main.c" 2</span></span><br><span class="line"><span class="number">839</span></span><br><span class="line"><span class="number">840</span> <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">()</span></span>;</span><br><span class="line"><span class="number">841</span></span><br><span class="line"><span class="number">842</span> <span class="keyword">int</span> buf[<span class="number">2</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line"><span class="number">843</span> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br></pre></td></tr></table></figure></p>
+<p>　　可以将此预处理后的文件转换为汇编文件。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">gcc</span> -S main.c</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>　　这将自动生成一个名为main.s的文本文件<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">movq    <span class="variable">%rsp</span>, <span class="variable">%rbp</span></span><br><span class="line">.cfi_def_cfa_register <span class="number">6</span></span><br><span class="line">subq    <span class="variable">$1</span>6, <span class="variable">%rsp</span></span><br><span class="line">movl    <span class="variable">$1</span>, -<span class="number">8</span>(<span class="variable">%rbp</span>)</span><br><span class="line">movl    <span class="variable">$3</span>, -<span class="number">4</span>(<span class="variable">%rbp</span>)</span><br><span class="line">leaq    -<span class="number">4</span>(<span class="variable">%rbp</span>), <span class="variable">%rdx</span></span><br></pre></td></tr></table></figure></p>
+<p>　　可以将其编译为目标文件<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">as <span class="keyword">main</span>.s -o <span class="keyword">main</span>.o</span><br></pre></td></tr></table></figure></p>
+<p>　　这已经是一个二进制文件，可以使用<code>readelf</code>,<code>objdump</code>查看它的相关信息.<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">##反编译汇编代码</span><br><span class="line">p$ objdump -d  main.o </span><br><span class="line"><span class="label"></span><br><span class="line">main.o:</span>     file format elf64-x86-<span class="number">64</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of <span class="built_in">section</span> <span class="string">.text</span>:</span><br><span class="line"></span><br><span class="line"><span class="number">0000000000000000</span> &lt;main&gt;:</span><br><span class="line">   <span class="number">0</span>:   <span class="number">55</span>                      <span class="keyword">push</span>   %<span class="literal">rbp</span></span><br><span class="line">   <span class="number">1</span>:   <span class="number">48</span> <span class="number">89</span> e5                <span class="keyword">mov</span>    %<span class="literal">rsp</span>,%<span class="literal">rbp</span></span><br><span class="line">   <span class="number">4</span>:   <span class="number">48</span> <span class="number">83</span> ec <span class="number">10</span>             <span class="keyword">sub</span>    <span class="number">$0</span>x10,%<span class="literal">rsp</span></span><br><span class="line">   <span class="number">8</span>:   c7 <span class="number">45</span> f8 <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>    movl   <span class="number">$0</span>x1,-<span class="number">0x8</span>(%<span class="literal">rbp</span>)</span><br><span class="line"><span class="label">   f:</span>   c7 <span class="number">45</span> fc <span class="number">03</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>    movl   <span class="number">$0</span>x3,-<span class="number">0x4</span>(%<span class="literal">rbp</span>)</span><br><span class="line">  <span class="number">16</span>:   <span class="number">48</span> <span class="number">8d</span> <span class="number">55</span> fc             <span class="keyword">lea</span>    -<span class="number">0x4</span>(%<span class="literal">rbp</span>),%<span class="literal">rdx</span></span><br><span class="line">  1a:   <span class="number">48</span> <span class="number">8d</span> <span class="number">45</span> f8             <span class="keyword">lea</span>    -<span class="number">0x8</span>(%<span class="literal">rbp</span>),%<span class="literal">rax</span></span><br><span class="line">  1e:   <span class="number">48</span> <span class="number">89</span> d6                <span class="keyword">mov</span>    %<span class="literal">rdx</span>,%<span class="literal">rsi</span></span><br><span class="line">  <span class="number">21</span>:   <span class="number">48</span> <span class="number">89</span> c7                <span class="keyword">mov</span>    %<span class="literal">rax</span>,%<span class="literal">rdi</span></span><br><span class="line">  <span class="number">24</span>:   b8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="number">$0</span>x0,%<span class="number">eax</span></span><br><span class="line">  <span class="number">29</span>:   e8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          callq  2e &lt;main+<span class="number">0x2e</span>&gt;</span><br><span class="line">  2e:   8b <span class="number">55</span> fc                <span class="keyword">mov</span>    -<span class="number">0x4</span>(%<span class="literal">rbp</span>),%<span class="number">edx</span></span><br><span class="line">  <span class="number">31</span>:   8b <span class="number">45</span> f8                <span class="keyword">mov</span>    -<span class="number">0x8</span>(%<span class="literal">rbp</span>),%<span class="number">eax</span></span><br><span class="line">  <span class="number">34</span>:   <span class="number">89</span> c6                   <span class="keyword">mov</span>    %<span class="number">eax</span>,%<span class="literal">esi</span></span><br><span class="line">  <span class="number">36</span>:   bf <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="number">$0</span>x0,%<span class="literal">edi</span></span><br><span class="line">  3b:   b8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="number">$0</span>x0,%<span class="number">eax</span></span><br><span class="line">  <span class="number">40</span>:   e8 <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          callq  <span class="number">45</span> &lt;main+<span class="number">0x45</span>&gt;</span><br><span class="line">  <span class="number">45</span>:   c9                      leaveq</span><br><span class="line">  <span class="number">46</span>:   c3                      retq</span><br><span class="line"></span><br><span class="line">##查看elf格式相关段，以下为symtab段信息</span><br><span class="line">$ readelf -s main.o</span><br><span class="line"></span><br><span class="line">Symbol table <span class="string">'.symtab'</span> contains <span class="number">12</span> entries:</span><br><span class="line"><span class="label">   Num:</span>    Value          Size Type    Bind   Vis      Ndx Name</span><br><span class="line">     <span class="number">0</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> NOTYPE  LOCAL  <span class="built_in">DEFAULT</span>  UND</span><br><span class="line">     <span class="number">1</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> FILE    LOCAL  <span class="built_in">DEFAULT</span>  <span class="preprocessor">ABS</span> main.c</span><br><span class="line">     <span class="number">2</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">1</span></span><br><span class="line">     <span class="number">3</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">3</span></span><br><span class="line">     <span class="number">4</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">4</span></span><br><span class="line">     <span class="number">5</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">5</span></span><br><span class="line">     <span class="number">6</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">7</span></span><br><span class="line">     <span class="number">7</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">8</span></span><br><span class="line">     <span class="number">8</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> <span class="built_in">SECTION</span> LOCAL  <span class="built_in">DEFAULT</span>    <span class="number">6</span></span><br><span class="line">     <span class="number">9</span>: <span class="number">0000000000000000</span>    <span class="number">71</span> FUNC    <span class="built_in">GLOBAL</span> <span class="built_in">DEFAULT</span>    <span class="number">1</span> main</span><br><span class="line">    <span class="number">10</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> NOTYPE  <span class="built_in">GLOBAL</span> <span class="built_in">DEFAULT</span>  UND swap</span><br><span class="line">    <span class="number">11</span>: <span class="number">0000000000000000</span>     <span class="number">0</span> NOTYPE  <span class="built_in">GLOBAL</span> <span class="built_in">DEFAULT</span>  UND printf</span><br></pre></td></tr></table></figure></p>
+<p>　　使用ld可以将多个目标文件链接成一个可执行文件 </p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main<span class="class">.o</span> swap<span class="class">.o</span> -o p</span><br></pre></td></tr></table></figure>
+<h2 id="库函数">库函数</h2><p>　　C语言中将许多常用的函数的目标文件用archive格式进行组织，形成一个个函数库，方便开发。例如默认包含的<code>libc.a</code>（其中包含<code>printf</code>等函数的目标文件），用于数学计算的<code>libm.a</code>等。<br>　　我们也可以生成自己的函数库。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">##将两个relocatable目标文件打包成库文件archive</span><br><span class="line">ar rcs libvector<span class="class">.a</span> addvec<span class="class">.o</span> multvec.o</span><br></pre></td></tr></table></figure></p>
+<p>　　使用该库进行编译,static意为生成一个不依赖任何外部目标文件的可执行文件<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -static main<span class="class">.c</span> libvector<span class="class">.a</span></span><br><span class="line">##一般将库放在后面,否则易出错，同一文件可重复出现在参数中</span><br></pre></td></tr></table></figure></p>
+<h2 id="动态链接">动态链接</h2><p>　　动态链接可在运行时加载指定代码，多个进程可共享同一内存片段，具有相当多的优点。我们可以将自己所写方法生成动态函数库。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fPIC -shared swap2<span class="class">.c</span> -o libswap.so</span><br></pre></td></tr></table></figure></p>
+<p>使用动态库，需要用到dlfcn.h<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;dlfcn.h&gt;</span></span><br><span class="line">main()&#123;</span><br><span class="line">    <span class="keyword">int</span> buf[] = &#123;<span class="number">3</span>, <span class="number">5</span>&#125;;</span><br><span class="line">    <span class="keyword">void</span> (*swap)(<span class="keyword">int</span>*, <span class="keyword">int</span>*);</span><br><span class="line">    <span class="keyword">char</span>* error;</span><br><span class="line">    <span class="keyword">void</span>* handle = dlopen(<span class="string">"./libswap.so"</span>,RTLD_LAZY);</span><br><span class="line">    <span class="keyword">if</span>(!handle)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr,<span class="string">"%s\n"</span>,dlerror());</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    swap = dlsym(handle, <span class="string">"swap"</span>);</span><br><span class="line">    <span class="keyword">if</span>( (error = dlerror()) != NULL)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr,<span class="string">"%s\n"</span>,dlerror());</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    swap(buf,buf+<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"buf = [%d, %d]\n"</span>,buf[<span class="number">0</span>],buf[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">if</span>(<span class="number">0</span>&gt;dlclose(handle))&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr,<span class="string">"%s\n"</span>,dlerror());</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　使用以下命令进行编译运行，注意<code>-rdynamic</code>, <code>main2.c</code> 和<code>-ldl</code>的位置关系。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$gcc</span> -rdynamic -O2 main2<span class="class">.c</span> -ldl -o <span class="tag">p</span></span><br><span class="line">$ ./<span class="tag">p</span></span><br><span class="line">buf = [<span class="number">5</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure></p>
+<h2 id="小结">小结</h2><p>　　CSAPP的这一节中其实重点在讲<code>relocatable</code>目标文件的组织结构，以及如何从源文件生成及它又如何转换为<code>executable</code>目标文件，但几乎每一句都是重要内容所以不方便摘录，推荐阅读原文。这里只是记录了一些实际操作相关。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C语言/">C语言</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/12/14/CSAPP-linking-and-tools/" data-title="静态链接与动态链接 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/12/13/OSTEP-smaller-page-table/"  title="OSTEP学习笔记-分页表">
+ <strong>下一篇：</strong><br/> 
+ <span>OSTEP学习笔记-分页表
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/12/14/CSAPP-linking-and-tools/" data-title="静态链接与动态链接" data-url="http://azyet.github.io/2015/12/14/CSAPP-linking-and-tools/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#compiler_driver"><span class="toc-number">1.</span> <span class="toc-text">compiler driver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#库函数"><span class="toc-number">2.</span> <span class="toc-text">库函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态链接"><span class="toc-number">3.</span> <span class="toc-text">动态链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>27</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
