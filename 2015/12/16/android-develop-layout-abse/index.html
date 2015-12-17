@@ -1,0 +1,592 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android开发入门之-Layout | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="Layouts定义UI中的可视结构，如App和widget可以在XML和java中同时定义，一般来说使用XML定义可以做到界面与控制分离。也可以在XML中定义默认格式，在运行中用java来改变它，这涉及到View和Viewgroup类。一般来说XML的元素与类对应，而XML的属性则与方法对应，名字都相分直观，偶尔稍有差异，如EditText中的text属性对应java中EditText.setTe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发入门之-Layout">
+<meta property="og:url" content="http://azyet.github.io/2015/12/16/android-develop-layout-abse/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="Layouts定义UI中的可视结构，如App和widget可以在XML和java中同时定义，一般来说使用XML定义可以做到界面与控制分离。也可以在XML中定义默认格式，在运行中用java来改变它，这涉及到View和Viewgroup类。一般来说XML的元素与类对应，而XML的属性则与方法对应，名字都相分直观，偶尔稍有差异，如EditText中的text属性对应java中EditText.setTe">
+<meta property="og:image" content="http://developer.android.com/images/layoutparams.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android开发入门之-Layout">
+<meta name="twitter:description" content="Layouts定义UI中的可视结构，如App和widget可以在XML和java中同时定义，一般来说使用XML定义可以做到界面与控制分离。也可以在XML中定义默认格式，在运行中用java来改变它，这涉及到View和Viewgroup类。一般来说XML的元素与类对应，而XML的属性则与方法对应，名字都相分直观，偶尔稍有差异，如EditText中的text属性对应java中EditText.setTe">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Layouts"><span class="toc-number">1.</span> <span class="toc-text">Layouts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写XML"><span class="toc-number">2.</span> <span class="toc-text">编写XML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加载xml资源"><span class="toc-number">3.</span> <span class="toc-text">加载xml资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#属性"><span class="toc-number">4.</span> <span class="toc-text">属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ID"><span class="toc-number">5.</span> <span class="toc-text">ID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layout_Parameters"><span class="toc-number">6.</span> <span class="toc-text">Layout Parameters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方位"><span class="toc-number">7.</span> <span class="toc-text">方位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大小、填充与边框"><span class="toc-number">8.</span> <span class="toc-text">大小、填充与边框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见布局"><span class="toc-number">9.</span> <span class="toc-text">常见布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linear_Layout"><span class="toc-number">9.1.</span> <span class="toc-text">Linear Layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relative_layout"><span class="toc-number">9.2.</span> <span class="toc-text">Relative layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web_Layout"><span class="toc-number">9.3.</span> <span class="toc-text">Web Layout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适配器"><span class="toc-number">10.</span> <span class="toc-text">适配器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为AdapterView填充数据"><span class="toc-number">11.</span> <span class="toc-text">为AdapterView填充数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayAdapter"><span class="toc-number">11.1.</span> <span class="toc-text">ArrayAdapter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SimpleCursorAdapter"><span class="toc-number">12.</span> <span class="toc-text">SimpleCursorAdapter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理点击事件"><span class="toc-number">13.</span> <span class="toc-text">处理点击事件</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
+<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
+<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">orientation=</span><span class="string">"vertical"</span> &gt;</span><br><span class="line">    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">text=</span><span class="string">"Hello, I am a TextView"</span> /&gt;</span><br><span class="line">    &lt;Button android:<span class="variable">id=</span><span class="string">"@+id/button"</span></span><br><span class="line">            android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">text=</span><span class="string">"Hello, I am a Button"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
+<a id="more"></a>
+<h2 id="加载xml资源">加载xml资源</h2><p>每个<code>xml</code>都被编译为一个<code>View</code>资源，应该在<code>java</code>中的<code>onCreate()</code>方法中使用<code>setContentView(R.layout.xml_filename)</code>加载<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.main_layout);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="属性">属性</h2><p>每个<code>View</code>和<code>ViewGroup</code>都有自己的属性，有些<code>View</code>有特有的属性，属性也可以被子类继承。有一些称为“布局参数<code>Layout Parameters</code>”的属性用来描述<code>View</code>对象的布局方位，定义于其所属父<code>ViewGroup</code>中。</p>
+<h2 id="ID">ID</h2><p><code>xml</code>中使用唯一<code>String</code>来赋值<code>id</code>属性，编译后在<code>View</code>对象中以数字<code>ID</code>表示，作为其在树中的唯一标识</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:<span class="property">id</span>=<span class="string">"@+id/my_button"</span></span><br></pre></td></tr></table></figure>
+<p>@符号告诉解析器这是一个<code>ID</code>字串，+表示这是一个新建资源需要添加到<code>R.java</code>，<code>android</code>框架还提供一些其它资源，当引用资源时，不需要+符号，但是需要指定包命名空间</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:<span class="property">id</span>=<span class="string">"@android:id/empty"</span></span><br></pre></td></tr></table></figure>
+<p><code>android</code>包命名空间指定是<code>android.R</code>资源类，而不是本地资源类。</p>
+<p>常用方法是在<code>xml</code>中如此定义</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button android:<span class="variable">id=</span><span class="string">"@+id/my_button"</span></span><br><span class="line">        android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">        android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">        android:<span class="variable">text=</span><span class="string">"@string/my_button_text"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>然后在<code>java</code>中这样引用，通常是在<code>onCreate()</code>中</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Button myButton = <span class="list">(<span class="keyword">Button</span>)</span> findViewById<span class="list">(<span class="keyword">R</span>.id.my_button)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>在<code>RelativeLayout</code>中，<code>View</code>之间相互引用定位，因此定义和使用<code>ID</code>十分重要。<code>id</code>只需要在所搜寻的<code>tree</code>中唯一即可，当然通常也是全树，所以最好是唯一的。</p>
+<h2 id="Layout_Parameters">Layout Parameters</h2><p>形如<code>layout_xxx</code>的属性定义<code>View</code>在<code>ViewGroup</code>中的方位。每个<code>ViewGroup</code>类都有一个继承于<code>ViewGroup.LayoutParams</code>的嵌套内部类，定义<code>child</code>在<code>ViewGroup</code>中能使用的方位参数。</p>
+<p><img src="http://developer.android.com/images/layoutparams.png" alt=""></p>
+<p><code>layout_width</code> 和<code>layout_height</code>是所有<code>ViewGroup</code>共有和必须定义的。一般不会使用数值来赋值，而是以下常量</p>
+<p> -<code>wrap_content</code> 适应内容<br> -<code>match_parent</code> 父<code>ViewGroup</code>能允许的最大值。</p>
+<p><code>pixel</code>也不推荐使用，使用<code>density-independent pixel units (dp)</code>代替。</p>
+<h2 id="方位">方位</h2><p><code>View</code>的占位都是矩形的。位置由<code>left top</code>坐标定义，大小由<code>width height</code>定义，单位是<code>pixel</code>。</p>
+<p>坐标可通过<code>getLeft()</code> 和<code>getTop()</code>获得，都是相对父<code>ViewGroup</code>的值，同时也提供<code>getRight()</code> 和<code>getBottom()</code>来避免手工计算。</p>
+<h2 id="大小、填充与边框">大小、填充与边框</h2><p>实质有两组大小参数<code>measured width</code> 和<code>measured height</code>，以及<code>width</code> 和<code>height</code>有时也叫<code>drawing width</code> 和<code>drawing height</code>.</p>
+<p><code>getMeasuredWidth()</code> 和<code>getMeasuredHeight()</code>得到其在父元素中能达到的大小。<code>getWidth()</code> 和<code>getHeight()</code>则表示实际在屏幕上的绘图大小，两者可以设定为相同值。</p>
+<p>通过<code>setPadding(int, int, int, int)</code> 方法和<code>getPaddingLeft()</code>,<code>getPaddingTop()</code>,<code>getPaddingRight()</code> 和 <code>getPaddingBottom()</code>可以设定和查询填充的大小。</p>
+<p><code>view</code>不提供<code>margin</code>参数，但是<code>ViewGroup</code>有<code>ViewGroup.MarginLayoutParams</code>参数。</p>
+<h2 id="常见布局">常见布局</h2><p><code>Layout</code>可以嵌套，但原则上嵌套会使渲染变慢，所以应使层次尽量简单。</p>
+<h3 id="Linear_Layout">Linear Layout</h3><p>横向或纵向排列，超出屏幕大小会生成滚动条</p>
+<h3 id="Relative_layout">Relative layout</h3><p>通过指定<code>View</code>之间与<code>View</code>与父元素之间的相对关系来定位</p>
+<h3 id="Web_Layout">Web Layout</h3><p>显示网页</p>
+<h2 id="适配器">适配器</h2><p>当内容动态或未定时，可以继承<code>AdapterView</code>以在运行时定义布局。<code>AdapterView</code>的子类使用<code>adapter</code>绑定布局数据，就像数据源与<code>adapterView</code>间的第三人一样，它从数据源（如数据库）中读取数据，并将其转换为<code>View</code>添加到<code>AdapterView</code>中。</p>
+<p><code>AdapterView</code>支持的常见布局有<br><code>List View</code> ： 单列<br><code>Grid View</code> ： 表格</p>
+<h2 id="为AdapterView填充数据">为AdapterView填充数据</h2><p>可通过绑定<code>list view</code> 或<code>grid view</code>到<code>Adapter</code>来填充<code>AdapterView</code>,<code>adapter</code>从外部读取数据并为第一个数据项生成<code>view</code>。</p>
+<p><code>Android</code>提供若干不同的<code>Adapter</code>来适应不同的数据。</p>
+<h3 id="ArrayAdapter">ArrayAdapter</h3><p><code>toString()</code>为每个数组元素生成一个<code>TextView</code></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ArrayAdapter&lt;<span class="built_in">String</span>&gt; adapter = <span class="keyword">new</span> ArrayAdapter&lt;<span class="built_in">String</span>&gt;(<span class="keyword">this</span>,</span><br><span class="line">        android.R.layout.simple_list_item_1, myStringArray);</span><br></pre></td></tr></table></figure>
+<p>然后用<code>setAdapter()</code>将其绑定到<code>ListView</code><br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ListView listView = (ListView) findViewById(R.<span class="property">id</span>.listview);</span><br><span class="line">listView.setAdapter(adapter);</span><br></pre></td></tr></table></figure></p>
+<p>如果想要定制每项的外观，可以<code>override</code>数组元素的<code>toString()</code>. 如果想要生成<code>TextView</code>之外的<code>View</code>，可以继承<code>ArrayAdapter</code>并<code>override</code>其<code>getView()</code>方法。</p>
+<h2 id="SimpleCursorAdapter">SimpleCursorAdapter</h2><p>一般当数据是数据库查询结果<code>cursor</code>(可随机存取)时使用。需要指定每行记录使用的<code>layout</code>以及每列数据插入哪个<code>View</code>。例如对一个包含人名与号码等信息的电话薄数据。</p>
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="component">String[] fromColumns = &#123;ContactsContract<span class="string">.Data.DISPLAY_NAME</span>,</span><br><span class="line">                        ContactsContract<span class="string">.CommonDataKinds.Phone.NUMBER&#125;</span>;</span><br><span class="line">int[] toViews = &#123;R<span class="string">.id.display_name</span>, R<span class="string">.id.phone_number&#125;</span>;</span></span><br></pre></td></tr></table></figure>
+<p>第一项指定要显示哪些内容（列），第二项指定数据显示在哪些<code>View</code>中。</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,</span><br><span class="line">        R.layout.person_name_and_number, cursor, <span class="keyword">from</span>Columns, <span class="keyword">to</span>Views, <span class="number">0</span>);</span><br><span class="line">ListView listView = getListView();</span><br><span class="line">listView.<span class="built_in">set</span>Adapter(adapter);</span><br></pre></td></tr></table></figure>
+<p>如果使用的数据发生了变化，可以调用<code>notifyDataSetChanged()</code>来通知<code>adapter</code>重新渲染。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myStringList.<span class="built_in">add</span>(<span class="built_in">text</span>);</span><br><span class="line">adapter.notifyDataSetChanged();</span><br></pre></td></tr></table></figure></p>
+<h2 id="处理点击事件">处理点击事件</h2><p>可为<code>adapterView</code>的每项<code>View</code>添加处理方法，方式为实现接口<code>AdapterView.OnItemClickListener</code><br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a message handling object as an anonymous class.</span></span><br><span class="line"><span class="keyword">private</span> OnItemClickListener mMessageClickedHandler = <span class="keyword">new</span> OnItemClickListener() &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onItemClick</span><span class="params">(AdapterView parent, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do something in response to the click</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">listView.setOnItemClickListener(mMessageClickedHandler);</span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/12/16/android-develop-layout-abse/" data-title="Android开发入门之-Layout | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/12/14/CSAPP-linking-and-tools/"  title="静态链接与动态链接">
+ <strong>下一篇：</strong><br/> 
+ <span>静态链接与动态链接
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/12/16/android-develop-layout-abse/" data-title="Android开发入门之-Layout" data-url="http://azyet.github.io/2015/12/16/android-develop-layout-abse/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Layouts"><span class="toc-number">1.</span> <span class="toc-text">Layouts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写XML"><span class="toc-number">2.</span> <span class="toc-text">编写XML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加载xml资源"><span class="toc-number">3.</span> <span class="toc-text">加载xml资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#属性"><span class="toc-number">4.</span> <span class="toc-text">属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ID"><span class="toc-number">5.</span> <span class="toc-text">ID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layout_Parameters"><span class="toc-number">6.</span> <span class="toc-text">Layout Parameters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方位"><span class="toc-number">7.</span> <span class="toc-text">方位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大小、填充与边框"><span class="toc-number">8.</span> <span class="toc-text">大小、填充与边框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见布局"><span class="toc-number">9.</span> <span class="toc-text">常见布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linear_Layout"><span class="toc-number">9.1.</span> <span class="toc-text">Linear Layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relative_layout"><span class="toc-number">9.2.</span> <span class="toc-text">Relative layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web_Layout"><span class="toc-number">9.3.</span> <span class="toc-text">Web Layout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适配器"><span class="toc-number">10.</span> <span class="toc-text">适配器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为AdapterView填充数据"><span class="toc-number">11.</span> <span class="toc-text">为AdapterView填充数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ArrayAdapter"><span class="toc-number">11.1.</span> <span class="toc-text">ArrayAdapter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SimpleCursorAdapter"><span class="toc-number">12.</span> <span class="toc-text">SimpleCursorAdapter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#处理点击事件"><span class="toc-number">13.</span> <span class="toc-text">处理点击事件</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>28</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

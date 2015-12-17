@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2015/12/16/android-develop-layout-abse/</loc>
+    <lastmod>2015-12-17T06:58:44.037Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/12/14/CSAPP-linking-and-tools/</loc>
     <lastmod>2015-12-14T07:32:59.386Z</lastmod>
   </url>
@@ -54,11 +59,6 @@
   <url>
     <loc>http://azyet.github.io/2015/06/20/configureAndMakeInstall/</loc>
     <lastmod>2015-12-04T00:24:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
@@ -217,11 +217,6 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/13/firstPage/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -302,6 +297,11 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/06/10/adbLearningNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -332,11 +332,6 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/06/windowsLoginSameSMBHostWithDiffUser/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -347,12 +342,17 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
+    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   

@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
+<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
+<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">orientation=</span><span class="string">"vertical"</span> &gt;</span><br><span class="line">    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">text=</span><span class="string">"Hello, I am a TextView"</span> /&gt;</span><br><span class="line">    &lt;Button android:<span class="variable">id=</span><span class="string">"@+id/button"</span></span><br><span class="line">            android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">text=</span><span class="string">"Hello, I am a Button"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/android-develop-layout-abse/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/android-develop-layout-abse/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/android-develop-layout-abse/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/14/CSAPP-linking-and-tools/" title="静态链接与动态链接" itemprop="url">静态链接与动态链接</a>
   </h1>
   <p class="article-author">By
@@ -656,77 +719,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/10/repoLearningNote/" title="repo命令参考手册" itemprop="url">repo命令参考手册</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-10T09:51:59.000Z" itemprop="datePublished"> 發表於 2015-06-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>repo用法的基本形式为:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span> <span class="tag">&lt;<span class="title">OPTIONS</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</span></span><br><span class="line">repo sync <span class="annotation">[&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="help">help</h2><p>使用<code>help</code>命令可以获得最新的帮助文档,由各子命令来组织.</p>
-<p>你也可以查看子命令的帮助<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo help <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="init">init</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ repo init -u &lt;URL&gt; <span class="annotation">[&lt;OPTIONS&gt;]</span></span><br></pre></td></tr></table></figure>
-<p>在当前目录安装repo, 将创建一个<code>.repo</code>目录,内含源代码的git仓库和标准android manifest 文件, 同时还有一个<code>manifest.xml</code>文件,指向<code>.repo/manifests/</code>目录中的定manifest.<br>参数:</p>
-<p><code>-u</code> URL,指定manifest位置</p>
-<p><code>-m</code> 选择仓库中的manifest文件,缺省为<code>default.xml</code></p>
-<p><code>-b</code> 指定revision, 如一个特定的manifest分支. </p>
-<blockquote>
-<p>repo的其它命令需要在.repo的父目录或者某一子目录中执行</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/10/repoLearningNote/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/android/">android</a><a href="/tags/repo/">repo</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/10/repoLearningNote/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/10/repoLearningNote/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -747,7 +739,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>27</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>28</sup></a></li>
 			
 		
 			
@@ -783,6 +775,10 @@
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
@@ -792,10 +788,6 @@
 		
 			
 				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>3</sup></a></li>
 			
 		
 			

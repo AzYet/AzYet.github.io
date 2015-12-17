@@ -78,6 +78,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/10/repoLearningNote/" title="repo命令参考手册" itemprop="url">repo命令参考手册</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-10T09:51:59.000Z" itemprop="datePublished"> 發表於 2015-06-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>repo用法的基本形式为:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span> <span class="tag">&lt;<span class="title">OPTIONS</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</span></span><br><span class="line">repo sync <span class="annotation">[&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="help">help</h2><p>使用<code>help</code>命令可以获得最新的帮助文档,由各子命令来组织.</p>
+<p>你也可以查看子命令的帮助<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo help <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="init">init</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ repo init -u &lt;URL&gt; <span class="annotation">[&lt;OPTIONS&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>在当前目录安装repo, 将创建一个<code>.repo</code>目录,内含源代码的git仓库和标准android manifest 文件, 同时还有一个<code>manifest.xml</code>文件,指向<code>.repo/manifests/</code>目录中的定manifest.<br>参数:</p>
+<p><code>-u</code> URL,指定manifest位置</p>
+<p><code>-m</code> 选择仓库中的manifest文件,缺省为<code>default.xml</code></p>
+<p><code>-b</code> 指定revision, 如一个特定的manifest分支. </p>
+<blockquote>
+<p>repo的其它命令需要在.repo的父目录或者某一子目录中执行</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/10/repoLearningNote/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/android/">android</a><a href="/tags/repo/">repo</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/10/repoLearningNote/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/10/repoLearningNote/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/10/adbLearningNote3/" title="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它" itemprop="url">adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它</a>
   </h1>
   <p class="article-author">By
@@ -648,75 +719,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/30/hindsightLearningNote1/" title="simics hindsight学习笔记（一）" itemprop="url">simics hindsight学习笔记（一）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-30T14:42:23.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="概念">概念</h1><p>　　以下介绍一些关于模拟的基本概念。</p>
-<h2 id="模拟的限制">模拟的限制</h2><p>　　Simics是系统层指令集模拟器，也就是说：</p>
-<pre><code>指令级的模拟，一次执行一个指令
-模拟硬件的二进制接口，任何硬件上运行的软件在<span class="keyword">target</span>上也能运行
-</code></pre><p>　　包括<strong>firmawre,硬件驱动，操作系统</strong>和用户程序在内的任何软件都能在target上运行。</p>
-<p>　　simics的时间系统非常简单，例如它默认所有<strong>指令的执行时间是一样</strong>的，利用这点将可以编写简单程序来区别模拟与真实系统。</p>
-<h2 id="非入侵的观察和调试">非入侵的观察和调试</h2><p>　　Simics有强大的调试和观察功能：</p>
-<pre><code>观察和设置<span class="keyword">*</span><span class="keyword">*</span>register,memory和硬件状态<span class="keyword">*</span><span class="keyword">*</span>
-设置断点和观察点
-以脚本实现上述功能
-</code></pre><p>　　有了上述支持，<strong>无须在target上安装任何调试程序</strong>，因此调试行为也对target及之上的软件是<strong>完全透明</strong>的。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/30/hindsightLearningNote1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/30/hindsightLearningNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -737,7 +739,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>27</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>28</sup></a></li>
 			
 		
 			
@@ -773,6 +775,10 @@
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
@@ -782,10 +788,6 @@
 		
 			
 				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>3</sup></a></li>
 			
 		
 			
