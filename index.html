@@ -78,6 +78,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/09/17/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-09-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2016-09-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
+<p>一般C包装函数功能如下：</p>
+<ul>
+<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
+<li>trapping to kernel mode(开始执行）</li>
+<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
+</ul>
+<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
+<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
+<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
+<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
+<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
+<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/09/17/Linux-errno-intro/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/09/17/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/09/17/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
   </h1>
   <p class="article-author">By
@@ -654,71 +725,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/20/configureAndMakeInstall/" title="configure和make install背后的故事" itemprop="url">configure和make install背后的故事</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-20T08:11:57.000Z" itemprop="datePublished"> 發表於 2015-06-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>接触过Linux开发的人都知道从源代码安装需要执行类似以下的步骤：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
-<p>目前为止我执行上述命令已经很多次了，但是并不知道它背后的逻辑。在跟进一个还在开发中的项目的时候，上要述步骤并不能完美执行，需要针对作一些修改，是时候挖掘这些咒语背后的操作了。</p>
-<h2 id="configure">configure</h2><p><code>configure</code>脚本负责在特定的系统上执行build的准备工作。这确认后续的build和install的依赖关系已经满足，找出使用这些依赖需要知道的所有信息。</p>
-<p>Linux程序通常是用C编写的，所以我们需要C编译器，configure脚本通常会检查系统有合适的C编译器，它在哪里以及如何调用。</p>
-<h2 id="Build">Build</h2><p>一旦configure完成，我们就可以执行<code>make</code>命令来build软件。它执行一系列在Makefile中定义的操作来编译写好的源代码。</p>
-<p>通常下载的源文件tarball中不包含Makefile，取而代之的是一个模板文件<code>Makefile.in</code>，configure脚本产生一个针对你的系统定制的Makefile文件。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/20/configureAndMakeInstall/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/20/configureAndMakeInstall/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/20/configureAndMakeInstall/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -739,11 +745,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>28</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>29</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>11</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>12</sup></a></li>
 			
 		
 			
@@ -771,11 +777,11 @@
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>4</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
 			
