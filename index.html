@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/10/17/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-10-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2016-10-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
+<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
+<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
+<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/10/17/OSTEP-Linux-concurrency-lock/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/10/17/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/10/17/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/09/17/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
@@ -654,77 +717,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/28/rabbitmqInNova/" title="Nova中的RabbitMQ" itemprop="url">Nova中的RabbitMQ</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-28T04:16:42.000Z" itemprop="datePublished"> 發表於 2015-06-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　最近需要在项目中使用到消息队列，虽然之前有过使用经验，但是因为当时并无具体要求，所以只是在看完RabbitMQ的tutorial之后就自行实现了，并不知道合理性和效率如何。所以在新的项目设计时，打算借鉴一下Openstack中AMQP的使用经验 </p>
-<h2 id="Nova消息队列">Nova消息队列</h2><p>　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许它们以松耦合的风格通信。更准确地说，Nova组件之间使用RPC通信。但是这个机制是建立在发布/订阅机制之上的，它有以下优势：</p>
-<ul>
-<li><p>解耦client和Server（Client不需要知道Server的具体引用）</p>
-</li>
-<li><p>Client和Server完全异步(Client不需要Server在收到RPC call时同时执行）</p>
-</li>
-<li><p>随机平衡远程调用（多个Servant时，优先分配空闲者处理调用）</p>
-</li>
-</ul>
-<p>　　Nova使用direct, fanout,和topic Exchange。其架构如下图所示 </p>
-<p><img src="http://docs.openstack.org/developer/nova/_images/arch.png" alt=""></p>
-<p>　　Nova通过一个封装和解封装消息到调用的类来实现RPC功能，包括请求/响应（rpc.call）, 单向(rpc.cast)。每个Nova服务（计算，调度等）在初始化时都实现两个AMQP队列，一个接收带有NODE-TYPE.NODE-ID的routingkey（如 compute.hostname）的消息，另一个接受通用的带有NODE-TYPE的routingkey（如compute）的消息。前者将消息传递给特定的物理节点，例如，终止某个虚拟机实例时使用。这个API在调用是“请求/响应”类型时充当consumer，rpc.cast时仅为publisher。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/28/rabbitmqInNova/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/openstack/">openstack</a><a href="/tags/rabbitmq/">rabbitmq</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/28/rabbitmqInNova/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/28/rabbitmqInNova/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -745,11 +737,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>29</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>12</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>13</sup></a></li>
 			
 		
 			
@@ -785,7 +777,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -793,7 +785,7 @@
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -813,7 +805,7 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			

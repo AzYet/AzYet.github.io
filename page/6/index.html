@@ -78,6 +78,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/10/heapSortAnalizeAndImplement/" title="堆排序实战：理解再实现" itemprop="url">堆排序实战：理解再实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-10T04:17:28.000Z" itemprop="datePublished"> 發表於 2015-05-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　堆排序我已经遗忘得差不多了，只记得有这么一种方式，且时间复杂度为n*log(n)。下面要做的是根据其算法描述来自行实现，作为一种练习。</p>
+<h2 id="关于堆">关于堆</h2><p>　　看了一下wiki的前两段，大致知道了此处堆实质是二叉树，常用一维数组来表示，有一个很重要的规律，对于以0开头的数组：左右子节点的序号分别为<code>2*i+1</code>, <code>2*i+2</code>。</p>
+<p>　　作为一个喜欢用理解帮助记忆的人，想弄明白为何如此。</p>
+<ol>
+<li>对每个节点，i = 前（上层及左边）节点数，这是显然的。</li>
+<li>本层的节点数 = 所有上层节点数之和 + 1。（等比数列）</li>
+<li>所以对<strong>每层最左节点</strong>，<code>2*i</code>为本层最右节点，<code>2*i+1</code>, <code>2*i+2</code>是下层第一二节点，自然是i的子节点</li>
+<li>自i每右移1,<code>2×i</code>移2,依然是其左右子结点。</li>
+</ol>
+<p>　　以上是堆的父子节点序号对应规律，是进行节点操作的基础。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/10/heapSortAnalizeAndImplement/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/堆排序/">堆排序</a><a href="/tags/实现/">实现</a><a href="/tags/算法/">算法</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/10/heapSortAnalizeAndImplement/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/10/heapSortAnalizeAndImplement/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/09/hex2decStr/" title="C语言笔试题：十六与十进制字符串转换" itemprop="url">C语言笔试题：十六与十进制字符串转换</a>
   </h1>
   <p class="article-author">By
@@ -640,65 +708,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/23/javaQueue/" title="java中的Queue" itemprop="url">java中的Queue</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-23T05:21:54.000Z" itemprop="datePublished"> 發表於 2015-04-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　Queue接口与List、Set同一级别，都是继承了Collection接口。<strong>LinkedList</strong>实现了Queue接 口。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">add</span>        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常</span><br><span class="line">remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException异常</span><br><span class="line"><span class="keyword">element</span>  返回队列头部的元素             如果队列为空，则抛出一个NoSuchElementException异常</span><br><span class="line">offer       添加一个元素并返回<span class="constant">true</span>       如果队列已满，则返回<span class="constant">false</span></span><br><span class="line">poll         移除并返问队列头部的元素    如果队列为空，则返回<span class="constant">null</span></span><br><span class="line">peek       返回队列头部的元素             如果队列为空，则返回<span class="constant">null</span></span><br><span class="line"><span class="built_in">put</span>         添加一个元素                      如果队列满，则阻塞</span><br><span class="line">take        移除并返回队列头部的元素     如果队列为空，则阻塞</span><br></pre></td></tr></table></figure></p>
-<p> 　　阻塞队列的操作可以根据它们的响应方式分为以下三类：<strong>aad、removee和element</strong>操作在你试图为一个已满的队列增加元素或从空队列取得元素时 抛出异常。当然，在多线程程序中，队列在任何时间都可能变成满的或空的，所以你可能想使用**offer、poll、peek方法。这些方法在无法完成任务时 只是给出一个出错示而不会抛出异常。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Queue/">Queue</a><a href="/tags/java/">java</a><a href="/tags/阻塞/">阻塞</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/23/javaQueue/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/23/javaQueue/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -719,11 +728,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>29</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>12</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>13</sup></a></li>
 			
 		
 			
@@ -759,7 +768,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -767,7 +776,7 @@
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -787,7 +796,7 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
