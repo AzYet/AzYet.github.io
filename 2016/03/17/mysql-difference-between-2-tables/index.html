@@ -11,27 +11,18 @@
     
 
     
-    <meta name="description" content="mysql
-
-
-原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。
-降维的操作可以用到group by和sum.1select status, time ... sum (xxx) as x">
+    <meta name="description" content="原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。
+降维降维的操作可以用到group by和sum.1select status, time ... sum (xxx) as xxx fro">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql合并记录及两表比较">
 <meta property="og:url" content="http://azyet.github.io/2016/03/17/mysql-difference-between-2-tables/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="mysql
-
-
-原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。
-降维的操作可以用到group by和sum.1select status, time ... sum (xxx) as x">
+<meta property="og:description" content="原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。
+降维降维的操作可以用到group by和sum.1select status, time ... sum (xxx) as xxx fro">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql合并记录及两表比较">
-<meta name="twitter:description" content="mysql
-
-
-原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。
-降维的操作可以用到group by和sum.1select status, time ... sum (xxx) as x">
+<meta name="twitter:description" content="原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。
+降维降维的操作可以用到group by和sum.1select status, time ... sum (xxx) as xxx fro">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -56,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -95,32 +86,34 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
+    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 发表于 2016-03-17</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#降维"><span class="toc-number">1.</span> <span class="toc-text">降维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#比较"><span class="toc-number">2.</span> <span class="toc-text">比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写入"><span class="toc-number">3.</span> <span class="toc-text">写入</span></a></li></ol>
 		
 		</div>
 		
-		<ul>
-<li>mysql</li>
-</ul>
-<hr>
-<p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
-<p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
-<p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br><a id="more"></a><br>查询到数据之后，需要将其更新到新表中，但只需要更新新增项和数据有修改的项。此时需要用到<code>left join</code>。<br><code>left join</code>顾名思义以左为准，即只要在左表出现，右表即使为空也会出现在结果中，因此特别查找适合“新增”项。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> (上文查询语句) t <span class="keyword">left</span> <span class="keyword">join</span> newtable n <span class="keyword">on</span> ( t.<span class="keyword">time</span> = n.<span class="keyword">time</span> <span class="keyword">and</span> t.<span class="keyword">status</span> = n.<span class="keyword">status</span>) <span class="keyword">where</span> (n.xxx <span class="keyword">is</span> <span class="literal">null</span> <span class="keyword">or</span> n.xxx &lt;&gt; t.xxx);</span></span><br></pre></td></tr></table></figure></p>
-<p>最后就是如何将查询结果插入到新表中，直接<code>insert into</code>查询结果即可，但是需要注意一项，即已存在的表项不要重复插入，而是更新即可，此时需要使用 <code>on duplicate key update</code>。<br>完整的语句应该是<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> newtable &lt;上一语句&gt; <span class="keyword">on</span> duplicate <span class="keyword">key</span> <span class="keyword">update</span> newtable.xxx = t.xxx;</span></span><br></pre></td></tr></table></figure></p>
+		<p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
+<h2 id="降维">降维</h2><p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br><a id="more"></a></p>
+<h2 id="比较">比较</h2><p>查询到数据之后，需要将其更新到新表中，但只需要更新新增项和数据有修改的项。此时需要用到<code>left join</code>。<br><code>left join</code>顾名思义以左为准，即只要在左表出现，右表即使为空也会出现在结果中，因此特别查找适合“新增”项。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> (上文查询语句) t <span class="keyword">left</span> <span class="keyword">join</span> newtable n <span class="keyword">on</span> ( t.<span class="keyword">time</span> = n.<span class="keyword">time</span> <span class="keyword">and</span> t.<span class="keyword">status</span> = n.<span class="keyword">status</span>) <span class="keyword">where</span> (n.xxx <span class="keyword">is</span> <span class="literal">null</span> <span class="keyword">or</span> n.xxx &lt;&gt; t.xxx);</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="写入">写入</h2><p>最后就是如何将查询结果插入到新表中，直接<code>insert into</code>查询结果即可，但是需要注意一项，即已存在的表项不要重复插入，而是更新即可，此时需要使用 <code>on duplicate key update</code>。<br>完整的语句应该是<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> newtable &lt;上一语句&gt; <span class="keyword">on</span> duplicate <span class="keyword">key</span> <span class="keyword">update</span> newtable.xxx = t.xxx;</span></span><br></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/mysql/">mysql</a>
+  </div>
 
 </div>
 
@@ -141,19 +134,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/09/17/Linux-errno-intro/" title="Linux中的errno">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Linux中的errno</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/02/05/IPv6-tunnel-via-ipv4/"  title="IPv6 tunnel via ipv4">
+<a href="/2015/12/16/Linux-errno-intro/"  title="Linux中的errno">
  <strong>下一篇：</strong><br/> 
- <span>IPv6 tunnel via ipv4
+ <span>Linux中的errno
 </span>
 </a>
 </div>
@@ -167,24 +152,24 @@
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#降维"><span class="toc-number">1.</span> <span class="toc-text">降维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#比较"><span class="toc-number">2.</span> <span class="toc-text">比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写入"><span class="toc-number">3.</span> <span class="toc-text">写入</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -272,7 +257,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -300,7 +285,7 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -547,7 +532,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

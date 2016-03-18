@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -78,140 +78,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/10/17/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-10-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2016-10-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
-<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
-<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/10/17/OSTEP-Linux-concurrency-lock/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/10/17/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/10/17/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/09/17/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-09-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2016-09-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
-<p>一般C包装函数功能如下：</p>
-<ul>
-<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
-<li>trapping to kernel mode(开始执行）</li>
-<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
-</ul>
-<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
-<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
-<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
-<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
-<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
-<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/09/17/Linux-errno-intro/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/09/17/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/09/17/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2016/03/17/mysql-difference-between-2-tables/" title="mysql合并记录及两表比较" itemprop="url">mysql合并记录及两表比较</a>
   </h1>
   <p class="article-author">By
@@ -219,18 +85,14 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
+    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 发表于 2016-03-17</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <ul>
-<li>mysql</li>
-</ul>
-<hr>
-<p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
-<p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
+        <p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
+<h2 id="降维">降维</h2><p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
 <p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br>
         
         
@@ -243,6 +105,11 @@
     <footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/mysql/">mysql</a>
+  </div>
 
 </div>
 
@@ -272,29 +139,48 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/02/05/IPv6-tunnel-via-ipv4/" title="IPv6 tunnel via ipv4" itemprop="url">IPv6 tunnel via ipv4</a>
+      <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-02-05T18:53:41.000Z" itemprop="datePublished"> 發表於 2016-02-05</time>
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-16</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        
+        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
+<p>一般C包装函数功能如下：</p>
+<ul>
+<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
+<li>trapping to kernel mode(开始执行）</li>
+<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
+</ul>
+<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
+<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
+<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
+<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
+<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
+<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
         
         
         <p class="article-more-link">
+          
+            <a href="/2015/12/16/Linux-errno-intro/#more">Read More</a>
           
        </p>
     </div>
     <footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
 
 </div>
 
@@ -304,7 +190,70 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/02/05/IPv6-tunnel-via-ipv4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/05/IPv6-tunnel-via-ipv4/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/12/16/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
+<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
+<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
+<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -331,7 +280,7 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-16</time>
     
   </p>
 </header>
@@ -394,7 +343,7 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-14T09:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-14</time>
+    <time datetime="2015-12-14T09:09:23.000Z" itemprop="datePublished"> 发表于 2015-12-14</time>
     
   </p>
 </header>
@@ -459,7 +408,7 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-14T03:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-13</time>
+    <time datetime="2015-12-14T03:09:23.000Z" itemprop="datePublished"> 发表于 2015-12-13</time>
     
   </p>
 </header>
@@ -521,7 +470,7 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 发表于 2015-12-10</time>
     
   </p>
 </header>
@@ -585,7 +534,7 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T18:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
+    <time datetime="2015-12-10T18:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-10</time>
     
   </p>
 </header>
@@ -649,7 +598,7 @@
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T13:26:04.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
+    <time datetime="2015-12-10T13:26:04.000Z" itemprop="datePublished"> 发表于 2015-12-10</time>
     
   </p>
 </header>
@@ -699,23 +648,86 @@
 
 
 
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/05/An-example-of-using-regular-expressions-in-C/" title="例程：在C语言中使用正则表达式" itemprop="url">例程：在C语言中使用正则表达式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-05T21:00:59.000Z" itemprop="datePublished"> 发表于 2015-12-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Regex_in_C">Regex in C</h2><p>　　正则表达式在处理文本方面十分强大，几乎稍微复杂一些的文本操作都会用到，而在python和java中使用regex都十分方便，其实Linux中的C也提供也标准库<regex.h>，使用也不会很复杂。遗憾的是功能较java和python的regex库要少，缺乏替换等功能，需要使用者自己去实现。<br>　　在Linux下输入<code>man regcomp</code>就可以查看所有与regex相关的函数的说明了,以下是一些关键信息的摘要，如果使用中遇到问题请自行查阅manual。</p>
+<h2 id="编译模式">编译模式</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>　　regcomp用来编译文本regex生成匹配规则，执行结果保存在<code>regex_t</code>结构的<code>preg</code>参数中，执行成功时返回0。<br>　　由于使用java,python较多，下意识地将C函数库与java、python类库比较，C语言中常常使用结构体来实现OOP语言中与对象类似的功能。但是C语言函数调用使用值传递，且结构体与数组的定义形式与普通变量相同，数据都保存在栈中，而不是堆中（java所有的对象和数组都是<code>new</code>操作建立的，保存于堆中），所以常常看到将指针作为参数传入函数，但实际担当的是传递结果的角色。</p>
+<h2 id="执行匹配">执行匹配</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regexec</span><span class="params">(<span class="keyword">const</span> regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="built_in">string</span>, size_t nmatch,</span><br><span class="line">           regmatch_t pmatch[], <span class="keyword">int</span> eflags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>　　<code>regexec</code>将匹配规则与目标文本进行匹配，并将匹配结果保存在<code>regmatch_t</code>的结构数组<code>pmatch[]</code>中。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/05/An-example-of-using-regular-expressions-in-C/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C语言/">C语言</a><a href="/tags/regex/">regex</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/05/An-example-of-using-regular-expressions-in-C/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/05/An-example-of-using-regular-expressions-in-C/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -803,7 +815,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -831,7 +843,7 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -1001,7 +1013,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

@@ -4,22 +4,37 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>IPv6 tunnel via ipv4 | AzYet&#39;s Notebook</title>
+    <title>Linux中的errno | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="milestones">
+    <meta name="description" content="前言Linux system call是kernel入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。
+一般C包装函数功能如下：
+
+将参数与system call代号copy到kernel指定的寄存器
+trapping to kernel mode(开始执行）
+返回user mode时，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IPv6 tunnel via ipv4">
-<meta property="og:url" content="http://azyet.github.io/2016/02/05/IPv6-tunnel-via-ipv4/index.html">
+<meta property="og:title" content="Linux中的errno">
+<meta property="og:url" content="http://azyet.github.io/2015/12/16/Linux-errno-intro/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="milestones">
+<meta property="og:description" content="前言Linux system call是kernel入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。
+一般C包装函数功能如下：
+
+将参数与system call代号copy到kernel指定的寄存器
+trapping to kernel mode(开始执行）
+返回user mode时，">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IPv6 tunnel via ipv4">
-<meta name="twitter:description" content="milestones">
+<meta name="twitter:title" content="Linux中的errno">
+<meta name="twitter:description" content="前言Linux system call是kernel入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。
+一般C包装函数功能如下：
+
+将参数与system call代号copy到kernel指定的寄存器
+trapping to kernel mode(开始执行）
+返回user mode时，">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -44,7 +59,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -76,31 +91,59 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/02/05/IPv6-tunnel-via-ipv4/" title="IPv6 tunnel via ipv4" itemprop="url">IPv6 tunnel via ipv4</a>
+      <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-02-05T18:53:41.000Z" itemprop="datePublished"> 發表於 2016-02-05</time>
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-16</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#返回值"><span class="toc-number">2.</span> <span class="toc-text">返回值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接调用"><span class="toc-number">3.</span> <span class="toc-text">直接调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关函数"><span class="toc-number">4.</span> <span class="toc-text">相关函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#错误恢复"><span class="toc-number">5.</span> <span class="toc-text">错误恢复</span></a></li></ol>
 		
 		</div>
 		
-		  
+		<h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
+<p>一般C包装函数功能如下：</p>
+<ul>
+<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
+<li>trapping to kernel mode(开始执行）</li>
+<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
+</ul>
+<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
+<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
+<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
+<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
+<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
+<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br><a id="more"></a></p>
+<h2 id="直接调用">直接调用</h2><p>一般情况下无需直接调用<code>system call</code>，但是有时并无C函数库对其进行妥善的封装，此时可以使用<code>syscall(2)</code>来直接调用，历史上，也可以使用宏<code>_syscall(2)</code>。</p>
+<h2 id="相关函数">相关函数</h2><p><code>errno</code>定义在<code>&lt;errno.h&gt;</code>文件中，对支持多线程的系统，应为每个线程保存一个errno的copy，以避免相互干涉，因此在linux中，其定义是这样的。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> *__errno_location(<span class="keyword">void</span>);</span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> errno (*__errno_location())</span></span><br></pre></td></tr></table></figure></p>
+<p>errno定义成为函数的返回值（int型指针）所指向的值。</p>
+<p>需要注意的是errno在没有新的错误产生时不会清零，所以请只在系统调用返回错误时检查它。errno也不会被设置为0, 0也没有对应的错误定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;string.h&gt;</span></span><br><span class="line"><span class="keyword">char</span> *strerror(<span class="keyword">int</span> errnum);</span><br></pre></td></tr></table></figure>
+<p>输入errno返回对应的说明。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">perror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *msg)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>直接打印输入”msg: “+errno对应的说明，比如msg可以是当前命令。</p>
+<p>例程如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;string.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;errno.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdlib.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc , <span class="keyword">char</span>* argv[])</span></span>&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(stderr,<span class="string">"EACESS: %s\n"</span>,strerror(EACCES));</span><br><span class="line">    errno = ENOENT;</span><br><span class="line">    perror(argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./<span class="tag">a</span><span class="class">.out</span> </span><br><span class="line">EACESS: Permission denied</span><br><span class="line">./<span class="tag">a</span><span class="class">.out</span>: No such file or directory</span><br></pre></td></tr></table></figure></p>
+<h2 id="错误恢复">错误恢复</h2><p><code>error</code>分为<code>fatal</code> 和<code>nonfatal</code>, 对于<code>fatal error</code>，能做的就是打印错误并退出程序；而非<code>fatal</code>的错误，多半是与资源有关的 ，如<code>EAGAIN</code>,<code>ENFILE</code>,<code>ENOBUFS</code>,<code>ENOLCK</code>等，可以实施一些等待+重试操作来提升可靠性，避免不必要的退出。比如说检测到网络连接断开时，可以设定为等待一段时间后再次连接。有的程序使用指数算法，重试次数越多，等待时间显著增长。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
 
 </div>
 
@@ -108,7 +151,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2016/02/05/IPv6-tunnel-via-ipv4/" data-title="IPv6 tunnel via ipv4 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2015/12/16/Linux-errno-intro/" data-title="Linux中的errno | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -131,9 +174,9 @@
 
 
 <div class="next">
-<a href="/2015/12/16/android-develop-layout-abse/"  title="Android开发入门之-Layout">
+<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/"  title="OSTEP学习笔记之-Lock的实现">
  <strong>下一篇：</strong><br/> 
- <span>Android开发入门之-Layout
+ <span>OSTEP学习笔记之-Lock的实现
 </span>
 </a>
 </div>
@@ -142,29 +185,29 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/02/05/IPv6-tunnel-via-ipv4/" data-title="IPv6 tunnel via ipv4" data-url="http://azyet.github.io/2016/02/05/IPv6-tunnel-via-ipv4/"></div>
+	<div class="ds-thread" data-thread-key="2015/12/16/Linux-errno-intro/" data-title="Linux中的errno" data-url="http://azyet.github.io/2015/12/16/Linux-errno-intro/"></div>
 </section>
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#返回值"><span class="toc-number">2.</span> <span class="toc-text">返回值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接调用"><span class="toc-number">3.</span> <span class="toc-text">直接调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关函数"><span class="toc-number">4.</span> <span class="toc-text">相关函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#错误恢复"><span class="toc-number">5.</span> <span class="toc-text">错误恢复</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -252,7 +295,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -280,7 +323,7 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -527,7 +570,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
