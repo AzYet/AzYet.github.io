@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" title="Nginx+gunicorn+Flask安装指南" itemprop="url">Nginx+gunicorn+Flask安装指南</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-17T20:52:57.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Introduction">Introduction</h2><p>本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。</p>
+<h2 id="关于WSGI的一些概念">关于WSGI的一些概念</h2><p>gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义WEB应用/框架 与 WEB服务器/应用服务器之间通信规范的接口标准，旨在简化和规范上述部件间的通信，并使各部分易于替换。它定义了一组可用于其它协议之上的接口。</p>
+<p>因此作为一种WSGI实现的gunicorn可以将HTTP请求转换为WSGI定义的python标准请求，可被同样遵循了WSGI规范的应用如django,flask接收处理，处理后的响应也同样可被逆向转换为http response并回到客户端。</p>
+<p>nginx在此场景中则作为一个http request代理，将不uri或类型的请求发送至不同的web server处理，比如静态图片可由自己处理，而动态的数据库查询可交给flask应用来完成。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Flask/">Flask</a><a href="/tags/Nginx/">Nginx</a><a href="/tags/gunicorn/">gunicorn</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/17/simple-sytemd-upstart-script/" title="systemd简单自启动脚本" itemprop="url">systemd简单自启动脚本</a>
   </h1>
   <p class="article-author">By
@@ -96,6 +158,7 @@
 <p>当然也可以用简单地shell命令来代替unit configuration file规则<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">Power-<span class="keyword">off</span> gpu</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/bin/sh -c <span class="string">"echo OFF &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">ExecStop=<span class="value">/bin/sh -c <span class="string">"echo ON &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">RemainAfterExit=<span class="value"><span class="keyword">yes</span></span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
 <p>.service文件编写好之后，可以使用<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">enable</span> yourservice.<span class="keyword">service</span></span><br></pre></td></tr></table></figure></p>
 <p>来启动服务。</p>
+<p>如果.service文件有修改 ，可以需要使用<code>systemctl daemon-reload</code>命令重新加载。</p>
 <p>更多的内置关键字和用法，可以参考<a href="https://wiki.ubuntu.com/SystemdForUpstartUsers" target="_blank" rel="external">https://wiki.ubuntu.com/SystemdForUpstartUsers</a></p>
 
         
@@ -183,77 +246,6 @@
 	
 	  	<span></span>
 		<a href="/2016/03/17/mysql-difference-between-2-tables/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/mysql-difference-between-2-tables/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
-<p>一般C包装函数功能如下：</p>
-<ul>
-<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
-<li>trapping to kernel mode(开始执行）</li>
-<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
-</ul>
-<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
-<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
-<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
-<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
-<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
-<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/16/Linux-errno-intro/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/16/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -380,6 +372,77 @@
 	
 	  	<span></span>
 		<a href="/2015/12/16/android-develop-layout-abse/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/android-develop-layout-abse/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
+<p>一般C包装函数功能如下：</p>
+<ul>
+<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
+<li>trapping to kernel mode(开始执行）</li>
+<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
+</ul>
+<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
+<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
+<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
+<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
+<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
+<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/Linux-errno-intro/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -648,69 +711,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/10/value-passing-in-c-programming/" title="C语言的参数传递与返回值" itemprop="url">C语言的参数传递与返回值</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-10T13:26:04.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="C没有引用传递">C没有引用传递</h2><p>C没有引用！C没有引用！C没有引用！重要的事说3遍。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//file: refer.c</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> &amp;a,<span class="keyword">int</span> &amp;b)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>用C编译器编译：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cc refer.c</span><br><span class="line">refer.<span class="string">c:</span><span class="number">1</span>:<span class="number">15</span>: <span class="string">error:</span> expected ‘;’, ‘,’ or ‘)’ before ‘&amp;’ token</span><br><span class="line"> <span class="typename">void</span> swap(<span class="typename">int</span> &amp;a,<span class="typename">int</span> &amp;b)&#123;</span><br><span class="line">               ^</span><br></pre></td></tr></table></figure></p>
-<p>C++中才有引用<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ g++ refer<span class="class">.c</span></span><br><span class="line">$</span><br></pre></td></tr></table></figure></p>
-<p>很多博文C与C++不分，误导了不少人（例如我）。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/10/value-passing-in-c-programming/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/C语言/">-C语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/10/value-passing-in-c-programming/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/10/value-passing-in-c-programming/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -807,7 +807,7 @@
 			
 		
 			
-				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
 			
 		
 		</ul>

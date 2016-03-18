@@ -101,6 +101,7 @@
 <p>当然也可以用简单地shell命令来代替unit configuration file规则<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">Power-<span class="keyword">off</span> gpu</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/bin/sh -c <span class="string">"echo OFF &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">ExecStop=<span class="value">/bin/sh -c <span class="string">"echo ON &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">RemainAfterExit=<span class="value"><span class="keyword">yes</span></span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
 <p>.service文件编写好之后，可以使用<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">enable</span> yourservice.<span class="keyword">service</span></span><br></pre></td></tr></table></figure></p>
 <p>来启动服务。</p>
+<p>如果.service文件有修改 ，可以需要使用<code>systemctl daemon-reload</code>命令重新加载。</p>
 <p>更多的内置关键字和用法，可以参考<a href="https://wiki.ubuntu.com/SystemdForUpstartUsers" target="_blank" rel="external">https://wiki.ubuntu.com/SystemdForUpstartUsers</a></p>
   
 	</div>
@@ -132,6 +133,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" title="Nginx+gunicorn+Flask安装指南">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Nginx+gunicorn+Flask安装指南</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2016/03/17/mysql-difference-between-2-tables/"  title="mysql合并记录及两表比较">
@@ -247,7 +256,7 @@
 			
 		
 			
-				<li><a href="/tags/启动流程/" title="启动流程">启动流程<sup>2</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
 			
 		
 		</ul>

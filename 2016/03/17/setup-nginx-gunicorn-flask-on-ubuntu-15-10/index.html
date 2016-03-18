@@ -1,0 +1,570 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Nginx+gunicorn+Flask安装指南 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="Introduction本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。
+关于WSGI的一些概念gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx+gunicorn+Flask安装指南">
+<meta property="og:url" content="http://azyet.github.io/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="Introduction本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。
+关于WSGI的一些概念gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义W">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx+gunicorn+Flask安装指南">
+<meta name="twitter:description" content="Introduction本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。
+关于WSGI的一些概念gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义W">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" title="Nginx+gunicorn+Flask安装指南" itemprop="url">Nginx+gunicorn+Flask安装指南</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-17T20:52:57.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于WSGI的一些概念"><span class="toc-number">2.</span> <span class="toc-text">关于WSGI的一些概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WHY_Gunicorn"><span class="toc-number">3.</span> <span class="toc-text">WHY Gunicorn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装依赖包"><span class="toc-number">4.</span> <span class="toc-text">安装依赖包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建python虚拟环境"><span class="toc-number">5.</span> <span class="toc-text">创建python虚拟环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建Flask应用"><span class="toc-number">6.</span> <span class="toc-text">创建Flask应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Flask"><span class="toc-number">6.1.</span> <span class="toc-text">安装Flask</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建应用"><span class="toc-number">6.2.</span> <span class="toc-text">创建应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建wsgi入口"><span class="toc-number">7.</span> <span class="toc-text">创建wsgi入口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试Gunicorn"><span class="toc-number">8.</span> <span class="toc-text">测试Gunicorn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建自启动脚本"><span class="toc-number">9.</span> <span class="toc-text">创建自启动脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置nginx请求代理规则"><span class="toc-number">10.</span> <span class="toc-text">配置nginx请求代理规则</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Introduction">Introduction</h2><p>本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。</p>
+<h2 id="关于WSGI的一些概念">关于WSGI的一些概念</h2><p>gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义WEB应用/框架 与 WEB服务器/应用服务器之间通信规范的接口标准，旨在简化和规范上述部件间的通信，并使各部分易于替换。它定义了一组可用于其它协议之上的接口。</p>
+<p>因此作为一种WSGI实现的gunicorn可以将HTTP请求转换为WSGI定义的python标准请求，可被同样遵循了WSGI规范的应用如django,flask接收处理，处理后的响应也同样可被逆向转换为http response并回到客户端。</p>
+<p>nginx在此场景中则作为一个http request代理，将不uri或类型的请求发送至不同的web server处理，比如静态图片可由自己处理，而动态的数据库查询可交给flask应用来完成。<br><a id="more"></a></p>
+<h2 id="WHY_Gunicorn">WHY Gunicorn</h2><p>如果Flask也可以直接处理http请求，为何要使用WSGI的Gunicorn或者其它如uWSGI这样的管理服务呢？除了前面所提到的松耦合原因外，还因为其具有强大的worker进程管理能力，Gunicorn可以同时运行多个flask进程并为其分配来自客户端的请求，也可以自动重启中断的进程，从而提高了伸缩性和可用性。</p>
+<h2 id="安装依赖包">安装依赖包</h2><p>如果已经安装可以忽略<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></span><br><span class="line">sudo apt-<span class="built_in">get</span> install <span class="keyword">python</span>-pip <span class="keyword">python</span>-dev nginx</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建python虚拟环境">创建python虚拟环境</h2><p>virtualevn可以为每个python应用创建虚拟环境，因此我们可以用来使flask应用与其它python文件隔离。<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip <span class="keyword">install</span> virtualenv</span><br></pre></td></tr></table></figure></p>
+<p>现在创建工程目录并进入，然后创建项目的虚拟python环境目录并激活<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/myproject</span><br><span class="line"><span class="keyword">cd</span> ~/myproject</span><br><span class="line"></span><br><span class="line">virtualenv myprojectenv</span><br><span class="line"><span class="keyword">source</span> myprojectenv/bin/activate</span><br></pre></td></tr></table></figure></p>
+<p>激活之后，提示符最前面会出现相应的(myprojectenv) 提示<code>(myprojectenv)user@host:~/myproject$</code>。</p>
+<h2 id="创建Flask应用">创建Flask应用</h2><h3 id="安装Flask">安装Flask</h3><p>继续在虚拟环境中执行<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> gunicorn flask</span><br></pre></td></tr></table></figure></p>
+<h3 id="创建应用">创建应用</h3><p>使用文本编辑器创建一个内容如下的文件<code>vi ~/myproject/myproject.py</code>:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line">application = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="decorator">@application.route("/")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"&lt;h1 style='color:blue'&gt;Hello There!&lt;/h1&gt;"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    application.run(host=<span class="string">'0.0.0.0'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>运行<code>python myproject.py</code>，在浏览器中访问<a href="http://127.0.0.1:5000可以见到&quot;Hello" target="_blank" rel="external">http://127.0.0.1:5000可以见到&quot;Hello</a> There”字样。</p>
+<p>测试成功后，可以ctrl+c关闭进程，进入下一步。</p>
+<h2 id="创建wsgi入口">创建wsgi入口</h2><p>接下来我们要创建一个应用的入口文件，通过它Gunicorn知道如何与应用交互。这里它也是一个简单的文本文件<code>vi ~/myproject/wsgi.py</code>。<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> myproject import <span class="type">application</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="type">application</span>.<span class="command">run</span>()</span><br></pre></td></tr></table></figure></p>
+<h2 id="测试Gunicorn">测试Gunicorn</h2><p>可以只指定入口参数，这里我们还指定了服务地址：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">cd</span> ~/myproject</span><br><span class="line">gunicorn --bind <span class="number">0.0.0.0:8000</span> wsgi</span><br></pre></td></tr></table></figure></p>
+<p>此时使用浏览器同样应该能在本机的8000端口上看到同样的”Hello There”字样。测试成功之后，可以输入<code>deactivate</code>退出virtualevn虚拟环境。</p>
+<h2 id="创建自启动脚本">创建自启动脚本</h2><p>本人Linux发行版为ubuntu 15.10，使用了systemd来管理自启动，使用脚本编写请按照自己的发行版格式，比如upstart等。<br>先给出完整的脚本内容<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line"><span class="keyword">Description</span>=run gunicorn</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=chen</span><br><span class="line"><span class="keyword">Group</span>=www-data</span><br><span class="line">Restart=on-failure</span><br><span class="line">Environment=PATH=<span class="regexp">/data/my</span><span class="keyword">project</span><span class="regexp">/myprojectenv/</span>bin</span><br><span class="line">WorkingDirectory=<span class="regexp">/data/my</span><span class="keyword">project</span></span><br><span class="line">ExecStart=<span class="regexp">/data/my</span><span class="keyword">project</span><span class="regexp">/myprojectenv/</span>bin<span class="regexp">/python /</span>data<span class="regexp">/myproject/my</span>projectenv<span class="regexp">/bin/gu</span>nicorn --workers <span class="number">3</span> --bind unix:<span class="regexp">/tmp/my</span><span class="keyword">project</span>.sock -m <span class="number">007</span> wsgi</span><br><span class="line">RemainAfterExit=yes</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></p>
+<p><code>Restart=on-failure</code>保证进程中断会被自动重启<br><code>Environment=PATH=/data/myproject/myprojectenv/bin</code>这里可以设置一些额外的环境变量<br><code>WorkingDirectory</code>相当于chdir<br><code>ExecStart</code>最重要部分，需要在开机时运行的命令。这次我们使用了socket文件而不是网络端口来与nginx通信，这样可以避免每个进程占用一个端口。<br>最后<code>[Install]</code>字段中的<code>WantedBy=multi-user.target</code>类似upstart脚本中指定runlevel=[2345]的作用，保证脚本在开机时自动执行。</p>
+<h2 id="配置nginx请求代理规则">配置nginx请求代理规则</h2><p>配置Nginx将特定的http请求转发到gunicorn创建的socket上，只需要在nginx的规则上增加一小部分即可。<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-available/my</span><span class="keyword">project</span></span><br></pre></td></tr></table></figure></p>
+<p>其内容为<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">server</span> &#123;</span><br><span class="line">    <span class="title">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="title">server_name</span> server_domain_or_IP;</span><br><span class="line"></span><br><span class="line">    <span class="title">location</span> / &#123;</span><br><span class="line">        <span class="title">include</span> proxy_params;</span><br><span class="line">        <span class="title">proxy_pass</span> <span class="url">http://unix:/home/user/myproject/myproject.sock</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里需要注意的是请确定nginx有权限访问socket文件，一般将其放置在/tmp目录即可。<br>将规则启用<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-available/my</span><span class="keyword">project</span> <span class="regexp">/etc/</span>nginx<span class="regexp">/sites-enabled</span></span><br></pre></td></tr></table></figure></p>
+<p>启动之前，还可以测试配置文件是否正确<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> nginx -t</span><br></pre></td></tr></table></figure></p>
+<p>如果一切正常，就可以重启nginx了<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> systemctl restart nginx</span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Flask/">Flask</a><a href="/tags/Nginx/">Nginx</a><a href="/tags/gunicorn/">gunicorn</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" data-title="Nginx+gunicorn+Flask安装指南 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/03/17/simple-sytemd-upstart-script/"  title="systemd简单自启动脚本">
+ <strong>下一篇：</strong><br/> 
+ <span>systemd简单自启动脚本
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" data-title="Nginx+gunicorn+Flask安装指南" data-url="http://azyet.github.io/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于WSGI的一些概念"><span class="toc-number">2.</span> <span class="toc-text">关于WSGI的一些概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WHY_Gunicorn"><span class="toc-number">3.</span> <span class="toc-text">WHY Gunicorn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装依赖包"><span class="toc-number">4.</span> <span class="toc-text">安装依赖包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建python虚拟环境"><span class="toc-number">5.</span> <span class="toc-text">创建python虚拟环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建Flask应用"><span class="toc-number">6.</span> <span class="toc-text">创建Flask应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Flask"><span class="toc-number">6.1.</span> <span class="toc-text">安装Flask</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建应用"><span class="toc-number">6.2.</span> <span class="toc-text">创建应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建wsgi入口"><span class="toc-number">7.</span> <span class="toc-text">创建wsgi入口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试Gunicorn"><span class="toc-number">8.</span> <span class="toc-text">测试Gunicorn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建自启动脚本"><span class="toc-number">9.</span> <span class="toc-text">创建自启动脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置nginx请求代理规则"><span class="toc-number">10.</span> <span class="toc-text">配置nginx请求代理规则</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
