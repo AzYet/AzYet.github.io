@@ -78,6 +78,152 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/20/zookeeperNote6/" title="ZooKeeper学习笔记（六）之Java例程" itemprop="url">ZooKeeper学习笔记（六）之Java例程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T16:44:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　之前小节中已经写过快速入门的例程，但在进一步了解了更多的概念之后，需要更多的实践来加深印象。总之理论学习和实践穿插进行在我看来是一种不错的方式，重要的是在参照教程编写代码的同时不要只求快速跑通，而应该与之前的看过的原理结合起来。</p>
+<h2 id="一个简单的Watch客户端">一个简单的Watch客户端</h2><p>　　watch一个znode，用启动和停止特定程序的方式作出回应。</p>
+<h3 id="Requirements">Requirements</h3><ol>
+<li>接收的参数:<blockquote>
+<p> 服务地址<br> 需要watch的znode<br> 可执行程序+参数</p>
+</blockquote>
+</li>
+<li>从zonde中取得数据并运行程序</li>
+<li>如果znode变化，用新的数据重启程序</li>
+<li>如果znode删除，终止程序</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/20/zookeeperNote6/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java例程/">Java例程</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/20/zookeeperNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote6/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/zookeeperNote5/" title="ZooKeeper学习笔记（五）之基本概念-续" itemprop="url">ZooKeeper学习笔记（五）之基本概念-续</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-20T15:33:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="ACL_权限">ACL 权限</h2><p>ZooKeeper支持以下权限：</p>
+<pre><code><span class="operator"><span class="keyword">CREATE</span> : you can <span class="keyword">create</span> a child node
+
+<span class="keyword">READ</span> : you can <span class="keyword">get</span> <span class="keyword">data</span> <span class="keyword">from</span> a node <span class="keyword">and</span> list its children.
+
+<span class="keyword">WRITE</span> : you can <span class="keyword">set</span> <span class="keyword">data</span> <span class="keyword">for</span> a node
+
+<span class="keyword">DELETE</span> : you can <span class="keyword">delete</span> a child node
+
+ADMIN : you can <span class="keyword">set</span> permissions</span>
+</code></pre><p>　　创建和删除被从写的权限中抽离出来以实现更<strong>细粒度</strong>的控制.    </p>
+<p>　　因为ZooKeeper并无znode拥有者的概念，所以设计了<code>ADMIN</code>权限。ZooKeeper默认所有人拥有excute/lookup权限。</p>
+<h2 id="内建ACL策略">内建ACL策略</h2><p>　　ZooKeeeper有以下内建策略。</p>
+<blockquote>
+<p>   world ： 有唯一id，anyone，表示任何人</p>
+<p>   auth ： 不使用id, 代表认证用户</p>
+<p>   digest ： 用 username:password 来生成 MD5 hash作为id. 认证使用username:password形式的明文， ACL中密码采用base64 编码的密码 的SHA1哈希.</p>
+<p>   ip ：使用client IP 作为id. expression为<code>addr/bits</code>形式.</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/20/zookeeperNote5/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ACL/">ACL</a><a href="/tags/Binding/">Binding</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/20/zookeeperNote5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote5/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/20/zookeeperNote4/" title="ZooKeeper学习笔记（四）之基本概念" itemprop="url">ZooKeeper学习笔记（四）之基本概念</a>
   </h1>
   <p class="article-author">By
@@ -598,140 +744,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/18/rabbitmqNote3/" title="RabbitMQ学习笔记（三）之订阅与发布" itemprop="url">RabbitMQ学习笔记（三）之订阅与发布</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-18T13:08:47.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　这节中我们将学习如何将一个消息传递给多个consummer,所谓的发布/订阅模式。</p>
-<h2 id="Exchange">Exchange</h2><p>　　是时候学习完整的消息模型了。</p>
-<p>　　回顾一下之前的内容：</p>
-<ol>
-<li>producer是产生消息的用户进程。</li>
-<li>Queue是存储消息的缓存</li>
-<li>cunsumer是接收消息的用户进程</li>
-</ol>
-<p>　　切记消息从来不是直接发送给queue，实质上多数情况下producer甚至不知道有queue的存在。<br>　　消息是直接发送给Exhange的。Exhange很简单，一方面它从producer接收消息并推送到Queue中，至于是将消息推送到特定的Queue，或所有QUEUE,或丢弃，这取决了Exchange的类型。<br><img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt=""></p>
-<p>　　有以下几种Exchange类型：direct，topic，headers和fanout。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/18/rabbitmqNote3/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/订阅与发布/">订阅与发布</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/18/rabbitmqNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote3/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/18/rabbitmqNote2/" title="RabbitMQ学习笔记（二）之Work Queues" itemprop="url">RabbitMQ学习笔记（二）之Work Queues</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-18T10:20:49.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　本节中我们将新建Work Queue用来在多个工作进程间分发比较耗时的任务。</p>
-<p>　　work queue的主要意图就是避免立即处理资源密集的任务并等待它完成，而是安排它稍后处理。将任务封闭为消息发送给queue，后台的工作进程会取得这个消息并处理它，如果有多个工作进程，它们分担任务。</p>
-<p>　　这种理念在web应用中非常有用，特别是在当无法在一个短时间窗内完成复杂请求时。</p>
-<h2 id="准备工作">准备工作</h2><p>　　方便起见，我们将使用Thread.sleep()来代替一个真正的费时任务，使用<code>.</code>号来代表处理时长，比如消息<code>hello...</code>表示任务将费时3秒。</p>
-<p>　　对上一节的producer进行改动，使之能发送随机时长的任务。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/18/rabbitmqNote2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Work-Queues/">Work Queues</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/18/rabbitmqNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote2/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
   </nav>
 
 </div>
@@ -761,11 +776,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -789,7 +804,7 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -797,15 +812,15 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -817,15 +832,15 @@
 			
 		
 			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>2</sup></a></li>
 			
 		
 		</ul>

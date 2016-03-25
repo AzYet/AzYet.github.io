@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>漫游Go语言（一） | AzYet&#39;s Notebook</title>
+    <title>漫游Go语言（一）之包,函数&amp;变量 | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
@@ -15,14 +15,14 @@
 PackageGo程序都由包组成，从main包开始执行。12345678910package mainimport (	&quot;fmt&quot;	&quot;math/rand&quot;	)func main() &amp;#123;	fmt.Println(&quot;My favorite number is&quot;, rand.Intn(10))&amp;#125;
 以上程序导入了m">
 <meta property="og:type" content="article">
-<meta property="og:title" content="漫游Go语言（一）">
+<meta property="og:title" content="漫游Go语言（一）之包,函数&变量">
 <meta property="og:url" content="http://azyet.github.io/2016/03/24/a-tour-of-go-1/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="这只是我follow tour.golang.org时的笔记（翻译）。
 PackageGo程序都由包组成，从main包开始执行。12345678910package mainimport (	&quot;fmt&quot;	&quot;math/rand&quot;	)func main() &amp;#123;	fmt.Println(&quot;My favorite number is&quot;, rand.Intn(10))&amp;#125;
 以上程序导入了m">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="漫游Go语言（一）">
+<meta name="twitter:title" content="漫游Go语言（一）之包,函数&变量">
 <meta name="twitter:description" content="这只是我follow tour.golang.org时的笔记（翻译）。
 PackageGo程序都由包组成，从main包开始执行。12345678910package mainimport (	&quot;fmt&quot;	&quot;math/rand&quot;	)func main() &amp;#123;	fmt.Println(&quot;My favorite number is&quot;, rand.Intn(10))&amp;#125;
 以上程序导入了m">
@@ -82,7 +82,7 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/03/24/a-tour-of-go-1/" title="漫游Go语言（一）" itemprop="url">漫游Go语言（一）</a>
+      <a href="/2016/03/24/a-tour-of-go-1/" title="漫游Go语言（一）之包,函数&amp;变量" itemprop="url">漫游Go语言（一）之包,函数&amp;变量</a>
   </h1>
   <p class="article-author">By
        
@@ -153,7 +153,7 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-1/" data-title="漫游Go语言（一） | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-1/" data-title="漫游Go语言（一）之包,函数&amp;变量 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -167,10 +167,10 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/03/24/a-tour-of-go-2/" title="漫游Go语言（二）">
+ <a href="/2016/03/24/a-tour-of-go-2/" title="漫游Go语言（二）之流程控制与defer">
   <strong>上一篇：</strong><br/>
   <span>
-  漫游Go语言（二）</span>
+  漫游Go语言（二）之流程控制与defer</span>
 </a>
 </div>
 
@@ -187,7 +187,7 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/03/24/a-tour-of-go-1/" data-title="漫游Go语言（一）" data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-1/"></div>
+	<div class="ds-thread" data-thread-key="2016/03/24/a-tour-of-go-1/" data-title="漫游Go语言（一）之包,函数&变量" data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-1/"></div>
 </section>
 
 
@@ -225,11 +225,11 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -253,7 +253,7 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -261,15 +261,15 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -281,15 +281,15 @@ PackageGo程序都由包组成，从main包开始执行。12345678910package mai
 			
 		
 			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>2</sup></a></li>
 			
 		
 		</ul>

@@ -4,57 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>从一次HTTP访问解析TCP协议的连接建立与释放 | AzYet&#39;s Notebook</title>
+    <title>a tour of go 4 | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="要理解TCP的连接和断开其实不难，需要自己代入情境，如果是你来设计网络协议你会如何做。
-连接建立情况： 通信质量无法保障（IP层的不可靠性）的情况下，如何保证两者可靠通信。
-
-A: 在家吗，我想过来玩？[SYN]
-B: 在，你过来吧。[SYN,ACK]
-A: 好的。[ACK]
-（完成）A出发… 
-
-
-　　所谓三次握手，其实是发了三次包，代表一次握手过程中的三个步骤而已。">
+    <meta name="description" content="milestones">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从一次HTTP访问解析TCP协议的连接建立与释放">
-<meta property="og:url" content="http://azyet.github.io/2015/04/27/learnTCPviaHTTP/index.html">
+<meta property="og:title" content="a tour of go 4">
+<meta property="og:url" content="http://azyet.github.io/2016/03/24/a-tour-of-go-4/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="要理解TCP的连接和断开其实不难，需要自己代入情境，如果是你来设计网络协议你会如何做。
-连接建立情况： 通信质量无法保障（IP层的不可靠性）的情况下，如何保证两者可靠通信。
-
-A: 在家吗，我想过来玩？[SYN]
-B: 在，你过来吧。[SYN,ACK]
-A: 好的。[ACK]
-（完成）A出发… 
-
-
-　　所谓三次握手，其实是发了三次包，代表一次握手过程中的三个步骤而已。">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1erk1lcl4slj20kp02pq48.jpg">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1erk1mzk47cj20pb09on3e.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1erk1toph04j20oa0c2468.jpg">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1erk1wzy9nzj20mn0aqtes.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1erk1zrgajxj20lk04dwhb.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1erk25pcr1bj20gs062dio.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1erk29ccakhj20g40dywj2.jpg">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1erk2bvuftnj20lw01vjsj.jpg">
+<meta property="og:description" content="milestones">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从一次HTTP访问解析TCP协议的连接建立与释放">
-<meta name="twitter:description" content="要理解TCP的连接和断开其实不难，需要自己代入情境，如果是你来设计网络协议你会如何做。
-连接建立情况： 通信质量无法保障（IP层的不可靠性）的情况下，如何保证两者可靠通信。
-
-A: 在家吗，我想过来玩？[SYN]
-B: 在，你过来吧。[SYN,ACK]
-A: 好的。[ACK]
-（完成）A出发… 
-
-
-　　所谓三次握手，其实是发了三次包，代表一次握手过程中的三个步骤而已。">
+<meta name="twitter:title" content="a tour of go 4">
+<meta name="twitter:description" content="milestones">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -111,14 +76,14 @@ A: 好的。[ACK]
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/27/learnTCPviaHTTP/" title="从一次HTTP访问解析TCP协议的连接建立与释放" itemprop="url">从一次HTTP访问解析TCP协议的连接建立与释放</a>
+      <a href="/2016/03/24/a-tour-of-go-4/" title="a tour of go 4" itemprop="url">a tour of go 4</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-27T05:44:03.000Z" itemprop="datePublished"> 發表於 2015-04-27</time>
+    <time datetime="2016-03-25T02:27:34.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
     
   </p>
 </header>
@@ -127,67 +92,15 @@ A: 好的。[ACK]
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#连接建立"><span class="toc-number">1.</span> <span class="toc-text">连接建立</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送数据"><span class="toc-number">2.</span> <span class="toc-text">发送数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特殊字段"><span class="toc-number">2.1.</span> <span class="toc-text">特殊字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向字节流"><span class="toc-number">2.2.</span> <span class="toc-text">面向字节流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接释放"><span class="toc-number">3.</span> <span class="toc-text">连接释放</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">4.</span> <span class="toc-text">后记</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p>要理解TCP的连接和断开其实不难，需要自己代入情境，如果是你来设计网络协议你会如何做。</p>
-<h2 id="连接建立">连接建立</h2><p>情况： 通信质量无法保障（IP层的不可靠性）的情况下，如何保证两者可靠通信。</p>
-<ol>
-<li>A: 在家吗，我想过来玩？[SYN]</li>
-<li>B: 在，你过来吧。[SYN,ACK]</li>
-<li>A: 好的。[ACK]</li>
-<li>（完成）A出发… </li>
-</ol>
-<p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1erk1lcl4slj20kp02pq48.jpg" alt=""></p>
-<p>　　所谓三次握手，其实是发了三次包，代表一次握手过程中的三个步骤而已。<a id="more"></a></p>
-<p>　　如果少了第三步，可以出现什么情况？因为通信糟糕（TCP设计于70年代，网络确实也较差），A有未收到答复2的可能性，那么B就无法确定A会不会来，只能一直等待(syn flood 攻击)。如果有第三步，系统可以设置较短的等待时间，过时不候。而如果设计上就没第三步，那么等于服务器收到请求即建立连接，这样会造成很多不必要的消耗。</p>
-<p>　　其实3完成也还有不确定性，因为B没有对此作回复，所以B可能未收到，从而连接未建立，那么A过去就会被拒之门外，但关系不大，重新发起请求就行了。</p>
-<p>　　或者也可以这么理解：</p>
-<pre><code><span class="number">1</span> B收到<span class="literal">A</span>的SYN，B知道了<span class="literal">A</span>--&gt;B可达
-<span class="number">2</span> <span class="literal">A</span>收到B回复的SYN ACK，<span class="literal">A</span>知道了<span class="literal">A</span>--&gt;B,B--&gt;<span class="literal">A</span>可达
-<span class="number">3</span> B收到<span class="literal">A</span>的ACK， B知道B--&gt;<span class="literal">A</span>可达
-
-也就是说如果少了第三步，B无法知道B--&gt;<span class="literal">A</span>线路的可用性，而三步是双方都能确认双向可达性的最少步骤。
-</code></pre><h2 id="发送数据">发送数据</h2><p>　　当然仅靠握手还无法保证TCP的可靠性，于是就有seq和ack编号，来对每个数据块作确认，为了提高效率引入了pipeline思想，多线程同步发送，为了保障效率和控制拥塞又引入了window。</p>
-<p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1erk1mzk47cj20pb09on3e.jpg" alt=""></p>
-<p>　　上图中TCP建立之后，就开始HTTP的GET操作，注意下文的TCP <strong>segment len : 140</strong> ，此次GET操作传送的载荷是140Byte，所以紧接的回复<strong>ACK</strong>号是<strong>141</strong>，意为接下来准备接收从141字节起始的内容。</p>
-<p>　　所以接下来的下一个GET，其SEQ为141。</p>
-<p><img src="http://ww1.sinaimg.cn/large/55f247cbgw1erk1toph04j20oa0c2468.jpg" alt=""></p>
-<p>　　所以数据传送期间，SEQ就是上次对方发送的ACK号，而ACK则是上次对方发送的<strong>SEQ+数据Length</strong></p>
-<h3 id="特殊字段">特殊字段</h3><p>　　TCP设计了一些十分有用的标识位，比如<strong>URG紧急</strong>，远程发出中断指令时可使用，配合<strong>紧急指针</strong>字段，指令将立即加入到缓存队列的最前端。</p>
-<p>　　与之对应的是<strong>PSH推送</strong>，它代表对方收到此报文后应该立即交付应用层，而不是在缓冲中排队。注意这里没有相应的定位指针，因为PUSH总是单独创建的报文段。</p>
-<p>　　可以看到HTTP <strong>GET</strong>使用了<strong>PSH</strong>，以便Server能更快地响应。之后的302回复也使用了PSH。</p>
-<p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1erk1wzy9nzj20mn0aqtes.jpg" alt=""></p>
-<h3 id="面向字节流">面向字节流</h3><p>　　TCP没有protoTypea或者类似etherType的标志位，虽然会对数据分块，但是也没有类似IP那样的分片标志。因为TCP是<strong>面向字节流</strong>的，对PDU的内容不关心，由上层应用去解析。</p>
-<p>　　Server对二次GET的响应内容较长，使用了多个TCP包来传送，可以看到client<strong>没有再逐个ACK</strong>。<br>　　Server发送数据期间，Client只收不发，所以Server方报文的ACK一直不变，而client的ACK号相应增加。</p>
-<p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1erk1zrgajxj20lk04dwhb.jpg" alt=""></p>
-<p>　　另外如果检查TCP的PDU(第一个segment)，可以发现其内容直接就是：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="string">Server:</span> nginx</span><br><span class="line"><span class="string">Date:</span> Mon, <span class="number">27</span> Apr <span class="number">2015</span> <span class="number">02</span>:<span class="number">51</span>:<span class="number">14</span> GMT</span><br><span class="line">Content-<span class="string">Type:</span> text/html; charset=utf-<span class="number">8</span></span><br><span class="line">.......</span><br></pre></td></tr></table></figure></p>
-<p>　　下图中TCP头部以后，数据段起始前四字节，数值为<strong>0x48 0x54 0x54 0x50</strong></p>
-<p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1erk25pcr1bj20gs062dio.jpg" alt=""></p>
-<p>　　0x48 0x54 0x54 0x50对应<strong>ascii</strong>就是<strong>HTTP</strong></p>
-<p><img src="http://ww1.sinaimg.cn/large/55f247cbgw1erk29ccakhj20g40dywj2.jpg" alt=""></p>
-<h2 id="连接释放">连接释放</h2><p>TCP连接的释放过程比建立复杂一些，因为TCP是双工的，所以包含两个过程</p>
-<ol>
-<li>A数据传送完成，提出断开请求 </li>
-<li>B确认（此时A—》B方向断开，但是B—》A依然畅通）</li>
-<li>B在己方数据传输完成后，(虽然此例中没有再传输数据，但是B是可以继续向A发数据的)也提出断开请求，</li>
-<li>A确认</li>
-<li>至此完全断开</li>
-</ol>
-<p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1erk2bvuftnj20lw01vjsj.jpg" alt=""></p>
-<p>可以看到期间ACK一直是置位的，因为协议规定连接存续期间ACK为1。</p>
-<h2 id="后记">后记</h2><p>当然TCP远不止上面提到的那么简单，为了在不确定交付的IP上构建可靠连接，TCP设计了许多巧妙的机制，比如说它的状态机，它的和重传机制，想再一步深入推荐<a href="http://coolshell.cn/articles/11564.html" target="_blank" rel="external">TCP的那些事儿</a>,文章不长，但是信息量却是很大的。</p>
-  
+		  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/HTTP/">HTTP</a><a href="/tags/TCP协议/">TCP协议</a><a href="/tags/连接建立/">连接建立</a><a href="/tags/连接释放/">连接释放</a>
-  </div>
 
 </div>
 
@@ -195,7 +108,7 @@ A: 好的。[ACK]
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2015/04/27/learnTCPviaHTTP/" data-title="从一次HTTP访问解析TCP协议的连接建立与释放 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-4/" data-title="a tour of go 4 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -208,19 +121,11 @@ A: 好的。[ACK]
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/05/05/loginCampusNetworkViaShellScript/" title="Shell登录校园网关">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Shell登录校园网关</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/04/24/changeApacheRootDir/"  title="修改Apache2的根目录">
+<a href="/2016/03/24/a-tour-of-go-3/"  title="漫游Go语言（三）之指针、struct、数组和slice">
  <strong>下一篇：</strong><br/> 
- <span>修改Apache2的根目录
+ <span>漫游Go语言（三）之指针、struct、数组和slice
 </span>
 </a>
 </div>
@@ -229,7 +134,7 @@ A: 好的。[ACK]
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/27/learnTCPviaHTTP/" data-title="从一次HTTP访问解析TCP协议的连接建立与释放" data-url="http://azyet.github.io/2015/04/27/learnTCPviaHTTP/"></div>
+	<div class="ds-thread" data-thread-key="2016/03/24/a-tour-of-go-4/" data-title="a tour of go 4" data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-4/"></div>
 </section>
 
 
@@ -239,7 +144,7 @@ A: 好的。[ACK]
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#连接建立"><span class="toc-number">1.</span> <span class="toc-text">连接建立</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送数据"><span class="toc-number">2.</span> <span class="toc-text">发送数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特殊字段"><span class="toc-number">2.1.</span> <span class="toc-text">特殊字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向字节流"><span class="toc-number">2.2.</span> <span class="toc-text">面向字节流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接释放"><span class="toc-number">3.</span> <span class="toc-text">连接释放</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">4.</span> <span class="toc-text">后记</span></a></li></ol>
+ 
  
   </div>
 

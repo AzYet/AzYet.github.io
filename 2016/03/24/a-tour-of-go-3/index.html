@@ -1,0 +1,595 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>漫游Go语言（三）之指针、struct、数组和slice | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="Go是有指针的，*T定义一个指向T类型的指针，其缺省值为nil.1var p *int
+类似地，&amp;amp;操作符可以取操作数的地址。12i := 42p = &amp;amp;i
+而*操作符也可以取指针指向的值12fmt.Println(*p) // 通过指针p读取i值*p = 21         // 通过指针p更新i值
+但与C不同的是，Go没有指针运算。
+structstruct是一组域的集合123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫游Go语言（三）之指针、struct、数组和slice">
+<meta property="og:url" content="http://azyet.github.io/2016/03/24/a-tour-of-go-3/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="Go是有指针的，*T定义一个指向T类型的指针，其缺省值为nil.1var p *int
+类似地，&amp;amp;操作符可以取操作数的地址。12i := 42p = &amp;amp;i
+而*操作符也可以取指针指向的值12fmt.Println(*p) // 通过指针p读取i值*p = 21         // 通过指针p更新i值
+但与C不同的是，Go没有指针运算。
+structstruct是一组域的集合123">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1f29gorfuv9j207i07jq5f.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漫游Go语言（三）之指针、struct、数组和slice">
+<meta name="twitter:description" content="Go是有指针的，*T定义一个指向T类型的指针，其缺省值为nil.1var p *int
+类似地，&amp;amp;操作符可以取操作数的地址。12i := 42p = &amp;amp;i
+而*操作符也可以取指针指向的值12fmt.Println(*p) // 通过指针p读取i值*p = 21         // 通过指针p更新i值
+但与C不同的是，Go没有指针运算。
+structstruct是一组域的集合123">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/24/a-tour-of-go-3/" title="漫游Go语言（三）之指针、struct、数组和slice" itemprop="url">漫游Go语言（三）之指针、struct、数组和slice</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-25T02:17:43.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#struct"><span class="toc-number">1.</span> <span class="toc-text">struct</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#struct指针"><span class="toc-number">1.1.</span> <span class="toc-text">struct指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct_lteral"><span class="toc-number">1.2.</span> <span class="toc-text">struct lteral</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数组"><span class="toc-number">2.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice"><span class="toc-number">3.</span> <span class="toc-text">slice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#slice_of_slice"><span class="toc-number">3.1.</span> <span class="toc-text">slice of slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切割slice"><span class="toc-number">3.2.</span> <span class="toc-text">切割slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make_slice"><span class="toc-number">3.3.</span> <span class="toc-text">make slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nil_slice"><span class="toc-number">3.4.</span> <span class="toc-text">nil slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向slice添加元素"><span class="toc-number">3.5.</span> <span class="toc-text">向slice添加元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for_range"><span class="toc-number">3.6.</span> <span class="toc-text">for range</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice练习"><span class="toc-number">4.</span> <span class="toc-text">slice练习</span></a></li></ol>
+		
+		</div>
+		
+		<p>Go是有指针的，<code>*T</code>定义一个指向T类型的指针，其缺省值为<code>nil</code>.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> <span class="tag">p</span> *int</span><br></pre></td></tr></table></figure></p>
+<p>类似地，<code>&amp;</code>操作符可以取操作数的地址。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">i</span> := <span class="number">42</span></span><br><span class="line"><span class="tag">p</span> = &amp;i</span><br></pre></td></tr></table></figure></p>
+<p>而<code>*</code>操作符也可以取指针指向的值<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fmt.<span class="function"><span class="title">Println</span><span class="params">(*p)</span></span> <span class="comment">// 通过指针p读取i值</span></span><br><span class="line">*<span class="tag">p</span> = <span class="number">21</span>         <span class="comment">// 通过指针p更新i值</span></span><br></pre></td></tr></table></figure></p>
+<p>但与<code>C</code>不同的是，Go没有指针运算。</p>
+<h2 id="struct">struct</h2><p><code>struct</code>是一组<code>域</code>的集合<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X <span class="typename">int</span></span><br><span class="line">	Y <span class="typename">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	fmt.Println(Vertex&#123;<span class="number">1</span>, <span class="number">2</span>&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>struct的域可以通过<code>.</code>来存取。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="rule"><span class="attribute">v </span>:<span class="value">= Vertex&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">v.X = <span class="number">4</span></span><br><span class="line">fmt.<span class="function">Println</span>(v.X）</span></span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="struct指针">struct指针</h3><p>其定义与基本数据类型无异，但需要注意的是通过它引用域也是使用<code>.</code>操作符，而无显式的解引用过程。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="rule"><span class="attribute">v </span>:<span class="value">= Vertex&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">p := &amp;v</span><br><span class="line">p.X = <span class="number">1</span>e9</span><br><span class="line">fmt.<span class="function">Println</span>(v)</span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="struct_lteral">struct lteral</h3><p><code>struct literal</code>通过列出<code>struct</code>域的值来表示一个新建的<code>struct</code>.你也可以通过<code>name:值</code>的方式来只指定一个子集。<br>还可以同时使用<code>&amp;</code>操作符来直接返回指针。<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex struct &#123;</span><br><span class="line">	X, Y <span class="built_in">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var (</span><br><span class="line">	v1 = Vertex&#123;<span class="number">1</span>, <span class="number">2</span>&#125;  // has <span class="keyword">type</span> Vertex</span><br><span class="line">	v2 = Vertex&#123;X: <span class="number">1</span>&#125;  // Y:<span class="number">0</span> is <span class="type">implicit</span></span><br><span class="line">	v3 = Vertex&#123;&#125;      // X:<span class="number">0</span> and Y:<span class="number">0</span></span><br><span class="line">	p  = &amp;Vertex&#123;<span class="number">1</span>, <span class="number">2</span>&#125; // has <span class="keyword">type</span> *Vertex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="keyword">fmt</span>.Println(v1, p, v2, v3)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="数组">数组</h2><p><code>[n]T</code>表示长度为n类型为T的数组。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> <span class="tag">a</span> [<span class="number">10</span>]int</span><br></pre></td></tr></table></figure></p>
+<p>数组的长度也是它类型的一部分，所以其长度不能改变，这看起来不方便，但不用担心，Go提供一系列操作数组的便捷方法。<br>（也就是下面提到的<code>slice</code>了。）</p>
+<h2 id="slice">slice</h2><p>slice指向一组数值，且包含长度。<code>[]T</code>是一个类型为T的slice.而<code>len(primes)</code>则返回名为primes的slice的长度。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	primes := []<span class="typename">int</span>&#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>&#125;</span><br><span class="line">	fmt.Println(<span class="string">"primes =="</span>, primes)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(primes); i++ &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"primes[%d] == %d\n"</span>, i, primes[i])</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="slice_of_slice">slice of slice</h3><p>slice可包含slice等任意类型。<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">package</span> <span class="atom">main</span></span><br><span class="line"></span><br><span class="line"><span class="atom">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="atom">func</span> <span class="atom">main</span>() &#123;</span><br><span class="line">	// <span class="name">Create</span> <span class="atom">a</span> <span class="atom">tic</span>-<span class="atom">tac</span>-<span class="atom">toe</span> <span class="atom">board</span>.</span><br><span class="line">	<span class="atom">board</span> := [][]<span class="atom">string</span>&#123;</span><br><span class="line">		[]<span class="atom">string</span>&#123;<span class="string">"_"</span>, <span class="string">"_"</span>, <span class="string">"_"</span>&#125;,</span><br><span class="line">		[]<span class="atom">string</span>&#123;<span class="string">"_"</span>, <span class="string">"_"</span>, <span class="string">"_"</span>&#125;,</span><br><span class="line">		[]<span class="atom">string</span>&#123;<span class="string">"_"</span>, <span class="string">"_"</span>, <span class="string">"_"</span>&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// <span class="name">The</span> <span class="atom">players</span> <span class="atom">take</span> <span class="atom">turns</span>.</span><br><span class="line">	<span class="atom">board</span>[<span class="number">0</span>][<span class="number">0</span>] = <span class="string">"X"</span></span><br><span class="line">	<span class="atom">board</span>[<span class="number">2</span>][<span class="number">2</span>] = <span class="string">"O"</span></span><br><span class="line">	<span class="atom">board</span>[<span class="number">2</span>][<span class="number">0</span>] = <span class="string">"X"</span></span><br><span class="line">	<span class="atom">board</span>[<span class="number">1</span>][<span class="number">0</span>] = <span class="string">"O"</span></span><br><span class="line">	<span class="atom">board</span>[<span class="number">0</span>][<span class="number">2</span>] = <span class="string">"X"</span></span><br><span class="line"></span><br><span class="line">	<span class="atom">for</span> <span class="atom">i</span> := <span class="number">0</span>; <span class="atom">i</span> &lt; <span class="atom">len</span>(<span class="atom">board</span>); <span class="atom">i</span>++ &#123;</span><br><span class="line">		<span class="atom">fmt</span>.<span class="name">Printf</span>(<span class="string">"%s\n"</span>, <span class="atom">strings</span>.<span class="name">Join</span>(<span class="atom">board</span>[<span class="atom">i</span>], <span class="string">" "</span>))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">X _ X</span><br><span class="line"><span class="keyword">O</span> _ _</span><br><span class="line">X _ <span class="keyword">O</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="切割slice">切割slice</h3><p>slice可被切割<code>s[lo:hi]</code>代表包含下标<code>lo</code> 至 <code>hi-1</code>在内的元素，也就是<code>s[lo:lo]</code>为空，s[lo:lo+1]包含一个元素。<br>同样可以省略起始或截止位，代表从头或至尾<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	s := []<span class="keyword">int</span>&#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>&#125;</span><br><span class="line">	fmt.<span class="keyword">Println</span>(<span class="string">"s =="</span>, s)</span><br><span class="line">	fmt.<span class="keyword">Println</span>(<span class="string">"s[1:4] =="</span>, s[<span class="number">1</span>:<span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">	<span class="comment">// missing low index implies 0</span></span><br><span class="line">	fmt.<span class="keyword">Println</span>(<span class="string">"s[:3] =="</span>, s[:<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">	<span class="comment">// missing high index implies len(s)</span></span><br><span class="line">	fmt.<span class="keyword">Println</span>(<span class="string">"s[4:] =="</span>, s[<span class="number">4</span>:])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">s</span> == [<span class="number">2</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">11</span> <span class="number">13</span>]</span><br><span class="line"><span class="atom">s</span>[<span class="number">1</span>:<span class="number">4</span>] == [<span class="number">3</span> <span class="number">5</span> <span class="number">7</span>]</span><br><span class="line"><span class="atom">s</span>[:<span class="number">3</span>] == [<span class="number">2</span> <span class="number">3</span> <span class="number">5</span>]</span><br><span class="line"><span class="atom">s</span>[<span class="number">4</span>:] == [<span class="number">11</span> <span class="number">13</span>]</span><br></pre></td></tr></table></figure></p>
+<h3 id="make_slice">make slice</h3><p>可使用<code>make</code>函数来生成slice，它生成一个全0的数组并返回一个引用该数组的slice.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">a</span> := <span class="function"><span class="title">make</span><span class="params">([]int, <span class="number">5</span>)</span></span>  <span class="comment">// len(a)=5</span></span><br></pre></td></tr></table></figure></p>
+<p>要指定容量，指定第三个参数即可。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">b</span> := <span class="function"><span class="title">make</span><span class="params">([]int, <span class="number">0</span>, <span class="number">5</span>)</span></span> <span class="comment">// len(b)=0, cap(b)=5</span></span><br><span class="line"></span><br><span class="line"><span class="tag">b</span> = <span class="tag">b</span>[:<span class="function"><span class="title">cap</span><span class="params">(b)</span></span>] <span class="comment">// len(b)=5, cap(b)=5</span></span><br><span class="line"><span class="tag">b</span> = <span class="tag">b</span>[<span class="number">1</span>:]      <span class="comment">// len(b)=4, cap(b)=4</span></span><br></pre></td></tr></table></figure></p>
+<p>可见可用cap()方法来得到slice容量<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	a := <span class="built_in">make</span>([]<span class="typename">int</span>, <span class="number">5</span>)</span><br><span class="line">	printSlice(<span class="string">"a"</span>, a)</span><br><span class="line"></span><br><span class="line">	b := <span class="built_in">make</span>([]<span class="typename">int</span>, <span class="number">0</span>, <span class="number">5</span>)</span><br><span class="line">	printSlice(<span class="string">"b"</span>, b)</span><br><span class="line"></span><br><span class="line">	c := b[:<span class="number">2</span>]</span><br><span class="line">	printSlice(<span class="string">"c"</span>, c)</span><br><span class="line"></span><br><span class="line">	d := c[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">	printSlice(<span class="string">"d"</span>, d)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> printSlice(s <span class="typename">string</span>, x []<span class="typename">int</span>) &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%s len=%d cap=%d %v\n"</span>,</span><br><span class="line">		s, <span class="built_in">len</span>(x), <span class="built_in">cap</span>(x), x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a <span class="built_in">len</span>=<span class="number">5</span> <span class="built_in">cap</span>=<span class="number">5</span> [<span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>]</span><br><span class="line">b <span class="built_in">len</span>=<span class="number">0</span> <span class="built_in">cap</span>=<span class="number">5</span> []</span><br><span class="line">c <span class="built_in">len</span>=<span class="number">2</span> <span class="built_in">cap</span>=<span class="number">5</span> [<span class="number">0</span> <span class="number">0</span>]</span><br><span class="line">d <span class="built_in">len</span>=<span class="number">3</span> <span class="built_in">cap</span>=<span class="number">3</span> [<span class="number">0</span> <span class="number">0</span> <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">Program exited.</span><br></pre></td></tr></table></figure></p>
+<h3 id="nil_slice">nil slice</h3><p>slice的0值（缺省值）为<code>nil</code>，其长度和容量都是0.<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	<span class="keyword">var</span> s []<span class="typename">int</span></span><br><span class="line">	fmt.Println(s, <span class="built_in">len</span>(s), <span class="built_in">cap</span>(s))</span><br><span class="line">	<span class="keyword">if</span> s == <span class="constant">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"nil!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="向slice添加元素">向slice添加元素</h3><p>Go为slice提供内置的append方法，其原型为<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func <span class="function">append</span>(s <span class="attr_selector">[]</span>T, vs ..<span class="class">.T</span>) <span class="attr_selector">[]</span>T</span><br></pre></td></tr></table></figure></p>
+<p>其第一参数为类型为T的slice，后为需要追加的类型为T的值。其返回值为原元素+<code>append</code>的元素的slice,如果原slice容量不够，会返回一个新建的slice.<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	<span class="keyword">var</span> s []<span class="typename">int</span></span><br><span class="line">	printSlice(s)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// append works on nil slices.</span></span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="number">0</span>)</span><br><span class="line">	printSlice(s)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// The slice grows as needed.</span></span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="number">1</span>)</span><br><span class="line">	printSlice(s)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// We can add more than one element at a time.</span></span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">	printSlice(s)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> printSlice(s []<span class="typename">int</span>) &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"len=%d cap=%d %v\n"</span>, <span class="built_in">len</span>(s), <span class="built_in">cap</span>(s), s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">len</span>=<span class="number">0</span> <span class="built_in">cap</span>=<span class="number">0</span> []</span><br><span class="line"><span class="built_in">len</span>=<span class="number">1</span> <span class="built_in">cap</span>=<span class="number">2</span> [<span class="number">0</span>]</span><br><span class="line"><span class="built_in">len</span>=<span class="number">2</span> <span class="built_in">cap</span>=<span class="number">2</span> [<span class="number">0</span> <span class="number">1</span>]</span><br><span class="line"><span class="built_in">len</span>=<span class="number">5</span> <span class="built_in">cap</span>=<span class="number">8</span> [<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line">Program exited.</span><br></pre></td></tr></table></figure></p>
+<h3 id="for_range">for range</h3><p>在<code>for</code>循环结合<code>range</code>关键字可以遍历一个<code>slice</code>.<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> pow = []<span class="typename">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">64</span>, <span class="number">128</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	<span class="keyword">for</span> i, v := <span class="keyword">range</span> pow &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"2**%d = %d\n"</span>, i, v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>range的每次迭代返回两个值，分别是下标和对应值的copy，也可以使用<code>_</code>来略过下标，或者可以只指定下标。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := range <span class="built_in">pow</span> &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> _, value := range <span class="built_in">pow</span> &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="slice练习">slice练习</h2><p>实现Pic,它返回<code>dy</code>的<code>slice</code>，每个元素是<code>dy</code>的8位无符号整形。当运行这个程序时，它将显示你的图片，将整形数以灰度呈现。<br>图片任由你选择，有一些有趣的函数如<code>(x+y)/2</code>,<code>x*y</code>，<code>x^y</code>.<br>(你需要使用循环来为[][]unit8分配每个[]uint8)<br>（使用<code>unit8(intValue)</code>来转换数值类型）</p>
+<p>注：这个程序只能在golang.org上完成，因为它<code>import</code>了教程自带的包。<br>题为：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"golang.org/x/tour/pic"</span></span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">Pic</span><span class="params">(dx, dy int)</span></span> [][]uint8 &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	pic.<span class="type">Show</span>(<span class="type">Pic</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我的答案：灰度为x,y坐标积。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"golang.org/x/tour/pic"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Pic(dx, dy <span class="typename">int</span>) [][]<span class="typename">uint8</span> &#123;</span><br><span class="line">	r := <span class="built_in">make</span>([][]<span class="typename">uint8</span>,dy)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> r &#123;</span><br><span class="line">		e := <span class="built_in">make</span>([]<span class="typename">uint8</span>,dy)</span><br><span class="line">		<span class="keyword">for</span> j := <span class="keyword">range</span> e&#123;</span><br><span class="line">			e[j] = <span class="typename">uint8</span>(i*j)</span><br><span class="line">		&#125;</span><br><span class="line">		r[i] = e</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	pic.Show(Pic)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印出的图案也很有趣：<br><img src="http://ww4.sinaimg.cn/large/55f247cbjw1f29gorfuv9j207i07jq5f.jpg" alt=""><br>同样的，建议大家自行试验，PS: x^y的图案也很有趣。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-3/" data-title="漫游Go语言（三）之指针、struct、数组和slice | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/24/a-tour-of-go-4/" title="a tour of go 4">
+  <strong>上一篇：</strong><br/>
+  <span>
+  a tour of go 4</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/24/a-tour-of-go-2/"  title="漫游Go语言（二）之流程控制与defer">
+ <strong>下一篇：</strong><br/> 
+ <span>漫游Go语言（二）之流程控制与defer
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/24/a-tour-of-go-3/" data-title="漫游Go语言（三）之指针、struct、数组和slice" data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#struct"><span class="toc-number">1.</span> <span class="toc-text">struct</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#struct指针"><span class="toc-number">1.1.</span> <span class="toc-text">struct指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct_lteral"><span class="toc-number">1.2.</span> <span class="toc-text">struct lteral</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数组"><span class="toc-number">2.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice"><span class="toc-number">3.</span> <span class="toc-text">slice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#slice_of_slice"><span class="toc-number">3.1.</span> <span class="toc-text">slice of slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切割slice"><span class="toc-number">3.2.</span> <span class="toc-text">切割slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make_slice"><span class="toc-number">3.3.</span> <span class="toc-text">make slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nil_slice"><span class="toc-number">3.4.</span> <span class="toc-text">nil slice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向slice添加元素"><span class="toc-number">3.5.</span> <span class="toc-text">向slice添加元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for_range"><span class="toc-number">3.6.</span> <span class="toc-text">for range</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice练习"><span class="toc-number">4.</span> <span class="toc-text">slice练习</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -4,25 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC | AzYet&#39;s Notebook</title>
+    <title>AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用1ovs-ofctl show bridge
-就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9">
-<meta property="og:type" content="article">
-<meta property="og:title" content="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC">
-<meta property="og:url" content="http://azyet.github.io/2014/03/04/checkOFPortAndMAClinkedIn/index.html">
+    <meta name="description" content="milestones">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AzYet's Notebook">
+<meta property="og:url" content="http://azyet.github.io/page/9/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用1ovs-ofctl show bridge
-就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9">
+<meta property="og:description" content="milestones">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC">
-<meta name="twitter:description" content="在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用1ovs-ofctl show bridge
-就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9">
+<meta name="twitter:title" content="AzYet's Notebook">
+<meta name="twitter:description" content="milestones">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -73,10 +70,12 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2014/03/04/checkOFPortAndMAClinkedIn/" title="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC" itemprop="url">[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC</a>
@@ -90,24 +89,20 @@
     
   </p>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
-		
-			
-		
-		</div>
-		
-		<p>　　在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用<br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ovs-ofctl <span class="literal">show</span> bridge</span><br></pre></td></tr></table></figure></p>
+    <div class="article-content">
+        
+        <p>　　在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用<br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ovs-ofctl <span class="literal">show</span> bridge</span><br></pre></td></tr></table></figure></p>
 <p>就能得到。如<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root<span class="annotation">@vaio</span>:~# ovs-ofctl show br-<span class="typename">int</span></span><br><span class="line">OFPT_FEATURES_REPLY (xid=<span class="number">0x2</span>): <span class="string">dpid:</span><span class="number">0000</span>da9142cdfb44</span><br><span class="line"><span class="string">n_tables:</span><span class="number">254</span>, <span class="string">n_buffers:</span><span class="number">256</span></span><br><span class="line"><span class="string">capabilities:</span> FLOW_STATS TABLE_STATS PORT_STATS QUEUE_STATS ARP_MATCH_IP</span><br><span class="line"><span class="string">actions:</span> OUTPUT SET_VLAN_VID SET_VLAN_PCP STRIP_VLAN SET_DL_SRC SET_DL_DST SET_NW_SRC SET_NW_DST SET_NW_TOS SET_TP_SRC SET_TP_DST ENQUEUE</span><br><span class="line"> <span class="number">1</span>(patch-tun): <span class="string">addr:</span><span class="number">6</span><span class="string">e:</span><span class="number">4</span><span class="string">b:</span><span class="number">44</span>:<span class="number">8</span><span class="string">e:</span><span class="string">f8:</span>d7</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     speed:</span> <span class="number">0</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> <span class="number">18</span>(tap0): <span class="string">addr:</span><span class="string">ea:</span><span class="number">58</span>:<span class="string">d5:</span><span class="string">f8:</span><span class="number">26</span>:<span class="number">4</span>e</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     current:</span>    <span class="number">10</span>MB-FD COPPER</span><br><span class="line"><span class="label">     speed:</span> <span class="number">10</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> <span class="number">19</span>(tap1): <span class="string">addr:</span><span class="number">96</span>:<span class="string">fc:</span><span class="number">5</span><span class="string">d:</span><span class="string">b6:</span><span class="number">43</span>:d6</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     current:</span>    <span class="number">10</span>MB-FD COPPER</span><br><span class="line"><span class="label">     speed:</span> <span class="number">10</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> LOCAL(br-<span class="typename">int</span>): <span class="string">addr:</span><span class="string">da:</span><span class="number">91</span>:<span class="number">42</span>:<span class="string">cd:</span><span class="string">fb:</span><span class="number">44</span></span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     speed:</span> <span class="number">0</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line">OFPT_GET_CONFIG_REPLY (xid=<span class="number">0x4</span>): frags=normal miss_send_len=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
-<p>　　当一个bridge上连接有多台虚拟机（或VM有多个IF）时，我们还常常需要知道VM的IF与bridge  port的对应，这时候可以使用：<br><a id="more"></a><br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ovs-appctl fdb/<span class="literal">show</span> bridge</span><br></pre></td></tr></table></figure></p>
-<p>例如：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@vaio</span><span class="symbol">:~</span><span class="comment"># ovs-appctl fdb/show br-int</span></span><br><span class="line"> port  <span class="constant">VLAN </span> <span class="constant">MAC </span>               <span class="constant">Age</span></span><br><span class="line"><span class="constant">LOCAL </span>    <span class="number">0</span>  <span class="symbol">da:</span><span class="number">91</span><span class="symbol">:</span><span class="number">42</span><span class="symbol">:cd</span><span class="symbol">:fb</span><span class="symbol">:</span><span class="number">44</span>   <span class="number">18</span></span><br><span class="line">   <span class="number">18</span>     <span class="number">0</span>  <span class="number">52</span><span class="symbol">:</span><span class="number">54</span><span class="symbol">:</span><span class="number">00</span><span class="symbol">:a9</span><span class="symbol">:b8</span><span class="symbol">:b0</span>    <span class="number">0</span></span><br><span class="line">   <span class="number">19</span>     <span class="number">0</span>  <span class="number">52</span><span class="symbol">:</span><span class="number">54</span><span class="symbol">:</span><span class="number">00</span><span class="symbol">:a9</span><span class="symbol">:b8</span><span class="symbol">:b1</span>    <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
-<p>　　可以看到18号ofport连接的是MAC为52:54:00:a9:b8:b0的虚拟网卡。可结合上一个命令，知18号ofport的port name为tap0。</p>
-<p>　　需要注意的是，该网卡必须要有数据的收发，才能够得到上述的结果，所以使用该命令之前不妨先执行一下类似ping的动作。</p>
-  
-	</div>
-		<footer class="article-footer clearfix">
+<p>　　当一个bridge上连接有多台虚拟机（或VM有多个IF）时，我们还常常需要知道VM的IF与bridge  port的对应，这时候可以使用：<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2014/03/04/checkOFPortAndMAClinkedIn/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 
@@ -120,47 +115,31 @@
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://azyet.github.io/2014/03/04/checkOFPortAndMAClinkedIn/" data-title="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
-	  </div>
-	
-	</div>
 
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/03/04/checkOFPortAndMAClinkedIn/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/03/04/checkOFPortAndMAClinkedIn/" data-count-type="comments">&nbsp;</a>
+	
+</div>
 
 </footer>
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2014/04/01/OvsNeutronPluginConflictsWithSDNController/" title="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题">
-  <strong>上一篇：</strong><br/>
-  <span>
-  [openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题</span>
-</a>
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
+  </nav>
+
 </div>
-
-
-</nav>
-
-	
-<section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/03/04/checkOFPortAndMAClinkedIn/" data-title="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC" data-url="http://azyet.github.io/2014/03/04/checkOFPortAndMAClinkedIn/"></div>
-</section>
-
-
-</div>  
       <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
- 
- 
- 
-  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
@@ -385,89 +364,12 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
 
 
 
@@ -550,4 +452,4 @@ var _hmt = _hmt || [];
 <!-- Tiny_search End -->
 
   </body>
-</html>
+ </html>
