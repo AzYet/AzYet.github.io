@@ -4,22 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>a tour of go 4 | AzYet&#39;s Notebook</title>
+    <title>漫游Go语言（四）之Map、函数value与闭包 | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="milestones">
+    <meta name="description" content="Map所以Map就是Key-value对。map必须make后才能使用，nil的map是无法赋值的。1234567891011121314151617package mainimport &quot;fmt&quot;type Vertex struct &amp;#123;	Lat, Long float64&amp;#125;var m map[string]Vertexfunc main() &amp;#123;	m = make(m">
 <meta property="og:type" content="article">
-<meta property="og:title" content="a tour of go 4">
+<meta property="og:title" content="漫游Go语言（四）之Map、函数value与闭包">
 <meta property="og:url" content="http://azyet.github.io/2016/03/24/a-tour-of-go-4/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="milestones">
+<meta property="og:description" content="Map所以Map就是Key-value对。map必须make后才能使用，nil的map是无法赋值的。1234567891011121314151617package mainimport &quot;fmt&quot;type Vertex struct &amp;#123;	Lat, Long float64&amp;#125;var m map[string]Vertexfunc main() &amp;#123;	m = make(m">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="a tour of go 4">
-<meta name="twitter:description" content="milestones">
+<meta name="twitter:title" content="漫游Go语言（四）之Map、函数value与闭包">
+<meta name="twitter:description" content="Map所以Map就是Key-value对。map必须make后才能使用，nil的map是无法赋值的。1234567891011121314151617package mainimport &quot;fmt&quot;type Vertex struct &amp;#123;	Lat, Long float64&amp;#125;var m map[string]Vertexfunc main() &amp;#123;	m = make(m">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -76,7 +76,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/03/24/a-tour-of-go-4/" title="a tour of go 4" itemprop="url">a tour of go 4</a>
+      <a href="/2016/03/24/a-tour-of-go-4/" title="漫游Go语言（四）之Map、函数value与闭包" itemprop="url">漫游Go语言（四）之Map、函数value与闭包</a>
   </h1>
   <p class="article-author">By
        
@@ -92,15 +92,40 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Map"><span class="toc-number">1.</span> <span class="toc-text">Map</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#map_literals"><span class="toc-number">1.1.</span> <span class="toc-text">map literals</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map操作"><span class="toc-number">1.2.</span> <span class="toc-text">Map操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map练习"><span class="toc-number">1.3.</span> <span class="toc-text">Map练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数value"><span class="toc-number">2.</span> <span class="toc-text">函数value</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数闭包"><span class="toc-number">3.</span> <span class="toc-text">函数闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包练习：Fibonacci数列"><span class="toc-number">3.1.</span> <span class="toc-text">闭包练习：Fibonacci数列</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		  
+		<h2 id="Map">Map</h2><p>所以Map就是Key-value对。map必须make后才能使用，nil的map是无法赋值的。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	Lat, Long <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> m <span class="keyword">map</span>[<span class="typename">string</span>]Vertex</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	m = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="typename">string</span>]Vertex)</span><br><span class="line">	m[<span class="string">"Bell Labs"</span>] = Vertex&#123;</span><br><span class="line">		<span class="number">40.68433</span>, -<span class="number">74.39967</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(m[<span class="string">"Bell Labs"</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="map_literals">map literals</h3><p>map literals和struct literals是类似的，不过key是必须的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	Lat, Long <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> m = <span class="keyword">map</span>[<span class="typename">string</span>]Vertex&#123;</span><br><span class="line">	<span class="string">"Bell Labs"</span>: Vertex&#123;</span><br><span class="line">		<span class="number">40.68433</span>, -<span class="number">74.39967</span>,</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="string">"Google"</span>: Vertex&#123;</span><br><span class="line">		<span class="number">37.42202</span>, -<span class="number">122.08408</span>,</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果顶层类型只是一个类型名，可以将它从literal元素们中省略。<br><a id="more"></a><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="keyword">map</span>[<span class="typename">string</span>]Vertex&#123;</span><br><span class="line">	<span class="string">"Bell Labs"</span>: &#123;<span class="number">40.68433</span>, -<span class="number">74.39967</span>&#125;,</span><br><span class="line">	<span class="string">"Google"</span>:    &#123;<span class="number">37.42202</span>, -<span class="number">122.08408</span>&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Map操作">Map操作</h3><p>新建或更新map项<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">m[key] </span>=<span class="string"> elem</span></span><br></pre></td></tr></table></figure></p>
+<p>取值<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">elem </span>=<span class="string"> m[key]</span></span><br></pre></td></tr></table></figure></p>
+<p>删除元素<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">delete</span><span class="params">(m, key)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>检测key是否存在<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elem, ok = m[<span class="variable">key</span>]</span><br><span class="line">elem, ok := m[<span class="variable">key</span>]  <span class="comment">//短定义</span></span><br></pre></td></tr></table></figure></p>
+<p>如果存在，则返回 值+true，否则返回对应类型的0值和false<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="typename">string</span>]<span class="typename">int</span>)</span><br><span class="line"></span><br><span class="line">	m[<span class="string">"Answer"</span>] = <span class="number">42</span></span><br><span class="line">	fmt.Println(<span class="string">"The value:"</span>, m[<span class="string">"Answer"</span>])</span><br><span class="line"></span><br><span class="line">	m[<span class="string">"Answer"</span>] = <span class="number">48</span></span><br><span class="line">	fmt.Println(<span class="string">"The value:"</span>, m[<span class="string">"Answer"</span>])</span><br><span class="line"></span><br><span class="line">	<span class="built_in">delete</span>(m, <span class="string">"Answer"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"The value:"</span>, m[<span class="string">"Answer"</span>])</span><br><span class="line"></span><br><span class="line">	v, ok := m[<span class="string">"Answer"</span>]</span><br><span class="line">	fmt.Println(<span class="string">"The value:"</span>, v, <span class="string">"Present?"</span>, ok)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Map练习">Map练习</h3><p>实现一个WordCount，统计一个string中每个单词的频度，这个练习可以本地做，也可以在golang的交互式网页做，它提供一个结果校验功能。<br>提示，可以使用strings包中的Fields方法<br><a href="https://tour.golang.org/moretypes/20" target="_blank" rel="external">https://tour.golang.org/moretypes/20</a><br>以下是我的答案<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"golang.org/x/tour/wc"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> WordCount(s <span class="typename">string</span>) <span class="keyword">map</span>[<span class="typename">string</span>]<span class="typename">int</span> &#123;</span><br><span class="line">	r := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="typename">string</span>]<span class="typename">int</span>)</span><br><span class="line">	<span class="keyword">for</span> _,w := <span class="keyword">range</span> strings.Fields(s)&#123;</span><br><span class="line">		r[w] += <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	wc.Test(WordCount)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">PASS</span><br><span class="line"> <span class="title">f</span><span class="params">("I am learning Go!")</span> </span>= </span><br><span class="line">  <span class="built_in">map</span>[<span class="built_in">string</span>]<span class="keyword">int</span>&#123;<span class="string">"I"</span>:<span class="number">1</span>, <span class="string">"am"</span>:<span class="number">1</span>, <span class="string">"learning"</span>:<span class="number">1</span>, <span class="string">"Go!"</span>:<span class="number">1</span>&#125;</span><br><span class="line"><span class="function">PASS</span><br><span class="line"> <span class="title">f</span><span class="params">("The quick brown fox jumped over the lazy dog.")</span> </span>= </span><br><span class="line">  <span class="built_in">map</span>[<span class="built_in">string</span>]<span class="keyword">int</span>&#123;<span class="string">"fox"</span>:<span class="number">1</span>, <span class="string">"jumped"</span>:<span class="number">1</span>, <span class="string">"quick"</span>:<span class="number">1</span>, <span class="string">"brown"</span>:<span class="number">1</span>, <span class="string">"over"</span>:<span class="number">1</span>, <span class="string">"the"</span>:<span class="number">1</span>, <span class="string">"lazy"</span>:<span class="number">1</span>, <span class="string">"dog."</span>:<span class="number">1</span>, <span class="string">"The"</span>:<span class="number">1</span>&#125;</span><br><span class="line"><span class="function">PASS</span><br><span class="line"> <span class="title">f</span><span class="params">("I ate a donut. Then I ate another donut.")</span> </span>= </span><br><span class="line">  <span class="built_in">map</span>[<span class="built_in">string</span>]<span class="keyword">int</span>&#123;<span class="string">"Then"</span>:<span class="number">1</span>, <span class="string">"another"</span>:<span class="number">1</span>, <span class="string">"I"</span>:<span class="number">2</span>, <span class="string">"ate"</span>:<span class="number">2</span>, <span class="string">"a"</span>:<span class="number">1</span>, <span class="string">"donut."</span>:<span class="number">2</span>&#125;</span><br><span class="line"><span class="function">PASS</span><br><span class="line"> <span class="title">f</span><span class="params">("A man a plan a canal panama.")</span> </span>= </span><br><span class="line">  <span class="built_in">map</span>[<span class="built_in">string</span>]<span class="keyword">int</span>&#123;<span class="string">"A"</span>:<span class="number">1</span>, <span class="string">"man"</span>:<span class="number">1</span>, <span class="string">"a"</span>:<span class="number">2</span>, <span class="string">"plan"</span>:<span class="number">1</span>, <span class="string">"canal"</span>:<span class="number">1</span>, <span class="string">"panama."</span>:<span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可见这种0缺省值的设定还是很好用的，可以让程序简练。</p>
+<h2 id="函数value">函数value</h2><p>在Go中函数也是值，可以用作函数参数与返回值。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> compute(fn <span class="keyword">func</span>(<span class="typename">float64</span>, <span class="typename">float64</span>) <span class="typename">float64</span>) <span class="typename">float64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fn(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	hypot := <span class="keyword">func</span>(x, y <span class="typename">float64</span>) <span class="typename">float64</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> math.Sqrt(x*x + y*y)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(hypot(<span class="number">5</span>, <span class="number">12</span>))</span><br><span class="line"></span><br><span class="line">	fmt.Println(compute(hypot))</span><br><span class="line">	fmt.Println(compute(math.Pow))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上述例子中，compute函数的参数是一个2个参数和返回值都是float64的函数。变量hypot的值是一个函数。</p>
+<h2 id="函数闭包">函数闭包</h2><p>Go函数可以是闭包。所谓闭包是一个引用了外部变量的函数值，这个函数可以存取和赋值给变量。这种意义上该函数被绑定到变量。<br>下面的例子中，adder函数返回一个闭包。每个闭包被绑定到它自有的sum变量。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">adder</span><span class="params">()</span></span> <span class="func"><span class="keyword">func</span><span class="params">(int)</span></span> int &#123;</span><br><span class="line">	sum := <span class="number">0</span></span><br><span class="line">	<span class="keyword">return</span> <span class="func"><span class="keyword">func</span><span class="params">(x int)</span></span> int &#123;</span><br><span class="line">		sum += x</span><br><span class="line">		<span class="keyword">return</span> sum</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	pos, neg := adder(), adder()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		fmt.<span class="type">Println</span>( pos(i), neg(-<span class="number">2</span>*i),)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0 0</span><br><span class="line">1 -2</span><br><span class="line">3 -6</span><br><span class="line">6 -12</span><br><span class="line">10 -20</span><br><span class="line">15 -30</span><br><span class="line">21 -42</span><br><span class="line">28 -56</span><br><span class="line">36 -72</span><br><span class="line">45 -90</span><br></pre></td></tr></table></figure></p>
+<h3 id="闭包练习：Fibonacci数列">闭包练习：Fibonacci数列</h3><p>题目就不用解释了，菲波那契数列大家都很熟悉，由0,1开始，之后每个元素都是前二者的和。0, 1, 1, 2, 3, 5, …</p>
+<p>我的答案（参考之后的结果，一开始是懵逼的，居然不带参数）<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">fibonacci</span><span class="params">()</span></span> <span class="func"><span class="keyword">func</span><span class="params">()</span></span>int&#123;</span><br><span class="line">    x,y:=<span class="number">0</span>,<span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="func"><span class="keyword">func</span><span class="params">()</span></span>(r int) &#123;</span><br><span class="line">        r=x</span><br><span class="line">        x,y = y,x+y</span><br><span class="line">        <span class="keyword">return</span> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    f:=fibonacci()</span><br><span class="line">    <span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++ &#123;</span><br><span class="line">        fmt.<span class="type">Println</span>(f())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">8</span><br><span class="line">13</span><br><span class="line">21</span><br><span class="line">34</span><br></pre></td></tr></table></figure></p>
+<p>很有趣是不是？首先f:=fibnacci() 定义了<code>function value</code>，这是闭包的前提。按我的猜测，此时为<code>f</code>分配了内存空间，包括其中的变量<code>x</code>、<code>y</code>,所以在<code>f</code>的生命周期内，<code>x</code>,<code>y</code>是一直存在的，因此当匿名函数一直操作其外部的<code>x</code>,<code>y</code>时，其变化一真累积，这也是fibonacci（）不用传入参数的原因。最后fibonacci应该从0开始返回，这里也用到了一个Go特有的颇tricky的<code>return</code>方式来实现。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
 
 </div>
 
@@ -108,7 +133,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-4/" data-title="a tour of go 4 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-4/" data-title="漫游Go语言（四）之Map、函数value与闭包 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -134,7 +159,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/03/24/a-tour-of-go-4/" data-title="a tour of go 4" data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-4/"></div>
+	<div class="ds-thread" data-thread-key="2016/03/24/a-tour-of-go-4/" data-title="漫游Go语言（四）之Map、函数value与闭包" data-url="http://azyet.github.io/2016/03/24/a-tour-of-go-4/"></div>
 </section>
 
 
@@ -144,7 +169,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Map"><span class="toc-number">1.</span> <span class="toc-text">Map</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#map_literals"><span class="toc-number">1.1.</span> <span class="toc-text">map literals</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map操作"><span class="toc-number">1.2.</span> <span class="toc-text">Map操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map练习"><span class="toc-number">1.3.</span> <span class="toc-text">Map练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数value"><span class="toc-number">2.</span> <span class="toc-text">函数value</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数闭包"><span class="toc-number">3.</span> <span class="toc-text">函数闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包练习：Fibonacci数列"><span class="toc-number">3.1.</span> <span class="toc-text">闭包练习：Fibonacci数列</span></a></li></ol></li></ol>
  
   </div>
 
@@ -172,11 +197,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -200,11 +225,11 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -212,11 +237,15 @@
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -225,10 +254,6 @@
 		
 			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>3</sup></a></li>
 			
 		
 			
