@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/18/rabbitmqNote4/" title="RabbitMQ学习笔记（四）之消息路由" itemprop="url">RabbitMQ学习笔记（四）之消息路由</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T14:18:00.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。</p>
+<h2 id="Bindings">Bindings</h2><p>上一节已经提到Binding，代码如下：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<p>Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。</p>
+<p>Binding可以添加额外的路由参数，为免混淆，这里称为bindingKey。以下是使用BindingKey来绑定：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">"black"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>BindingKey的解释取决于Exchange类型，fanout类Exchange直接无视BindingKey.</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote4/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/消息路由/">消息路由</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote4/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/18/rabbitmqNote3/" title="RabbitMQ学习笔记（三）之订阅与发布" itemprop="url">RabbitMQ学习笔记（三）之订阅与发布</a>
   </h1>
   <p class="article-author">By
@@ -650,66 +713,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/09/dijkstraAnlalizeAndImplement/" title="最短路径dijkstra算法实践：理解再实现" itemprop="url">最短路径dijkstra算法实践：理解再实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-09T07:24:25.000Z" itemprop="datePublished"> 發表於 2015-05-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。<br>　　<br>　　以下面的图为测试样本：</p>
-<p> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""><br>　　<br>　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于之前的记录，则更新记录；直到所有点都被遍历。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/09/dijkstraAnlalizeAndImplement/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/dijkstra/">dijkstra</a><a href="/tags/图论/">图论</a><a href="/tags/最短路径/">最短路径</a><a href="/tags/算法/">算法</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/09/dijkstraAnlalizeAndImplement/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/09/dijkstraAnlalizeAndImplement/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -750,7 +753,19 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
 			
 		
 			
@@ -762,15 +777,7 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -778,11 +785,7 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>4</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			

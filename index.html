@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/25/a-tour-of-go-5/" title="漫游Go语言（五）之方法、接口与类型断言" itemprop="url">漫游Go语言（五）之方法、接口与类型断言</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-25T17:46:54.000Z" itemprop="datePublished"> 發表於 2016-03-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="方法method">方法method</h2><p>Go没有类，但是能为类型定义方法<code>method</code>。所谓方法就是一个具有特殊<code>receiver</code>参数的函数，<code>receiver</code>在自己的参数列表中，位于<code>func</code>关键字与函数名之间。<code>method</code>只是一个有着<code>receiver</code>的特殊函数。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type <span class="type">Vertex</span> <span class="class"><span class="keyword">struct</span> </span>&#123;</span><br><span class="line">	<span class="type">X</span>, <span class="type">Y</span> float64</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(v Vertex)</span></span> <span class="type">Abs</span>() float64 &#123;</span><br><span class="line">	<span class="keyword">return</span> math.<span class="type">Sqrt</span>(v.<span class="type">X</span>*v.<span class="type">X</span> + v.<span class="type">Y</span>*v.<span class="type">Y</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	v := <span class="type">Vertex</span>&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	fmt.<span class="type">Println</span>(v.<span class="type">Abs</span>())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你也可以为非<code>struct</code>的数据类型定义方法，如<code>type MyFloat float64</code>,但方法和类型必须在同一包下。</p>
+<h3 id="pointer_receiver">pointer receiver</h3><p>如果需要更改该类型变量的值，那么就要用到<code>pointer receiver</code>。如果使用值参数，那么就是值传递，其它普通函数也是一样的。</p>
+<p><code>method</code>不同于一般<code>function</code>之处在于其<code>receiver</code>为<code>pointer</code>时，即可以接受<code>pointer</code>也可以接受<code>value</code>的变量的调用，其效果都等同于传入<code>pointer</code>。同理当<code>method</code>的<code>receiver</code>为<code>value</code>时，不管传入<code>pointer</code>还是<code>value</code>，效果都是值传递。<br><figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> "fmt"</span><br><span class="line"></span><br><span class="line"><span class="component">type Vertex struct &#123;</span><br><span class="line">	X, Y float64</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="component">func (v *Vertex) Scale(f float64) &#123;</span><br><span class="line">	v<span class="string">.X</span> = v<span class="string">.X</span> * f</span><br><span class="line">	v<span class="string">.Y</span> = v<span class="string">.Y</span> * f</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="component">func ScaleFunc(v *Vertex, f float64) &#123;</span><br><span class="line">	v<span class="string">.X</span> = v<span class="string">.X</span> * f</span><br><span class="line">	v<span class="string">.Y</span> = v<span class="string">.Y</span> * f</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="component">func main() &#123;</span><br><span class="line">	v := Vertex&#123;3, 4&#125;</span></span><br><span class="line">	v.Scale(2)</span><br><span class="line">	ScaleFunc(&amp;v, 10)</span><br><span class="line"></span><br><span class="line">	p := &amp;Vertex&#123;4, 3&#125;</span><br><span class="line">	p.Scale(3)</span><br><span class="line">	ScaleFunc(p, 8)</span><br><span class="line"></span><br><span class="line">	fmt.Println(v, p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/25/a-tour-of-go-5/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/25/a-tour-of-go-5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/25/a-tour-of-go-5/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/24/a-tour-of-go-4/" title="漫游Go语言（四）之Map、函数value与闭包" itemprop="url">漫游Go语言（四）之Map、函数value与闭包</a>
   </h1>
   <p class="article-author">By
@@ -515,77 +577,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
-<p>一般C包装函数功能如下：</p>
-<ul>
-<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
-<li>trapping to kernel mode(开始执行）</li>
-<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
-</ul>
-<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
-<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
-<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
-<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
-<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
-<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/16/Linux-errno-intro/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/16/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
   </h1>
   <p class="article-author">By
@@ -746,7 +737,19 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
 			
 		
 			
@@ -758,15 +761,7 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -774,11 +769,7 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>4</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			

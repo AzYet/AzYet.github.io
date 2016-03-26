@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2016/03/25/a-tour-of-go-5/</loc>
+    <lastmod>2016-03-26T05:53:55.958Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2016/03/24/a-tour-of-go-4/</loc>
-    <lastmod>2016-03-25T16:44:37.287Z</lastmod>
+    <lastmod>2016-03-26T02:31:16.576Z</lastmod>
   </url>
   
   <url>
@@ -107,11 +112,6 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote6/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/18/rabbitmqNote5/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -202,12 +202,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
+    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote2/</loc>
+    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -357,17 +357,17 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote6/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2014/04/01/OvsNeutronPluginConflictsWithSDNController/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/05/15/ObjectAndXmlInServlet/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote6/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -392,17 +392,22 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/06/10/repoLearningNote/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote3/</loc>
+    <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote6/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote2/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   

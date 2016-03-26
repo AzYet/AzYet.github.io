@@ -1,0 +1,577 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>漫游Go语言（五）之方法、接口与类型断言 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="方法methodGo没有类，但是能为类型定义方法method。所谓方法就是一个具有特殊receiver参数的函数，receiver在自己的参数列表中，位于func关键字与函数名之间。method只是一个有着receiver的特殊函数。12345678910111213141516171819package mainimport (	&quot;fmt&quot;	&quot;math&quot;)type Vertex struct &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫游Go语言（五）之方法、接口与类型断言">
+<meta property="og:url" content="http://azyet.github.io/2016/03/25/a-tour-of-go-5/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="方法methodGo没有类，但是能为类型定义方法method。所谓方法就是一个具有特殊receiver参数的函数，receiver在自己的参数列表中，位于func关键字与函数名之间。method只是一个有着receiver的特殊函数。12345678910111213141516171819package mainimport (	&quot;fmt&quot;	&quot;math&quot;)type Vertex struct &amp;">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漫游Go语言（五）之方法、接口与类型断言">
+<meta name="twitter:description" content="方法methodGo没有类，但是能为类型定义方法method。所谓方法就是一个具有特殊receiver参数的函数，receiver在自己的参数列表中，位于func关键字与函数名之间。method只是一个有着receiver的特殊函数。12345678910111213141516171819package mainimport (	&quot;fmt&quot;	&quot;math&quot;)type Vertex struct &amp;">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/25/a-tour-of-go-5/" title="漫游Go语言（五）之方法、接口与类型断言" itemprop="url">漫游Go语言（五）之方法、接口与类型断言</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-25T17:46:54.000Z" itemprop="datePublished"> 發表於 2016-03-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#方法method"><span class="toc-number">1.</span> <span class="toc-text">方法method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pointer_receiver"><span class="toc-number">1.1.</span> <span class="toc-text">pointer receiver</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#interface"><span class="toc-number">2.</span> <span class="toc-text">interface</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式的接口实现"><span class="toc-number">2.1.</span> <span class="toc-text">隐式的接口实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interface_value"><span class="toc-number">2.2.</span> <span class="toc-text">interface value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interface所赋的实质类型值为nil"><span class="toc-number">2.3.</span> <span class="toc-text">interface所赋的实质类型值为nil</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#零值interface"><span class="toc-number">2.4.</span> <span class="toc-text">零值interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#空接口"><span class="toc-number">2.5.</span> <span class="toc-text">空接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型断言"><span class="toc-number">3.</span> <span class="toc-text">类型断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#type_switch"><span class="toc-number">3.1.</span> <span class="toc-text">type switch</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stringer接口"><span class="toc-number">4.</span> <span class="toc-text">Stringer接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Stringer接口练习"><span class="toc-number">4.1.</span> <span class="toc-text">Stringer接口练习</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="方法method">方法method</h2><p>Go没有类，但是能为类型定义方法<code>method</code>。所谓方法就是一个具有特殊<code>receiver</code>参数的函数，<code>receiver</code>在自己的参数列表中，位于<code>func</code>关键字与函数名之间。<code>method</code>只是一个有着<code>receiver</code>的特殊函数。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type <span class="type">Vertex</span> <span class="class"><span class="keyword">struct</span> </span>&#123;</span><br><span class="line">	<span class="type">X</span>, <span class="type">Y</span> float64</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(v Vertex)</span></span> <span class="type">Abs</span>() float64 &#123;</span><br><span class="line">	<span class="keyword">return</span> math.<span class="type">Sqrt</span>(v.<span class="type">X</span>*v.<span class="type">X</span> + v.<span class="type">Y</span>*v.<span class="type">Y</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	v := <span class="type">Vertex</span>&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	fmt.<span class="type">Println</span>(v.<span class="type">Abs</span>())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你也可以为非<code>struct</code>的数据类型定义方法，如<code>type MyFloat float64</code>,但方法和类型必须在同一包下。</p>
+<h3 id="pointer_receiver">pointer receiver</h3><p>如果需要更改该类型变量的值，那么就要用到<code>pointer receiver</code>。如果使用值参数，那么就是值传递，其它普通函数也是一样的。</p>
+<p><code>method</code>不同于一般<code>function</code>之处在于其<code>receiver</code>为<code>pointer</code>时，即可以接受<code>pointer</code>也可以接受<code>value</code>的变量的调用，其效果都等同于传入<code>pointer</code>。同理当<code>method</code>的<code>receiver</code>为<code>value</code>时，不管传入<code>pointer</code>还是<code>value</code>，效果都是值传递。<br><figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> "fmt"</span><br><span class="line"></span><br><span class="line"><span class="component">type Vertex struct &#123;</span><br><span class="line">	X, Y float64</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="component">func (v *Vertex) Scale(f float64) &#123;</span><br><span class="line">	v<span class="string">.X</span> = v<span class="string">.X</span> * f</span><br><span class="line">	v<span class="string">.Y</span> = v<span class="string">.Y</span> * f</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="component">func ScaleFunc(v *Vertex, f float64) &#123;</span><br><span class="line">	v<span class="string">.X</span> = v<span class="string">.X</span> * f</span><br><span class="line">	v<span class="string">.Y</span> = v<span class="string">.Y</span> * f</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="component">func main() &#123;</span><br><span class="line">	v := Vertex&#123;3, 4&#125;</span></span><br><span class="line">	v.Scale(2)</span><br><span class="line">	ScaleFunc(&amp;v, 10)</span><br><span class="line"></span><br><span class="line">	p := &amp;Vertex&#123;4, 3&#125;</span><br><span class="line">	p.Scale(3)</span><br><span class="line">	ScaleFunc(p, 8)</span><br><span class="line"></span><br><span class="line">	fmt.Println(v, p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>运行：<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="list">&#123;60 80&#125;</span> &amp;<span class="list">&#123;96 72&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>而一般的function,其参数类型必须与声明严格一致，否则无法编译。</p>
+<p>以上特性叫做<code>pointer indirection</code>(指针迂回？）。</p>
+<p>使用<code>pointer</code>的<code>receiver</code>有两个好处，1可以更改其值，2可以避免调用一次copy一次。另外一个<code>type</code>的<code>method</code>应该使用同一各类的<code>receiver</code>，即<code>value</code>或<code>pointer</code>，其原因接下来会说明。</p>
+<h2 id="interface">interface</h2><p>接口定义了一组方法的签名。一个接口的value可以存放任何实现了该组接口的值。接上面的例子。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Abser <span class="keyword">interface</span> &#123;</span><br><span class="line">	Abs() <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	<span class="keyword">var</span> a Abser</span><br><span class="line">	f := MyFloat(-math.Sqrt2)</span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"></span><br><span class="line">	a = f  <span class="comment">// a MyFloat implements Abser</span></span><br><span class="line">	a = &amp;v <span class="comment">// a *Vertex implements Abser</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// In the following line, v is a Vertex (not *Vertex)</span></span><br><span class="line">	<span class="comment">// and does NOT implement Abser.</span></span><br><span class="line">	a = v</span><br><span class="line"></span><br><span class="line">	fmt.Println(a.Abs())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="typename">float64</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (f MyFloat) Abs() <span class="typename">float64</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="typename">float64</span>(-f)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="typename">float64</span>(f)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (v *Vertex) Abs() <span class="typename">float64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>main</code>中<code>a = v</code>语句会报错，因为<code>Vertex</code>类型并没有实现<code>Abser</code>接口，实现该接口是<code>*Vertex</code>类型。这一点容易让人迷惑，因为方法具有<code>indirection</code>特性，但<code>interface</code>看起来没有。</p>
+<h3 id="隐式的接口实现">隐式的接口实现</h3><p>type只要实现了接口所定义的方法，它就实现了该接口，而无需显式地使用<code>implements</code>这样的关键字，这样就解耦了接口的定义与实现，甚至可以从一组现有的<code>type</code>中抽象出一个新的接口（先实现，再定义接口）。</p>
+<h3 id="interface_value">interface value</h3><p>实质上，接口可以视为值和具体类型（value, type）的元组。<code>interface value</code>存放着隐式的具体类型的值。调用一个接口的方法则执行该隐式具体类型的同名方法。<br>这有点“多态”的特性，以下是我自己写的演示程序。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (<span class="string">"fmt"</span></span><br><span class="line">        <span class="string">"math"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Shape <span class="keyword">interface</span>&#123;</span><br><span class="line">    Area() <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Rectangel <span class="keyword">struct</span>&#123;</span><br><span class="line">    des <span class="typename">string</span></span><br><span class="line">    x,y <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Triangel <span class="keyword">struct</span>&#123;</span><br><span class="line">    des <span class="typename">string</span></span><br><span class="line">    x,y,a <span class="typename">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (r *Rectangel) Area() <span class="typename">float64</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> r.x * r.y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (t *Triangel) Area() <span class="typename">float64</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t.x * t.y * math.Sin(t.a) * <span class="number">0.5</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">    <span class="keyword">var</span> a1 , a2 Shape</span><br><span class="line">    r := &amp;Rectangel&#123;<span class="string">"Recangel"</span>,<span class="number">3</span>,<span class="number">4</span>&#125;</span><br><span class="line">    t := &amp;Triangel&#123;<span class="string">"Triangel"</span>,<span class="number">3</span>,<span class="number">4</span>,math.Pi/<span class="number">2</span>&#125;</span><br><span class="line">    a1 = r</span><br><span class="line">    a2 = t</span><br><span class="line">    fmt.Println(r,t)</span><br><span class="line">    fmt.Println(a1.Area(),a2.Area())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;<span class="list">&#123;Recangel 3 4&#125;</span> &amp;<span class="list">&#123;Triangel 3 4 1.5707963267948966&#125;</span></span><br><span class="line"><span class="number">12</span> <span class="number">6</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="interface所赋的实质类型值为nil">interface所赋的实质类型值为nil</h3><p>如果实质类型的值为<code>nil</code>，此时方法<code>receiver</code>为<code>nil</code>。对许多其它语言来说，调用<code>null</code>对象的方法会异常，但是Go不会。<br>把上述程序稍微改改<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(r *Rectangel)</span></span> <span class="type">Area</span>() float64&#123;</span><br><span class="line">    <span class="keyword">if</span> r == <span class="built_in">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span> </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> r.x * r.y</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">var</span> a1 , a2, a3 <span class="type">Shape</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">var</span> r2 *<span class="type">Rectangel</span></span><br><span class="line">...</span><br><span class="line">a3 = r2</span><br><span class="line">fmt.<span class="type">Println</span>(r,t,r2)</span><br><span class="line">fmt.<span class="type">Println</span>(a1.<span class="type">Area</span>(),a2.<span class="type">Area</span>(), a3.<span class="type">Area</span>())</span><br></pre></td></tr></table></figure></p>
+<p>运行<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;<span class="list">&#123;Rectangel 3 4&#125;</span> &amp;<span class="list">&#123;Triangel 3 4 1.5707963267948966&#125;</span> &lt;nil&gt;</span><br><span class="line"><span class="number">12</span> <span class="number">6</span> <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>这所以还能正常运行，是因为虽然值为<code>nil</code>，但其实质类型是确定的（<code>*Rectangel</code>)。但如果类型也为<code>nil</code>…</p>
+<h3 id="零值interface">零值interface</h3><p>即无具体类型，也无值。此时能够通过编译，但运行时调用方法就会报错，因为不能确定调用何种类型的对应方法。<br>例如再将上述程序修改<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> a1 , a2, a3, a4 Shape</span><br><span class="line">...</span><br><span class="line">a4.<span class="function"><span class="title">Area</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure></p>
+<p>使用go install 能够通过编译，但运行bin/mygo二进制文件时出现runtime error<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&amp;&#123;Rectangel <span class="number">3</span> <span class="number">4</span>&#125; &amp;&#123;Triangel <span class="number">3</span> <span class="number">4</span> <span class="number">1.5707963267948966</span>&#125; &lt;nil&gt;</span><br><span class="line"><span class="number">12</span> <span class="number">6</span> <span class="number">0</span></span><br><span class="line"><span class="string">panic:</span> runtime <span class="string">error:</span> invalid memory address or nil pointer dereference</span><br><span class="line">[signal <span class="number">0xb</span> code=<span class="number">0x1</span> addr=<span class="number">0x20</span> pc=<span class="number">0x401590</span>]</span><br><span class="line"></span><br><span class="line">goroutine <span class="number">1</span> [running]:</span><br><span class="line">panic(<span class="number">0x4db680</span>, <span class="number">0xc82000a180</span>)</span><br><span class="line">	<span class="regexp">/usr/</span>local<span class="regexp">/go/</span>src<span class="regexp">/runtime/</span>panic.<span class="string">go:</span><span class="number">464</span> +<span class="number">0x3e6</span></span><br><span class="line">main.main()</span><br><span class="line">	<span class="regexp">/tmp/</span>mymtd<span class="regexp">/src/</span>myinterface/myinterface.<span class="string">go:</span><span class="number">40</span> +<span class="number">0x4f0</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="空接口">空接口</h3><p>无方法的接口为空接口<code>interface{}</code>,它可以保存任何类型的值，因为所有类型都有至少0个接口。空接口用来处理不知道具体类型的值，例如<code>fmt.Print</code>可以接受任何空接口值。<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var i interface&#123;&#125;</span><br><span class="line">i = <span class="number">42</span></span><br><span class="line">fmt.Printf(<span class="string">"(<span class="variable">%v</span>, <span class="variable">%T</span>)\n"</span>,i,i)</span><br><span class="line">i = <span class="number">31.34</span></span><br><span class="line">fmt.Printf(<span class="string">"(<span class="variable">%v</span>, <span class="variable">%T</span>)\n"</span>,i,i)</span><br><span class="line">i = <span class="string">"hello"</span></span><br><span class="line">fmt.Printf(<span class="string">"(<span class="variable">%v</span>, <span class="variable">%T</span>)\n"</span>,i,i)</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="list">(<span class="keyword">42</span>, int)</span></span><br><span class="line"><span class="list">(<span class="keyword">31.34</span>, float64)</span></span><br><span class="line"><span class="list">(<span class="keyword">hello</span>, string)</span></span><br></pre></td></tr></table></figure></p>
+<p>有点类似万能类型。</p>
+<h2 id="类型断言">类型断言</h2><p>通过类型断言可了解接口<code>value</code>的具体类型。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t := <span class="tag">i</span>.(T)</span><br></pre></td></tr></table></figure></p>
+<p>断言<code>i</code>值的具体类型为<code>T</code>,并将其值赋给<code>t</code>。如果i值类型并不为T，那么就会触发panic。<br>类型断言也可以返回两个值，实质类型和bool值<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t, ok := <span class="tag">i</span>.(T)</span><br></pre></td></tr></table></figure></p>
+<p>如果i值类型为T，那么就会得到值和<code>true</code>，否则就会得到<code>nil</code>和T和<code>false</code>.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var i <span class="class"><span class="keyword">interface</span>&#123;</span>&#125;</span><br><span class="line">i = <span class="number">42</span></span><br><span class="line">f,<span class="string">ok :</span>= i.(float64)</span><br><span class="line">fmt.Printf(<span class="string">"f value = %v, f type = %T, ok = %v\n"</span>,f,f,ok)</span><br><span class="line">f2,<span class="string">ok2 :</span>= i.(<span class="typename">int</span>)</span><br><span class="line">fmt.Println(f2,ok2)</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f <span class="variable">value =</span> <span class="number">0</span>, f <span class="variable">type =</span> float64, <span class="variable">ok =</span> <span class="constant">false</span></span><br><span class="line"><span class="number">42</span> <span class="constant">true</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="type_switch">type switch</h3><p><code>type switch</code>结构允许一系列的类型断言<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> <span class="string">v :</span>= i.(type) &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">T:</span></span><br><span class="line">    <span class="comment">// here v has type T</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">S:</span></span><br><span class="line">    <span class="comment">// here v has type S</span></span><br><span class="line"><span class="string">default:</span></span><br><span class="line">    <span class="comment">// no match; here v has the same type as i</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实例<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">do</span><span class="params">(i interface&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> v := i.(type) &#123;</span><br><span class="line">	<span class="keyword">case</span> int:</span><br><span class="line">		fmt.<span class="type">Printf</span>(<span class="string">"Twice %v is %v\n"</span>, v, v*<span class="number">2</span>)</span><br><span class="line">	<span class="keyword">case</span> string:</span><br><span class="line">		fmt.<span class="type">Printf</span>(<span class="string">"%q is %v bytes long\n"</span>, v, len(v))</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.<span class="type">Printf</span>(<span class="string">"I don't know about type %T!\n"</span>, v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">do</span>(<span class="number">21</span>)</span><br><span class="line">	<span class="keyword">do</span>(<span class="string">"hello"</span>)</span><br><span class="line">	<span class="keyword">do</span>(<span class="built_in">true</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Twice <span class="number">21</span> <span class="keyword">is</span> <span class="number">42</span></span><br><span class="line"><span class="string">"hello"</span> <span class="keyword">is</span> <span class="number">5</span> bytes <span class="built_in">long</span></span><br><span class="line">I don<span class="comment">'t know about type bool!</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Stringer接口">Stringer接口</h2><p>最普遍的一个接口是<code>fmt</code>包中定义的<code>Stringer</code>接口<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stringer <span class="interface"><span class="keyword">interface</span> </span>&#123;</span><br><span class="line">    <span class="built_in">String</span>() <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>它使用一个string来描述自己，fmt和其它包都使用这个接口来打印变量的值。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="typename">string</span></span><br><span class="line">	Age  <span class="typename">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (p Person) String() <span class="typename">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"%v (%v years)"</span>, p.Name, p.Age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	a := Person&#123;<span class="string">"Arthur Dent"</span>, <span class="number">42</span>&#125;</span><br><span class="line">	z := Person&#123;<span class="string">"Zaphod Beeblebrox"</span>, <span class="number">9001</span>&#125;</span><br><span class="line">	fmt.Println(a, z)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>有点类似<code>java</code>的<code>toString</code>方法，另外注意这次用到了<code>fmt.Sprintf</code>函数。</p>
+<h3 id="Stringer接口练习">Stringer接口练习</h3><p>type IPAddr [4]int，其打印形式应该为1.2.3.4<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> <span class="keyword">main</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">type</span> <span class="constant">I</span>PAddr [<span class="number">4</span>]int</span><br><span class="line"></span><br><span class="line">func (<span class="literal">ip</span> <span class="constant">I</span>PAddr) <span class="constant">String</span>() <span class="keyword">string&#123;</span></span><br><span class="line">    return fmt.<span class="constant">Sprintf</span>(<span class="string">"%v.%v.%v.%v"</span>,<span class="literal">ip</span>[<span class="number">0</span>],<span class="literal">ip</span>[<span class="number">1</span>],<span class="literal">ip</span>[<span class="number">2</span>],<span class="literal">ip</span>[<span class="number">3</span>])</span><br><span class="line"><span class="keyword">&#125;</span></span><br><span class="line">func <span class="keyword">main()&#123;</span></span><br><span class="line">    <span class="literal">ip</span> := <span class="keyword">IPAddr&#123;</span><span class="number">104</span>,<span class="number">194</span>,<span class="number">78</span>,<span class="number">21</span><span class="keyword">&#125;</span> </span><br><span class="line">    fmt.<span class="constant">Println</span>(<span class="literal">ip</span>)</span><br><span class="line"><span class="keyword">&#125;</span></span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/03/25/a-tour-of-go-5/" data-title="漫游Go语言（五）之方法、接口与类型断言 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/03/24/a-tour-of-go-4/"  title="漫游Go语言（四）之Map、函数value与闭包">
+ <strong>下一篇：</strong><br/> 
+ <span>漫游Go语言（四）之Map、函数value与闭包
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/25/a-tour-of-go-5/" data-title="漫游Go语言（五）之方法、接口与类型断言" data-url="http://azyet.github.io/2016/03/25/a-tour-of-go-5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#方法method"><span class="toc-number">1.</span> <span class="toc-text">方法method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pointer_receiver"><span class="toc-number">1.1.</span> <span class="toc-text">pointer receiver</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#interface"><span class="toc-number">2.</span> <span class="toc-text">interface</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式的接口实现"><span class="toc-number">2.1.</span> <span class="toc-text">隐式的接口实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interface_value"><span class="toc-number">2.2.</span> <span class="toc-text">interface value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interface所赋的实质类型值为nil"><span class="toc-number">2.3.</span> <span class="toc-text">interface所赋的实质类型值为nil</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#零值interface"><span class="toc-number">2.4.</span> <span class="toc-text">零值interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#空接口"><span class="toc-number">2.5.</span> <span class="toc-text">空接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型断言"><span class="toc-number">3.</span> <span class="toc-text">类型断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#type_switch"><span class="toc-number">3.1.</span> <span class="toc-text">type switch</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stringer接口"><span class="toc-number">4.</span> <span class="toc-text">Stringer接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Stringer接口练习"><span class="toc-number">4.1.</span> <span class="toc-text">Stringer接口练习</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -78,6 +78,75 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/30/hindsightLearningNote1/" title="simics hindsight学习笔记（一）" itemprop="url">simics hindsight学习笔记（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T14:42:23.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="概念">概念</h1><p>　　以下介绍一些关于模拟的基本概念。</p>
+<h2 id="模拟的限制">模拟的限制</h2><p>　　Simics是系统层指令集模拟器，也就是说：</p>
+<pre><code>指令级的模拟，一次执行一个指令
+模拟硬件的二进制接口，任何硬件上运行的软件在<span class="keyword">target</span>上也能运行
+</code></pre><p>　　包括<strong>firmawre,硬件驱动，操作系统</strong>和用户程序在内的任何软件都能在target上运行。</p>
+<p>　　simics的时间系统非常简单，例如它默认所有<strong>指令的执行时间是一样</strong>的，利用这点将可以编写简单程序来区别模拟与真实系统。</p>
+<h2 id="非入侵的观察和调试">非入侵的观察和调试</h2><p>　　Simics有强大的调试和观察功能：</p>
+<pre><code>观察和设置<span class="keyword">*</span><span class="keyword">*</span>register,memory和硬件状态<span class="keyword">*</span><span class="keyword">*</span>
+设置断点和观察点
+以脚本实现上述功能
+</code></pre><p>　　有了上述支持，<strong>无须在target上安装任何调试程序</strong>，因此调试行为也对target及之上的软件是<strong>完全透明</strong>的。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/hindsightLearningNote1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/hindsightLearningNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/30/simicsProductFamily/" title="Simics产品家族" itemprop="url">Simics产品家族</a>
   </h1>
   <p class="article-author">By
@@ -677,78 +746,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/21/zookeeperNote7/" title="ZooKeeper学习笔记（七）之方法和解决方案" itemprop="url">ZooKeeper学习笔记（七）之方法和解决方案</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-21T09:41:26.000Z" itemprop="datePublished"> 發表於 2015-05-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="用ZooKeeper构建高级结构">用ZooKeeper构建高级结构</h2><p>　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。</p>
-<p>　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。</p>
-<p>　　所有设计遵循实用原则，特别避免了轮询，计时和任何导致“羊群效应”的事情，避免网络暴发和扩容受限。</p>
-<p>　　还有很多可以想象的有用功能这里没有提到，比如可撤销读写优先级锁。列举的功能也可以以其它方式实现，总之本文只是为了刺激大家的想象力。</p>
-<h2 id="原装可用的功能">原装可用的功能</h2><p>　　<code>目录服务</code>和<code>配置</code>是两大ZooKeeper直接提供的功能，另一个是<code>组员管理</code>，组由znode表示，成员由之下的瞬时node表示，掉线的成员被服务检测到后会自动删除。</p>
-<h2 id="Barrier">Barrier</h2><p>　　分布式系统使用Barrier来阻塞一组进程直到某条件满足。ZooKeeper设计一个barrier node来实现Barrier功能。node存在代表Barrier存在。伪代码如下：</p>
-<pre><code>client调用<span class="keyword">exists</span>并设置watch
-
-如果<span class="keyword">exists</span>返回假，barrier不存在，进程继续
-
-如果<span class="keyword">exists</span>返回真，有barrier，进程阻塞等待watch事件
-
-收到watch事件时重新调用<span class="keyword">exists</span>……直到barrier移除
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/21/zookeeperNote7/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/leader-election/">leader election</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/21/zookeeperNote7/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/21/zookeeperNote7/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
@@ -789,7 +786,19 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
 			
 		
 			
@@ -801,15 +810,7 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -817,11 +818,7 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>4</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
