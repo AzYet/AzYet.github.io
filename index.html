@@ -78,6 +78,191 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/04/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-05T00:17:46.000Z" itemprop="datePublished"> 發表於 2016-04-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="sync-Mutex">sync.Mutex</h2><p>Go为mutual exclusion提供sync.Mutex库的两个方法<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">Lock</span></span><br><span class="line"><span class="keyword">Unlock</span></span></span><br></pre></td></tr></table></figure></p>
+<p>我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用<code>defer</code>关键字来确保<code>mutex</code>会被释放。</p>
+<h2 id="练习：网页爬虫">练习：网页爬虫</h2><p>在练习将使用Go并发特性来实现并行爬虫。修改<code>Crawl</code>方法并行但不重复地获取URL。<br>提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全的。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/04/a-tour-of-go-8/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/04/a-tour-of-go-8/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/04/a-tour-of-go-8/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/04/a-tour-of-go-7/" title="漫游Go语言（七）之goroutine/channel" itemprop="url">漫游Go语言（七）之goroutine/channel</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-04T17:32:54.000Z" itemprop="datePublished"> 發表於 2016-04-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="goroutine">goroutine</h2><p><code>goroutine</code>是由<code>go runtime</code>所管理的轻量级线程。<br><code>go f(x,y,z）</code>开启一个运行<code>f(x,y,z)</code>的新goroutine。<code>f</code>,<code>x</code>,<code>y</code>,<code>z</code>值的计算发生在当前<code>goroutine</code>，但f的执行则在新的<code>goroutine</code>中。</p>
+<p><code>goroutine</code>运行在同一地址空间中，所以共享内在的存取必须同步，<code>sync</code>包提供一些有用的基本工具，但一般你用不到它们，因为还有其它的工具。</p>
+<h2 id="channel">channel</h2><p><code>channel</code>是一种有类型的管道，使用<code>&lt;-</code>操作符就可以通过它发送和接收数值。<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">ch</span> &lt;- v    // Send v to channel <span class="number">ch</span>.</span><br><span class="line">v := &lt;-<span class="number">ch</span>  // Receive from <span class="number">ch</span>, <span class="keyword">and</span></span><br><span class="line">           // assign value to v.</span><br></pre></td></tr></table></figure></p>
+<p>参数按箭头的方向流动。和<code>map</code>及<code>slice</code>一样，<code>channel</code>也需要先定义再使用。<br>样例代码将<code>slice</code>中数累加，将工作分布在两个<code>goroutine</code>中，当二者完成时，得到最终结果。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/04/a-tour-of-go-7/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/04/a-tour-of-go-7/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/04/a-tour-of-go-7/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/25/a-tour-of-go-6/" title="漫游Go语言（六）之Error、Reader和Image练习" itemprop="url">漫游Go语言（六）之Error、Reader和Image练习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-25T18:00:16.000Z" itemprop="datePublished"> 發表於 2016-03-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Error">Error</h2><p><code>Go</code>使用<code>error</code>类型的值来表示错误，这是一个内建的类似<code>Stringer</code>的接口。<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="interface"><span class="keyword">interface</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Error</span>() <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>类似<code>Stringer</code>,<code>fmt</code>包也会寻找<code>error</code>接口来打印值。</p>
+<p>函数经常以<code>error</code>作为返回类型，调用函数的代码应该通过检测<code>error</code>是否为<code>nil</code>并处理处理。一般来说<code>error == nil</code>说明无错误，而非nil则代表failure.</p>
+<h3 id="error练习">error练习</h3><p>实现一个开方函数，除返回结果外，还返回<code>error</code>,当被操作数是负数是返回一个非<code>nil</code>的<code>error</code>，其<code>Error()</code>方法返回“cannot Sqrt negative number: -2”信息。<br>创建一个<code>MyFloat</code>的类<code>type MyFloat float64</code>,然后实现<code>func (mf MyFloat ) Error() string</code>使之成为一个<code>error</code>。<br>这是我的答案<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> ( <span class="string">"fmt"</span></span><br><span class="line">        <span class="string">"math"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="typename">float64</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (mf MyFloat) Error() <span class="typename">string</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"cannot Sqrt negative number:%v.\n"</span>,<span class="typename">float64</span>(mf))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Sqrt(f <span class="typename">float64</span>) (<span class="typename">float64</span>,error)&#123;</span><br><span class="line">    <span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>, MyFloat(f)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> math.Sqrt(f),<span class="constant">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">    fmt.Println(Sqrt(<span class="number">4.3</span>))</span><br><span class="line">    fmt.Println(Sqrt(-<span class="number">5.2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/25/a-tour-of-go-6/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/25/a-tour-of-go-6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/25/a-tour-of-go-6/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/25/a-tour-of-go-5/" title="漫游Go语言（五）之方法、接口与类型断言" itemprop="url">漫游Go语言（五）之方法、接口与类型断言</a>
   </h1>
   <p class="article-author">By
@@ -510,193 +695,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/17/mysql-difference-between-2-tables/" title="mysql合并记录及两表比较" itemprop="url">mysql合并记录及两表比较</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
-<h2 id="降维">降维</h2><p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
-<p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/17/mysql-difference-between-2-tables/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/mysql/">mysql</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/17/mysql-difference-between-2-tables/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/mysql-difference-between-2-tables/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
-<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
-<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">orientation=</span><span class="string">"vertical"</span> &gt;</span><br><span class="line">    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">text=</span><span class="string">"Hello, I am a TextView"</span> /&gt;</span><br><span class="line">    &lt;Button android:<span class="variable">id=</span><span class="string">"@+id/button"</span></span><br><span class="line">            android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">text=</span><span class="string">"Hello, I am a Button"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
-<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/16/android-develop-layout-abse/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/16/android-develop-layout-abse/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/android-develop-layout-abse/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
-<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
-<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -725,6 +723,10 @@
 			
 		
 			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
@@ -737,23 +739,19 @@
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			

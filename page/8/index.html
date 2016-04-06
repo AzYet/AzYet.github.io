@@ -78,6 +78,189 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/23/sshPortForwarding/" title="利用ssh端口转发使内网服务对公网可见" itemprop="url">利用ssh端口转发使内网服务对公网可见</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-23T05:23:39.000Z" itemprop="datePublished"> 發表於 2015-04-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　近日实验室一合作项目需要将校内的某web站点发现到公网，但是校内的地址都是10.0.0.0/8的私网地址，对外不可见。如果要向校方申请公网ip未免太过麻烦，想到自己有一VPS，拿来做端口转发应该是满足这个需求的。</p>
+<p>　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用local/remote端口转发。
+　　</p>
+<h2 id="场景与效果">场景与效果</h2><blockquote>
+<p>使内网ip为10.x.x.x的主机的80服务对外可用,拥有一台ip为104.x.x.x的公网VPS(虚拟服务器)。<br>设置完成后，访问<a href="http://104.x.x.x:8080将等同于访问10.x.x.x的80端口。">http://104.x.x.x:8080将等同于访问10.x.x.x的80端口。</a>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/23/sshPortForwarding/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/port-forwarding/">port forwarding</a><a href="/tags/ssh/">ssh</a><a href="/tags/公网/">公网</a><a href="/tags/端口转发/">端口转发</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/23/sshPortForwarding/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/23/sshPortForwarding/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/23/javaQueue/" title="java中的Queue" itemprop="url">java中的Queue</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-23T05:21:54.000Z" itemprop="datePublished"> 發表於 2015-04-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Queue接口与List、Set同一级别，都是继承了Collection接口。<strong>LinkedList</strong>实现了Queue接 口。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">add</span>        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常</span><br><span class="line">remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException异常</span><br><span class="line"><span class="keyword">element</span>  返回队列头部的元素             如果队列为空，则抛出一个NoSuchElementException异常</span><br><span class="line">offer       添加一个元素并返回<span class="constant">true</span>       如果队列已满，则返回<span class="constant">false</span></span><br><span class="line">poll         移除并返问队列头部的元素    如果队列为空，则返回<span class="constant">null</span></span><br><span class="line">peek       返回队列头部的元素             如果队列为空，则返回<span class="constant">null</span></span><br><span class="line"><span class="built_in">put</span>         添加一个元素                      如果队列满，则阻塞</span><br><span class="line">take        移除并返回队列头部的元素     如果队列为空，则阻塞</span><br></pre></td></tr></table></figure></p>
+<p> 　　阻塞队列的操作可以根据它们的响应方式分为以下三类：<strong>aad、removee和element</strong>操作在你试图为一个已满的队列增加元素或从空队列取得元素时 抛出异常。当然，在多线程程序中，队列在任何时间都可能变成满的或空的，所以你可能想使用**offer、poll、peek方法。这些方法在无法完成任务时 只是给出一个出错示而不会抛出异常。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Queue/">Queue</a><a href="/tags/java/">java</a><a href="/tags/阻塞/">阻塞</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/23/javaQueue/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/23/javaQueue/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/21/sambaCounterNoPermission/" title="CentOS7上开启Samba服务，其它主机没有权限访问的问题" itemprop="url">CentOS7上开启Samba服务，其它主机没有权限访问的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-21T10:45:26.000Z" itemprop="datePublished"> 發表於 2015-04-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　在多个主机间共享文件，Samba是一个不错的选择，速度快而且稳定，不同系统之间都可以访问，包括Android，用它架设一个简单媒体服务器是不错的选择。之前在Ubuntu开启共享是十分简单地，文件管理里自带设置，在其它CentOS6的VPS上我也设置过，并不复杂，但是在CentOS7上同样设置之后，虽然能查到到共享目录，但是无法打开，显示没有权限。<br>　　<br><img src="http://ww3.sinaimg.cn/large/55f247cbgw1erddz8kp5yj20eu05ewff.jpg" alt=""></p>
+<p>　　几经折腾之后，怀疑是SELinux在作祟，试着关闭SELinux之后，服务正常了。但粗暴地关闭显然是不够优雅的，我们还是设置SELinux与之共存吧.</p>
+<h2 id="SELinux">SELinux</h2><p>　　本人对SELinux也不甚了解，作为一个桌面Linux用户，有iptables就绰绰有余了（事实上规则长期全空），但是CentOS作为一个以稳定安全著称的发行版，SELinux是默认开启的（前面提到的VPS默认关闭了，能出于易用性的考虑）。简单浏览了一下，SELinux竟然出自大名鼎鼎（臭名昭著）的美国NSA之手，意为安全增强Linux，通过定义策略来控制哪些域可以访问哪些上下文。
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/21/sambaCounterNoPermission/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CentOS/">CentOS</a><a href="/tags/Samba/">Samba</a><a href="/tags/selinux/">selinux</a><a href="/tags/共享/">共享</a><a href="/tags/没有权限/">没有权限</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/21/sambaCounterNoPermission/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/21/sambaCounterNoPermission/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/21/insAndconfigVlcCentos/" title="CentOS7安装和配置VLC显示中文字幕" itemprop="url">CentOS7安装和配置VLC显示中文字幕</a>
   </h1>
   <p class="article-author">By
@@ -501,191 +684,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/14/freeNetViaIPv6/" title="通过IPv6“免费”上网" itemprop="url">通过IPv6“免费”上网</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-14T04:29:33.000Z" itemprop="datePublished"> 發表於 2015-04-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。</p>
-<p>然而政策如此，短期内没有改变的迹象，只有自己想对策了。</p>
-<h2 id="开发IPv6潜能">开发IPv6潜能</h2><p>长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然是运行于IPv4的网络中，而IPv6与v4网络的互通一直不好，所以v6的可用资源少得可怜。</p>
-<hr>
-<p>更新详细教程：  <strong><a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/">为VPS创建IPv6隧道</a></strong></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/14/freeNetViaIPv6/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/free/">free</a><a href="/tags/vpn/">vpn</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/14/freeNetViaIPv6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/14/freeNetViaIPv6/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/14/openvpnOnDroid/" title="安卓手机端配置OpenVPN via IPv6" itemprop="url">安卓手机端配置OpenVPN via IPv6</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-14T04:02:00.000Z" itemprop="datePublished"> 發表於 2015-04-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="client选用">client选用</h2><p>OpenVPN Connect 1.1.16<br>软件界面挺土的，无所谓了，这种软件功能稳定就行。</p>
-<h2 id="生成keys">生成keys</h2><p>使用和生成server端keys相同的pem文件和ca.crt文件<br>先导入环境变量
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/14/openvpnOnDroid/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/android/">android</a><a href="/tags/ipv6/">ipv6</a><a href="/tags/openvpn/">openvpn</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/14/openvpnOnDroid/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/14/openvpnOnDroid/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/05/21/usefulTagsForMavenPomFile/" title="[maven]POM文件中的一些常用标签和m2eclipse插件的安装" itemprop="url">[maven]POM文件中的一些常用标签和m2eclipse插件的安装</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2014-05-21T07:32:00.000Z" itemprop="datePublished"> 發表於 2014-05-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>之前一直在一些导入的开源工程里编写一些Java代码，所以不怎么遇到依赖问题，最近学习Hadoop，由于安装的是2.4.0版本，在编写hadoop、hbase相关程序的时候，遇到一些依赖问题难以解决，网上搜索结果无论英文还是中文一般都是hadoop 1.x的版本，但是1.x和2.x的包结构根本不一样，尝试了很久手动搜索然后一个一个jar包导入的方式，最后还是提示有问题，这时候我想到了maven工具，虽然一直没有真正使用过，但是知道它在管理依赖方面有很大的优势，所以这两天粗略学习了一下。</p>
-<p>　　学习一个东西最好的（最适合我的）方式，还是去official site看 getting started 之类的tutorial, 在看过30分钟的入门教程之后（实质follow完远不止30分钟），对Maven有了一个初步的了解，已经能够使用它来创建工程和导入第三方的Jar包了。</p>
-<p>　　getting started里提到的都是一些最常见的标签，于是我又尝试阅读了一下两个开源项目的POM文件，试着往自己工程的POM里添加相应的标签，最终终于成功编译了一个hbase的程序，之后又尝试了一些restlet等框架，总体感觉maven在解决依赖关系方面确实非常强大，当然Maven远不止是一个为依赖关系而设计的工具，还需要进一步的学习和体会 。</p>
-<p>在开始之前，除上官网教程中生成maven工程的命令：相关的package和jar名都可以修改<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mvn archetype:generate \</span><br><span class="line">  -DarchetypeGroupId=org<span class="class">.apache</span><span class="class">.maven</span><span class="class">.archetypes</span> \</span><br><span class="line">  -DgroupId=com<span class="class">.mycompany</span><span class="class">.app</span> \</span><br><span class="line">  -DartifactId=my-app</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2014/05/21/usefulTagsForMavenPomFile/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a><a href="/tags/eclipse/">eclipse</a><a href="/tags/maven/">maven</a><a href="/tags/依赖/">依赖</a><a href="/tags/可运行jar/">可运行jar</a><a href="/tags/标签/">标签</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/05/21/usefulTagsForMavenPomFile/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/05/21/usefulTagsForMavenPomFile/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
@@ -714,6 +712,10 @@
 			
 		
 			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
@@ -726,23 +728,19 @@
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			

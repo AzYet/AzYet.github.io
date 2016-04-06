@@ -78,6 +78,130 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/17/mysql-difference-between-2-tables/" title="mysql合并记录及两表比较" itemprop="url">mysql合并记录及两表比较</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
+<h2 id="降维">降维</h2><p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/17/mysql-difference-between-2-tables/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/mysql/">mysql</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/17/mysql-difference-between-2-tables/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/mysql-difference-between-2-tables/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
+<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
+<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">orientation=</span><span class="string">"vertical"</span> &gt;</span><br><span class="line">    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">text=</span><span class="string">"Hello, I am a TextView"</span> /&gt;</span><br><span class="line">    &lt;Button android:<span class="variable">id=</span><span class="string">"@+id/button"</span></span><br><span class="line">            android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">text=</span><span class="string">"Hello, I am a Button"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/android-develop-layout-abse/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/android-develop-layout-abse/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/android-develop-layout-abse/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
@@ -130,6 +254,69 @@
 	
 	  	<span></span>
 		<a href="/2015/12/16/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
+<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
+<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
+<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -524,209 +711,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/25/maxSubsetSum/" title="一道笔试题：求数组元素和最大的子集" itemprop="url">一道笔试题：求数组元素和最大的子集</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-25T06:42:45.000Z" itemprop="datePublished"> 發表於 2015-10-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><p>昨天参加腾讯旗下某公司的笔试，其中唯一的算法题是这样的（大致描述）：</p>
-<blockquote>
-<p>某数组中有正数也有负数，相邻的一个或多个元素组成一个子集，求所有子集中元素和的最大值。<br>例如数组[-2, -4, 3, 5, -6, -3, 2, 4], 其子集和最大值为8,对应子集为[3, 5]</p>
-</blockquote>
-<h2 id="思路">思路</h2><p>第一反应是穷举，即列举所有长度从1到全集的所有子集的和，但是这肯定是效率很低的方法。</p>
-<p>当时解题的思路就是分析人工计算时，会以何种方式进行：</p>
-<ol>
-<li>从第一个元素开始往后累加，更新记录过程中的最大和<br>2.如果和为负，则抛弃前面的和，从后续元素开始重新累加<br>3.直到数组尾，得到最大值</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/25/maxSubsetSum/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/25/maxSubsetSum/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/10/25/maxSubsetSum/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/28/rabbitmqInNova/" title="Nova中的RabbitMQ" itemprop="url">Nova中的RabbitMQ</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-28T04:16:42.000Z" itemprop="datePublished"> 發表於 2015-06-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　最近需要在项目中使用到消息队列，虽然之前有过使用经验，但是因为当时并无具体要求，所以只是在看完RabbitMQ的tutorial之后就自行实现了，并不知道合理性和效率如何。所以在新的项目设计时，打算借鉴一下Openstack中AMQP的使用经验 </p>
-<h2 id="Nova消息队列">Nova消息队列</h2><p>　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许它们以松耦合的风格通信。更准确地说，Nova组件之间使用RPC通信。但是这个机制是建立在发布/订阅机制之上的，它有以下优势：</p>
-<ul>
-<li><p>解耦client和Server（Client不需要知道Server的具体引用）</p>
-</li>
-<li><p>Client和Server完全异步(Client不需要Server在收到RPC call时同时执行）</p>
-</li>
-<li><p>随机平衡远程调用（多个Servant时，优先分配空闲者处理调用）</p>
-</li>
-</ul>
-<p>　　Nova使用direct, fanout,和topic Exchange。其架构如下图所示 </p>
-<p><img src="http://docs.openstack.org/developer/nova/_images/arch.png" alt=""></p>
-<p>　　Nova通过一个封装和解封装消息到调用的类来实现RPC功能，包括请求/响应（rpc.call）, 单向(rpc.cast)。每个Nova服务（计算，调度等）在初始化时都实现两个AMQP队列，一个接收带有NODE-TYPE.NODE-ID的routingkey（如 compute.hostname）的消息，另一个接受通用的带有NODE-TYPE的routingkey（如compute）的消息。前者将消息传递给特定的物理节点，例如，终止某个虚拟机实例时使用。这个API在调用是“请求/响应”类型时充当consumer，rpc.cast时仅为publisher。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/28/rabbitmqInNova/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/openstack/">openstack</a><a href="/tags/rabbitmq/">rabbitmq</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/28/rabbitmqInNova/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/28/rabbitmqInNova/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/20/configureAndMakeInstall/" title="configure和make install背后的故事" itemprop="url">configure和make install背后的故事</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-20T08:11:57.000Z" itemprop="datePublished"> 發表於 2015-06-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>接触过Linux开发的人都知道从源代码安装需要执行类似以下的步骤：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
-<p>目前为止我执行上述命令已经很多次了，但是并不知道它背后的逻辑。在跟进一个还在开发中的项目的时候，上要述步骤并不能完美执行，需要针对作一些修改，是时候挖掘这些咒语背后的操作了。</p>
-<h2 id="configure">configure</h2><p><code>configure</code>脚本负责在特定的系统上执行build的准备工作。这确认后续的build和install的依赖关系已经满足，找出使用这些依赖需要知道的所有信息。</p>
-<p>Linux程序通常是用C编写的，所以我们需要C编译器，configure脚本通常会检查系统有合适的C编译器，它在哪里以及如何调用。</p>
-<h2 id="Build">Build</h2><p>一旦configure完成，我们就可以执行<code>make</code>命令来build软件。它执行一系列在Makefile中定义的操作来编译写好的源代码。</p>
-<p>通常下载的源文件tarball中不包含Makefile，取而代之的是一个模板文件<code>Makefile.in</code>，configure脚本产生一个针对你的系统定制的Makefile文件。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/20/configureAndMakeInstall/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/20/configureAndMakeInstall/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/20/configureAndMakeInstall/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -755,6 +739,10 @@
 			
 		
 			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
@@ -767,23 +755,19 @@
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>5</sup></a></li>
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			

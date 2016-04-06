@@ -1,0 +1,580 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>漫游Go语言（六）之Error、Reader和Image练习 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="ErrorGo使用error类型的值来表示错误，这是一个内建的类似Stringer的接口。123type error interface &amp;#123;    Error() string&amp;#125;
+类似Stringer,fmt包也会寻找error接口来打印值。
+函数经常以error作为返回类型，调用函数的代码应该通过检测error是否为nil并处理处理。一般来说error == nil说明无错误">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫游Go语言（六）之Error、Reader和Image练习">
+<meta property="og:url" content="http://azyet.github.io/2016/03/25/a-tour-of-go-6/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="ErrorGo使用error类型的值来表示错误，这是一个内建的类似Stringer的接口。123type error interface &amp;#123;    Error() string&amp;#125;
+类似Stringer,fmt包也会寻找error接口来打印值。
+函数经常以error作为返回类型，调用函数的代码应该通过检测error是否为nil并处理处理。一般来说error == nil说明无错误">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbjw1f2mtjtu5gkj203c03g3yb.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漫游Go语言（六）之Error、Reader和Image练习">
+<meta name="twitter:description" content="ErrorGo使用error类型的值来表示错误，这是一个内建的类似Stringer的接口。123type error interface &amp;#123;    Error() string&amp;#125;
+类似Stringer,fmt包也会寻找error接口来打印值。
+函数经常以error作为返回类型，调用函数的代码应该通过检测error是否为nil并处理处理。一般来说error == nil说明无错误">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/25/a-tour-of-go-6/" title="漫游Go语言（六）之Error、Reader和Image练习" itemprop="url">漫游Go语言（六）之Error、Reader和Image练习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-25T18:00:16.000Z" itemprop="datePublished"> 發表於 2016-03-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Error"><span class="toc-number">1.</span> <span class="toc-text">Error</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#error练习"><span class="toc-number">1.1.</span> <span class="toc-text">error练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Readers"><span class="toc-number">2.</span> <span class="toc-text">Readers</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reader练习"><span class="toc-number">2.1.</span> <span class="toc-text">Reader练习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#练习:rot13Reader"><span class="toc-number">2.2.</span> <span class="toc-text">练习:rot13Reader</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Image接口"><span class="toc-number">3.</span> <span class="toc-text">Image接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#image练习"><span class="toc-number">3.1.</span> <span class="toc-text">image练习</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="Error">Error</h2><p><code>Go</code>使用<code>error</code>类型的值来表示错误，这是一个内建的类似<code>Stringer</code>的接口。<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="interface"><span class="keyword">interface</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Error</span>() <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>类似<code>Stringer</code>,<code>fmt</code>包也会寻找<code>error</code>接口来打印值。</p>
+<p>函数经常以<code>error</code>作为返回类型，调用函数的代码应该通过检测<code>error</code>是否为<code>nil</code>并处理处理。一般来说<code>error == nil</code>说明无错误，而非nil则代表failure.</p>
+<h3 id="error练习">error练习</h3><p>实现一个开方函数，除返回结果外，还返回<code>error</code>,当被操作数是负数是返回一个非<code>nil</code>的<code>error</code>，其<code>Error()</code>方法返回“cannot Sqrt negative number: -2”信息。<br>创建一个<code>MyFloat</code>的类<code>type MyFloat float64</code>,然后实现<code>func (mf MyFloat ) Error() string</code>使之成为一个<code>error</code>。<br>这是我的答案<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> ( <span class="string">"fmt"</span></span><br><span class="line">        <span class="string">"math"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="typename">float64</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (mf MyFloat) Error() <span class="typename">string</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"cannot Sqrt negative number:%v.\n"</span>,<span class="typename">float64</span>(mf))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Sqrt(f <span class="typename">float64</span>) (<span class="typename">float64</span>,error)&#123;</span><br><span class="line">    <span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>, MyFloat(f)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> math.Sqrt(f),<span class="constant">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">    fmt.Println(Sqrt(<span class="number">4.3</span>))</span><br><span class="line">    fmt.Println(Sqrt(-<span class="number">5.2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>运行：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2.073644135332772</span> &lt;nil&gt;</span><br><span class="line"><span class="number">0</span> cannot <span class="built_in">Sqrt</span> negative <span class="keyword">number</span>:-<span class="number">5.2.</span></span><br></pre></td></tr></table></figure></p>
+<p>这里需要注意的一点是，在<code>Error()</code>方法里，当用<code>Sprintf</code>返回<code>string</code>时，一定要将其强制转换为基本类型<code>float64</code>，否则就会进入死循环直到<code>stack overflow</code>.这是因为<code>Error</code>方法的<code>Sprintf</code>语句中打印<code>MyFloat</code>类型又会调用<code>Error</code>，从而进入死循环。</p>
+<h2 id="Readers">Readers</h2><p>io包中定义了io.Reader接口，代表数据stream的读取端。Go的标准库包含这些接口的多种实现，包括文件、网络、压缩器、加密器等。<br>io.reader接口有一个Read方法：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func <span class="list">(<span class="keyword">T</span>)</span> Read<span class="list">(<span class="keyword">b</span> []byte)</span> <span class="list">(<span class="keyword">n</span> int, err error)</span></span><br></pre></td></tr></table></figure></p>
+<p><code>Read</code>向指定的<code>slice</code>中填充数据并返回读取的字节数和一个<code>error</code>，当文件结束时它返回一个<code>io.EOF</code>的<code>error</code>.<br>下例中使用<code>NewReader</code>方法创建了一个<code>io.Reader</code>并使用其<code>Read</code>方法一次读入8字节。<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	r := strings.NewReader(<span class="string">"Hello, Reader!"</span>)</span><br><span class="line"></span><br><span class="line">	b := make([]byte, 8)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">n</span>, <span class="keyword">err</span> := r.<span class="keyword">Read</span>(b)</span><br><span class="line">		fmt.Printf(<span class="string">"n = %v err = %v b = %v\n"</span>, <span class="keyword">n</span>, <span class="keyword">err</span>, b)</span><br><span class="line">		fmt.Printf(<span class="string">"b[:n] = %q\n"</span>, b[:<span class="keyword">n</span>])</span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">err</span> == io.EOF &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Reader练习">Reader练习</h3><p>实现一个<code>Reader</code>类型，从中能读出无穷的<code>&#39;A&#39;</code>字符。<br>这个应该是比较简单地，直接给出我的实现。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"golang.org/x/tour/reader"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyReader <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// TODO: Add a Read([]byte) (int, error) method to MyReader.</span></span><br><span class="line"><span class="keyword">func</span> (mr MyReader) Read(b []<span class="typename">byte</span>) (<span class="typename">int</span> ,error)&#123;</span><br><span class="line">    <span class="built_in">len</span> := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> b&#123;</span><br><span class="line">        b[i] = <span class="string">'A'</span> </span><br><span class="line">        <span class="built_in">len</span> ++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span> ,<span class="constant">nil</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	reader.Validate(MyReader&#123;&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="练习:rot13Reader">练习:rot13Reader</h3><p>一种常见的模式是用一个<code>io.Reader</code>包装另一个<code>io.Reader</code>，以对<code>stream</code>实现修改。<br>例如<code>gzip.NewReader</code>函数接收一个<code>io.Reader</code>(压缩数据的stream)，返回一个<code>*gzip.Reader</code>，它也是一个<code>io.Reader</code>（一个已解压数据的<code>stream</code>）.</p>
+<p>题目：实现一个<code>rot13Reader</code>，它从一个<code>io.Reader</code>中读取数据并实现<code>rot13</code>加密算法（所有字母顺移13位。<br>这个题目有一点工作量，以下是我的实现：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"io"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type rot13Reader <span class="class"><span class="keyword">struct</span> </span>&#123;</span><br><span class="line">	r io.<span class="type">Reader</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">isAlphabet</span><span class="params">(<span class="built_in">c</span> byte)</span></span> bool &#123;</span><br><span class="line">	<span class="keyword">return</span> 'a' &lt;= <span class="built_in">c</span> &amp;&amp; <span class="built_in">c</span> &lt;= 'z' || '<span class="type">A'</span> &lt;= <span class="built_in">c</span> &amp;&amp; <span class="built_in">c</span> &lt;= '<span class="type">Z'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">rot13</span><span class="params">(<span class="built_in">c</span> byte)</span></span> byte &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">c</span> &gt;= 'a' &amp;&amp; <span class="built_in">c</span> &lt;= 'z' &#123;</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">c</span> += <span class="number">13</span>; <span class="built_in">c</span> &gt; 'z' &#123;</span><br><span class="line">			<span class="built_in">c</span> = <span class="built_in">c</span>%'z' + 'a' - <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">c</span> &gt;= '<span class="type">A'</span> &amp;&amp; <span class="built_in">c</span> &lt;= '<span class="type">Z'</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">c</span> += <span class="number">13</span>; <span class="built_in">c</span> &gt; '<span class="type">Z'</span> &#123;</span><br><span class="line">			<span class="built_in">c</span> = <span class="built_in">c</span>%'<span class="type">Z'</span> + '<span class="type">A'</span> - <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">c</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(r rot13Reader)</span></span> <span class="type">Read</span>(b []byte) (int, error) &#123;</span><br><span class="line">	n, e := r.r.<span class="type">Read</span>(b)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> isAlphabet(b[i]) &#123;</span><br><span class="line">			b[i] = rot13(b[i])</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> e == io.<span class="type">EOF</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n, e</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := strings.<span class="type">NewReader</span>(<span class="string">"Lbh penpxrq gur pbqr!"</span>)</span><br><span class="line">	r := rot13Reader&#123;s&#125;</span><br><span class="line">	io.<span class="type">Copy</span>(os.<span class="type">Stdout</span>, &amp;r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：<br><figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">You</span> <span class="function_or_atom">cracked</span> <span class="function_or_atom">the</span> <span class="function_or_atom">code</span><span class="exclamation_mark">!</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Image接口">Image接口</h2><p>image包定义了Image接口<br><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">package</span> image</span><br><span class="line"></span><br><span class="line"><span class="typedef"><span class="keyword">type</span> <span class="type">Image</span> interface <span class="container">&#123;</span><br><span class="line">    <span class="type">ColorModel</span>() <span class="title">color</span>.<span class="type">Model</span></span><br><span class="line">    <span class="type">Bounds</span>() <span class="type">Rectangle</span></span><br><span class="line">    <span class="type">At</span>(<span class="title">x</span>, <span class="title">y</span> <span class="title">int</span>) <span class="title">color</span>.<span class="type">Color</span></span><br><span class="line">&#125;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>其中<code>Bounds</code>方法返回的<code>Rectangle</code>类型实质是<code>image.Rectangle</code>，因为它是在包内定义的。<br>详细信息<a href="https://golang.org/pkg/image/#Image" target="_blank" rel="external">https://golang.org/pkg/image/#Image</a><br><code>color.Color</code>和<code>color.Model</code>都是接口，但是我们将暂时略过它们而使用预实现的<code>color.RGBA</code>和<code>color.GRGBAModel</code>。这些接口和类型在<a href="https://golang.org/pkg/image/color/" target="_blank" rel="external">image/color package</a>中定义<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"image"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	m := image.NewRGBA(image.Rect(0, 0, 100, 100))</span><br><span class="line">	fmt.Println(m.Bounds())</span><br><span class="line">	fmt.Println(m.At(0, 0).RGBA())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行：</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">(0,0)</span>-<span class="comment">(100,100)</span></span><br><span class="line"><span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h3 id="image练习">image练习</h3><p>还记得之前的生成图像练习吗？不过这次我们要实现一个<code>image.Image</code>而不是一个<code>slice</code>.<br>定义你自己的<code>Image</code>类型，实现<a href="https://golang.org/pkg/image/#Image" target="_blank" rel="external">必要的方法</a>,并调用<code>pic.ShowImage()</code>。<br><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="typedef"><span class="keyword">type</span> <span class="type">Image</span> interface <span class="container">&#123;</span><br><span class="line">        // <span class="type">ColorModel</span> <span class="title">returns</span> <span class="title">the</span> <span class="type">Image</span>'<span class="title">s</span> <span class="title">color</span> <span class="title">model</span>.</span><br><span class="line">        <span class="type">ColorModel</span>() <span class="title">color</span>.<span class="type">Model</span></span><br><span class="line">        // <span class="type">Bounds</span> <span class="title">returns</span> <span class="title">the</span> <span class="title">domain</span> <span class="title">for</span> <span class="title">which</span> <span class="type">At</span> <span class="title">can</span> <span class="title">return</span> <span class="title">non</span>-<span class="title">zero</span> <span class="title">color</span>.</span><br><span class="line">        // <span class="type">The</span> <span class="title">bounds</span> <span class="title">do</span> <span class="title">not</span> <span class="title">necessarily</span> <span class="title">contain</span> <span class="title">the</span> <span class="title">point</span> (0, 0).</span><br><span class="line">        <span class="type">Bounds</span>() <span class="type">Rectangle</span></span><br><span class="line">        // <span class="type">At</span> <span class="title">returns</span> <span class="title">the</span> <span class="title">color</span> <span class="title">of</span> <span class="title">the</span> <span class="title">pixel</span> <span class="title">at</span> (<span class="title">x</span>, <span class="title">y</span>).</span><br><span class="line">        // <span class="type">At</span>(<span class="type">Bounds</span>().<span class="type">Min</span>.<span class="type">X</span>, <span class="type">Bounds</span>().<span class="type">Min</span>.<span class="type">Y</span>) <span class="title">returns</span> <span class="title">the</span> <span class="title">upper</span>-<span class="title">left</span> <span class="title">pixel</span> <span class="title">of</span> <span class="title">the</span> <span class="title">grid</span>.</span><br><span class="line">        // <span class="type">At</span>(<span class="type">Bounds</span>().<span class="type">Max</span>.<span class="type">X</span>-1, <span class="type">Bounds</span>().<span class="type">Max</span>.<span class="type">Y</span>-1) <span class="title">returns</span> <span class="title">the</span> <span class="title">lower</span>-<span class="title">right</span> <span class="title">one</span>.</span><br><span class="line">        <span class="type">At</span>(<span class="title">x</span>, <span class="title">y</span> <span class="title">int</span>) <span class="title">color</span>.<span class="type">Color</span></span><br><span class="line">&#125;</span></span></span><br></pre></td></tr></table></figure></p>
+<p><code>Bounds</code>应该返回一个<code>image.Rectangle</code>,类似<code>image.Rect(0,0,w,h)</code>.<br><code>ColorModel</code>应该返回<code>color.RGBAModel</code>。</p>
+<p>事实以上教程可能比较老了，当我查阅了新的<code>Image</code>相关<code>api</code>文档之后，类似<code>Rect</code>这样的<code>type</code>都已经换了形式。以下是我的实现<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"golang.org/x/tour/pic"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"image/color"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"image"</span></span><br><span class="line"></span><br><span class="line">type <span class="type">Image</span> <span class="class"><span class="keyword">struct</span> </span>&#123;</span><br><span class="line">	w, h  int</span><br><span class="line">	colr uint8</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(i Image)</span></span> <span class="type">ColorModel</span>() color.<span class="type">Model</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> color.<span class="type">RGBAModel</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(i Image)</span></span> <span class="type">Bounds</span>() image.<span class="type">Rectangle</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> image.<span class="type">Rectangle</span>&#123;image.<span class="type">Point</span>&#123;i.w, i.h&#125;, image.<span class="type">Point</span>&#123;<span class="number">110</span>, <span class="number">110</span>&#125;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="params">(i Image)</span></span> <span class="type">At</span>(x, y int) color.<span class="type">Color</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> color.<span class="type">RGBA</span>&#123;i.colr+uint8(x), i.colr+uint8(y), <span class="number">255</span>, <span class="number">255</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="type">Image</span>&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">50</span>&#125;</span><br><span class="line">	pic.<span class="type">ShowImage</span>(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印的图片是<br><img src="http://ww2.sinaimg.cn/large/55f247cbjw1f2mtjtu5gkj203c03g3yb.jpg" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/03/25/a-tour-of-go-6/" data-title="漫游Go语言（六）之Error、Reader和Image练习 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/04/a-tour-of-go-7/" title="漫游Go语言（七）之goroutine/channel">
+  <strong>上一篇：</strong><br/>
+  <span>
+  漫游Go语言（七）之goroutine/channel</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/25/a-tour-of-go-5/"  title="漫游Go语言（五）之方法、接口与类型断言">
+ <strong>下一篇：</strong><br/> 
+ <span>漫游Go语言（五）之方法、接口与类型断言
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/25/a-tour-of-go-6/" data-title="漫游Go语言（六）之Error、Reader和Image练习" data-url="http://azyet.github.io/2016/03/25/a-tour-of-go-6/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Error"><span class="toc-number">1.</span> <span class="toc-text">Error</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#error练习"><span class="toc-number">1.1.</span> <span class="toc-text">error练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Readers"><span class="toc-number">2.</span> <span class="toc-text">Readers</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reader练习"><span class="toc-number">2.1.</span> <span class="toc-text">Reader练习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#练习:rot13Reader"><span class="toc-number">2.2.</span> <span class="toc-text">练习:rot13Reader</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Image接口"><span class="toc-number">3.</span> <span class="toc-text">Image接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#image练习"><span class="toc-number">3.1.</span> <span class="toc-text">image练习</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
