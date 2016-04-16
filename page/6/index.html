@@ -78,6 +78,136 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/19/zookeeperNote2/" title="ZooKeeper学习笔记（二）之开发入门" itemprop="url">ZooKeeper学习笔记（二）之开发入门</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T11:32:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>这一节中我们演示用ZooKeeper创建一个简单的barrier和producer-consumer队列。当然首先你必须有至少一个ZooKeeper Server在运行。</p>
+<h2 id="基类">基类</h2><p>barrier和queue都将用到以下共同代码，构造方法会创建到Server的连接。</p>
+<pre><code>注意：官网教程没有提到，这个基类是要实现Watcher接口的，这样<span class="built_in">process</span>方法才能作为回调方法收到消息
+</code></pre><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> ZooKeeper zk = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">Object</span> mutex = <span class="keyword">new</span> <span class="keyword">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">String</span> root;</span><br><span class="line"></span><br><span class="line">    SyncPrimitive(<span class="keyword">String</span> address)</span><br><span class="line">            <span class="keyword">throws</span> KeeperException, IOException &#123;</span><br><span class="line">        <span class="keyword">if</span>(zk == <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Starting ZK:"</span>);</span><br><span class="line">            zk = <span class="keyword">new</span> ZooKeeper(address, <span class="number">3000</span>, (Watcher) <span class="keyword">this</span>);</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Finished starting ZK: "</span> + zk);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> process(WatcherEvent event) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">void</span> process(WatchedEvent watchedEvent) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>WatchEvent包含的信息有：</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WatchedEvent <span class="keyword">state</span>:SyncConnected type:NodeChildrenChanged path:/testRoot1</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/zookeeperNote2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/19/zookeeperNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/19/zookeeperNote1/" title="ZooKeeper学习笔记（一）之概览" itemprop="url">ZooKeeper学习笔记（一）之概览</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T09:56:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。</p>
+<h2 id="什么是ZooKeeper">什么是ZooKeeper</h2><p>Zookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理的复杂。</p>
+<pre><code>naming <span class="keyword">service</span> 也称<span class="literal">directory</span> <span class="keyword">service</span>.
+</code></pre><p>协同一个分布式系统就像管理一个动物园。</p>
+<p>ZooKeeper致力于将上述服务的必要部分提取成一组非常简单的集中协同服务API。服务本身就是分布式和高可靠的。一致性、组管理和presence协议将由服务提供，应用不必自己来实现。应用程序使用特定服务由ZooKeeper特定组件和应用程序特定convention组成。ZooKeeper提供的配方将表明这些简单服务可以用来构建强大的抽象。</p>
+<p>ZooKeeper本身有C和Java的实现，并提供多种Client绑定，含Python Ruby和Go。</p>
+<h2 id="ZooKeepr概览">ZooKeepr概览</h2><p>ZooKeeper允许分布式进程通过共享的层级的数据注册命令空间（类似文件系统）来相互协同。不同于文件系统的是，ZooKeeper为Client提供<strong>高吞吐量，低延时，高可用和顺序严格</strong>的znode存取。高性能全ZooKeeper可被用在大型的分布式系统。高可靠保证ZooKeeper不会成为系统的单点命门。严格的顺序使复杂的同步单元可在Client上实施。命名空间则非常类似标准的文件系统。</p>
+<p><img src="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&amp;modificationDate=1295027310000&amp;api=v2" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/zookeeperNote1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/概览/">概览</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/19/zookeeperNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/18/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
   </h1>
   <p class="article-author">By
@@ -593,131 +723,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/15/ObjectAndXmlInServlet/" title="Java对象与xml的相互转换" itemprop="url">Java对象与xml的相互转换</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-15T16:17:29.000Z" itemprop="datePublished"> 發表於 2015-05-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　Rest API中使用最多的参数类型是Json和xml，而在之前的项目一直接触的也是Json，实际上我也认为Json更简洁更直观。但是最近导师和某研究院签了一个合作项目，对方的前端使用的是xml，所以我也跟着查找了一下java对象与xml的转换方法。</p>
-<p>　　Servlet是自带json和xml两种返回格式的，在Get时返回xml非常简单,使用annotation指定xml即可。
-　　</p>
-<h2 id="GET">GET</h2><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Get(<span class="string">"xml"</span>)</span><br><span class="line"><span class="keyword">public</span> Object handleGetRequest() &#123;</span><br><span class="line">    <span class="keyword">log</span><span class="built_in">.</span>debug(<span class="string">"received a Get Request"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">new</span> <span class="keyword">Order</span>(<span class="string">"id123"</span>,<span class="string">"user1"</span>,<span class="literal">new</span> <span class="built_in">Date</span>(),<span class="string">"scan"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/15/ObjectAndXmlInServlet/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/servlet/">servlet</a><a href="/tags/xml/">xml</a><a href="/tags/对象/">对象</a><a href="/tags/转换/">转换</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/15/ObjectAndXmlInServlet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/ObjectAndXmlInServlet/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/15/LinkedListReverseAndLocateMid/" title="链表反转与寻找中间结点" itemprop="url">链表反转与寻找中间结点</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-15T15:37:36.000Z" itemprop="datePublished"> 發表於 2015-05-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　前两天收到一个电话面试，期间问了一个关于链表的基础问题，而我竟然答错了。想想真是汗颜，一方面确实经验不足，有些紧张，另一方面也是太天真，总以为太过基础的内容不值花费太多时间。</p>
-<p>　　其实作为在校生，面试官不会对你有多高的期望，最看重的就是你的基本素质，而我恰恰忽略了这方面的准备。虽然项目期间写了不少代码，但是Java本身就提供种类容器，很少遇到要自己去处理链表、排序之类的操作。所以乍一问及，也没来得及细想，就凭印象给出了一个错误答案。<br>　　<br>　　所以后来找了一些关于链表的常见问题，亡羊补牢一下。
-　　</p>
-<h2 id="链表反转">链表反转</h2><p>　　所这个其实没有多少算法，凭直觉就能写出代码。考虑到笔试中使用C语言较多，所以这次用C来实现。说起来本科直接学的C++，与C的不同还是很明显的。</p>
-<h3 id="节点定义">节点定义</h3><p>链表名+next指针<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> Node &#123;</span><br><span class="line">    <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="keyword">struct</span> Node *next;</span><br><span class="line">&#125; Node;</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/15/LinkedListReverseAndLocateMid/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/中点/">中点</a><a href="/tags/反转/">反转</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a><a href="/tags/链表/">链表</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/15/LinkedListReverseAndLocateMid/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/LinkedListReverseAndLocateMid/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -754,23 +759,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -778,7 +771,23 @@
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -790,15 +799,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -814,7 +815,11 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 		</ul>

@@ -78,6 +78,127 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/14/createUbuntuBootUsbDiskInWindows/" title="在windows/Linux下制作ubuntu 14.10的启动U盘" itemprop="url">在windows/Linux下制作ubuntu 14.10的启动U盘</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-14T15:00:57.000Z" itemprop="datePublished"> 發表於 2015-04-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="此文由来">此文由来</h3><p>由于在ubuntu下误将win8分区格式化，所以重新安装了win8，而大家都知道win8安装是会覆盖掉grub的，所以就无法进入Linux了，必须要用Linux的LiveCD来修改Grub。</p>
+<h2 id="Linux下制作启动U盘">Linux下制作启动U盘</h2><p>在linux下制作ubuntu的启动盘再简单不过<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ubuntu<span class="class">.iso</span> &gt; /dev/sdx</span><br></pre></td></tr></table></figure></p>
+<p>只需要将iso文件原样刻录进u盘的即可，无需写入引导信息之类的额外操作。
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/14/createUbuntuBootUsbDiskInWindows/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/blkid/">blkid</a><a href="/tags/lsblk/">lsblk</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/u盘/">u盘</a><a href="/tags/启动盘/">启动盘</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/14/createUbuntuBootUsbDiskInWindows/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/14/createUbuntuBootUsbDiskInWindows/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/14/createWinBootUsbDiskInLinux/" title="在Linux环境下创建win8启动盘" itemprop="url">在Linux环境下创建win8启动盘</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-14T14:34:18.000Z" itemprop="datePublished"> 發表於 2015-04-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="此文由来">此文由来</h3><p>今天在Linux下格式化一只32G的U盘时，误将内置的32G SSD盘格了，那正是我win8的安装盘！！！</p>
+<h2 id="用到的工具">用到的工具</h2><p>fdisk, mkfs.ntfs， mount, ms-sys<br>当然你还得有一个win8的安装镜像文件（ISO）。<br>其中关键道具就是ms-sys，它不是系统自带的工具，需要自己安装，但是安装非常简单，就是下载源码make &amp;&amp; sudo make install，所以我也不细说了。只说一下大致流程。
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/14/createWinBootUsbDiskInLinux/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ms-sys/">ms-sys</a><a href="/tags/u盘/">u盘</a><a href="/tags/启动盘/">启动盘</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/14/createWinBootUsbDiskInLinux/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/14/createWinBootUsbDiskInLinux/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/14/freeNetViaIPv6/" title="通过IPv6“免费”上网" itemprop="url">通过IPv6“免费”上网</a>
   </h1>
   <p class="article-author">By
@@ -415,23 +536,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -439,7 +548,23 @@
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -451,15 +576,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -475,7 +592,11 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 		</ul>

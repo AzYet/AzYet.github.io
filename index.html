@@ -78,6 +78,128 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/15/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法" itemprop="url">ansible用到的简单yaml语法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-15T22:11:43.000Z" itemprop="datePublished"> 發表於 2016-04-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>对ansible来说，几乎每个yaml文件都以一个列表开头，而每一项则是一个key-value对。yaml文件可分别以<code>---</code>和<code>...</code>来标识文件的开始和结束。</p>
+<h2 id="list">list</h2><p>ymal列表项起始于同一缩进的<code>-</code>,注意空格不可省略。<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">--</span><br><span class="line"></span># A list of tasty fruits</span><br><span class="line">fruits:</span><br><span class="line">    -<span class="ruby"> <span class="constant">Apple</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Orange</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Strawberry</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Mango</span></span><br><span class="line"></span>...</span><br></pre></td></tr></table></figure></p>
+<h2 id="dictionary">dictionary</h2><p>而字典则是以<code>:</code>分割，空格同样不可省略。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">martin</span>:</span><br><span class="line">    <span class="attribute">name</span>: Martin D'vloper</span><br><span class="line">    <span class="attribute">job</span>: Developer</span><br><span class="line">    <span class="attribute">skill</span>: Elite</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/15/simple-yaml-in-ansible/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a><a href="/tags/yaml/">yaml</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/15/simple-yaml-in-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/15/simple-yaml-in-ansible/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/13/note-of-ansible/" title="Ansible学习笔记" itemprop="url">Ansible学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-14T01:09:07.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="远程连接信息">远程连接信息</h2><p>了解<code>ansible</code>如何通过<code>ssh</code>与远程主机通信是很重要的。</p>
+<p><code>ansible 1.3</code>和之后版本会默认使用<code>openssh</code>，以支持<code>ControlPersist</code>，<code>Kerberos</code>和<code>~/.ssh/config</code>配置。在一些较老的版本中，如<code>RH/CentOS</code>较早版本时，<code>openssh</code>版本可能太老而不支持部分以上特性，此时<code>ansible</code>会使用<code>python</code>的<code>OpenSSH</code>实现<code>paramiko</code>。如果需要<code>Kerberized ssh</code>，建议使用<code>ubuntu</code>、<code>fedora</code>等<code>openssh</code>版本较新的发行版。<br>而&lt;=1.2的版本中，默认为<code>paramiko</code>，使用<code>-c</code>选项切换到<code>native</code>的<code>ssh.</code><br>有很小的可能会遇到不支持<code>SFTP</code>的情况，此时可以在配置文件中切换到<code>SCP</code>。<br>与远程主机通信时，默认使用<code>ssh key</code>，也可以通过<code>-k</code>选项来使用密码，如果需要sudo特性且sudo要求密码时，可使用<code>--ask-become-pass</code>。<br>也许是常识：控制主机离被控制集群越近，执行速度越快，因此尽量选用较近的主机。<br><code>ansible</code>也并不一定要使用<code>ssh</code>，传输方式是插件式的，支持本地管理方式、<code>chroot,lxc</code>和<code>jail containers, ansible-pull</code>模式能够按日程从中央<code>git</code>服务器中<code>pull</code>指令。</p>
+<h2 id="第一个命令">第一个命令</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -<span class="keyword">m</span> ping -<span class="keyword">u</span> root -b</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/13/note-of-ansible/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/13/note-of-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/04/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
   </h1>
   <p class="article-author">By
@@ -569,132 +691,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" title="Nginx+gunicorn+Flask安装指南" itemprop="url">Nginx+gunicorn+Flask安装指南</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-17T20:52:57.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Introduction">Introduction</h2><p>本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。</p>
-<h2 id="关于WSGI的一些概念">关于WSGI的一些概念</h2><p>gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义WEB应用/框架 与 WEB服务器/应用服务器之间通信规范的接口标准，旨在简化和规范上述部件间的通信，并使各部分易于替换。它定义了一组可用于其它协议之上的接口。</p>
-<p>因此作为一种WSGI实现的gunicorn可以将HTTP请求转换为WSGI定义的python标准请求，可被同样遵循了WSGI规范的应用如django,flask接收处理，处理后的响应也同样可被逆向转换为http response并回到客户端。</p>
-<p>nginx在此场景中则作为一个http request代理，将不uri或类型的请求发送至不同的web server处理，比如静态图片可由自己处理，而动态的数据库查询可交给flask应用来完成。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Flask/">Flask</a><a href="/tags/Nginx/">Nginx</a><a href="/tags/gunicorn/">gunicorn</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/17/simple-sytemd-upstart-script/" title="systemd简单自启动脚本" itemprop="url">systemd简单自启动脚本</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-17T18:07:08.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>如果要使用systemd来实现开机自启动，一般将后缀为<code>.service</code>的<code>unit configuration file</code>放置在<code>/etc/systemd/system/</code>下。<br>如果只是简单地运行一个shell脚本：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">run shell script</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/usr/bin/yourscript</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
-<p>如果还需要关闭的话，则需要加一行ExecStop,并相应修改：<br>(yourscript脚本接受两种参数并执行不同操作）<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">Power-<span class="keyword">off</span> gpu</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/usr/bin/yourscript start</span></span></span><br><span class="line"><span class="setting">ExecStop=<span class="value">/usr/bin/yourscript stop</span></span></span><br><span class="line"><span class="setting">RemainAfterExit=<span class="value"><span class="keyword">yes</span></span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
-<p>当然也可以用简单地shell命令来代替unit configuration file规则<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">Power-<span class="keyword">off</span> gpu</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/bin/sh -c <span class="string">"echo OFF &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">ExecStop=<span class="value">/bin/sh -c <span class="string">"echo ON &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">RemainAfterExit=<span class="value"><span class="keyword">yes</span></span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
-<p>.service文件编写好之后，可以使用<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">enable</span> yourservice.<span class="keyword">service</span></span><br></pre></td></tr></table></figure></p>
-<p>来启动服务。</p>
-<p>如果.service文件有修改 ，可以需要使用<code>systemctl daemon-reload</code>命令重新加载。</p>
-<p>更多的内置关键字和用法，可以参考<a href="https://wiki.ubuntu.com/SystemdForUpstartUsers" target="_blank" rel="external">https://wiki.ubuntu.com/SystemdForUpstartUsers</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/systemd/">systemd</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/17/simple-sytemd-upstart-script/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/simple-sytemd-upstart-script/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -731,23 +727,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -755,7 +739,23 @@
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -767,15 +767,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -791,7 +783,11 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 		</ul>

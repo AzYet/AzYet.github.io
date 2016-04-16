@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2016/04/15/simple-yaml-in-ansible/</loc>
+    <lastmod>2016-04-16T10:15:44.686Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2016/04/13/note-of-ansible/</loc>
+    <lastmod>2016-04-14T14:12:47.415Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2016/03/25/a-tour-of-go-6/</loc>
     <lastmod>2016-04-06T03:32:20.901Z</lastmod>
   </url>
@@ -127,17 +137,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote2/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/18/rabbitmqNote/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote4/</loc>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -152,17 +157,22 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote2/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/05/11/natInnerServiceToPublic/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote3/</loc>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote2/</loc>
+    <loc>http://azyet.github.io/2015/05/06/windowsLoginSameSMBHostWithDiffUser/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -207,12 +217,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote2/</loc>
+    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
+    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote1/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -227,7 +237,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
+    <loc>http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -267,7 +277,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/06/windowsLoginSameSMBHostWithDiffUser/</loc>
+    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -302,7 +312,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/</loc>
+    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -312,7 +322,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
+    <loc>http://azyet.github.io/2015/06/01/ubuntu1404WirelessShare/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -337,16 +347,6 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/06/01/ubuntu1404WirelessShare/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/22/theGreatCannon/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -362,6 +362,11 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote5/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/05/30/simicsProductFamily/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -372,7 +377,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote5/</loc>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote4/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/04/21/sambaCounterNoPermission/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -383,11 +393,6 @@
   
   <url>
     <loc>http://azyet.github.io/2015/05/15/ObjectAndXmlInServlet/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/04/21/sambaCounterNoPermission/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -412,17 +417,22 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/18/rabbitmqNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote1/</loc>
+    <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote2/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote2/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
