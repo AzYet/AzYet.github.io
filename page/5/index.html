@@ -78,6 +78,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/27/androidBootProcess/" title="android启动流程" itemprop="url">android启动流程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-27T17:23:24.000Z" itemprop="datePublished"> 發表於 2015-05-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>什么是Zygot,init.rc,和Linux的启动过程有什么区别等。</p>
+<h2 id="通电与系统启动">通电与系统启动</h2><p>电源接通以后，Boot Rom从一个写入硬件的预定义的地址开始执行，它会<strong>加载BootLoader</strong>到内存中执行。</p>
+<p>（注：类似PC的BIOS）</p>
+<h2 id="BootLoader">BootLoader</h2><p>这是一个在android之前运行的小程序，它不是android的一部分，是厂商设置锁的其它限制的地方。</p>
+<p>(注：类似Linux的Grub)</p>
+<p>Bootloader分两步执行，首先它检测外部Ram并加载一个第二步中要用到的程序。</p>
+<p>第二步中，bootloader安装内核运行需要的<strong>网络、内存</strong>等，它为kernel的特定功能提供<strong>配置参数</strong>或者<strong>输入</strong>。</p>
+<p>bootloader可以在这里找到：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;android <span class="keyword">source</span>&gt;<span class="regexp">/bootable/</span>bootloader<span class="regexp">/legacy/u</span>sbloader</span><br></pre></td></tr></table></figure>
+<p>legacy的loader包含两个重要部分：</p>
+<pre><code><span class="number">1</span>. init<span class="class">.s</span>:: 初始化栈，置零BSS segment和调用main.c中的<span class="function"><span class="title">call_main</span><span class="params">()</span></span>。
+<span class="number">2</span>. main<span class="class">.c</span>:: 初始化硬件（硬件，主板，键盘，控制台）和创建Linux tags
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/27/androidBootProcess/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Zygote/">Zygote</a><a href="/tags/android/">android</a><a href="/tags/bootloader/">bootloader</a><a href="/tags/启动流程/">启动流程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/27/androidBootProcess/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/27/androidBootProcess/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/26/ipCommandInLinux/" title="Linux下的ip命令" itemprop="url">Linux下的ip命令</a>
   </h1>
   <p class="article-author">By
@@ -690,72 +761,6 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/19/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-19T17:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p> 这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。</p>
-<h2 id="Barrier">Barrier</h2><p> 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.</p>
-<h3 id="测试代码">测试代码</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> ZKBarrier zkBarrier = <span class="keyword">new</span> ZKBarrier(<span class="string">"dell:2181"</span>, <span class="string">"/testRoot3"</span>, <span class="number">3</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//purge the children under testrRoot</span></span><br><span class="line"></span><br><span class="line">zkBarrier.name = args[<span class="number">0</span>];</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Entering the Barrier"</span>);</span><br><span class="line">zkBarrier.enter();</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Work done, leaving"</span>);</span><br><span class="line">zkBarrier.leave();</span><br><span class="line"><span class="keyword">return</span>;</span><br></pre></td></tr></table></figure>
-<p> 大致的流程如下：</p>
-<pre><code>等待其它进程（总数3）就绪
-开始工作
-等待所有Node删除，退出
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/19/zookeeperNote3/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/19/zookeeperNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote3/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
@@ -800,11 +805,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			
@@ -812,11 +817,15 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -828,7 +837,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -844,11 +853,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
 			
 		
 			

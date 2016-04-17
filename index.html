@@ -139,27 +139,28 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/13/note-of-ansible/" title="Ansible学习笔记" itemprop="url">Ansible学习笔记</a>
+      <a href="/2016/04/13/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables" itemprop="url">ansible学习笔记(二)Iventory、Variables</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-14T01:09:07.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="远程连接信息">远程连接信息</h2><p>了解<code>ansible</code>如何通过<code>ssh</code>与远程主机通信是很重要的。</p>
-<p><code>ansible 1.3</code>和之后版本会默认使用<code>openssh</code>，以支持<code>ControlPersist</code>，<code>Kerberos</code>和<code>~/.ssh/config</code>配置。在一些较老的版本中，如<code>RH/CentOS</code>较早版本时，<code>openssh</code>版本可能太老而不支持部分以上特性，此时<code>ansible</code>会使用<code>python</code>的<code>OpenSSH</code>实现<code>paramiko</code>。如果需要<code>Kerberized ssh</code>，建议使用<code>ubuntu</code>、<code>fedora</code>等<code>openssh</code>版本较新的发行版。<br>而&lt;=1.2的版本中，默认为<code>paramiko</code>，使用<code>-c</code>选项切换到<code>native</code>的<code>ssh.</code><br>有很小的可能会遇到不支持<code>SFTP</code>的情况，此时可以在配置文件中切换到<code>SCP</code>。<br>与远程主机通信时，默认使用<code>ssh key</code>，也可以通过<code>-k</code>选项来使用密码，如果需要sudo特性且sudo要求密码时，可使用<code>--ask-become-pass</code>。<br>也许是常识：控制主机离被控制集群越近，执行速度越快，因此尽量选用较近的主机。<br><code>ansible</code>也并不一定要使用<code>ssh</code>，传输方式是插件式的，支持本地管理方式、<code>chroot,lxc</code>和<code>jail containers, ansible-pull</code>模式能够按日程从中央<code>git</code>服务器中<code>pull</code>指令。</p>
-<h2 id="第一个命令">第一个命令</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -<span class="keyword">m</span> ping -<span class="keyword">u</span> root -b</span><br></pre></td></tr></table></figure>
+        <p><code>ansible</code>同时和多种系统工作，它会选择<code>inventory</code>文件中的部分主机执行不同的操作，这个文件默认位于<code>/etc/ansible/hosts</code>。你也可以同时使用多个<code>inventory</code>或者动态地从云端<code>pull</code>。</p>
+<h2 id="host_and_group">host and group</h2><p><code>inventory</code>文件的模式类似<code>ini</code>：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mail<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[webservers]</span><br><span class="line">foo<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">bar<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[dbservers]</span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">three<span class="class">.example</span><span class="class">.com</span></span><br></pre></td></tr></table></figure></p>
+<p>方括号中是组名，同个主机可以位于多个组中，此时变量将来自所有其所属的组。如果ssh主机使用非默认的22端口，可以使用<code>:</code>将其指定于主机名之后<code>badwolf.example.com:5309</code>。</p>
+<p>如果是静态IP想取个别名，可使用以下的方式。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">jumper</span> ansible_port=<span class="number">5555</span> ansible_host=<span class="number">192.168.1.50</span></span><br></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/13/note-of-ansible/#more">Read More</a>
+            <a href="/2016/04/13/note-of-ansible-2/#more">Read More</a>
           
        </p>
     </div>
@@ -180,7 +181,68 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/13/note-of-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/13/note-of-ansible-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/13/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接" itemprop="url">Ansible学习笔记(一)SSH连接</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-14T01:09:07.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="远程连接信息">远程连接信息</h2><p>了解<code>ansible</code>如何通过<code>ssh</code>与远程主机通信是很重要的。</p>
+<p><code>ansible 1.3</code>和之后版本会默认使用<code>openssh</code>，以支持<code>ControlPersist</code>，<code>Kerberos</code>和<code>~/.ssh/config</code>配置。在一些较老的版本中，如<code>RH/CentOS</code>较早版本时，<code>openssh</code>版本可能太老而不支持部分以上特性，此时<code>ansible</code>会使用<code>python</code>的<code>OpenSSH</code>实现<code>paramiko</code>。如果需要<code>Kerberized ssh</code>，建议使用<code>ubuntu</code>、<code>fedora</code>等<code>openssh</code>版本较新的发行版。<br>而&lt;=1.2的版本中，默认为<code>paramiko</code>，使用<code>-c</code>选项切换到<code>native</code>的<code>ssh.</code><br>有很小的可能会遇到不支持<code>SFTP</code>的情况，此时可以在配置文件中切换到<code>SCP</code>。<br>与远程主机通信时，默认使用<code>ssh key</code>，也可以通过<code>-k</code>选项来使用密码，如果需要sudo特性且sudo要求密码时，可使用<code>--ask-become-pass</code>。<br>也许是常识：控制主机离被控制集群越近，执行速度越快，因此尽量选用较近的主机。<br><code>ansible</code>也并不一定要使用<code>ssh</code>，传输方式是插件式的，支持本地管理方式、<code>chroot,lxc</code>和<code>jail containers, ansible-pull</code>模式能够按日程从中央<code>git</code>服务器中<code>pull</code>指令。</p>
+<h2 id="第一个命令">第一个命令</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -<span class="keyword">m</span> ping -<span class="keyword">u</span> root -b</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/13/note-of-ansible-1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/13/note-of-ansible-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-1/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -628,69 +690,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/24/a-tour-of-go-1/" title="漫游Go语言（一）之包,函数&amp;变量" itemprop="url">漫游Go语言（一）之包,函数&amp;变量</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-24T19:58:05.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>这只是我follow tour.golang.org时的笔记（翻译）。</p>
-<h2 id="Package">Package</h2><p>Go程序都由包组成，从<code>main</code>包开始执行。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span>	</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.<span class="type">Println</span>(<span class="string">"My favorite number is"</span>, rand.<span class="type">Intn</span>(<span class="number">10</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>以上程序导入了<code>match</code> 和<code>math/rand</code>两个包，按约定包名与路径最后一部分相同，比如<code>math/rand</code>目录下的文件都以package rand的声明开头。</p>
-<h2 id="Import">Import</h2><p>可以将多个包用括号一起导入，如<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.<span class="type">Printf</span>(<span class="string">"Now you have %g problems."</span>, math.<span class="type">Sqrt</span>(<span class="number">7</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>当然也可以用多个语句分别导入，但推荐以上方式。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/24/a-tour-of-go-1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/24/a-tour-of-go-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/24/a-tour-of-go-1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -735,11 +734,11 @@
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			
@@ -747,11 +746,15 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -763,7 +766,7 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -779,11 +782,7 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
 			
 		
 			

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Ansible学习笔记 | AzYet&#39;s Notebook</title>
+    <title>Ansible学习笔记(一)SSH连接 | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
@@ -14,13 +14,13 @@
     <meta name="description" content="远程连接信息了解ansible如何通过ssh与远程主机通信是很重要的。
 ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Kerberos和~/.ssh/config配置。在一些较老的版本中，如RH/CentOS较早版本时，openssh版本可能太老而不支持部分以上特性，此时ansible会使用python的OpenSSH实现paramiko。如果需要K">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ansible学习笔记">
-<meta property="og:url" content="http://azyet.github.io/2016/04/13/note-of-ansible/index.html">
+<meta property="og:title" content="Ansible学习笔记(一)SSH连接">
+<meta property="og:url" content="http://azyet.github.io/2016/04/13/note-of-ansible-1/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="远程连接信息了解ansible如何通过ssh与远程主机通信是很重要的。
 ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Kerberos和~/.ssh/config配置。在一些较老的版本中，如RH/CentOS较早版本时，openssh版本可能太老而不支持部分以上特性，此时ansible会使用python的OpenSSH实现paramiko。如果需要K">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ansible学习笔记">
+<meta name="twitter:title" content="Ansible学习笔记(一)SSH连接">
 <meta name="twitter:description" content="远程连接信息了解ansible如何通过ssh与远程主机通信是很重要的。
 ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Kerberos和~/.ssh/config配置。在一些较老的版本中，如RH/CentOS较早版本时，openssh版本可能太老而不支持部分以上特性，此时ansible会使用python的OpenSSH实现paramiko。如果需要K">
 <link rel="publisher" href="107081205815475258476">
@@ -79,7 +79,7 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/13/note-of-ansible/" title="Ansible学习笔记" itemprop="url">Ansible学习笔记</a>
+      <a href="/2016/04/13/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接" itemprop="url">Ansible学习笔记(一)SSH连接</a>
   </h1>
   <p class="article-author">By
        
@@ -129,7 +129,7 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2016/04/13/note-of-ansible/" data-title="Ansible学习笔记 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2016/04/13/note-of-ansible-1/" data-title="Ansible学习笔记(一)SSH连接 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -143,10 +143,10 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/04/15/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法">
+ <a href="/2016/04/13/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables">
   <strong>上一篇：</strong><br/>
   <span>
-  ansible用到的简单yaml语法</span>
+  ansible学习笔记(二)Iventory、Variables</span>
 </a>
 </div>
 
@@ -163,7 +163,7 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/04/13/note-of-ansible/" data-title="Ansible学习笔记" data-url="http://azyet.github.io/2016/04/13/note-of-ansible/"></div>
+	<div class="ds-thread" data-thread-key="2016/04/13/note-of-ansible-1/" data-title="Ansible学习笔记(一)SSH连接" data-url="http://azyet.github.io/2016/04/13/note-of-ansible-1/"></div>
 </section>
 
 
@@ -213,11 +213,11 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			
@@ -225,11 +225,15 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -241,7 +245,7 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -257,11 +261,7 @@ ansible 1.3和之后版本会默认使用openssh，以支持ControlPersist，Ker
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
 			
 		
 			

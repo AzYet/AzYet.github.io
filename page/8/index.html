@@ -78,6 +78,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/27/learnTCPviaHTTP/" title="从一次HTTP访问解析TCP协议的连接建立与释放" itemprop="url">从一次HTTP访问解析TCP协议的连接建立与释放</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-27T05:44:03.000Z" itemprop="datePublished"> 發表於 2015-04-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>要理解TCP的连接和断开其实不难，需要自己代入情境，如果是你来设计网络协议你会如何做。</p>
+<h2 id="连接建立">连接建立</h2><p>情况： 通信质量无法保障（IP层的不可靠性）的情况下，如何保证两者可靠通信。</p>
+<ol>
+<li>A: 在家吗，我想过来玩？[SYN]</li>
+<li>B: 在，你过来吧。[SYN,ACK]</li>
+<li>A: 好的。[ACK]</li>
+<li>（完成）A出发… </li>
+</ol>
+<p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1erk1lcl4slj20kp02pq48.jpg" alt=""></p>
+<p>　　所谓三次握手，其实是发了三次包，代表一次握手过程中的三个步骤而已。
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/27/learnTCPviaHTTP/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HTTP/">HTTP</a><a href="/tags/TCP协议/">TCP协议</a><a href="/tags/连接建立/">连接建立</a><a href="/tags/连接释放/">连接释放</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/27/learnTCPviaHTTP/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/27/learnTCPviaHTTP/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/24/changeApacheRootDir/" title="修改Apache2的根目录" itemprop="url">修改Apache2的根目录</a>
   </h1>
   <p class="article-author">By
@@ -624,67 +692,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/15/bootRepair/" title="重装Windows后的Grub修复" itemprop="url">重装Windows后的Grub修复</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-15T12:59:39.000Z" itemprop="datePublished"> 發表於 2015-04-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>众所周知windows安装会覆盖Grub信息，导致Linux无法启动，修复的方法大概有两种，一种是继续使用windows的引导，加上Linux的Entry，另一种则是重新安装grub。</p>
-<p>个人来说偏好第二种，windows的BCD比较简陋，功能也很简单，而grub则要漂亮和强大一些。另外就是LInux的liveCD也使得grub的安装非常方便，推荐使用ubuntu的Desktop版CD。</p>
-<p>整体来说，重装windows后grub的修复有以下几步。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/15/bootRepair/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/grub/">grub</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/修复/">修复</a><a href="/tags/启动/">启动</a><a href="/tags/引导/">引导</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/15/bootRepair/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/15/bootRepair/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
@@ -729,11 +736,11 @@
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			
@@ -741,11 +748,15 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -757,7 +768,7 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -773,11 +784,7 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
 			
 		
 			
