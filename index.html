@@ -78,6 +78,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/17/note-of-ansible-3/" title="ansible学习笔记(三)Pattern" itemprop="url">ansible学习笔记(三)Pattern</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-17T04:09:43.000Z" itemprop="datePublished"> 發表於 2016-04-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible <span class="tag">&lt;<span class="title">pattern_goes_here</span>&gt;</span> -m <span class="tag">&lt;<span class="title">module_name</span>&gt;</span> -a <span class="tag">&lt;<span class="title">arguments</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible webservers -m service -<span class="tag">a</span> <span class="string">"name=httpd state=restarted"</span></span><br></pre></td></tr></table></figure></p>
+<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span>:two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"><span class="number">192.168</span>.<span class="number">1</span>.*</span><br></pre></td></tr></table></figure></p>
+<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>dbservers</span><br></pre></td></tr></table></figure></p>
+<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
+<p>还可以指定交集<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/17/note-of-ansible-3/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/17/note-of-ansible-3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/17/note-of-ansible-3/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/15/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法" itemprop="url">ansible用到的简单yaml语法</a>
   </h1>
   <p class="article-author">By
@@ -629,67 +693,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/24/a-tour-of-go-2/" title="漫游Go语言（二）之流程控制与defer" itemprop="url">漫游Go语言（二）之流程控制与defer</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-24T20:53:45.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="for循环">for循环</h2><p>Go只是一种循环控制语句<code>for</code>，由分号<code>;</code>分开的三部分作为与C同，其初始化部分通常用<code>:=</code>形式的短声明，其作用域只在循环内。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="string">sum :</span>= <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> <span class="string">i :</span>= <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		sum += i</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>注意与<code>C</code>,<code>java</code>等不同的是，条件部分无括号，而循环体的<code>{}</code>则不可省略。初始化与post循环体语句可省略，<code>;</code>也可以省略，如果什么都不带，则代表死循环。<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="keyword">sum</span> := <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> <span class="keyword">sum</span> &lt; <span class="number">1000</span> &#123;</span><br><span class="line">		<span class="keyword">sum</span> += <span class="keyword">sum</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">sum</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>死循环<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/24/a-tour-of-go-2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/24/a-tour-of-go-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/24/a-tour-of-go-2/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -762,11 +765,11 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -782,7 +785,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			

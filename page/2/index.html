@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/24/a-tour-of-go-2/" title="漫游Go语言（二）之流程控制与defer" itemprop="url">漫游Go语言（二）之流程控制与defer</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-24T20:53:45.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="for循环">for循环</h2><p>Go只是一种循环控制语句<code>for</code>，由分号<code>;</code>分开的三部分作为与C同，其初始化部分通常用<code>:=</code>形式的短声明，其作用域只在循环内。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="string">sum :</span>= <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> <span class="string">i :</span>= <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		sum += i</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意与<code>C</code>,<code>java</code>等不同的是，条件部分无括号，而循环体的<code>{}</code>则不可省略。初始化与post循环体语句可省略，<code>;</code>也可以省略，如果什么都不带，则代表死循环。<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="keyword">sum</span> := <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> <span class="keyword">sum</span> &lt; <span class="number">1000</span> &#123;</span><br><span class="line">		<span class="keyword">sum</span> += <span class="keyword">sum</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">sum</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>死循环<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/24/a-tour-of-go-2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/24/a-tour-of-go-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/24/a-tour-of-go-2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/24/a-tour-of-go-1/" title="漫游Go语言（一）之包,函数&amp;变量" itemprop="url">漫游Go语言（一）之包,函数&amp;变量</a>
   </h1>
   <p class="article-author">By
@@ -328,69 +389,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
-<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
-<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">orientation=</span><span class="string">"vertical"</span> &gt;</span><br><span class="line">    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">text=</span><span class="string">"Hello, I am a TextView"</span> /&gt;</span><br><span class="line">    &lt;Button android:<span class="variable">id=</span><span class="string">"@+id/button"</span></span><br><span class="line">            android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">text=</span><span class="string">"Hello, I am a Button"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
-<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/16/android-develop-layout-abse/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/16/android-develop-layout-abse/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/android-develop-layout-abse/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
@@ -506,6 +504,69 @@
 	
 	  	<span></span>
 		<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
+<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
+<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml <span class="variable">version=</span><span class="string">"1.0"</span> <span class="variable">encoding=</span><span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:<span class="variable">android=</span><span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"match_parent"</span></span><br><span class="line">              android:<span class="variable">orientation=</span><span class="string">"vertical"</span> &gt;</span><br><span class="line">    &lt;TextView android:<span class="variable">id=</span><span class="string">"@+id/text"</span></span><br><span class="line">              android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">              android:<span class="variable">text=</span><span class="string">"Hello, I am a TextView"</span> /&gt;</span><br><span class="line">    &lt;Button android:<span class="variable">id=</span><span class="string">"@+id/button"</span></span><br><span class="line">            android:<span class="variable">layout_width=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">layout_height=</span><span class="string">"wrap_content"</span></span><br><span class="line">            android:<span class="variable">text=</span><span class="string">"Hello, I am a Button"</span> /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/android-develop-layout-abse/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/android-develop-layout-abse/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/android-develop-layout-abse/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -646,70 +707,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　<code>setmentation</code>因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的<code>page frame</code>，每一个<code>frame</code>可包含一个虚拟内存空间中的<code>page</code>。</p>
-<p>　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。</p>
-<p>　　OS维护一个<code>per-process</code>的结构<code>page table</code>，保存着虚拟page映射到物理frame的地址翻译。</p>
-<h2 id="地址翻译">地址翻译</h2><p>　　将虚拟内存地址分割为<code>virtual page number</code> (VPN)和offset两部分。前者代表page号，后者为page内偏移量。通过page table将VPN替换为对应的<code>physical frame number</code>(PFN),从而可以得到真实的物理地址。</p>
-<p>　　对于一个真实的32位系统，page大小为4K，那么VPN数量为2^20 = 1MB,假设每个page需要4byte信息，那么每个page table大小为4M, 如果系统中有100个进程，那么光page table就要消耗400MB空间。显然这个大小是不可能置于CPU寄存器的，只能放置在内存中（依然很大）。</p>
-<h2 id="Page_Table_Entry_(PTE)">Page Table Entry (PTE)</h2><p>　　最简单的形式就是<code>linear page table</code>,用一人数组来存储，其中下标为VPN，内容为PTE。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg" alt=""></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/10/OSTEP-paging-intro/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/10/OSTEP-paging-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/10/OSTEP-paging-intro/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -782,11 +779,11 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -802,7 +799,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			

@@ -4,25 +4,28 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>simics简介 | AzYet&#39;s Notebook</title>
+    <title>ansible学习笔记(三)Pattern | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="Simics是一种支持定义、开发和部署数字系统的模拟器，具有快速、准确、可伸缩和扩展的特点，为工程人员提供了新的系统开发途径。Simics是一种完全系统模拟平台，能快速、确定且可控地运行未经修改的二进制文件。在硬件昂贵、稀缺甚至不存在时，为早期软件开发和测试提供理想的环境。Simics对Intel内部部门是免费使用的。
-　　Simics可以加速系统设计，软件开发和任何数字系统的部署，不论是简单的C">
+    <meta name="description" content="patternansible的命令格式为1ansible &amp;lt;pattern_goes_here&amp;gt; -m &amp;lt;module_name&amp;gt; -a &amp;lt;arguments&amp;gt;
+如1ansible webservers -m service -a &quot;name=httpd state=restarted&quot;
+Pattern支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集">
 <meta property="og:type" content="article">
-<meta property="og:title" content="simics简介">
-<meta property="og:url" content="http://azyet.github.io/2015/05/30/aboutSimics/index.html">
+<meta property="og:title" content="ansible学习笔记(三)Pattern">
+<meta property="og:url" content="http://azyet.github.io/2016/04/17/note-of-ansible-3/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="Simics是一种支持定义、开发和部署数字系统的模拟器，具有快速、准确、可伸缩和扩展的特点，为工程人员提供了新的系统开发途径。Simics是一种完全系统模拟平台，能快速、确定且可控地运行未经修改的二进制文件。在硬件昂贵、稀缺甚至不存在时，为早期软件开发和测试提供理想的环境。Simics对Intel内部部门是免费使用的。
-　　Simics可以加速系统设计，软件开发和任何数字系统的部署，不论是简单的C">
+<meta property="og:description" content="patternansible的命令格式为1ansible &amp;lt;pattern_goes_here&amp;gt; -m &amp;lt;module_name&amp;gt; -a &amp;lt;arguments&amp;gt;
+如1ansible webservers -m service -a &quot;name=httpd state=restarted&quot;
+Pattern支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="simics简介">
-<meta name="twitter:description" content="Simics是一种支持定义、开发和部署数字系统的模拟器，具有快速、准确、可伸缩和扩展的特点，为工程人员提供了新的系统开发途径。Simics是一种完全系统模拟平台，能快速、确定且可控地运行未经修改的二进制文件。在硬件昂贵、稀缺甚至不存在时，为早期软件开发和测试提供理想的环境。Simics对Intel内部部门是免费使用的。
-　　Simics可以加速系统设计，软件开发和任何数字系统的部署，不论是简单的C">
+<meta name="twitter:title" content="ansible学习笔记(三)Pattern">
+<meta name="twitter:description" content="patternansible的命令格式为1ansible &amp;lt;pattern_goes_here&amp;gt; -m &amp;lt;module_name&amp;gt; -a &amp;lt;arguments&amp;gt;
+如1ansible webservers -m service -a &quot;name=httpd state=restarted&quot;
+Pattern支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -79,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/30/aboutSimics/" title="simics简介" itemprop="url">simics简介</a>
+      <a href="/2016/04/17/note-of-ansible-3/" title="ansible学习笔记(三)Pattern" itemprop="url">ansible学习笔记(三)Pattern</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-30T08:40:21.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    <time datetime="2016-04-17T04:09:43.000Z" itemprop="datePublished"> 發表於 2016-04-17</time>
     
   </p>
 </header>
@@ -95,27 +98,24 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#完全系统模拟"><span class="toc-number">1.</span> <span class="toc-text">完全系统模拟</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可伸缩的目标和主机"><span class="toc-number">2.</span> <span class="toc-text">可伸缩的目标和主机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二进制透明"><span class="toc-number">3.</span> <span class="toc-text">二进制透明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更快，更容易开发和调试"><span class="toc-number">4.</span> <span class="toc-text">更快，更容易开发和调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#无限制的故意注入和系统测试"><span class="toc-number">5.</span> <span class="toc-text">无限制的故意注入和系统测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主要特性"><span class="toc-number">6.</span> <span class="toc-text">主要特性</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pattern"><span class="toc-number">1.</span> <span class="toc-text">pattern</span></a></li></ol>
 		
 		</div>
 		
-		<p>　　Simics是一种支持定义、开发和部署数字系统的模拟器，具有快速、准确、可伸缩和扩展的特点，为工程人员提供了新的系统开发途径。Simics是一种完全系统模拟平台，能快速、确定且可控地运行<strong>未经修改的二进制文件</strong>。在硬件昂贵、稀缺甚至不存在时，为早期软件开发和测试提供理想的环境。Simics对Intel内部部门是免费使用的。</p>
-<p>　　Simics可以加速系统设计，软件开发和任何数字系统的部署，不论是简单的CPU还是复杂混合的架构，多平台，<strong>计算机网络系统</strong>。Simics支持混合CPU类型的异构平台，从单CPU到数百SoC通过Ethernet连接的<strong>多机架系统</strong>。Simics提供不限于ARM, H8, MIPS, SPARC, SH, TI C64, and IA (x86）架构模型及周边系统。</p>
-<h2 id="完全系统模拟">完全系统模拟</h2><p>　　Simics可以模拟任何数字系统，基本的CPU+内存，定制的FPGA或ASIC，单个的板卡或插满板卡的机架，大型复杂的混合架构系统模型可以由现成的若干处理器家庭，数百计的IO设备和标准通信，背板和网络协议组成。</p>
-<a id="more"></a>
-<h2 id="可伸缩的目标和主机">可伸缩的目标和主机</h2><p>　　Simics容量包含两个维度，它能执行极端庞大和复杂的虚拟模型，也能方便地将Host server从一台PC扩容到<strong>服务器集群</strong>，保证<strong>任何大小的模型</strong>能够真实可用。</p>
-<h2 id="二进制透明">二进制透明</h2><p>　　Simics运行的<strong>二进制文件和真实物理系统</strong>运行的是<strong>一样</strong>的，使得开发者可以创建、调试和部署firmware，设备驱动，OS，中间件栈和应用软件。因为Simics使用不经修改的“产品二进制”，所以开发者任意可以使用自己熟悉的<strong>第三方开发工具</strong>。</p>
-<h2 id="更快，更容易开发和调试">更快，更容易开发和调试</h2><p>　　利益于硬件不具备的高级功能，调试和测试被简化。非侵入的调试和跟踪，执行可保存和恢复，确定性执行和可重复执行的测试用例，可正向和反向执行，可在任何内部设备上进行检查控制和断点，可以注入任意硬件故障，可保存系统状态和恢复。</p>
-<h2 id="无限制的故意注入和系统测试">无限制的故意注入和系统测试</h2><p>　　Simics可以为一个复杂的系统，包括它的准确<strong>配置</strong>和精确<strong>动作</strong>进行<strong>脚本编程</strong>，从而使测试更为容易。任何特定的目标系统安装都可以用运行脚本的方式在<strong>几分钟内重现</strong>，无需去定位和配置硬件板卡。</p>
-<h2 id="主要特性">主要特性</h2><ul>
-<li>Extensibility — 任何人都可以为自己的模拟平台扩展写模型和插件（DML，c/c++，python)</li>
-<li>Inspectability — 调试与分析更容易</li>
-<li>Checkpointing — 可将整个模拟保存到硬盘中</li>
-<li>Determinism — 同状态运行同脚本，行为一致，复现Bug十分方便</li>
-<li>Reversibility — 可反向执行，便于快速聚焦特定行为或Bug</li>
-<li>Scalability — 模拟多CPU，多板卡，多机架系统</li>
-<li>Scripting — Python编写脚本，便于自定义行为模拟</li>
-</ul>
+		<h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible <span class="tag">&lt;<span class="title">pattern_goes_here</span>&gt;</span> -m <span class="tag">&lt;<span class="title">module_name</span>&gt;</span> -a <span class="tag">&lt;<span class="title">arguments</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible webservers -m service -<span class="tag">a</span> <span class="string">"name=httpd state=restarted"</span></span><br></pre></td></tr></table></figure></p>
+<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span>:two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"><span class="number">192.168</span>.<span class="number">1</span>.*</span><br></pre></td></tr></table></figure></p>
+<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>dbservers</span><br></pre></td></tr></table></figure></p>
+<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
+<p>还可以指定交集<br><a id="more"></a><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>&amp;staging</span><br></pre></td></tr></table></figure></p>
+<p>或者以上运算的组合<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">webservers:</span><span class="string">dbservers:</span>&amp;<span class="string">staging:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
+<p>以上表达式的含义大致为( webservers 并 <code>dbserver )</code> 交 （<code>staging</code>） 交 （<code>pheonix</code>补） 。<br>你也可以使用通过-e参数传入的变量，不过这种用法不常见。<br><figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">webservers:!</span><span class="expression">&#123;&#123;<span class="variable">excluded</span>&#125;&#125;</span><span class="xml">:&amp;</span><span class="expression">&#123;&#123;<span class="variable">required</span>&#125;&#125;</span><span class="xml"></span></span><br></pre></td></tr></table></figure></p>
+<p>通配和组也可以混用<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">one*<span class="class">.com</span>:dbservers</span><br></pre></td></tr></table></figure></p>
+<p>还可以用类似数组的方式来引用组中的特定成员<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">webservers</span><span class="attr_selector">[0]</span>       </span><br><span class="line"><span class="tag">webservers</span><span class="attr_selector">[-1]</span>      </span><br><span class="line"><span class="tag">webservers</span><span class="attr_selector">[0:1]</span>     </span><br><span class="line"><span class="tag">webservers</span><span class="attr_selector">[1:]</span></span><br></pre></td></tr></table></figure></p>
+<p>语法有点类似python</p>
+<p>一般人不太可能用到正则表达式，但是是支持的，用～开头来标识这是一个<code>regex</code><br><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="special">~</span>(web|db).*<span class="command">\.</span>example<span class="command">\.</span>com</span><br></pre></td></tr></table></figure></p>
+<p>也可以在命令行中使用<code>-l</code>来指定子集：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook site<span class="class">.yml</span> --limit datacenter2</span><br></pre></td></tr></table></figure></p>
+<p>或者通过文件指定<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook site<span class="class">.yml</span> --limit @retry_hosts.txt</span><br></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -124,7 +124,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/ansible/">ansible</a>
   </div>
 
 </div>
@@ -133,7 +133,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2015/05/30/aboutSimics/" data-title="simics简介 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2016/04/17/note-of-ansible-3/" data-title="ansible学习笔记(三)Pattern | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -146,19 +146,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/05/30/simicsProductFamily/" title="Simics产品家族">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Simics产品家族</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/05/28/6stagesInLinuxBootProcess/"  title="Linux启动过程中的6个阶段">
+<a href="/2016/04/15/simple-yaml-in-ansible/"  title="ansible用到的简单yaml语法">
  <strong>下一篇：</strong><br/> 
- <span>Linux启动过程中的6个阶段
+ <span>ansible用到的简单yaml语法
 </span>
 </a>
 </div>
@@ -167,7 +159,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/05/30/aboutSimics/" data-title="simics简介" data-url="http://azyet.github.io/2015/05/30/aboutSimics/"></div>
+	<div class="ds-thread" data-thread-key="2016/04/17/note-of-ansible-3/" data-title="ansible学习笔记(三)Pattern" data-url="http://azyet.github.io/2016/04/17/note-of-ansible-3/"></div>
 </section>
 
 
@@ -177,7 +169,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#完全系统模拟"><span class="toc-number">1.</span> <span class="toc-text">完全系统模拟</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可伸缩的目标和主机"><span class="toc-number">2.</span> <span class="toc-text">可伸缩的目标和主机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二进制透明"><span class="toc-number">3.</span> <span class="toc-text">二进制透明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更快，更容易开发和调试"><span class="toc-number">4.</span> <span class="toc-text">更快，更容易开发和调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#无限制的故意注入和系统测试"><span class="toc-number">5.</span> <span class="toc-text">无限制的故意注入和系统测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主要特性"><span class="toc-number">6.</span> <span class="toc-text">主要特性</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pattern"><span class="toc-number">1.</span> <span class="toc-text">pattern</span></a></li></ol>
  
   </div>
 

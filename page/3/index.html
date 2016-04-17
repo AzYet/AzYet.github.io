@@ -78,6 +78,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　<code>setmentation</code>因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的<code>page frame</code>，每一个<code>frame</code>可包含一个虚拟内存空间中的<code>page</code>。</p>
+<p>　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。</p>
+<p>　　OS维护一个<code>per-process</code>的结构<code>page table</code>，保存着虚拟page映射到物理frame的地址翻译。</p>
+<h2 id="地址翻译">地址翻译</h2><p>　　将虚拟内存地址分割为<code>virtual page number</code> (VPN)和offset两部分。前者代表page号，后者为page内偏移量。通过page table将VPN替换为对应的<code>physical frame number</code>(PFN),从而可以得到真实的物理地址。</p>
+<p>　　对于一个真实的32位系统，page大小为4K，那么VPN数量为2^20 = 1MB,假设每个page需要4byte信息，那么每个page table大小为4M, 如果系统中有100个进程，那么光page table就要消耗400MB空间。显然这个大小是不可能置于CPU寄存器的，只能放置在内存中（依然很大）。</p>
+<h2 id="Page_Table_Entry_(PTE)">Page Table Entry (PTE)</h2><p>　　最简单的形式就是<code>linear page table</code>,用一人数组来存储，其中下标为VPN，内容为PTE。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/10/OSTEP-paging-intro/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/10/OSTEP-paging-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/10/OSTEP-paging-intro/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/10/OSTEP-vm-intro/" title="OSTEP学习笔记-内存虚拟化" itemprop="url">OSTEP学习笔记-内存虚拟化</a>
   </h1>
   <p class="article-author">By
@@ -662,74 +726,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/08/adbLearningNote2/" title="adb学习笔记(二)之am与pm" itemprop="url">adb学习笔记(二)之am与pm</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-08T06:35:01.000Z" itemprop="datePublished"> 發表於 2015-06-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="activity_manager_（am）">activity manager （am）</h2><p>　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am &lt;<span class="command"><span class="keyword">command</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>　　也要可以不进入shell直接执行命令：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -<span class="tag">a</span> android<span class="class">.intent</span><span class="class">.action</span><span class="class">.VIEW</span></span><br></pre></td></tr></table></figure>
-<h3 id="am命令及参数">am命令及参数</h3><h4 id="start_[options]_&lt;INTENT&gt;">start [options] &lt;INTENT&gt;</h4><p>　　通过指定Intent启动activity。</p>
-<p>　　options有：</p>
-<p><code>-D</code>      开启debug</p>
-<p><code>-W</code>      等启动结束</p>
-<p><code>--start-profiler &lt;FILE&gt;</code>       启动profiler，发送结果到<code>FILE</code></p>
-<p><code>-P &lt;FILE&gt;</code>             类上，但是profiler在app闲置时停止</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/08/adbLearningNote2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/08/adbLearningNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/08/adbLearningNote2/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -802,11 +798,11 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -822,7 +818,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
