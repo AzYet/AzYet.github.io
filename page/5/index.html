@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/30/aboutSimics/" title="simics简介" itemprop="url">simics简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T08:40:21.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Simics是一种支持定义、开发和部署数字系统的模拟器，具有快速、准确、可伸缩和扩展的特点，为工程人员提供了新的系统开发途径。Simics是一种完全系统模拟平台，能快速、确定且可控地运行<strong>未经修改的二进制文件</strong>。在硬件昂贵、稀缺甚至不存在时，为早期软件开发和测试提供理想的环境。Simics对Intel内部部门是免费使用的。</p>
+<p>　　Simics可以加速系统设计，软件开发和任何数字系统的部署，不论是简单的CPU还是复杂混合的架构，多平台，<strong>计算机网络系统</strong>。Simics支持混合CPU类型的异构平台，从单CPU到数百SoC通过Ethernet连接的<strong>多机架系统</strong>。Simics提供不限于ARM, H8, MIPS, SPARC, SH, TI C64, and IA (x86）架构模型及周边系统。</p>
+<h2 id="完全系统模拟">完全系统模拟</h2><p>　　Simics可以模拟任何数字系统，基本的CPU+内存，定制的FPGA或ASIC，单个的板卡或插满板卡的机架，大型复杂的混合架构系统模型可以由现成的若干处理器家庭，数百计的IO设备和标准通信，背板和网络协议组成。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/aboutSimics/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/aboutSimics/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/aboutSimics/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/28/6stagesInLinuxBootProcess/" title="Linux启动过程中的6个阶段" itemprop="url">Linux启动过程中的6个阶段</a>
   </h1>
   <p class="article-author">By
@@ -694,83 +755,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/20/zookeeperNote5/" title="ZooKeeper学习笔记（五）之基本概念-续" itemprop="url">ZooKeeper学习笔记（五）之基本概念-续</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-20T15:33:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="ACL_权限">ACL 权限</h2><p>ZooKeeper支持以下权限：</p>
-<pre><code><span class="operator"><span class="keyword">CREATE</span> : you can <span class="keyword">create</span> a child node
-
-<span class="keyword">READ</span> : you can <span class="keyword">get</span> <span class="keyword">data</span> <span class="keyword">from</span> a node <span class="keyword">and</span> list its children.
-
-<span class="keyword">WRITE</span> : you can <span class="keyword">set</span> <span class="keyword">data</span> <span class="keyword">for</span> a node
-
-<span class="keyword">DELETE</span> : you can <span class="keyword">delete</span> a child node
-
-ADMIN : you can <span class="keyword">set</span> permissions</span>
-</code></pre><p>　　创建和删除被从写的权限中抽离出来以实现更<strong>细粒度</strong>的控制.    </p>
-<p>　　因为ZooKeeper并无znode拥有者的概念，所以设计了<code>ADMIN</code>权限。ZooKeeper默认所有人拥有excute/lookup权限。</p>
-<h2 id="内建ACL策略">内建ACL策略</h2><p>　　ZooKeeeper有以下内建策略。</p>
-<blockquote>
-<p>   world ： 有唯一id，anyone，表示任何人</p>
-<p>   auth ： 不使用id, 代表认证用户</p>
-<p>   digest ： 用 username:password 来生成 MD5 hash作为id. 认证使用username:password形式的明文， ACL中密码采用base64 编码的密码 的SHA1哈希.</p>
-<p>   ip ：使用client IP 作为id. expression为<code>addr/bits</code>形式.</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/20/zookeeperNote5/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ACL/">ACL</a><a href="/tags/Binding/">Binding</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/20/zookeeperNote5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote5/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
@@ -831,11 +815,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -843,11 +827,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			

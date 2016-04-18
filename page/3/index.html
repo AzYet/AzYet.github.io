@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/12/13/OSTEP-smaller-page-table/" title="OSTEP学习笔记-分页表" itemprop="url">OSTEP学习笔记-分页表</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-14T03:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>一般常用的page大小是4/8KB,那么一个32位的操作系统，将有1M长度的的分页表，单个表项按4字节计，page table为4MB，而每个进程都需要自己的page table,那么100个进程需要400MB内存，无疑是不小的空间开销，需要想办法压缩。</p>
+<h2 id="增大page">增大page</h2><p>这无疑是简洁有效的，增大page会减小page table规模，但是负面效果也是明显的，大的page会导致内存利用率下降<code>internal fragment</code>。</p>
+<p>许多系统支持多page size，但是多page size并不是为了减小page table而是为了减轻TLB压力。因为有些程序可以聪明地一次申请足够大的page, 将常用的数据结构放置于同一page下，从而提高内存存取效率。</p>
+<h2 id="混合paging_&amp;_segments">混合paging &amp; segments</h2><p>当进程的堆和栈的使用率很低时，占用的内存可能是一个稀疏地址空间。也就是说绝大部分的page对进程都是invalid。此时与其保存所有page，不妨保存进程各数据段实际使用的page。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/13/OSTEP-smaller-page-table/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/13/OSTEP-smaller-page-table/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/13/OSTEP-smaller-page-table/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
   </h1>
   <p class="article-author">By
@@ -663,69 +725,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/08/shortcutsInBash/" title="BASH中的shortcut" itemprop="url">BASH中的shortcut</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-08T07:58:30.000Z" itemprop="datePublished"> 發表於 2015-06-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="BASH中的shortcut">BASH中的shortcut</h1><p>　　可能很多人不知道，BASH中有许多有用的快捷键，它能使你在shell下的工作更加高效。或者有些人已经使用了部分的快捷键，但是不知道它其实是BASH提供的功能，比如<code>ctrl+c</code>可以发送中断信号，<code>ctrl+l</code>可以实现clear命令的效果。事实上不仅是bash可以用一些快捷键，在一些其它的命令行工具中，也有可能可以使用这些组合键，因为这是由gnu 的 readline库定义的，所以使用了这个库的任何工具都提供这些能力。另外有些CLI虽然没有使用gnu的readline库，但是为了符合使用习惯，也会兼容这些操作。</p>
-<p>　　某些shortcut，特别是alt开头的，可能会与terminal menu等菜单冲突，此时可以找到terminal的设置菜单将其关闭。</p>
-<h2 id="编辑命令">编辑命令</h2><p><code>ctrl+a/e</code> 移动光标到行首、尾</p>
-<p><code>ctrl+u/k</code> 删除自光标位置到行首、尾的内容</p>
-<p><code>alt+d</code><br><code>ctrl+w</code>   删除自光标至词尾、首的内容<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/08/shortcutsInBash/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/08/shortcutsInBash/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/08/shortcutsInBash/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -786,11 +785,11 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -798,11 +797,11 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
