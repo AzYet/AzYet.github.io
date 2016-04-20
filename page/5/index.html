@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/30/simicsProductFamily/" title="Simics产品家族" itemprop="url">Simics产品家族</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T08:42:35.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Simics由多个产品和可选的add-on组成，此文档介绍它们分别是什么，彼此如何交互。</p>
+<h2 id="Simics_HindSight">Simics HindSight</h2><p>　　<strong>软件开发人员</strong>使用的主要/基本的产品，为Simics平台提<strong>供用户接口</strong>和<strong>软件调试接口</strong>。HindSight可以通过<strong>Eclipse</strong>来使用，也可以单独使用。如果单独使用，可以用通用的如<strong>GDB</strong>这样的或者其它<strong>IDE</strong>的软件调试器与之连接。</p>
+<p>　　HindSight提供<strong>脚本编程</strong>、设备和系统登录、低层<strong>Debugging</strong>，<strong>断点</strong>和WatchPoint能力，还提供独有的对调试隐蔽Bug极为有用的<strong>反向执行</strong>能力。</p>
+<p>　　HindSight还提供<strong>save和load</strong>能力，ckeckpoints包含系统（CPU，内存，软件等）状态的所有信息，你可以将其只在到硬盘当中，随时可以还原系统状态。</p>
+<p>　　Simics还提供一个虚拟板卡，所谓的“Quick Start Platform. QSP”，它是一个包含有限合成物和专门模拟设备的简单虚拟平台。用户可以通过它来<strong>上手和熟悉Simics特性</strong>。因为它的设备模型并不与真实物理设备对应，所以不能用它来运行真正的firmware。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/simicsProductFamily/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/simicsProductFamily/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/simicsProductFamily/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/30/aboutSimics/" title="simics简介" itemprop="url">simics简介</a>
   </h1>
   <p class="article-author">By
@@ -686,78 +749,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/20/zookeeperNote6/" title="ZooKeeper学习笔记（六）之Java例程" itemprop="url">ZooKeeper学习笔记（六）之Java例程</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-20T16:44:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　之前小节中已经写过快速入门的例程，但在进一步了解了更多的概念之后，需要更多的实践来加深印象。总之理论学习和实践穿插进行在我看来是一种不错的方式，重要的是在参照教程编写代码的同时不要只求快速跑通，而应该与之前的看过的原理结合起来。</p>
-<h2 id="一个简单的Watch客户端">一个简单的Watch客户端</h2><p>　　watch一个znode，用启动和停止特定程序的方式作出回应。</p>
-<h3 id="Requirements">Requirements</h3><ol>
-<li>接收的参数:<blockquote>
-<p> 服务地址<br> 需要watch的znode<br> 可执行程序+参数</p>
-</blockquote>
-</li>
-<li>从zonde中取得数据并运行程序</li>
-<li>如果znode变化，用新的数据重启程序</li>
-<li>如果znode删除，终止程序</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/20/zookeeperNote6/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java例程/">Java例程</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/20/zookeeperNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote6/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
   </nav>
 
 </div>
@@ -783,11 +777,15 @@
 			
 		
 			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -795,7 +793,7 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -807,7 +805,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -815,11 +813,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -827,15 +821,19 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -847,11 +845,7 @@
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
 			
 		
 		</ul>
