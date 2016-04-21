@@ -4,25 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>修改Apache2的根目录 | AzYet&#39;s Notebook</title>
+    <title>Nginx 1.9作为TCP反射代理（负载平衡） | AzYet&#39;s Notebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="PC_Chen">
     
 
     
-    <meta name="description" content="测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。12345Not FoundThe requested URL / was not found on this server.Apache/2.2.22 (Ubuntu) Server at dell Port 8800
-　　查看error.log，发现许多123[">
+    <meta name="description" content="从nginx 1.9开始，开源版中也有了tcp load balancing，为此投入了很多人力，这也是一个典型的商业软件开发支持开源产品的例子（此特性最早出现于nginx的商业版nginx plus）。
+why tcp load  balancingnginx最初是一个反向代理，如今已经具有非常丰富的特性，web server, 缓存/加速，反向代理 ， 应用网关。
+Nginx一般用作繁忙网站的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="修改Apache2的根目录">
-<meta property="og:url" content="http://azyet.github.io/2015/04/24/changeApacheRootDir/index.html">
+<meta property="og:title" content="Nginx 1.9作为TCP反射代理（负载平衡）">
+<meta property="og:url" content="http://azyet.github.io/2016/04/20/nginx-tcp-reverse-proxy/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。12345Not FoundThe requested URL / was not found on this server.Apache/2.2.22 (Ubuntu) Server at dell Port 8800
-　　查看error.log，发现许多123[">
+<meta property="og:description" content="从nginx 1.9开始，开源版中也有了tcp load balancing，为此投入了很多人力，这也是一个典型的商业软件开发支持开源产品的例子（此特性最早出现于nginx的商业版nginx plus）。
+why tcp load  balancingnginx最初是一个反向代理，如今已经具有非常丰富的特性，web server, 缓存/加速，反向代理 ， 应用网关。
+Nginx一般用作繁忙网站的">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1f34adxshnvj215h04pwiz.jpg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="修改Apache2的根目录">
-<meta name="twitter:description" content="测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。12345Not FoundThe requested URL / was not found on this server.Apache/2.2.22 (Ubuntu) Server at dell Port 8800
-　　查看error.log，发现许多123[">
+<meta name="twitter:title" content="Nginx 1.9作为TCP反射代理（负载平衡）">
+<meta name="twitter:description" content="从nginx 1.9开始，开源版中也有了tcp load balancing，为此投入了很多人力，这也是一个典型的商业软件开发支持开源产品的例子（此特性最早出现于nginx的商业版nginx plus）。
+why tcp load  balancingnginx最初是一个反向代理，如今已经具有非常丰富的特性，web server, 缓存/加速，反向代理 ， 应用网关。
+Nginx一般用作繁忙网站的">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -79,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/24/changeApacheRootDir/" title="修改Apache2的根目录" itemprop="url">修改Apache2的根目录</a>
+      <a href="/2016/04/20/nginx-tcp-reverse-proxy/" title="Nginx 1.9作为TCP反射代理（负载平衡）" itemprop="url">Nginx 1.9作为TCP反射代理（负载平衡）</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-24T09:01:58.000Z" itemprop="datePublished"> 發表於 2015-04-24</time>
+    <time datetime="2016-04-20T18:04:47.000Z" itemprop="datePublished"> 發表於 2016-04-20</time>
     
   </p>
 </header>
@@ -95,15 +99,19 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#why_tcp_load_balancing"><span class="toc-number">1.</span> <span class="toc-text">why tcp load  balancing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何配置TCP_load_balancing"><span class="toc-number">2.</span> <span class="toc-text">如何配置TCP load balancing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li></ol>
 		
 		</div>
 		
-		<p>　　测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Not Found</span><br><span class="line"></span><br><span class="line">The requested <span class="built_in">URL</span> / was <span class="operator">not</span> found <span class="command"><span class="keyword">on</span> <span class="title">this</span> <span class="title">server</span>.</span></span><br><span class="line"></span><br><span class="line">Apache/<span class="number">2.2</span>.22 (Ubuntu) Server <span class="keyword">at</span> dell Port <span class="number">8800</span></span><br></pre></td></tr></table></figure></p>
-<p>　　查看error.log，发现许多<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Fri Apr <span class="number">24</span> <span class="number">15</span>:<span class="number">36</span>:<span class="number">30</span> <span class="number">2015</span>] [<span class="keyword">error</span>] [client <span class="number">10.210</span>.106.16] File <span class="keyword">does</span> <span class="keyword">not</span> exist: /etc/apache2/htdocs</span><br><span class="line">[Fri Apr <span class="number">24</span> <span class="number">15</span>:<span class="number">36</span>:<span class="number">30</span> <span class="number">2015</span>] [<span class="keyword">error</span>] [client <span class="number">10.210</span>.106.16] File <span class="keyword">does</span> <span class="keyword">not</span> exist: /etc/apache2/htdocs</span><br><span class="line">[Fri Apr <span class="number">24</span> <span class="number">15</span>:<span class="number">36</span>:<span class="number">31</span> <span class="number">2015</span>] [<span class="keyword">error</span>] [client <span class="number">10.210</span>.106.16] File <span class="keyword">does</span> <span class="keyword">not</span> exist: /etc/apache2/htdocs</span><br></pre></td></tr></table></figure></p>
-<p>　　显然apache将/etc/apache2/htdocs当作了根目录，试着创建该目录，能正常访问了。<br>　　但是显然根目录设置于此是不合适的，根据网上的搜索结果更改sites-availabe , sites-enabled都没有解决问题。<br>　　用find命令在/etc/apache2下查找htdocs字段，也没有结果。<br>　　最后在一个不起眼的小页面上找到了答案。<br>创建文件:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/</span>apache2<span class="regexp">/conf.d/</span><span class="keyword">default</span>-documentroot</span><br></pre></td></tr></table></figure></p>
-<p>内容为:<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DocumentRoot /<span class="reserved">var</span>/www <span class="comment">#你想设置的目录</span></span><br></pre></td></tr></table></figure></p>
-<p>问题解决。</p>
+		<p>从nginx 1.9开始，开源版中也有了tcp load balancing，为此投入了很多人力，这也是一个典型的商业软件开发支持开源产品的例子（此特性最早出现于nginx的商业版nginx plus）。</p>
+<h2 id="why_tcp_load_balancing">why tcp load  balancing</h2><p>nginx最初是一个反向代理，如今已经具有非常丰富的特性，web server, 缓存/加速，反向代理 ， 应用网关。</p>
+<p>Nginx一般用作繁忙网站的前端，44.9%的前10000最繁忙商业网站使用了nginx作为前端。</p>
+<p>当你在内部使用nginx为应用实现代理和load balancing时，tcp load balancing将使你受益。现代应用使用各种协议而不只是http，nginx可用来处理这些内部流量，比如mysql load balancing就是一个好例子。<br><a id="more"></a></p>
+<h2 id="如何配置TCP_load_balancing">如何配置TCP load balancing</h2><p>TCP load balancing在<code>stream</code>上下文中配置，与<code>http</code>和<code>mail</code>类似，<code>stream</code>上下文能配置若干监听TCP连接的<code>Server</code>,连接被转发到由proxy_pass指令设定的<code>upstream</code> server group。Nginx使用load balancing算法来在<code>upstream servers</code>是选择。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">stream</span> &#123;</span><br><span class="line">    <span class="title">server</span> &#123;</span><br><span class="line">        <span class="title">listen</span> <span class="number">3306</span>;</span><br><span class="line">        <span class="title">proxy_pass</span> db;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title">upstream</span> db &#123;</span><br><span class="line">        <span class="title">server</span> db1:<span class="number">3306</span>;</span><br><span class="line">        <span class="title">server</span> db2:<span class="number">3306</span>;</span><br><span class="line">        <span class="title">server</span> db3:<span class="number">3306</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上配置实现的是Nginx plus r5中的特性，详情可见<a href="https://www.nginx.com/blog/tcp-load-balancing-in-nginx-plus-r5/" target="_blank" rel="external">TCP Load Balancing in NGINX Plus R5</a></p>
+<h2 id="测试">测试</h2><p>将测试机上的1307端口流量转发到vaio笔记本上的socks5端口。<br>在<code>/etc/nginx/nginx.conf</code>配置文件末尾添加<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">stream</span> &#123;</span><br><span class="line">    <span class="title">server</span> &#123;</span><br><span class="line">        <span class="title">listen</span> <span class="number">1307</span>;</span><br><span class="line">        <span class="title">proxy_pass</span> vaio;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title">upstream</span> vaio &#123;</span><br><span class="line">        <span class="title">server</span> <span class="number">172.18.5.233:1080</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重新加载配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx <span class="operator">-s</span> reload</span><br></pre></td></tr></table></figure></p>
+<p>在浏览器中设置代理为测试机<code>172.18.1.34:1307</code><br>在浏览器中打开<code>google.com</code>,监听笔记本vaio <code>172.18.5.233：1080</code><br>google页面打开，同时<code>tcpdump</code> 输出<br><img src="http://ww3.sinaimg.cn/large/55f247cbgw1f34adxshnvj215h04pwiz.jpg" alt=""><br>tcp转发成功，当然这里只有一台机器无法体现Load balancing，只能验证tcp reverse proxy功能的正常。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -112,7 +120,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/DocumentRoot/">DocumentRoot</a><a href="/tags/apache2/">apache2</a><a href="/tags/修改/">修改</a><a href="/tags/根目录/">根目录</a>
+  <span></span> <a href="/tags/nginx/">nginx</a>
   </div>
 
 </div>
@@ -121,7 +129,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://azyet.github.io/2015/04/24/changeApacheRootDir/" data-title="修改Apache2的根目录 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  <div data-url="http://azyet.github.io/2016/04/20/nginx-tcp-reverse-proxy/" data-title="Nginx 1.9作为TCP反射代理（负载平衡） | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -134,19 +142,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/04/27/learnTCPviaHTTP/" title="从一次HTTP访问解析TCP协议的连接建立与释放">
-  <strong>上一篇：</strong><br/>
-  <span>
-  从一次HTTP访问解析TCP协议的连接建立与释放</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/04/23/binaryTreeTraverse/"  title="二叉树的各种遍历（递归/非递归）">
+<a href="/2016/04/19/install-and-config-jumpserver/"  title="jumpserver的安装和配置">
  <strong>下一篇：</strong><br/> 
- <span>二叉树的各种遍历（递归/非递归）
+ <span>jumpserver的安装和配置
 </span>
 </a>
 </div>
@@ -155,7 +155,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/24/changeApacheRootDir/" data-title="修改Apache2的根目录" data-url="http://azyet.github.io/2015/04/24/changeApacheRootDir/"></div>
+	<div class="ds-thread" data-thread-key="2016/04/20/nginx-tcp-reverse-proxy/" data-title="Nginx 1.9作为TCP反射代理（负载平衡）" data-url="http://azyet.github.io/2016/04/20/nginx-tcp-reverse-proxy/"></div>
 </section>
 
 
@@ -165,7 +165,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#why_tcp_load_balancing"><span class="toc-number">1.</span> <span class="toc-text">why tcp load  balancing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何配置TCP_load_balancing"><span class="toc-number">2.</span> <span class="toc-text">如何配置TCP load balancing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li></ol>
  
   </div>
 
