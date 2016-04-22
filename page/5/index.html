@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/30/hindsightLearningNote2/" title="simics hindsight学习笔记（二）" itemprop="url">simics hindsight学习笔记（二）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T15:18:18.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　继续学习simics的使用。</p>
+<h1 id="CLI命令行界面">CLI命令行界面</h1><p>　　simics CLI是一种基于文本的高级用户界面，内置<strong>帮助</strong>系统，上下文敏感可用<strong>tab</strong>补全，支持<strong>脚本</strong>编程，作为hindsight的一部分一起提供。</p>
+<p>　　如果使用了GUI，那么可以通过Control Window的<code>Tools → Command Line Window</code>来启动。Eclipse中位于Console View中。如果未使用GUI，则位于启动simics的shell中。</p>
+<h2 id="调用命令">调用命令</h2><p>　　在命令行中输入命令+参数来使用，可以在reference manual中找到许多例子，以下是两个例子：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SYNOPSIS</span><br><span class="line">    command1 -x -y -small [cpu-<span class="keyword">name</span>] address (<span class="built_in">size</span>|<span class="keyword">name</span>)</span><br><span class="line">SYNOPSIS</span><br><span class="line">    command2 files . . .</span><br></pre></td></tr></table></figure></p>
+<p>　　以<strong>短横线</strong>开头的选项都是flag并且<strong>总是可选</strong>的，flag长度可能不止一个字符，且<strong>不能以-xy</strong>的形式来表示-x -y，位置不敏感，可位于参数列表中的任意位置。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/hindsightLearningNote2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/hindsightLearningNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/30/hindsightLearningNote1/" title="simics hindsight学习笔记（一）" itemprop="url">simics hindsight学习笔记（一）</a>
   </h1>
   <p class="article-author">By
@@ -670,82 +733,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/22/theGreatCannon/" title="The Great Cannon" itemprop="url">The Great Cannon</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-22T14:35:05.000Z" itemprop="datePublished"> 發表於 2015-05-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。</p>
-<p>　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。</p>
-<h2 id="利用百度来操纵百万级电脑发起DDoS">利用百度来操纵百万级电脑发起DDoS</h2><p>　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在线镜像站点，GreatFire.org工程成功地解除中国国内对一些站点的屏蔽。</p>
-<p>　　2015-3-18,项目网站报道前一天遭受了大规模的DOS攻击。这篇文档详细介绍了这次有史以来最大规模的应用层了攻击是如何实施的。</p>
-<p>　　攻击者实现了一种隐秘机制来操作大量的合法流量，境内或境外，来发起和操纵DDOS攻击反审查项目CloundFront和GreatFire.org项目。</p>
-<p>文档揭示了</p>
-<pre><code>访问中国数千网站的全球用户被随机收到恶意代码来实施攻击。
-
-当正常用户加载以下百度服务器dup<span class="class">.baidustatic</span><span class="class">.com</span>, ecomcbjs<span class="class">.jomodns</span><span class="class">.com</span>, cbjs<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>, hm<span class="class">.baidu</span><span class="class">.com</span>, eclick<span class="class">.baidu</span><span class="class">.com</span>, pos<span class="class">.baidu</span><span class="class">.com</span>, cpro<span class="class">.baidu</span><span class="class">.com</span> and hm<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>的资源时，恶意代码以JavaScript的形式发送。
-
-百度的分析代码h.js被替换成恶意代码触发攻击。
-
-恶意代码被无差别地发送给全球任何用户，唯一的目的即发起到CloundFront和GreatFire的攻击
-
-百万级的用户成为攻击目标，转而攻击Amazon的基础设施
-
-窜改发生在来自中国以外的流量访问百度服务器时
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/22/theGreatCannon/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/great-cannon/">great cannon</a><a href="/tags/安全/">安全</a><a href="/tags/网络/">网络</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/22/theGreatCannon/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/22/theGreatCannon/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
@@ -774,11 +761,15 @@
 			
 		
 			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -786,7 +777,7 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -798,7 +789,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -806,11 +797,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -818,15 +805,19 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -838,11 +829,7 @@
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
 			
 		
 		</ul>

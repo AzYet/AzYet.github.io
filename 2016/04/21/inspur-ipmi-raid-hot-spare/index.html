@@ -1,0 +1,568 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>浪潮服务器IPMI与RAID及Hot Spare配置 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="公司新上架了一批浪潮的服务器，型号为SA5212M4，使用了LSI 的SAS3008 磁盘控制器，安装了CentOS 6.7，在进行一些基础配置如RAID hot spare的时候，走过不少弯路(浪潮的技术支持只能呵呵)。
+IPMIIPMI是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浪潮服务器IPMI与RAID及Hot Spare配置">
+<meta property="og:url" content="http://azyet.github.io/2016/04/21/inspur-ipmi-raid-hot-spare/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="公司新上架了一批浪潮的服务器，型号为SA5212M4，使用了LSI 的SAS3008 磁盘控制器，安装了CentOS 6.7，在进行一些基础配置如RAID hot spare的时候，走过不少弯路(浪潮的技术支持只能呵呵)。
+IPMIIPMI是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1f35o494uivj20tj0eiwfy.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1f35o4p5ulqj20mf0f7773.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浪潮服务器IPMI与RAID及Hot Spare配置">
+<meta name="twitter:description" content="公司新上架了一批浪潮的服务器，型号为SA5212M4，使用了LSI 的SAS3008 磁盘控制器，安装了CentOS 6.7，在进行一些基础配置如RAID hot spare的时候，走过不少弯路(浪潮的技术支持只能呵呵)。
+IPMIIPMI是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/21/inspur-ipmi-raid-hot-spare/" title="浪潮服务器IPMI与RAID及Hot Spare配置" itemprop="url">浪潮服务器IPMI与RAID及Hot Spare配置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-21T22:45:34.000Z" itemprop="datePublished"> 發表於 2016-04-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IPMI"><span class="toc-number">1.</span> <span class="toc-text">IPMI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ipmitool"><span class="toc-number">1.1.</span> <span class="toc-text">ipmitool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改root密码"><span class="toc-number">1.2.</span> <span class="toc-text">修改root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用控制台"><span class="toc-number">1.3.</span> <span class="toc-text">使用控制台</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAID"><span class="toc-number">2.</span> <span class="toc-text">RAID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hot_Spare"><span class="toc-number">3.</span> <span class="toc-text">Hot Spare</span></a></li></ol>
+		
+		</div>
+		
+		<p>公司新上架了一批浪潮的服务器，型号为<code>SA5212M4</code>，使用了<code>LSI</code> 的<code>SAS3008</code> 磁盘控制器，安装了<code>CentOS 6.7</code>，在进行一些基础配置如<code>RAID</code> <code>hot spare</code>的时候，走过不少弯路(浪潮的技术支持只能呵呵)。</p>
+<h2 id="IPMI">IPMI</h2><p><code>IPMI</code>是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS甚至BIOS之外的系统，它能管理电源、显示等底层甚至硬件层次的资源，但它也能与OS通信，比如你可以通过ipmitools来设置ipmi的一些参数。</p>
+<h3 id="ipmitool">ipmitool</h3><p><code>ipmitool</code>是一个允许你通过shell来使用ipmi的工具，其它安装过程为<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install OpenIPMI OpenIPMI-tools</span><br><span class="line">chkconfig ipmi <span class="command"><span class="keyword">on</span></span></span><br><span class="line">service ipmi <span class="built_in">start</span></span><br></pre></td></tr></table></figure></p>
+<p>确认服务启动之后，你可以通过它来打印ipmi信息，管理ipmi的用户和密码等<br><a id="more"></a><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ipmitool lan print</span><br><span class="line">Set <span class="keyword">in</span> <span class="string">Progress         :</span> Set Complete</span><br><span class="line">Auth Type <span class="string">Support       :</span> MD2 MD5 PASSWORD </span><br><span class="line">Auth Type <span class="string">Enable        :</span> <span class="string">Callback :</span> MD2 MD5 PASSWORD </span><br><span class="line">                        : <span class="string">User     :</span> MD2 MD5 PASSWORD </span><br><span class="line">                        : <span class="string">Operator :</span> MD2 MD5 PASSWORD </span><br><span class="line">                        : <span class="string">Admin    :</span> MD2 MD5 PASSWORD </span><br><span class="line">                        : <span class="string">OEM      :</span> </span><br><span class="line">IP Address <span class="string">Source       :</span> Static Address</span><br><span class="line">IP <span class="string">Address              :</span> <span class="number">172.30</span>.0.xx</span><br><span class="line">Subnet <span class="string">Mask             :</span> <span class="number">255.255</span>.255.0</span><br><span class="line">MAC <span class="string">Address             :</span> <span class="number">6</span><span class="string">c:</span><span class="number">92</span>:<span class="string">bf:</span><span class="string">xx:</span><span class="string">xx:</span>xx</span><br><span class="line">SNMP Community <span class="string">String   :</span> Inspur</span><br><span class="line">IP <span class="string">Header               :</span> TTL=<span class="number">0x40</span> Flags=<span class="number">0x40</span> Precedence=<span class="number">0x00</span> TOS=<span class="number">0x10</span></span><br><span class="line">BMC ARP <span class="string">Control         :</span> ARP Responses Enabled, Gratuitous ARP Disabled</span><br><span class="line">Gratituous ARP <span class="string">Intrvl   :</span> <span class="number">0.0</span> seconds</span><br><span class="line">Default Gateway <span class="string">IP      :</span> <span class="number">172.30</span>.0.x</span><br><span class="line">Default Gateway <span class="string">MAC     :</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">Backup Gateway <span class="string">IP       :</span> <span class="number">0.0</span>.0.0</span><br><span class="line">Backup Gateway <span class="string">MAC      :</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line"><span class="number">802.1</span>q VLAN <span class="string">ID          :</span> Disabled</span><br><span class="line"><span class="number">802.1</span>q VLAN <span class="string">Priority    :</span> <span class="number">0</span></span><br><span class="line">RMCP+ Cipher <span class="string">Suites     :</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">11</span>,<span class="number">12</span></span><br><span class="line">Cipher Suite Priv <span class="string">Max   :</span> aaaaXXaaaXXaaXX</span><br><span class="line">                        :     X=Cipher Suite Unused</span><br><span class="line">                        :     c=CALLBACK</span><br><span class="line">                        :     u=USER</span><br><span class="line">                        :     o=OPERATOR</span><br><span class="line">                        :     a=ADMIN</span><br><span class="line">                        :     O=OEM</span><br><span class="line"></span><br><span class="line"># ipmitool user list <span class="number">1</span></span><br><span class="line">ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit</span><br><span class="line"><span class="number">1</span>   root             <span class="literal">false</span>   <span class="literal">false</span>      <span class="literal">true</span>       ADMINISTRATOR</span><br><span class="line"><span class="number">2</span>   admin            <span class="literal">true</span>    <span class="literal">false</span>      <span class="literal">false</span>      NO ACCESS</span><br></pre></td></tr></table></figure></p>
+<p>ipmi可以实现很多功能，但此次用到最多的功能是</p>
+<h3 id="修改root密码">修改root密码</h3><p>因为在一段时间内未能得知机房建设组设置的ipmi密码，因此使用ipmi重置了。<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipmitool <span class="keyword">user</span> <span class="built_in">set</span>  password <span class="number">1</span> mypaasswd</span><br><span class="line">ipmitool <span class="keyword">user</span> test <span class="number">1</span> <span class="number">16</span> mypasswd</span><br></pre></td></tr></table></figure></p>
+<p>第一个命令是重设密码，并不需要输入当前密码之类的，这也是合理的，ipmi使用频率不会太高，遗忘可能很大，而且机器是为使用者服务的，OS的特权用户应有权限重设密码。</p>
+<p>第二个命令是确认密码修改成功的，如果输出为Success，说明修改成功。</p>
+<h3 id="使用控制台">使用控制台</h3><p>如上可见，ipmi接入在一个<code>172.30.0.0/24</code>的私网地址，为了管理方便，其与服务器公网口接在同一交换机，因此服务器的OS可以直接接入本机和集群的IPMI网络。</p>
+<p>如果集群中任意一台机器支持图形界面，则可以用浏览器直接输入IPMI的IP打开WEB管理页，在这里你可以看到一些机器设备的状态和健康情况等等。但更有用的功能是“控制台重定向”： 将显示通过VNC重定向到远程主机。这样你就如控制虚拟机那样，在重启过程中能够看到自检和进入BIOS进行设置，同时也可以通过VNC控件挂载本地ISO镜像，从而实现远程装机。<br><img src="http://ww4.sinaimg.cn/large/55f247cbjw1f35o494uivj20tj0eiwfy.jpg" alt=""><br>WEB页的登录使用和ipmitool中设置的用户名和密码，浪潮的服务器在登录后主页右边有<code>console redirection</code>按钮，点击即下载一个<code>jviewer.jnlp</code>的java WEB应用,使用<code>javaws</code>命令可以打开。如果在linux（MAC也适用）下，请将你要访问的主机加入java安全的例外列表，否则会被block.<br>例外文件位置为<code>~/.java/deployment/security/exception.sites</code><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">http:</span><span class="comment">//172.30.0.xx:80</span></span><br><span class="line"><span class="string">http:</span><span class="comment">//172.30.0.xx:80</span></span><br><span class="line"><span class="string">http:</span><span class="comment">//172.30.0.xx:80</span></span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
+<p>如果是windows/Mac系统，则有相应的图形java控制台添加例外。<br>有可能会遇到以下错误。<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ javaws Downloads/jviewer.jnlp </span><br><span class="line">(<span class="variable">&lt;unknown&gt;</span>:24358): Gtk-CRITICAL <span class="keyword">*</span><span class="keyword">*</span>: IA__gtk_message_dialog_set_markup: assertion `GTK_IS_MESSAGE_DIALOG (message_d</span><br></pre></td></tr></table></figure></p>
+<p>添加-verbose参数诡异地可解，原因不明<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javaws Downloads/jviewer<span class="class">.jnlp</span> -verbose</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://ww4.sinaimg.cn/large/55f247cbjw1f35o4p5ulqj20mf0f7773.jpg" alt="">在打开的控制台菜单中<code>media</code> =&gt; <code>virtual media wizzard</code>可挂载本地ISO文件到远程机器的虚拟光驱，用于装机。</p>
+<h2 id="RAID">RAID</h2><p>网络上能搜到的关于浪潮机器的Raid全与本型号服务器硬件不符，加之自己也无经验，在与公司负责机房的人员及浪潮技术支持多次低效的沟通之后（期间发送了大量牛头不对马嘴的资料），才得知此是所谓的SAS卡（浪潮最后发过来的SAS资料还是错的，无力吐槽）。<br>使用LSI SAS3008控制卡对应的工具<br>下载地址<br><a href="http://support.lenovo.com/us/en/downloads/ds102444" target="_blank" rel="external">http://support.lenovo.com/us/en/downloads/ds102444</a><br>请使用<code>./sas3ircu 0 display</code>查看机器具体的磁盘情况<br>例如将enclosure2 sot 0-9的10块盘做成Raid10<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./<span class="tag">sas3ircu</span> <span class="tag">0</span> <span class="tag">create</span> <span class="tag">raid10</span> <span class="tag">max</span> <span class="tag">2</span><span class="pseudo">:0</span> <span class="tag">2</span><span class="pseudo">:1</span> <span class="tag">2</span><span class="pseudo">:2</span> <span class="tag">2</span><span class="pseudo">:3</span> <span class="tag">2</span><span class="pseudo">:4</span> <span class="tag">2</span><span class="pseudo">:5</span> <span class="tag">2</span><span class="pseudo">:6</span> <span class="tag">2</span><span class="pseudo">:7</span> <span class="tag">2</span><span class="pseudo">:8</span> <span class="tag">2</span><span class="pseudo">:9</span></span><br></pre></td></tr></table></figure></p>
+<p>还可以为raid添加热备</p>
+<h2 id="Hot_Spare">Hot Spare</h2><p>例如将2:10的盘作为控制器0的热备<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./<span class="tag">sas3ircu</span> <span class="tag">0</span> <span class="tag">hotspare</span> <span class="tag">2</span><span class="pseudo">:10</span></span><br></pre></td></tr></table></figure></p>
+<p>大分区请使用<code>gpt</code>格式分区表，工具可使用<code>parted</code><br>进行parted引导界面<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parted <span class="regexp">/dev/</span>sdb</span><br></pre></td></tr></table></figure></p>
+<p>parted 常用命令<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mklabel gpt <span class="comment">//建立gpt分区表，会覆盖原分区信息</span></span><br><span class="line"><span class="keyword">unit</span> TB     <span class="comment">//指定接下用使用的容量单位</span></span><br><span class="line">mkpart primary <span class="number">0</span> <span class="number">10</span>  <span class="comment">//建立一个从0位置开始，大小10TB的分区</span></span><br><span class="line">mkpart primary <span class="number">10</span> <span class="number">100</span>%  <span class="comment">//将剩余磁盘分为一个区</span></span><br></pre></td></tr></table></figure></p>
+<p>如果分区大小超过16T, 可使用<code>xfs</code>文件系统，否则推荐使用常见的<code>ext4</code><br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfs<span class="class">.ext4</span> /dev/sdb1</span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/运维/">运维</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/04/21/inspur-ipmi-raid-hot-spare/" data-title="浪潮服务器IPMI与RAID及Hot Spare配置 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/20/nginx-tcp-reverse-proxy/"  title="Nginx 1.9作为TCP反向代理（负载平衡）">
+ <strong>下一篇：</strong><br/> 
+ <span>Nginx 1.9作为TCP反向代理（负载平衡）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/21/inspur-ipmi-raid-hot-spare/" data-title="浪潮服务器IPMI与RAID及Hot Spare配置" data-url="http://azyet.github.io/2016/04/21/inspur-ipmi-raid-hot-spare/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IPMI"><span class="toc-number">1.</span> <span class="toc-text">IPMI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ipmitool"><span class="toc-number">1.1.</span> <span class="toc-text">ipmitool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改root密码"><span class="toc-number">1.2.</span> <span class="toc-text">修改root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用控制台"><span class="toc-number">1.3.</span> <span class="toc-text">使用控制台</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAID"><span class="toc-number">2.</span> <span class="toc-text">RAID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hot_Spare"><span class="toc-number">3.</span> <span class="toc-text">Hot Spare</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

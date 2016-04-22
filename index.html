@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/21/inspur-ipmi-raid-hot-spare/" title="浪潮服务器IPMI与RAID及Hot Spare配置" itemprop="url">浪潮服务器IPMI与RAID及Hot Spare配置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-21T22:45:34.000Z" itemprop="datePublished"> 發表於 2016-04-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>公司新上架了一批浪潮的服务器，型号为<code>SA5212M4</code>，使用了<code>LSI</code> 的<code>SAS3008</code> 磁盘控制器，安装了<code>CentOS 6.7</code>，在进行一些基础配置如<code>RAID</code> <code>hot spare</code>的时候，走过不少弯路(浪潮的技术支持只能呵呵)。</p>
+<h2 id="IPMI">IPMI</h2><p><code>IPMI</code>是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS甚至BIOS之外的系统，它能管理电源、显示等底层甚至硬件层次的资源，但它也能与OS通信，比如你可以通过ipmitools来设置ipmi的一些参数。</p>
+<h3 id="ipmitool">ipmitool</h3><p><code>ipmitool</code>是一个允许你通过shell来使用ipmi的工具，其它安装过程为<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install OpenIPMI OpenIPMI-tools</span><br><span class="line">chkconfig ipmi <span class="command"><span class="keyword">on</span></span></span><br><span class="line">service ipmi <span class="built_in">start</span></span><br></pre></td></tr></table></figure></p>
+<p>确认服务启动之后，你可以通过它来打印ipmi信息，管理ipmi的用户和密码等<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/21/inspur-ipmi-raid-hot-spare/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/运维/">运维</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/21/inspur-ipmi-raid-hot-spare/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/21/inspur-ipmi-raid-hot-spare/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/20/nginx-tcp-reverse-proxy/" title="Nginx 1.9作为TCP反向代理（负载平衡）" itemprop="url">Nginx 1.9作为TCP反向代理（负载平衡）</a>
   </h1>
   <p class="article-author">By
@@ -639,68 +701,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/25/a-tour-of-go-6/" title="漫游Go语言（六）之Error、Reader和Image练习" itemprop="url">漫游Go语言（六）之Error、Reader和Image练习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-25T18:00:16.000Z" itemprop="datePublished"> 發表於 2016-03-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Error">Error</h2><p><code>Go</code>使用<code>error</code>类型的值来表示错误，这是一个内建的类似<code>Stringer</code>的接口。<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="interface"><span class="keyword">interface</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Error</span>() <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>类似<code>Stringer</code>,<code>fmt</code>包也会寻找<code>error</code>接口来打印值。</p>
-<p>函数经常以<code>error</code>作为返回类型，调用函数的代码应该通过检测<code>error</code>是否为<code>nil</code>并处理处理。一般来说<code>error == nil</code>说明无错误，而非nil则代表failure.</p>
-<h3 id="error练习">error练习</h3><p>实现一个开方函数，除返回结果外，还返回<code>error</code>,当被操作数是负数是返回一个非<code>nil</code>的<code>error</code>，其<code>Error()</code>方法返回“cannot Sqrt negative number: -2”信息。<br>创建一个<code>MyFloat</code>的类<code>type MyFloat float64</code>,然后实现<code>func (mf MyFloat ) Error() string</code>使之成为一个<code>error</code>。<br>这是我的答案<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> ( <span class="string">"fmt"</span></span><br><span class="line">        <span class="string">"math"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="typename">float64</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (mf MyFloat) Error() <span class="typename">string</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"cannot Sqrt negative number:%v.\n"</span>,<span class="typename">float64</span>(mf))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Sqrt(f <span class="typename">float64</span>) (<span class="typename">float64</span>,error)&#123;</span><br><span class="line">    <span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>, MyFloat(f)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> math.Sqrt(f),<span class="constant">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">    fmt.Println(Sqrt(<span class="number">4.3</span>))</span><br><span class="line">    fmt.Println(Sqrt(-<span class="number">5.2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/25/a-tour-of-go-6/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/25/a-tour-of-go-6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/25/a-tour-of-go-6/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -729,11 +729,15 @@
 			
 		
 			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -741,7 +745,7 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -753,7 +757,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -761,11 +765,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -773,15 +773,19 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -793,11 +797,7 @@
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
 			
 		
 		</ul>

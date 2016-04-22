@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/21/sambaCounterNoPermission/" title="CentOS7上开启Samba服务，其它主机没有权限访问的问题" itemprop="url">CentOS7上开启Samba服务，其它主机没有权限访问的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-21T10:45:26.000Z" itemprop="datePublished"> 發表於 2015-04-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　在多个主机间共享文件，Samba是一个不错的选择，速度快而且稳定，不同系统之间都可以访问，包括Android，用它架设一个简单媒体服务器是不错的选择。之前在Ubuntu开启共享是十分简单地，文件管理里自带设置，在其它CentOS6的VPS上我也设置过，并不复杂，但是在CentOS7上同样设置之后，虽然能查到到共享目录，但是无法打开，显示没有权限。<br>　　<br><img src="http://ww3.sinaimg.cn/large/55f247cbgw1erddz8kp5yj20eu05ewff.jpg" alt=""></p>
+<p>　　几经折腾之后，怀疑是SELinux在作祟，试着关闭SELinux之后，服务正常了。但粗暴地关闭显然是不够优雅的，我们还是设置SELinux与之共存吧.</p>
+<h2 id="SELinux">SELinux</h2><p>　　本人对SELinux也不甚了解，作为一个桌面Linux用户，有iptables就绰绰有余了（事实上规则长期全空），但是CentOS作为一个以稳定安全著称的发行版，SELinux是默认开启的（前面提到的VPS默认关闭了，能出于易用性的考虑）。简单浏览了一下，SELinux竟然出自大名鼎鼎（臭名昭著）的美国NSA之手，意为安全增强Linux，通过定义策略来控制哪些域可以访问哪些上下文。
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/21/sambaCounterNoPermission/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CentOS/">CentOS</a><a href="/tags/Samba/">Samba</a><a href="/tags/selinux/">selinux</a><a href="/tags/共享/">共享</a><a href="/tags/没有权限/">没有权限</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/21/sambaCounterNoPermission/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/21/sambaCounterNoPermission/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/21/insAndconfigVlcCentos/" title="CentOS7安装和配置VLC显示中文字幕" itemprop="url">CentOS7安装和配置VLC显示中文字幕</a>
   </h1>
   <p class="article-author">By
@@ -624,68 +685,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/05/21/usefulTagsForMavenPomFile/" title="[maven]POM文件中的一些常用标签和m2eclipse插件的安装" itemprop="url">[maven]POM文件中的一些常用标签和m2eclipse插件的安装</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2014-05-21T07:32:00.000Z" itemprop="datePublished"> 發表於 2014-05-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>之前一直在一些导入的开源工程里编写一些Java代码，所以不怎么遇到依赖问题，最近学习Hadoop，由于安装的是2.4.0版本，在编写hadoop、hbase相关程序的时候，遇到一些依赖问题难以解决，网上搜索结果无论英文还是中文一般都是hadoop 1.x的版本，但是1.x和2.x的包结构根本不一样，尝试了很久手动搜索然后一个一个jar包导入的方式，最后还是提示有问题，这时候我想到了maven工具，虽然一直没有真正使用过，但是知道它在管理依赖方面有很大的优势，所以这两天粗略学习了一下。</p>
-<p>　　学习一个东西最好的（最适合我的）方式，还是去official site看 getting started 之类的tutorial, 在看过30分钟的入门教程之后（实质follow完远不止30分钟），对Maven有了一个初步的了解，已经能够使用它来创建工程和导入第三方的Jar包了。</p>
-<p>　　getting started里提到的都是一些最常见的标签，于是我又尝试阅读了一下两个开源项目的POM文件，试着往自己工程的POM里添加相应的标签，最终终于成功编译了一个hbase的程序，之后又尝试了一些restlet等框架，总体感觉maven在解决依赖关系方面确实非常强大，当然Maven远不止是一个为依赖关系而设计的工具，还需要进一步的学习和体会 。</p>
-<p>在开始之前，除上官网教程中生成maven工程的命令：相关的package和jar名都可以修改<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mvn archetype:generate \</span><br><span class="line">  -DarchetypeGroupId=org<span class="class">.apache</span><span class="class">.maven</span><span class="class">.archetypes</span> \</span><br><span class="line">  -DgroupId=com<span class="class">.mycompany</span><span class="class">.app</span> \</span><br><span class="line">  -DartifactId=my-app</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2014/05/21/usefulTagsForMavenPomFile/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a><a href="/tags/eclipse/">eclipse</a><a href="/tags/maven/">maven</a><a href="/tags/依赖/">依赖</a><a href="/tags/可运行jar/">可运行jar</a><a href="/tags/标签/">标签</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/05/21/usefulTagsForMavenPomFile/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/05/21/usefulTagsForMavenPomFile/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -714,11 +713,15 @@
 			
 		
 			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -726,7 +729,7 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -738,7 +741,7 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -746,11 +749,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -758,15 +757,19 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -778,11 +781,7 @@
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
 			
 		
 		</ul>
