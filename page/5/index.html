@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/03/ubuntuXfce4VNC/" title="ubuntu运行VNC Server无桌面时的解决方案" itemprop="url">ubuntu运行VNC Server无桌面时的解决方案</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-03T13:15:30.000Z" itemprop="datePublished"> 發表於 2015-06-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>配置vnc server实在是一个特别诡异的事，我在不同的ubuntu机器上配置服务时，总是遇到千奇百怪的问题，大部分情况下比较顺利，将<code>~/.vnc/xstartup</code>最后一句<code>x-window-manager&amp;</code>替换为<code>gnome-session&amp;</code>就能顺利地出现桌面，而有些则不行，需要改为<code>gnome-session --session=ubuntu-2d&amp;</code>……</p>
+<h2 id="问题">问题</h2><p>而今天遇到的ubuntu 14.04，则死活不行，用realvnc viewer连接之后，只有灰灰的一个背景，没有桌面，没有terminal。</p>
+<p>查阅了很多博文，有说需要安装<code>gnome-session-fallback</code>的，有说需要安装<code>gdm</code>的，也有用<code>kde</code>的，除了kde我没有尝试，另外两种验证无效，依然只有一个灰色背景。</p>
+<p>最后用xfce4桌面解决，选择些方案一是因为xfce相对较小，gnome-session死活不行的情况下，再将一个kde未免太过兴师动众，xfce我使用过一段时间，是一个相当轻量级的GUI环境，清爽易用，功能一点不含糊。决定之后，一次尝试即成功。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/03/ubuntuXfce4VNC/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/vnc/">vnc</a><a href="/tags/xfce/">xfce</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/03/ubuntuXfce4VNC/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/03/ubuntuXfce4VNC/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/01/ubuntu1404WirelessShare/" title="ubuntu14.04无线共享设置" itemprop="url">ubuntu14.04无线共享设置</a>
   </h1>
   <p class="article-author">By
@@ -666,69 +728,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/24/ipv6TunneltoVps/" title="为VPS创建IPv6隧道" itemprop="url">为VPS创建IPv6隧道</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-25T02:30:31.000Z" itemprop="datePublished"> 發表於 2015-05-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。</p>
-<p>此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。</p>
-<p>为什么要为VPS创建v6隧道，场景有二：1)利用IPv6从绕过校园网计费网关连接到VPS，进而接入世界；2)IPv4用户也能享用IPv6的PT资源。</p>
-<p>先来看建立v6隧道之前的VPS网络情况，顺带一提我给VPS装的CentOS6系统：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr_selector">[root@localhost ~]</span># <span class="tag">ifconfig</span> </span><br><span class="line"><span class="tag">lo</span>        <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:Local</span> <span class="tag">Loopback</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.0</span><span class="class">.0</span><span class="class">.0</span></span><br><span class="line">          <span class="tag">inet6</span> <span class="tag">addr</span>: <span class="pseudo">::1</span>/<span class="tag">128</span> <span class="tag">Scope</span><span class="pseudo">:Host</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">LOOPBACK</span> <span class="tag">RUNNING</span>  <span class="tag">MTU</span><span class="pseudo">:65536</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br><span class="line">          <span class="tag">RX</span> <span class="tag">packets</span><span class="pseudo">:27661</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">frame</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">TX</span> <span class="tag">packets</span><span class="pseudo">:27661</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">carrier</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">collisions</span><span class="pseudo">:0</span> <span class="tag">txqueuelen</span><span class="pseudo">:0</span> </span><br><span class="line">          <span class="tag">RX</span> <span class="tag">bytes</span><span class="pseudo">:81575090</span> (<span class="number">77.7</span> MiB)  <span class="tag">TX</span> <span class="tag">bytes</span><span class="pseudo">:81575090</span> (<span class="number">77.7</span> MiB)</span><br><span class="line"></span><br><span class="line"><span class="tag">venet0</span>    <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:UNSPEC</span>  <span class="tag">HWaddr</span> <span class="tag">00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">P-t-P</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">Bcast</span><span class="pseudo">:0</span><span class="class">.0</span><span class="class">.0</span><span class="class">.0</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.255</span><span class="class">.255</span><span class="class">.255</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">BROADCAST</span> <span class="tag">POINTOPOINT</span> <span class="tag">RUNNING</span> <span class="tag">NOARP</span>  <span class="tag">MTU</span><span class="pseudo">:1500</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br><span class="line">          <span class="tag">RX</span> <span class="tag">packets</span><span class="pseudo">:156925340</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">frame</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">TX</span> <span class="tag">packets</span><span class="pseudo">:298546103</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:11986</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">carrier</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">collisions</span><span class="pseudo">:0</span> <span class="tag">txqueuelen</span><span class="pseudo">:0</span> </span><br><span class="line">          <span class="tag">RX</span> <span class="tag">bytes</span><span class="pseudo">:157483015316</span> (<span class="number">146.6</span> GiB)  <span class="tag">TX</span> <span class="tag">bytes</span><span class="pseudo">:164615931237</span> (<span class="number">153.3</span> GiB)</span><br><span class="line"></span><br><span class="line"><span class="tag">venet0</span><span class="pseudo">:0</span>  <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:UNSPEC</span>  <span class="tag">HWaddr</span> <span class="tag">00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">P-t-P</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">Bcast</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.255</span><span class="class">.255</span><span class="class">.255</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">BROADCAST</span> <span class="tag">POINTOPOINT</span> <span class="tag">RUNNING</span> <span class="tag">NOARP</span>  <span class="tag">MTU</span><span class="pseudo">:1500</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="隧道申请">隧道申请</h2><p>首先你要有一个隧道服务的提供商，推荐<a href="https://www.tunnelbroker.net/">tunnelbroker.net</a>，本人长期使用，比较稳定。<br>注册完成以后，点击<code>Create Regular Tunnel</code>，在<code>IPv4 Endpoint (Your side)</code>填入你的VPS的IPv4地址，在列表中选择一个离你的VPS最近的Server创建隧道，尽量使延迟最小。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/24/ipv6TunneltoVps/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/VPS/">VPS</a><a href="/tags/网络/">网络</a><a href="/tags/隧道/">隧道</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/24/ipv6TunneltoVps/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/ipv6TunneltoVps/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
@@ -785,6 +784,10 @@
 			
 		
 			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
@@ -793,7 +796,7 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -805,7 +808,7 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -818,10 +821,6 @@
 		
 			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			

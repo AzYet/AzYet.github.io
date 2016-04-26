@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/24/ipv6TunneltoVps/" title="为VPS创建IPv6隧道" itemprop="url">为VPS创建IPv6隧道</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-25T02:30:31.000Z" itemprop="datePublished"> 發表於 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。</p>
+<p>此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。</p>
+<p>为什么要为VPS创建v6隧道，场景有二：1)利用IPv6从绕过校园网计费网关连接到VPS，进而接入世界；2)IPv4用户也能享用IPv6的PT资源。</p>
+<p>先来看建立v6隧道之前的VPS网络情况，顺带一提我给VPS装的CentOS6系统：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr_selector">[root@localhost ~]</span># <span class="tag">ifconfig</span> </span><br><span class="line"><span class="tag">lo</span>        <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:Local</span> <span class="tag">Loopback</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.0</span><span class="class">.0</span><span class="class">.0</span></span><br><span class="line">          <span class="tag">inet6</span> <span class="tag">addr</span>: <span class="pseudo">::1</span>/<span class="tag">128</span> <span class="tag">Scope</span><span class="pseudo">:Host</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">LOOPBACK</span> <span class="tag">RUNNING</span>  <span class="tag">MTU</span><span class="pseudo">:65536</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br><span class="line">          <span class="tag">RX</span> <span class="tag">packets</span><span class="pseudo">:27661</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">frame</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">TX</span> <span class="tag">packets</span><span class="pseudo">:27661</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">carrier</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">collisions</span><span class="pseudo">:0</span> <span class="tag">txqueuelen</span><span class="pseudo">:0</span> </span><br><span class="line">          <span class="tag">RX</span> <span class="tag">bytes</span><span class="pseudo">:81575090</span> (<span class="number">77.7</span> MiB)  <span class="tag">TX</span> <span class="tag">bytes</span><span class="pseudo">:81575090</span> (<span class="number">77.7</span> MiB)</span><br><span class="line"></span><br><span class="line"><span class="tag">venet0</span>    <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:UNSPEC</span>  <span class="tag">HWaddr</span> <span class="tag">00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">P-t-P</span><span class="pseudo">:127</span><span class="class">.0</span><span class="class">.0</span><span class="class">.1</span>  <span class="tag">Bcast</span><span class="pseudo">:0</span><span class="class">.0</span><span class="class">.0</span><span class="class">.0</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.255</span><span class="class">.255</span><span class="class">.255</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">BROADCAST</span> <span class="tag">POINTOPOINT</span> <span class="tag">RUNNING</span> <span class="tag">NOARP</span>  <span class="tag">MTU</span><span class="pseudo">:1500</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br><span class="line">          <span class="tag">RX</span> <span class="tag">packets</span><span class="pseudo">:156925340</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:0</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">frame</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">TX</span> <span class="tag">packets</span><span class="pseudo">:298546103</span> <span class="tag">errors</span><span class="pseudo">:0</span> <span class="tag">dropped</span><span class="pseudo">:11986</span> <span class="tag">overruns</span><span class="pseudo">:0</span> <span class="tag">carrier</span><span class="pseudo">:0</span></span><br><span class="line">          <span class="tag">collisions</span><span class="pseudo">:0</span> <span class="tag">txqueuelen</span><span class="pseudo">:0</span> </span><br><span class="line">          <span class="tag">RX</span> <span class="tag">bytes</span><span class="pseudo">:157483015316</span> (<span class="number">146.6</span> GiB)  <span class="tag">TX</span> <span class="tag">bytes</span><span class="pseudo">:164615931237</span> (<span class="number">153.3</span> GiB)</span><br><span class="line"></span><br><span class="line"><span class="tag">venet0</span><span class="pseudo">:0</span>  <span class="tag">Link</span> <span class="tag">encap</span><span class="pseudo">:UNSPEC</span>  <span class="tag">HWaddr</span> <span class="tag">00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span>  </span><br><span class="line">          <span class="tag">inet</span> <span class="tag">addr</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">P-t-P</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">Bcast</span><span class="pseudo">:104</span><span class="class">.194</span><span class="class">.xx</span><span class="class">.xx</span>  <span class="tag">Mask</span><span class="pseudo">:255</span><span class="class">.255</span><span class="class">.255</span><span class="class">.255</span></span><br><span class="line">          <span class="tag">UP</span> <span class="tag">BROADCAST</span> <span class="tag">POINTOPOINT</span> <span class="tag">RUNNING</span> <span class="tag">NOARP</span>  <span class="tag">MTU</span><span class="pseudo">:1500</span>  <span class="tag">Metric</span><span class="pseudo">:1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="隧道申请">隧道申请</h2><p>首先你要有一个隧道服务的提供商，推荐<a href="https://www.tunnelbroker.net/">tunnelbroker.net</a>，本人长期使用，比较稳定。<br>注册完成以后，点击<code>Create Regular Tunnel</code>，在<code>IPv4 Endpoint (Your side)</code>填入你的VPS的IPv4地址，在列表中选择一个离你的VPS最近的Server创建隧道，尽量使延迟最小。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/24/ipv6TunneltoVps/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/VPS/">VPS</a><a href="/tags/网络/">网络</a><a href="/tags/隧道/">隧道</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/24/ipv6TunneltoVps/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/ipv6TunneltoVps/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/24/dynamicProgramming2/" title="动态规划实战（二）：背包问题" itemprop="url">动态规划实战（二）：背包问题</a>
   </h1>
   <p class="article-author">By
@@ -694,72 +757,6 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/19/zookeeperNote1/" title="ZooKeeper学习笔记（一）之概览" itemprop="url">ZooKeeper学习笔记（一）之概览</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-19T09:56:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。</p>
-<h2 id="什么是ZooKeeper">什么是ZooKeeper</h2><p>Zookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理的复杂。</p>
-<pre><code>naming <span class="keyword">service</span> 也称<span class="literal">directory</span> <span class="keyword">service</span>.
-</code></pre><p>协同一个分布式系统就像管理一个动物园。</p>
-<p>ZooKeeper致力于将上述服务的必要部分提取成一组非常简单的集中协同服务API。服务本身就是分布式和高可靠的。一致性、组管理和presence协议将由服务提供，应用不必自己来实现。应用程序使用特定服务由ZooKeeper特定组件和应用程序特定convention组成。ZooKeeper提供的配方将表明这些简单服务可以用来构建强大的抽象。</p>
-<p>ZooKeeper本身有C和Java的实现，并提供多种Client绑定，含Python Ruby和Go。</p>
-<h2 id="ZooKeepr概览">ZooKeepr概览</h2><p>ZooKeeper允许分布式进程通过共享的层级的数据注册命令空间（类似文件系统）来相互协同。不同于文件系统的是，ZooKeeper为Client提供<strong>高吞吐量，低延时，高可用和顺序严格</strong>的znode存取。高性能全ZooKeeper可被用在大型的分布式系统。高可靠保证ZooKeeper不会成为系统的单点命门。严格的顺序使复杂的同步单元可在Client上实施。命名空间则非常类似标准的文件系统。</p>
-<p><img src="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&amp;modificationDate=1295027310000&amp;api=v2" alt=""></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/19/zookeeperNote1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/概览/">概览</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/19/zookeeperNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -816,6 +813,10 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
@@ -824,7 +825,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -836,7 +837,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -849,10 +850,6 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 		
 			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			

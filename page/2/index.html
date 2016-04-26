@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/13/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接" itemprop="url">Ansible学习笔记(一)SSH连接</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-14T01:09:07.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="远程连接信息">远程连接信息</h2><p>了解<code>ansible</code>如何通过<code>ssh</code>与远程主机通信是很重要的。</p>
+<p><code>ansible 1.3</code>和之后版本会默认使用<code>openssh</code>，以支持<code>ControlPersist</code>，<code>Kerberos</code>和<code>~/.ssh/config</code>配置。在一些较老的版本中，如<code>RH/CentOS</code>较早版本时，<code>openssh</code>版本可能太老而不支持部分以上特性，此时<code>ansible</code>会使用<code>python</code>的<code>OpenSSH</code>实现<code>paramiko</code>。如果需要<code>Kerberized ssh</code>，建议使用<code>ubuntu</code>、<code>fedora</code>等<code>openssh</code>版本较新的发行版。<br>而&lt;=1.2的版本中，默认为<code>paramiko</code>，使用<code>-c</code>选项切换到<code>native</code>的<code>ssh.</code><br>有很小的可能会遇到不支持<code>SFTP</code>的情况，此时可以在配置文件中切换到<code>SCP</code>。<br>与远程主机通信时，默认使用<code>ssh key</code>，也可以通过<code>-k</code>选项来使用密码，如果需要sudo特性且sudo要求密码时，可使用<code>--ask-become-pass</code>。<br>也许是常识：控制主机离被控制集群越近，执行速度越快，因此尽量选用较近的主机。<br><code>ansible</code>也并不一定要使用<code>ssh</code>，传输方式是插件式的，支持本地管理方式、<code>chroot,lxc</code>和<code>jail containers, ansible-pull</code>模式能够按日程从中央<code>git</code>服务器中<code>pull</code>指令。</p>
+<h2 id="第一个命令">第一个命令</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -<span class="keyword">m</span> ping -<span class="keyword">u</span> root -b</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/13/note-of-ansible-1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/13/note-of-ansible-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/04/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
   </h1>
   <p class="article-author">By
@@ -631,70 +692,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/17/simple-sytemd-upstart-script/" title="systemd简单自启动脚本" itemprop="url">systemd简单自启动脚本</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-17T18:07:08.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>如果要使用systemd来实现开机自启动，一般将后缀为<code>.service</code>的<code>unit configuration file</code>放置在<code>/etc/systemd/system/</code>下。<br>如果只是简单地运行一个shell脚本：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">run shell script</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/usr/bin/yourscript</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
-<p>如果还需要关闭的话，则需要加一行ExecStop,并相应修改：<br>(yourscript脚本接受两种参数并执行不同操作）<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">Power-<span class="keyword">off</span> gpu</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/usr/bin/yourscript start</span></span></span><br><span class="line"><span class="setting">ExecStop=<span class="value">/usr/bin/yourscript stop</span></span></span><br><span class="line"><span class="setting">RemainAfterExit=<span class="value"><span class="keyword">yes</span></span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
-<p>当然也可以用简单地shell命令来代替unit configuration file规则<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[Unit]</span></span><br><span class="line"><span class="setting">Description=<span class="value">Power-<span class="keyword">off</span> gpu</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Service]</span></span><br><span class="line"><span class="setting">Type=<span class="value">oneshot</span></span></span><br><span class="line"><span class="setting">ExecStart=<span class="value">/bin/sh -c <span class="string">"echo OFF &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">ExecStop=<span class="value">/bin/sh -c <span class="string">"echo ON &gt; /whatever/switch"</span></span></span></span><br><span class="line"><span class="setting">RemainAfterExit=<span class="value"><span class="keyword">yes</span></span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[Install]</span></span><br><span class="line"><span class="setting">WantedBy=<span class="value">multi-user.target</span></span></span><br></pre></td></tr></table></figure></p>
-<p>.service文件编写好之后，可以使用<br><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">enable</span> yourservice.<span class="keyword">service</span></span><br></pre></td></tr></table></figure></p>
-<p>来启动服务。</p>
-<p>如果.service文件有修改 ，可以需要使用<code>systemctl daemon-reload</code>命令重新加载。</p>
-<p>更多的内置关键字和用法，可以参考<a href="https://wiki.ubuntu.com/SystemdForUpstartUsers" target="_blank" rel="external">https://wiki.ubuntu.com/SystemdForUpstartUsers</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/systemd/">systemd</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/17/simple-sytemd-upstart-script/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/simple-sytemd-upstart-script/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -751,6 +748,10 @@
 			
 		
 			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
@@ -759,7 +760,7 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -771,7 +772,7 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -784,10 +785,6 @@
 		
 			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
