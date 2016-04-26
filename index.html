@@ -78,6 +78,63 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/26/scala-tutorial-2/" title="scala学习笔记（二）变量/作用域/类与对象" itemprop="url">scala学习笔记（二）变量/作用域/类与对象</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-26T05:22:43.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="变量">变量</h2><p>变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。</p>
+<h3 id="变量声明">变量声明</h3><p>scala的变量分为<code>var</code>和<code>val</code>分别代表<code>mutable variable</code>和<code>immutable  variable</code><br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> myVar</span> : String = <span class="string">"Foo"</span></span><br><span class="line"><span class="variable"><span class="keyword">val</span> myVal</span> : String = “Foo”</span><br></pre></td></tr></table></figure></p>
+<h3 id="变量数据类型">变量数据类型</h3><p>变量的类型指定于变量名与等号<code>=</code>之间<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> or <span class="keyword">val</span> VariableName</span> : DataType = [Initial Value]</span><br></pre></td></tr></table></figure></p>
+<p>也可以不指定初始值<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> <span class="rule"><span class="attribute">myVar </span>:<span class="value">Int</span></span>; </span><br><span class="line"><span class="tag">val</span> <span class="rule"><span class="attribute">myVal </span>:<span class="value">String</span></span>;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/26/scala-tutorial-2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/26/scala-tutorial-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/26/scala-tutorial-2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/25/scala-tutorial-1/" title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" itemprop="url">scala学习笔记（一）基本概念、标识符、数据类型和字面值</a>
   </h1>
   <p class="article-author">By
@@ -646,67 +703,6 @@
 	
 	  	<span></span>
 		<a href="/2016/04/13/note-of-ansible-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/04/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-05T00:17:46.000Z" itemprop="datePublished"> 發表於 2016-04-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="sync-Mutex">sync.Mutex</h2><p>Go为mutual exclusion提供sync.Mutex库的两个方法<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">Lock</span></span><br><span class="line"><span class="keyword">Unlock</span></span></span><br></pre></td></tr></table></figure></p>
-<p>我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用<code>defer</code>关键字来确保<code>mutex</code>会被释放。</p>
-<h2 id="练习：网页爬虫">练习：网页爬虫</h2><p>在练习将使用Go并发特性来实现并行爬虫。修改<code>Crawl</code>方法并行但不重复地获取URL。<br>提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/04/a-tour-of-go-8/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/04/a-tour-of-go-8/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/04/a-tour-of-go-8/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 

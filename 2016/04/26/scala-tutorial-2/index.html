@@ -1,0 +1,578 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>scala学习笔记（二）变量/作用域/类与对象 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="变量变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。
+变量声明scala的变量分为var和val分别代表mutable variable和immutable  variable12var myVar : String = &quot;Foo&quot;val myVal : String = “Foo”
+变量数据类型变量的类型指定于变量名与等号=之间1var or">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scala学习笔记（二）变量/作用域/类与对象">
+<meta property="og:url" content="http://azyet.github.io/2016/04/26/scala-tutorial-2/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="变量变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。
+变量声明scala的变量分为var和val分别代表mutable variable和immutable  variable12var myVar : String = &quot;Foo&quot;val myVal : String = “Foo”
+变量数据类型变量的类型指定于变量名与等号=之间1var or">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scala学习笔记（二）变量/作用域/类与对象">
+<meta name="twitter:description" content="变量变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。
+变量声明scala的变量分为var和val分别代表mutable variable和immutable  variable12var myVar : String = &quot;Foo&quot;val myVal : String = “Foo”
+变量数据类型变量的类型指定于变量名与等号=之间1var or">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/26/scala-tutorial-2/" title="scala学习笔记（二）变量/作用域/类与对象" itemprop="url">scala学习笔记（二）变量/作用域/类与对象</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-26T05:22:43.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">1.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量声明"><span class="toc-number">1.1.</span> <span class="toc-text">变量声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量数据类型"><span class="toc-number">1.2.</span> <span class="toc-text">变量数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量类型推断"><span class="toc-number">1.3.</span> <span class="toc-text">变量类型推断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiple_assignment"><span class="toc-number">1.4.</span> <span class="toc-text">Multiple assignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例程"><span class="toc-number">1.5.</span> <span class="toc-text">例程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量范围"><span class="toc-number">2.</span> <span class="toc-text">变量范围</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#域"><span class="toc-number">2.1.</span> <span class="toc-text">域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法参数"><span class="toc-number">2.2.</span> <span class="toc-text">方法参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局部变量"><span class="toc-number">2.3.</span> <span class="toc-text">局部变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类和对象"><span class="toc-number">3.</span> <span class="toc-text">类和对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#继承"><span class="toc-number">3.1.</span> <span class="toc-text">继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式类_implicit_class"><span class="toc-number">3.2.</span> <span class="toc-text">隐式类 implicit class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单例对象Singleton_Objects"><span class="toc-number">3.3.</span> <span class="toc-text">单例对象Singleton Objects</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="变量">变量</h2><p>变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。</p>
+<h3 id="变量声明">变量声明</h3><p>scala的变量分为<code>var</code>和<code>val</code>分别代表<code>mutable variable</code>和<code>immutable  variable</code><br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> myVar</span> : String = <span class="string">"Foo"</span></span><br><span class="line"><span class="variable"><span class="keyword">val</span> myVal</span> : String = “Foo”</span><br></pre></td></tr></table></figure></p>
+<h3 id="变量数据类型">变量数据类型</h3><p>变量的类型指定于变量名与等号<code>=</code>之间<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> or <span class="keyword">val</span> VariableName</span> : DataType = [Initial Value]</span><br></pre></td></tr></table></figure></p>
+<p>也可以不指定初始值<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> <span class="rule"><span class="attribute">myVar </span>:<span class="value">Int</span></span>; </span><br><span class="line"><span class="tag">val</span> <span class="rule"><span class="attribute">myVal </span>:<span class="value">String</span></span>;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="变量类型推断">变量类型推断</h3><p>编译器能够根据声明时的初始值来推断变量类型，称为<code>类型推断</code></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> myVar</span> = <span class="number">10</span>; <span class="comment">//Int</span></span><br><span class="line"><span class="variable"><span class="keyword">val</span> myVal</span> = <span class="string">"Hello, Scala!"</span>;<span class="comment">//String</span></span><br></pre></td></tr></table></figure>
+<h3 id="Multiple_assignment">Multiple assignment</h3><p>如果一段代码返回一个元组（多个不同类型对象的集合）,元组可被赋值给<code>val</code>变量<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">val</span> (myVar1</span>: <span class="typename">Int</span>, myVar2: String) = Pair(<span class="number">40</span>, <span class="string">"Foo"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>类型推断也适用<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val <span class="list">(<span class="keyword">myVar1</span>, myVar2)</span> = Pair<span class="list">(<span class="number">40</span>, <span class="string">"Foo"</span>)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="例程">例程</h3><p>以下例程展示变量声明<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">        <span class="keyword">var</span> myVar :<span class="type">Int</span> = <span class="number">10</span>;</span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">myVal</span> :</span><span class="type">String</span> = “<span class="type">Hello</span> <span class="type">Scala</span> <span class="keyword">with</span> datatype declaration.”;</span><br><span class="line">        <span class="keyword">var</span> myVar1 = <span class="number">20</span>;</span><br><span class="line">        <span class="function"><span class="keyword">val</span> <span class="title">myVal1</span> =</span> “<span class="type">Hello</span> <span class="type">Scala</span> <span class="keyword">new</span> without datatype declaration.”;</span><br><span class="line">        println(myVar) println(myVal) println(myVar1) println(myVal1)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译执行<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scalac Demo.<span class="keyword">scala</span></span><br><span class="line"><span class="keyword">scala</span> Demo</span><br></pre></td></tr></table></figure></p>
+<p>输出为<br><figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span></span><br><span class="line"><span class="type">Hello</span> <span class="type">Scala</span> <span class="keyword">with</span> <span class="keyword">datatype</span> declaration.</span><br><span class="line"><span class="number">20</span></span><br><span class="line"><span class="type">Hello</span> <span class="type">Scala</span> without <span class="keyword">datatype</span> declaration.</span><br></pre></td></tr></table></figure></p>
+<h2 id="变量范围">变量范围</h2><p>三种：域、方法参数和局部变量。</p>
+<h3 id="域">域</h3><p>属于对象，对象的所有方法都可访问，对外权限取决于<code>存取修饰符</code>/‘access modifier’。可以是<code>var</code>也可以是<code>val</code>。</p>
+<h3 id="方法参数">方法参数</h3><p>用于在调用方法里向方法内部传递值。其值只在方法方法内部可见，但如果参数是对象且外部也有外用，则外部亦可见。方法参数总是<code>val</code>,亦即<code>immutable</code>。</p>
+<h3 id="局部变量">局部变量</h3><p>定义于方法内部，也只在内部可见，但如果将其引用<code>return</code>，则可以逃离本函数范围 。可是是<code>var</code>或者<code>val</code>.</p>
+<h2 id="类和对象">类和对象</h2><p>以下是一个基本定义类的语法。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> &lt;<span class="type">classsname</span>&gt;</span>(xc: <span class="typename">Int</span>, yc: <span class="typename">Int</span>) &#123;</span><br><span class="line">    <span class="variable"><span class="keyword">var</span> x</span>: <span class="typename">Int</span> = xc</span><br><span class="line">        <span class="variable"><span class="keyword">var</span> y</span>: <span class="typename">Int</span> = yc</span><br><span class="line">        def move(dx: <span class="typename">Int</span>, dy: <span class="typename">Int</span>) &#123;</span><br><span class="line">            x = x + dx</span><br><span class="line">                y = y + dy</span><br><span class="line">                println (<span class="string">"Point x location : "</span> + x);</span><br><span class="line">            println (<span class="string">"Point y location : "</span> + y);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>类名可作为构造函数，它带有两上参数，在整个类中可见。通过<code>new</code>关键字创建类的对象，并可使用如示例中的方法访问对象的域和方法。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io._</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span>(<span class="variable"><span class="keyword">val</span> xc</span>: <span class="typename">Int</span>, <span class="variable"><span class="keyword">val</span> yc</span>: <span class="typename">Int</span>) &#123;</span><br><span class="line">    <span class="variable"><span class="keyword">var</span> x</span>: <span class="typename">Int</span> = xc</span><br><span class="line">        <span class="variable"><span class="keyword">var</span> y</span>: <span class="typename">Int</span> = yc</span><br><span class="line">        def move(dx: <span class="typename">Int</span>, dy: <span class="typename">Int</span>) &#123;</span><br><span class="line">            x = x + dx</span><br><span class="line">                y = y + dy</span><br><span class="line">                println (<span class="string">"Point x location : "</span> + x);</span><br><span class="line">            println (<span class="string">"Point y location : "</span> + y);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">object</span> Demo &#123;</span><br><span class="line">    def main(args: Array[String]) &#123;</span><br><span class="line">        <span class="variable"><span class="keyword">val</span> pt</span> = new Point(<span class="number">10</span>, <span class="number">20</span>);</span><br><span class="line">        <span class="comment">// Move to a new location</span></span><br><span class="line">        pt.move(<span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="继承">继承</h3><p>scala也可以用<code>extends</code>关键字继承类，但有两个限制：1、重载方法需要<code>override</code>关键字；2、只有<code>primary</code>构造方法可以向基类的构造方法传递值。<br>scala也是<strong>单继承</strong><br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Location</span></span>(<span class="keyword">override</span> <span class="variable"><span class="keyword">val</span> xc</span>: <span class="typename">Int</span>, <span class="keyword">override</span> <span class="variable"><span class="keyword">val</span> yc</span>: <span class="typename">Int</span>,</span><br><span class="line">        <span class="variable"><span class="keyword">val</span> zc</span> :<span class="typename">Int</span>) extends Point(xc, yc)&#123;</span><br><span class="line">    <span class="variable"><span class="keyword">var</span> z</span>: <span class="typename">Int</span> = zc</span><br><span class="line">    <span class="comment">//move并非重载，签名不同</span></span><br><span class="line">        def move(dx: <span class="typename">Int</span>, dy: <span class="typename">Int</span>, dz: <span class="typename">Int</span>) &#123;</span><br><span class="line">            x = x + dx</span><br><span class="line">                y = y + dy</span><br><span class="line">                z = z + dz</span><br><span class="line">                println (<span class="string">"Point x location : "</span> + x);</span><br><span class="line">            println (<span class="string">"Point y location : "</span> + y);</span><br><span class="line">            println (<span class="string">"Point z location : "</span> + z);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="隐式类_implicit_class">隐式类 implicit class</h3><p>隐式类允许隐式地与方法的主构造方法通信，使用<code>implicit</code>关键字标识，这个特性是从2.10才引入的。<br><strong>语法：</strong> 以下是一个隐式类的语法示意。这个隐式类总是对象的访问范围，从而所有方法都可用，因为隐式类不能位于最外层。<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">object &lt;object <span class="keyword">name</span>&gt; &#123;</span><br><span class="line">    <span class="type">implicit</span> <span class="keyword">class</span> &lt;<span class="keyword">class</span> <span class="keyword">name</span>&gt;(&lt;Variable&gt;: <span class="type">Data</span> <span class="keyword">type</span>) &#123;</span><br><span class="line">        def &lt;method&gt;(): <span class="keyword">Unit</span>=</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以下的例子定义了一个隐式类<code>IntTimes</code>，它一个<code>times()</code>方法，该方法有一循环来执行<strong>指定语句</strong>和<strong>指定次</strong>。让我来打印<strong>四</strong>次<strong>hello world</strong></p>
+<p>以下例程中使用了两个<code>object class</code>，因此需要将它们保存在两个文件中。<br>Run.scala<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">object Run &#123;</span><br><span class="line">  <span class="type">implicit</span> <span class="keyword">class</span> IntTimes(x: <span class="built_in">Int</span>) &#123;</span><br><span class="line">    def times[A](f: =&gt; A): <span class="keyword">Unit</span> = &#123;</span><br><span class="line">      def loop(current: <span class="built_in">Int</span>): <span class="keyword">Unit</span> =</span><br><span class="line">        <span class="keyword">if</span> (current &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          f</span><br><span class="line">          loop(current - <span class="number">1</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      loop(x)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Demo.scala<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="type">Run</span>._</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="number">4</span> times println(<span class="string">"hello world"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行效果：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ scalac <span class="keyword">Run</span>.<span class="keyword">scala</span></span><br><span class="line">$ scalac Demo.<span class="keyword">scala</span></span><br><span class="line">$ <span class="keyword">scala</span> Demo</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>隐式类必须定义于其它类/对象/物质内部（不能是最外层）</li>
+<li>其构造方法只能接受一个非隐式参数</li>
+<li>不能与作用域内的其它方法、成员或对象同名</li>
+</ul>
+<h3 id="单例对象Singleton_Objects">单例对象Singleton Objects</h3><p><strong>scala中无静态成员</strong>，但有<code>单例对象</code>/<code>Singleton Objects</code>：只有一个实例/对象的类。使用<code>object</code>而不是<code>class</code>创建，无法实例化而只能通过主构造方法传递参数。之前例子中scala的main方法都是用单例对象调用的。</p>
+<blockquote>
+<p>请返回重温Point类的例子</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/04/26/scala-tutorial-2/" data-title="scala学习笔记（二）变量/作用域/类与对象 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/25/scala-tutorial-1/"  title="scala学习笔记（一）基本概念、标识符、数据类型和字面值">
+ <strong>下一篇：</strong><br/> 
+ <span>scala学习笔记（一）基本概念、标识符、数据类型和字面值
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/26/scala-tutorial-2/" data-title="scala学习笔记（二）变量/作用域/类与对象" data-url="http://azyet.github.io/2016/04/26/scala-tutorial-2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">1.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量声明"><span class="toc-number">1.1.</span> <span class="toc-text">变量声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量数据类型"><span class="toc-number">1.2.</span> <span class="toc-text">变量数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量类型推断"><span class="toc-number">1.3.</span> <span class="toc-text">变量类型推断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiple_assignment"><span class="toc-number">1.4.</span> <span class="toc-text">Multiple assignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例程"><span class="toc-number">1.5.</span> <span class="toc-text">例程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量范围"><span class="toc-number">2.</span> <span class="toc-text">变量范围</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#域"><span class="toc-number">2.1.</span> <span class="toc-text">域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法参数"><span class="toc-number">2.2.</span> <span class="toc-text">方法参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局部变量"><span class="toc-number">2.3.</span> <span class="toc-text">局部变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类和对象"><span class="toc-number">3.</span> <span class="toc-text">类和对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#继承"><span class="toc-number">3.1.</span> <span class="toc-text">继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式类_implicit_class"><span class="toc-number">3.2.</span> <span class="toc-text">隐式类 implicit class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单例对象Singleton_Objects"><span class="toc-number">3.3.</span> <span class="toc-text">单例对象Singleton Objects</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

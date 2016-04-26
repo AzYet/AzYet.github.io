@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/17/mysql-difference-between-2-tables/" title="mysql合并记录及两表比较" itemprop="url">mysql合并记录及两表比较</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
+<h2 id="降维">降维</h2><p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">select</span> <span class="keyword">status</span>, <span class="keyword">time</span> ... <span class="keyword">sum</span> (xxx) <span class="keyword">as</span> xxx <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> (...) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">time</span>, <span class="keyword">status</span>;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/17/mysql-difference-between-2-tables/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/mysql/">mysql</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/17/mysql-difference-between-2-tables/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/mysql-difference-between-2-tables/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/16/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
   </h1>
   <p class="article-author">By
@@ -637,73 +698,6 @@
 	
 	  	<span></span>
 		<a href="/2015/12/05/An-example-of-using-regular-expressions-in-C/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/05/An-example-of-using-regular-expressions-in-C/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/25/maxSubsetSum/" title="一道笔试题：求数组元素和最大的子集" itemprop="url">一道笔试题：求数组元素和最大的子集</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-25T06:42:45.000Z" itemprop="datePublished"> 發表於 2015-10-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><p>昨天参加腾讯旗下某公司的笔试，其中唯一的算法题是这样的（大致描述）：</p>
-<blockquote>
-<p>某数组中有正数也有负数，相邻的一个或多个元素组成一个子集，求所有子集中元素和的最大值。<br>例如数组[-2, -4, 3, 5, -6, -3, 2, 4], 其子集和最大值为8,对应子集为[3, 5]</p>
-</blockquote>
-<h2 id="思路">思路</h2><p>第一反应是穷举，即列举所有长度从1到全集的所有子集的和，但是这肯定是效率很低的方法。</p>
-<p>当时解题的思路就是分析人工计算时，会以何种方式进行：</p>
-<ol>
-<li>从第一个元素开始往后累加，更新记录过程中的最大和<br>2.如果和为负，则抛弃前面的和，从后续元素开始重新累加<br>3.直到数组尾，得到最大值</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/25/maxSubsetSum/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/25/maxSubsetSum/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/10/25/maxSubsetSum/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 

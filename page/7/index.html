@@ -78,6 +78,72 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/18/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T03:59:40.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。</p>
+<h2 id="单元测试，一致性测试和性能测试">单元测试，一致性测试和性能测试</h2><h3 id="单元测试">单元测试</h3><p>单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。</p>
+<p>被测试的代码比例也叫做覆盖率。</p>
+<p>单元测试只针对一小段代码（类，方法），外部依赖应该被移除，例如用测试框架模拟外部依赖。</p>
+<p>单元测试并不适合复杂的UI或组件交互，这部分工作属于一致性测试。</p>
+<h3 id="一致性测试">一致性测试</h3><p>旨在测试组件或组件间的一致性，有时也称为功能测试。</p>
+<p>这种测试将用例转化为测试集，例如模拟一个用户与应用交互。</p>
+<h3 id="性能测试">性能测试</h3><p>反复进行基准测试。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/junitNote1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JUnit/">JUnit</a><a href="/tags/Maven/">Maven</a><a href="/tags/单元测试/">单元测试</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/junitNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/junitNote1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/18/rabbitmqNote6/" title="RabbitMQ学习笔记（六）之RPC" itemprop="url">RabbitMQ学习笔记（六）之RPC</a>
   </h1>
   <p class="article-author">By
@@ -639,68 +705,6 @@
 	
 	  	<span></span>
 		<a href="/2015/05/15/LinkedListReverseAndLocateMid/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/LinkedListReverseAndLocateMid/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/11/natInnerServiceToPublic/" title="配置NAT使内网服务对外网可见" itemprop="url">配置NAT使内网服务对外网可见</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-11T09:33:58.000Z" itemprop="datePublished"> 發表於 2015-05-11</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。</p>
-<p>　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要将虚拟机8000服务映射到宿主机外网IP 10.103.25.248的某端口上上，这就是端口映射，亦即PNAT。</p>
-<h2 id="选定端口">选定端口</h2><p>　　查看宿主机端口占用情况：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@dell</span><span class="symbol">:~</span><span class="comment"># sudo lsof -i:8000</span></span><br><span class="line"><span class="constant">COMMAND </span> <span class="constant">PID </span>      <span class="constant">USER </span>  <span class="constant">FD </span>  <span class="constant">TYPE DEVICE SIZE/OFF NODE NAME</span></span><br><span class="line">java    <span class="number">2466</span> confluence   <span class="number">37</span>u  <span class="constant">IPv6 </span> <span class="number">23593</span>      0t<span class="number">0</span>  <span class="constant">TCP </span><span class="symbol">localhost:</span><span class="number">8000</span> (<span class="constant">LISTEN)</span></span><br></pre></td></tr></table></figure></p>
-<p>　　8000已被使用，选择使用空闲的8880端口，即实现10.103.25.248：8880 &lt;===&gt; 192.168.83.131:8000的映射。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/11/natInnerServiceToPublic/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/NAT/">NAT</a><a href="/tags/内外/">内外</a><a href="/tags/外网/">外网</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/11/natInnerServiceToPublic/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/11/natInnerServiceToPublic/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 

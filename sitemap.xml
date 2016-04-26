@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2016/04/26/scala-tutorial-2/</loc>
+    <lastmod>2016-04-26T17:24:18.504Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2016/04/25/scala-tutorial-1/</loc>
     <lastmod>2016-04-26T12:33:38.092Z</lastmod>
   </url>
@@ -232,12 +237,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/10/repoLearningNote/</loc>
+    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
+    <loc>http://azyet.github.io/2015/06/10/repoLearningNote/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
