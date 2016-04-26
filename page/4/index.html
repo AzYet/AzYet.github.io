@@ -78,6 +78,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/28/rabbitmqInNova/" title="Nova中的RabbitMQ" itemprop="url">Nova中的RabbitMQ</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-28T04:16:42.000Z" itemprop="datePublished"> 發表於 2015-06-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　最近需要在项目中使用到消息队列，虽然之前有过使用经验，但是因为当时并无具体要求，所以只是在看完RabbitMQ的tutorial之后就自行实现了，并不知道合理性和效率如何。所以在新的项目设计时，打算借鉴一下Openstack中AMQP的使用经验 </p>
+<h2 id="Nova消息队列">Nova消息队列</h2><p>　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许它们以松耦合的风格通信。更准确地说，Nova组件之间使用RPC通信。但是这个机制是建立在发布/订阅机制之上的，它有以下优势：</p>
+<ul>
+<li><p>解耦client和Server（Client不需要知道Server的具体引用）</p>
+</li>
+<li><p>Client和Server完全异步(Client不需要Server在收到RPC call时同时执行）</p>
+</li>
+<li><p>随机平衡远程调用（多个Servant时，优先分配空闲者处理调用）</p>
+</li>
+</ul>
+<p>　　Nova使用direct, fanout,和topic Exchange。其架构如下图所示 </p>
+<p><img src="http://docs.openstack.org/developer/nova/_images/arch.png" alt=""></p>
+<p>　　Nova通过一个封装和解封装消息到调用的类来实现RPC功能，包括请求/响应（rpc.call）, 单向(rpc.cast)。每个Nova服务（计算，调度等）在初始化时都实现两个AMQP队列，一个接收带有NODE-TYPE.NODE-ID的routingkey（如 compute.hostname）的消息，另一个接受通用的带有NODE-TYPE的routingkey（如compute）的消息。前者将消息传递给特定的物理节点，例如，终止某个虚拟机实例时使用。这个API在调用是“请求/响应”类型时充当consumer，rpc.cast时仅为publisher。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/28/rabbitmqInNova/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/openstack/">openstack</a><a href="/tags/rabbitmq/">rabbitmq</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/28/rabbitmqInNova/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/28/rabbitmqInNova/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/20/configureAndMakeInstall/" title="configure和make install背后的故事" itemprop="url">configure和make install背后的故事</a>
   </h1>
   <p class="article-author">By
@@ -658,69 +729,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/30/hindsightLearningNote3/" title="simics hindsight学习笔记（三）" itemprop="url">simics hindsight学习笔记（三）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-31T02:20:16.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>继续上一节，学习simics hindsight使用，命令行参数部分。</p>
-<h2 id="帮助系统">帮助系统</h2><p>simics常用命令按类别分组，要查看分类，可以输入help。</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; <span class="keyword">help</span></span><br><span class="line">[...]</span><br><span class="line">To <span class="built_in">get</span> you started, here <span class="keyword">is</span> <span class="keyword">a</span> <span class="keyword">list</span> of <span class="keyword">command</span> categorie<span class="variable">s:</span></span><br><span class="line">Breakpoints                 Files <span class="built_in">and</span> Directories       Python</span><br><span class="line">CD-ROM                      GUI Real                    Network</span><br><span class="line">Changing Simulated State    Haps                        Registers</span><br></pre></td></tr></table></figure>
-<p>使用<code>help catogory</code>打印该分类下的命令清单：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; help <span class="string">"Changing Simulated State"</span></span><br><span class="line">Commands available <span class="operator">in</span> <span class="operator">the</span> Changing Simulated State category:</span><br><span class="line"></span><br><span class="line">&lt;image&gt;.<span class="built_in">set</span>                     <span class="built_in">set</span> <span class="keyword">bytes</span> <span class="operator">in</span> image <span class="built_in">to</span> specified <span class="built_in">value</span></span><br><span class="line">&lt;memory-<span class="constant">space</span>&gt;.<span class="built_in">load</span>-binary      <span class="built_in">load</span> binary (executable) <span class="built_in">file</span> <span class="keyword">into</span> memory</span><br><span class="line">&lt;memory-<span class="constant">space</span>&gt;.<span class="built_in">load</span>-<span class="built_in">file</span>        <span class="built_in">load</span> <span class="built_in">file</span> <span class="keyword">into</span> memory</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/30/hindsightLearningNote3/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/30/hindsightLearningNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote3/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
@@ -749,15 +757,11 @@
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
 			
@@ -765,7 +769,7 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -777,7 +781,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -785,7 +789,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -793,19 +801,15 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -817,7 +821,11 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 		</ul>

@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2016/04/25/scala-tutorial-1/</loc>
+    <lastmod>2016-04-26T12:33:38.092Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2016/04/21/inspur-ipmi-raid-hot-spare/</loc>
     <lastmod>2016-04-22T10:57:20.649Z</lastmod>
   </url>

@@ -78,6 +78,87 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/25/scala-tutorial-1/" title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" itemprop="url">scala学习笔记（一）基本概念、标识符、数据类型和字面值</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-26T00:29:43.000Z" itemprop="datePublished"> 發表於 2016-04-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="overview">overview</h2><p>生产力、扩展性和可靠性</p>
+<ul>
+<li>面向对象的： 所有值都是对象；类型和行为由class和trait描述；可继承和混合重组（多继承的替代).</li>
+<li>函数式： 函数也是值/对象；轻量化的匿名函数定义；支持higher-order函数；嵌套函数；柯里函数；</li>
+<li>静态类型：但不需要提供冗余的类型信息</li>
+<li>与<code>java</code>良好的互操作性</li>
+<li>并发支持：良好的表达能力减少代码行数且类型安全，支持immutable方式从而使并发编程更容易。</li>
+</ul>
+<h2 id="scala_vs_java">scala vs java</h2><ul>
+<li>所有类型都是对象</li>
+<li>类型推断 </li>
+<li>嵌套函数</li>
+<li>函数也是对象</li>
+<li>SDL（Domain specific language）支持</li>
+<li>trait</li>
+<li>闭包</li>
+<li>Erlang式的并发支持</li>
+</ul>
+<h2 id="WEb框架">WEb框架</h2><p>scala在WEB应用中使用广泛，以下是最流行的几个框架</p>
+<ul>
+<li>The Lift Framework</li>
+<li>The Play framework</li>
+<li>The Bowler framework
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/25/scala-tutorial-1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/25/scala-tutorial-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/25/scala-tutorial-1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/21/inspur-ipmi-raid-hot-spare/" title="浪潮服务器IPMI与RAID及Hot Spare配置" itemprop="url">浪潮服务器IPMI与RAID及Hot Spare配置</a>
   </h1>
   <p class="article-author">By
@@ -639,68 +720,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/04/a-tour-of-go-7/" title="漫游Go语言（七）之goroutine/channel" itemprop="url">漫游Go语言（七）之goroutine/channel</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-04T17:32:54.000Z" itemprop="datePublished"> 發表於 2016-04-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="goroutine">goroutine</h2><p><code>goroutine</code>是由<code>go runtime</code>所管理的轻量级线程。<br><code>go f(x,y,z）</code>开启一个运行<code>f(x,y,z)</code>的新goroutine。<code>f</code>,<code>x</code>,<code>y</code>,<code>z</code>值的计算发生在当前<code>goroutine</code>，但f的执行则在新的<code>goroutine</code>中。</p>
-<p><code>goroutine</code>运行在同一地址空间中，所以共享内在的存取必须同步，<code>sync</code>包提供一些有用的基本工具，但一般你用不到它们，因为还有其它的工具。</p>
-<h2 id="channel">channel</h2><p><code>channel</code>是一种有类型的管道，使用<code>&lt;-</code>操作符就可以通过它发送和接收数值。<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">ch</span> &lt;- v    // Send v to channel <span class="number">ch</span>.</span><br><span class="line">v := &lt;-<span class="number">ch</span>  // Receive from <span class="number">ch</span>, <span class="keyword">and</span></span><br><span class="line">           // assign value to v.</span><br></pre></td></tr></table></figure></p>
-<p>参数按箭头的方向流动。和<code>map</code>及<code>slice</code>一样，<code>channel</code>也需要先定义再使用。<br>样例代码将<code>slice</code>中数累加，将工作分布在两个<code>goroutine</code>中，当二者完成时，得到最终结果。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/04/a-tour-of-go-7/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/04/a-tour-of-go-7/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/04/a-tour-of-go-7/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -729,15 +748,11 @@
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
 			
@@ -745,7 +760,7 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -757,7 +772,7 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -765,7 +780,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -773,19 +792,15 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -797,7 +812,11 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 		</ul>
