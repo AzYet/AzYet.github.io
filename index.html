@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/26/scala-tutorial-4/" title="scala学习笔记（四）循环、函数" itemprop="url">scala学习笔记（四）循环、函数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-26T22:01:12.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="循环">循环</h2><p>scala支持<code>while</code>和<code>do-while</code>循环，与java差别最大的是<code>for</code>循环及中断循环的控制。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while()&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;</span><br><span class="line">--------</span></span><br><span class="line">do&#123;</span><br><span class="line"></span><br><span class="line">&#125;while();</span><br></pre></td></tr></table></figure></p>
+<h3 id="范围for">范围for</h3><p>有<code>to</code>和<code>until</code>两种，主要差别是后者不包括上界<br>此处的<code>&lt;-</code>称为<code>generator</code>，因为它在每次循环中产生值。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for(i &lt;- 1 to 10)&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;// 将循环1,2,3...10，共10次</span><br><span class="line">-----</span></span><br><span class="line">for(i &lt;- 1 until 10)&#123;</span><br><span class="line"></span><br><span class="line">&#125;// 将循环1，2,3...9，共9次</span><br></pre></td></tr></table></figure></p>
+<h3 id="多循环">多循环</h3><p>可以在<code>for</code>中使用<code>；</code>分隔条件实现多循环，循环条件将从后往前开始计算<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( a &lt;- <span class="number">1</span> <span class="keyword">to</span> <span class="number">3</span>; b &lt;- <span class="number">1</span> <span class="keyword">to</span> <span class="number">3</span>)&#123;</span><br><span class="line">    println( <span class="string">"Value of a: "</span> + a );</span><br><span class="line">    println( <span class="string">"Value of b: "</span> + b );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/26/scala-tutorial-4/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/26/scala-tutorial-4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/26/scala-tutorial-4/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/26/scala-tutorial-3/" title="scala学习笔记（三）访问权限、操作符/优先级及条件语句" itemprop="url">scala学习笔记（三）访问权限、操作符/优先级及条件语句</a>
   </h1>
   <p class="article-author">By
@@ -662,68 +723,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/13/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables" itemprop="url">ansible学习笔记(二)Iventory、Variables</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p><code>ansible</code>同时和多种系统工作，它会选择<code>inventory</code>文件中的部分主机执行不同的操作，这个文件默认位于<code>/etc/ansible/hosts</code>。你也可以同时使用多个<code>inventory</code>或者动态地从云端<code>pull</code>。</p>
-<h2 id="host_and_group">host and group</h2><p><code>inventory</code>文件的模式类似<code>ini</code>：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mail<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[webservers]</span><br><span class="line">foo<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">bar<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[dbservers]</span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">three<span class="class">.example</span><span class="class">.com</span></span><br></pre></td></tr></table></figure></p>
-<p>方括号中是组名，同个主机可以位于多个组中，此时变量将来自所有其所属的组。如果ssh主机使用非默认的22端口，可以使用<code>:</code>将其指定于主机名之后<code>badwolf.example.com:5309</code>。</p>
-<p>如果是静态IP想取个别名，可使用以下的方式。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">jumper</span> ansible_port=<span class="number">5555</span> ansible_host=<span class="number">192.168.1.50</span></span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/13/note-of-ansible-2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ansible/">ansible</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/13/note-of-ansible-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-2/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -780,10 +779,6 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
@@ -792,7 +787,15 @@
 			
 		
 			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
@@ -801,10 +804,6 @@
 		
 			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -820,7 +819,7 @@
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>

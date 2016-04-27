@@ -1,0 +1,591 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>scala学习笔记（四）循环、函数 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="循环scala支持while和do-while循环，与java差别最大的是for循环及中断循环的控制。1234567while()&amp;#123;&amp;#125;--------do&amp;#123;&amp;#125;while();
+范围for有to和until两种，主要差别是后者不包括上界此处的&amp;lt;-称为generator，因为它在每次循环中产生值。1234567for(i &amp;lt;- 1 to 10)&amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scala学习笔记（四）循环、函数">
+<meta property="og:url" content="http://azyet.github.io/2016/04/26/scala-tutorial-4/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="循环scala支持while和do-while循环，与java差别最大的是for循环及中断循环的控制。1234567while()&amp;#123;&amp;#125;--------do&amp;#123;&amp;#125;while();
+范围for有to和until两种，主要差别是后者不包括上界此处的&amp;lt;-称为generator，因为它在每次循环中产生值。1234567for(i &amp;lt;- 1 to 10)&amp;#1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scala学习笔记（四）循环、函数">
+<meta name="twitter:description" content="循环scala支持while和do-while循环，与java差别最大的是for循环及中断循环的控制。1234567while()&amp;#123;&amp;#125;--------do&amp;#123;&amp;#125;while();
+范围for有to和until两种，主要差别是后者不包括上界此处的&amp;lt;-称为generator，因为它在每次循环中产生值。1234567for(i &amp;lt;- 1 to 10)&amp;#1">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/26/scala-tutorial-4/" title="scala学习笔记（四）循环、函数" itemprop="url">scala学习笔记（四）循环、函数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-26T22:01:12.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#循环"><span class="toc-number">1.</span> <span class="toc-text">循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#范围for"><span class="toc-number">1.1.</span> <span class="toc-text">范围for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多循环"><span class="toc-number">1.2.</span> <span class="toc-text">多循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集合的for"><span class="toc-number">1.3.</span> <span class="toc-text">集合的for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带filter的循环"><span class="toc-number">1.4.</span> <span class="toc-text">带filter的循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带yield的for"><span class="toc-number">1.5.</span> <span class="toc-text">带yield的for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#循环控制"><span class="toc-number">1.6.</span> <span class="toc-text">循环控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-number">2.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数声明"><span class="toc-number">2.1.</span> <span class="toc-text">函数声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数定义"><span class="toc-number">2.2.</span> <span class="toc-text">函数定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数调用"><span class="toc-number">2.3.</span> <span class="toc-text">函数调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#call-by-name函数参数"><span class="toc-number">2.4.</span> <span class="toc-text">call-by-name函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可变长参数"><span class="toc-number">2.5.</span> <span class="toc-text">可变长参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数默认值"><span class="toc-number">2.6.</span> <span class="toc-text">函数参数默认值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套函数"><span class="toc-number">2.7.</span> <span class="toc-text">嵌套函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部分应用函数"><span class="toc-number">2.8.</span> <span class="toc-text">部分应用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数值按名称传递"><span class="toc-number">2.9.</span> <span class="toc-text">函数参数值按名称传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#递归函数"><span class="toc-number">2.10.</span> <span class="toc-text">递归函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高阶函数_higher_order_function"><span class="toc-number">2.11.</span> <span class="toc-text">高阶函数 higher order function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#匿名函数"><span class="toc-number">2.12.</span> <span class="toc-text">匿名函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里函数"><span class="toc-number">2.13.</span> <span class="toc-text">柯里函数</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="循环">循环</h2><p>scala支持<code>while</code>和<code>do-while</code>循环，与java差别最大的是<code>for</code>循环及中断循环的控制。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while()&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;</span><br><span class="line">--------</span></span><br><span class="line">do&#123;</span><br><span class="line"></span><br><span class="line">&#125;while();</span><br></pre></td></tr></table></figure></p>
+<h3 id="范围for">范围for</h3><p>有<code>to</code>和<code>until</code>两种，主要差别是后者不包括上界<br>此处的<code>&lt;-</code>称为<code>generator</code>，因为它在每次循环中产生值。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for(i &lt;- 1 to 10)&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;// 将循环1,2,3...10，共10次</span><br><span class="line">-----</span></span><br><span class="line">for(i &lt;- 1 until 10)&#123;</span><br><span class="line"></span><br><span class="line">&#125;// 将循环1，2,3...9，共9次</span><br></pre></td></tr></table></figure></p>
+<h3 id="多循环">多循环</h3><p>可以在<code>for</code>中使用<code>；</code>分隔条件实现多循环，循环条件将从后往前开始计算<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( a &lt;- <span class="number">1</span> <span class="keyword">to</span> <span class="number">3</span>; b &lt;- <span class="number">1</span> <span class="keyword">to</span> <span class="number">3</span>)&#123;</span><br><span class="line">    println( <span class="string">"Value of a: "</span> + a );</span><br><span class="line">    println( <span class="string">"Value of b: "</span> + b );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>部分输出<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Value of <span class="tag">a</span>: <span class="number">1</span></span><br><span class="line">Value of <span class="tag">b</span>: <span class="number">1</span></span><br><span class="line">Value of <span class="tag">a</span>: <span class="number">1</span></span><br><span class="line">Value of <span class="tag">b</span>: <span class="number">2</span></span><br><span class="line">Value of <span class="tag">a</span>: <span class="number">1</span></span><br><span class="line">Value of <span class="tag">b</span>: <span class="number">3</span></span><br><span class="line">Value of <span class="tag">a</span>: <span class="number">2</span></span><br><span class="line">Value of <span class="tag">b</span>: <span class="number">1</span></span><br><span class="line">Value of <span class="tag">a</span>: <span class="number">2</span></span><br><span class="line">Value of <span class="tag">b</span>: <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="集合的for">集合的for</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( <span class="keyword">var</span> x &lt;- <span class="built_in">List</span> )&#123;</span><br><span class="line">    statement(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="带filter的循环">带filter的循环</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( <span class="keyword">var</span> x &lt;- <span class="built_in">List</span></span><br><span class="line">     <span class="keyword">if</span> condition1; <span class="keyword">if</span> condition2...</span><br><span class="line">   )&#123;</span><br><span class="line">   statement(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">val <span class="keyword">numList</span> = <span class="keyword">List</span>(1,2,3,4,5,6,7,8,9,10);</span><br><span class="line"><span class="comment">// for loop execution with multiple filters</span></span><br><span class="line"><span class="keyword">for</span>( a &lt;- <span class="keyword">numList</span></span><br><span class="line">     <span class="keyword">if</span> a != 3; <span class="keyword">if</span> a &lt; 8 )&#123;</span><br><span class="line">    println( <span class="string">"Value of a: "</span> + a );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="带yield的for">带yield的for</h3><p>你可以将<code>for</code>循环的返回值存储在变量中或者通过函数返回，这需要在循环体后加<code>yield</code>关键字。<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> retVal <span class="subst">=</span> for&#123; <span class="built_in">var</span> x <span class="subst">&lt;-</span> <span class="built_in">List</span></span><br><span class="line">    <span class="keyword">if</span> condition1; <span class="keyword">if</span> condition2<span class="attribute">...</span></span><br><span class="line">&#125;<span class="keyword">yield</span> x</span><br></pre></td></tr></table></figure></p>
+<p>如<br><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> retVal = <span class="keyword">for</span><span class="comment">&#123; a &lt;- numList </span><br><span class="line">    if a != 3; if a &lt; 8</span><br><span class="line">&#125;</span><span class="keyword">yield</span> a</span><br><span class="line"><span class="comment">// Now print returned values using another loop.</span></span><br><span class="line"><span class="keyword">for</span>( a &lt;- retVal)<span class="comment">&#123;</span><br><span class="line">    println( "Value of a: " + a );</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>retVal是一个集合，其元素为1,2,4,5,6,7</p>
+<h3 id="循环控制">循环控制</h3><p>scala并没有java中的<code>break</code>,<code>continue</code>关键字。但从2.8开始加入了中断控制。<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="reserved">import</span> scala.util.control._</span><br><span class="line"></span><br><span class="line">val <span class="keyword">loop</span> = <span class="keyword">new</span> Breaks;</span><br><span class="line"><span class="keyword">loop</span>.breakable&#123;</span><br><span class="line">    <span class="keyword">for</span>(...)&#123;</span><br><span class="line">        <span class="keyword">loop</span>.<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先须导入<code>scala.util.control</code>包，并<code>new</code>出一个<code>Breaks</code>对象，将循环置于<code>obj.breakable</code>后的花括号中，然后在循环内就可以使用<code>obj.break</code>中断循环。<br>如果有多层循环，可以<code>new</code>多个实例，从而方便地实现从内层循环直接跳出。</p>
+<h2 id="函数">函数</h2><p>函数与方法的叫法，经常混用不分，但也有细微差别，方法是对象的一部分，有名称、签名和可选的annotation,而函数本身就是对象，可被赋值给变量。或者说定义为某对象一部分的函数则为方法。</p>
+<p>函数可在源文件的任何位置声明，并且可以嵌套，也就是函数中定义函数。另外scala的函数名可以包含运算符。</p>
+<h3 id="函数声明">函数声明</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">functionName</span> <span class="params">([list of parameters])</span> :</span> [<span class="keyword">return</span> type]</span><br></pre></td></tr></table></figure>
+<p>如果没有等号<code>=</code>和函数体，那么就是<code>抽象函数</code></p>
+<h3 id="函数定义">函数定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">functionName</span> <span class="params">([list of parameters])</span> :</span> [<span class="keyword">return</span> type] = &#123;</span><br><span class="line">    function body</span><br><span class="line">    <span class="keyword">return</span> [expr]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果一个方法不需返回值，可以将其声明为返回<code>Unit</code>类型，等效于java中的<code>void</code>类型，无返回值的函数称为<code>procedures</code>.</p>
+<p>语法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">object Hello&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">printMe</span><span class="params">( )</span> :</span> Unit = &#123;</span><br><span class="line">        println(<span class="string">"Hello, Scala!"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="函数调用">函数调用</h3><p>scala提供多种调用函数的语法。函数是<code>scala</code>语言的核心，这也是为何scala被称为<code>`函数式编程语言</code>，接下来将介绍一些重要的概念，每一个scala程序员都应该认真理解。</p>
+<h3 id="call-by-name函数参数">call-by-name函数参数</h3><p>函数参数在传递之前其值已经决定，如果想参数的值在第一次调用时取值，可以使用<code>call by name</code>参数<br><code>call by name</code>机制将<code>代码块</code>（如下例中的<code>函数名</code>）传递给函数参数，每次函数访问该参数时都会执行该代码块。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    delayed(time());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">time</span>(</span>) = &#123;</span><br><span class="line">    println(<span class="string">"Getting time in nano seconds"</span>)</span><br><span class="line">    <span class="type">System</span>.nanoTime</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delayed</span>(</span>t: =&gt; <span class="type">Long</span>) = &#123;</span><br><span class="line">    println(<span class="string">"In delayed method"</span>)</span><br><span class="line">    println(<span class="string">"Param: "</span> + t)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出如下<br><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">In</span> delayed <span class="function"><span class="keyword">method</span></span><br><span class="line"><span class="title">Getting</span> <span class="title">time</span> <span class="title">in</span> <span class="title">nano</span> <span class="title">seconds</span></span><br><span class="line"><span class="title">Param</span>:</span> <span class="number">63999108438481</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="可变长参数">可变长参数</h3><p>scala允许最后一个参数同类型重复，如下例中的<code>String*</code>，实质是<code>Array[String]</code>.<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    printStrings(<span class="string">"Hello"</span>, <span class="string">"Scala"</span>, <span class="string">"Python"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">printStrings</span>(</span>args: <span class="type">String</span>*) = &#123;</span><br><span class="line">    <span class="keyword">var</span> i: <span class="type">Int</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> (arg &lt;- args) &#123;</span><br><span class="line">      println(<span class="string">"Arg value["</span> + i + <span class="string">"] = "</span> + arg)</span><br><span class="line">      i = i + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译后运行<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Arg <span class="keyword">value</span>[<span class="number">0</span>] = Hello</span><br><span class="line">Arg <span class="keyword">value</span>[<span class="number">1</span>] = Scala</span><br><span class="line">Arg <span class="keyword">value</span>[<span class="number">2</span>] = Python</span><br></pre></td></tr></table></figure></p>
+<h3 id="函数参数默认值">函数参数默认值</h3><p>scala允许为函数（部分）参数指定默认值，有默认值的参数在调用时可以（部分）不赋值而使用默认值。<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">object Demo &#123;</span><br><span class="line">  <span class="keyword">def</span> main(args: Array[String]) &#123;</span><br><span class="line">    <span class="keyword">println</span>(<span class="string">"Returned Value : "</span> + addInt(<span class="number">1</span>, b = <span class="number">3</span>))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> addInt(c: <span class="keyword">Int</span>, a: <span class="keyword">Int</span> = <span class="number">5</span>, b: <span class="keyword">Int</span> = <span class="number">7</span>): <span class="keyword">Int</span> = &#123;</span><br><span class="line">    var sum: <span class="keyword">Int</span> = <span class="number">0</span></span><br><span class="line">    sum = a + b + c</span><br><span class="line">    <span class="keyword">return</span> sum</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">Returned</span> <span class="rule"><span class="attribute">Value </span>:<span class="value"> <span class="number">9</span></span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="嵌套函数">嵌套函数</h3><p>函数内可定义函数，内部定义的函数称为<code>local function</code> <code>本地函数</code>，其<strong>作用域也只在其封装函数内</strong>。<br>比如以下阶乘的实现<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">object Demo &#123;</span><br><span class="line">  <span class="keyword">def</span> main(args: Array[String]) &#123;</span><br><span class="line">    <span class="keyword">println</span>(factorial(<span class="number">0</span>))</span><br><span class="line">    <span class="keyword">println</span>(factorial(<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">println</span>(factorial(<span class="number">2</span>))</span><br><span class="line">    <span class="keyword">println</span>(factorial(<span class="number">3</span>))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> factorial(i: <span class="keyword">Int</span>): <span class="keyword">Int</span> = &#123;</span><br><span class="line">    <span class="keyword">def</span> fact(i: <span class="keyword">Int</span>, accumulator: <span class="keyword">Int</span>): <span class="keyword">Int</span> = &#123;</span><br><span class="line">      <span class="keyword">if</span> (i &lt;= <span class="number">1</span>)</span><br><span class="line">        accumulator</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        fact(i - <span class="number">1</span>, i * accumulator)</span><br><span class="line">    &#125;</span><br><span class="line">    fact(i, <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">6</span><br></pre></td></tr></table></figure>
+<h3 id="部分应用函数">部分应用函数</h3><p>scala允许你分几次给函数的参数赋值，这适用于某些参数已经确定，而剩余参数选定的情形。<br>将未确定值的参数赋值为下划线<code>_</code>（数据类型不能省略），并将其结果保存在变量中，即得到部分应用函数。<br><figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import java.util.<span class="built_in">Date</span></span><br><span class="line"></span><br><span class="line">object Demo &#123;</span><br><span class="line">  def main(args: <span class="built_in">Array</span>[<span class="built_in">String</span>]) &#123;</span><br><span class="line">    val <span class="built_in">date</span> = <span class="keyword">new</span> <span class="built_in">Date</span></span><br><span class="line">    val logWithDateBound = <span class="built_in">log</span>(<span class="built_in">date</span>, _: <span class="built_in">String</span>)</span><br><span class="line">    logWithDateBound(<span class="string">"message1"</span>)</span><br><span class="line">    Thread.sleep(<span class="number">1000</span>)</span><br><span class="line">    logWithDateBound(<span class="string">"message2"</span>)</span><br><span class="line">    Thread.sleep(<span class="number">1000</span>)</span><br><span class="line">    logWithDateBound(<span class="string">"message3"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  def <span class="built_in">log</span>(<span class="built_in">date</span>: <span class="built_in">Date</span>, message: <span class="built_in">String</span>) = &#123;</span><br><span class="line">    println(<span class="built_in">date</span> + <span class="string">"----"</span> + message)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="函数参数值按名称传递">函数参数值按名称传递</h3><p>按名称传递允许你以任意顺序传递参数值。<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">object Demo &#123;</span><br><span class="line">  <span class="keyword">def</span> main(args: Array[String]) &#123;</span><br><span class="line">    printInt(b = <span class="number">5</span>, a = <span class="number">7</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> printInt(a: <span class="keyword">Int</span>, b: <span class="keyword">Int</span>) = &#123;</span><br><span class="line">    <span class="keyword">println</span>(<span class="string">"Value of a : "</span> + a)</span><br><span class="line">    <span class="keyword">println</span>(<span class="string">"Value of b : "</span> + b)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="递归函数">递归函数</h3><p>递归在函数式编程中至关重要，scala对递归有良好的支持。<br>比如以下的阶乘实现。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">for</span> (i &lt;- <span class="number">10</span> to <span class="number">20</span>)</span><br><span class="line">      printf(<span class="string">"factorial of %d is: %d、民"</span>, i, factorial(i))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">factorial</span>(</span>n: <span class="type">BigInt</span>): <span class="type">BigInt</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">      <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      n * factorial(n - <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">factorial <span class="keyword">of</span> <span class="number">10</span> <span class="keyword">is</span>: <span class="number">3628800</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">11</span> <span class="keyword">is</span>: <span class="number">39916800</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">12</span> <span class="keyword">is</span>: <span class="number">479001600</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">13</span> <span class="keyword">is</span>: <span class="number">6227020800</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">14</span> <span class="keyword">is</span>: <span class="number">87178291200</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">15</span> <span class="keyword">is</span>: <span class="number">1307674368000</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">16</span> <span class="keyword">is</span>: <span class="number">20922789888000</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">17</span> <span class="keyword">is</span>: <span class="number">355687428096000</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">18</span> <span class="keyword">is</span>: <span class="number">6402373705728000</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">19</span> <span class="keyword">is</span>: <span class="number">121645100408832000</span></span><br><span class="line">factorial <span class="keyword">of</span> <span class="number">20</span> <span class="keyword">is</span>: <span class="number">2432902008176640000</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="高阶函数_higher_order_function">高阶函数 higher order function</h3><p>所谓高阶函数，就是以其它函数为参数，或者返回值为函数。<br>以下例子中<code>apply()</code>接受 函数 <code>f</code>和值<code>v</code>为参数，并将<code>v</code>传递给<code>f</code>。<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">object Demo &#123;</span><br><span class="line">  def main(args: Array[String]) &#123;</span><br><span class="line"><span class="code">    println(apply(layout, 10))</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  def apply(f: Int =&gt; String, v: Int) = f(v)</span><br><span class="line"></span><br><span class="line">  def layout[<span class="link_label">A</span>](<span class="link_url">x: A</span>) = "[" + x.toString() + "]"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出为<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">10</span>]</span><br></pre></td></tr></table></figure></p>
+<p><code>Int =&gt; String</code>表示f的数据类型为此参数列表与返回值的函数，layout是一个使用了模板的函数。</p>
+<h3 id="匿名函数">匿名函数</h3><p>scala为匿名函数提供轻量级的语法支持，在源文件中，匿名函数也叫做<code>function literal</code>（个人译为<code>字面量函数</code>），在运行时，函数实例化，称为<code>函数值</code>(注意此外不同于函数返回值）。<br>scala支持<code>first-class</code>函数/<code>头等函数</code>，意味着函数可用<code>函数字面量</code>来表达并以对象形式呈现，亦即<code>函数值</code>。<br>以下都是匿名函数<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="reserved">var</span> mul = <span class="function"><span class="params">(x: Int, y: Int)</span> =&gt;</span> x*y</span><br><span class="line"><span class="reserved">var</span> userDir = <span class="function"><span class="params">()</span> =&gt;</span> &#123; System.getProperty(<span class="string">"user.dir"</span>) &#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用匿名函数<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">println</span><span class="params">( userDir()</span></span> )</span><br><span class="line"><span class="comment">//将输出当前目录</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="柯里函数">柯里函数</h3><p><code>柯里化</code>将一个多参数函数转换为<code>函数链</code>，每次接受一个参数。<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">def strcat<span class="list">(<span class="keyword">s1</span>: String)</span><span class="list">(<span class="keyword">s2</span>: String)</span> = s1 + s2</span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">def strcat<span class="list">(<span class="keyword">s1</span>: String)</span> = <span class="list">(<span class="keyword">s2</span>: String)</span> =&gt; s1 + s2</span><br></pre></td></tr></table></figure></p>
+<p>调用方式<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">strcat</span><span class="params">(<span class="string">"foo"</span>)</span><span class="params">(<span class="string">"bar"</span>)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>当然，函数链长度并不限于2<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">str1</span>:</span> <span class="type">String</span> = <span class="string">"Hello, "</span></span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">str2</span>:</span> <span class="type">String</span> = <span class="string">"Scala!"</span></span><br><span class="line">    println(<span class="string">"str1 + str2 = "</span> + strcat(str1)(str2))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">strcat</span>(</span>s1: <span class="type">String</span>)(s2: <span class="type">String</span>) = &#123;</span><br><span class="line">    s1 + s2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出<br><figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function_or_atom">str1</span> + <span class="function_or_atom">str2</span> = <span class="variable">Hello</span>, <span class="variable">Scala</span><span class="exclamation_mark">!</span></span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/04/26/scala-tutorial-4/" data-title="scala学习笔记（四）循环、函数 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/26/scala-tutorial-3/"  title="scala学习笔记（三）访问权限、操作符/优先级及条件语句">
+ <strong>下一篇：</strong><br/> 
+ <span>scala学习笔记（三）访问权限、操作符/优先级及条件语句
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/26/scala-tutorial-4/" data-title="scala学习笔记（四）循环、函数" data-url="http://azyet.github.io/2016/04/26/scala-tutorial-4/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#循环"><span class="toc-number">1.</span> <span class="toc-text">循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#范围for"><span class="toc-number">1.1.</span> <span class="toc-text">范围for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多循环"><span class="toc-number">1.2.</span> <span class="toc-text">多循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集合的for"><span class="toc-number">1.3.</span> <span class="toc-text">集合的for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带filter的循环"><span class="toc-number">1.4.</span> <span class="toc-text">带filter的循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带yield的for"><span class="toc-number">1.5.</span> <span class="toc-text">带yield的for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#循环控制"><span class="toc-number">1.6.</span> <span class="toc-text">循环控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-number">2.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数声明"><span class="toc-number">2.1.</span> <span class="toc-text">函数声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数定义"><span class="toc-number">2.2.</span> <span class="toc-text">函数定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数调用"><span class="toc-number">2.3.</span> <span class="toc-text">函数调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#call-by-name函数参数"><span class="toc-number">2.4.</span> <span class="toc-text">call-by-name函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可变长参数"><span class="toc-number">2.5.</span> <span class="toc-text">可变长参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数默认值"><span class="toc-number">2.6.</span> <span class="toc-text">函数参数默认值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套函数"><span class="toc-number">2.7.</span> <span class="toc-text">嵌套函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部分应用函数"><span class="toc-number">2.8.</span> <span class="toc-text">部分应用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数值按名称传递"><span class="toc-number">2.9.</span> <span class="toc-text">函数参数值按名称传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#递归函数"><span class="toc-number">2.10.</span> <span class="toc-text">递归函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高阶函数_higher_order_function"><span class="toc-number">2.11.</span> <span class="toc-text">高阶函数 higher order function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#匿名函数"><span class="toc-number">2.12.</span> <span class="toc-text">匿名函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#柯里函数"><span class="toc-number">2.13.</span> <span class="toc-text">柯里函数</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

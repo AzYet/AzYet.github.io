@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/13/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables" itemprop="url">ansible学习笔记(二)Iventory、Variables</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p><code>ansible</code>同时和多种系统工作，它会选择<code>inventory</code>文件中的部分主机执行不同的操作，这个文件默认位于<code>/etc/ansible/hosts</code>。你也可以同时使用多个<code>inventory</code>或者动态地从云端<code>pull</code>。</p>
+<h2 id="host_and_group">host and group</h2><p><code>inventory</code>文件的模式类似<code>ini</code>：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mail<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[webservers]</span><br><span class="line">foo<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">bar<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[dbservers]</span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">three<span class="class">.example</span><span class="class">.com</span></span><br></pre></td></tr></table></figure></p>
+<p>方括号中是组名，同个主机可以位于多个组中，此时变量将来自所有其所属的组。如果ssh主机使用非默认的22端口，可以使用<code>:</code>将其指定于主机名之后<code>badwolf.example.com:5309</code>。</p>
+<p>如果是静态IP想取个别名，可使用以下的方式。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">jumper</span> ansible_port=<span class="number">5555</span> ansible_host=<span class="number">192.168.1.50</span></span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/13/note-of-ansible-2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/13/note-of-ansible-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/13/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接" itemprop="url">Ansible学习笔记(一)SSH连接</a>
   </h1>
   <p class="article-author">By
@@ -630,68 +692,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" title="Nginx+gunicorn+Flask安装指南" itemprop="url">Nginx+gunicorn+Flask安装指南</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-17T20:52:57.000Z" itemprop="datePublished"> 發表於 2016-03-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Introduction">Introduction</h2><p>本文介绍如何使用Flask微框架在Ubuntu 15.10上搭建一个WEB应用，并使用guniconr Server来启动应用和设置Nginx作为前端反向代理。</p>
-<h2 id="关于WSGI的一些概念">关于WSGI的一些概念</h2><p>gunicorn是一个运行于unix环境的遵循python WSGI规范的WEB Server。WSGI（web server gateway interfaces)是一种python中定义WEB应用/框架 与 WEB服务器/应用服务器之间通信规范的接口标准，旨在简化和规范上述部件间的通信，并使各部分易于替换。它定义了一组可用于其它协议之上的接口。</p>
-<p>因此作为一种WSGI实现的gunicorn可以将HTTP请求转换为WSGI定义的python标准请求，可被同样遵循了WSGI规范的应用如django,flask接收处理，处理后的响应也同样可被逆向转换为http response并回到客户端。</p>
-<p>nginx在此场景中则作为一个http request代理，将不uri或类型的请求发送至不同的web server处理，比如静态图片可由自己处理，而动态的数据库查询可交给flask应用来完成。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Flask/">Flask</a><a href="/tags/Nginx/">Nginx</a><a href="/tags/gunicorn/">gunicorn</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -748,10 +748,6 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
@@ -760,7 +756,15 @@
 			
 		
 			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
@@ -769,10 +773,6 @@
 		
 			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 			
@@ -788,7 +788,7 @@
 			
 		
 			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>
