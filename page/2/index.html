@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/15/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法" itemprop="url">ansible用到的简单yaml语法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-15T22:11:43.000Z" itemprop="datePublished"> 發表於 2016-04-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>对ansible来说，几乎每个yaml文件都以一个列表开头，而每一项则是一个key-value对。yaml文件可分别以<code>---</code>和<code>...</code>来标识文件的开始和结束。</p>
+<h2 id="list">list</h2><p>ymal列表项起始于同一缩进的<code>-</code>,注意空格不可省略。<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">--</span><br><span class="line"></span># A list of tasty fruits</span><br><span class="line">fruits:</span><br><span class="line">    -<span class="ruby"> <span class="constant">Apple</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Orange</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Strawberry</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Mango</span></span><br><span class="line"></span>...</span><br></pre></td></tr></table></figure></p>
+<h2 id="dictionary">dictionary</h2><p>而字典则是以<code>:</code>分割，空格同样不可省略。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">martin</span>:</span><br><span class="line">    <span class="attribute">name</span>: Martin D'vloper</span><br><span class="line">    <span class="attribute">job</span>: Developer</span><br><span class="line">    <span class="attribute">skill</span>: Elite</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/15/simple-yaml-in-ansible/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ansible/">ansible</a><a href="/tags/yaml/">yaml</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/15/simple-yaml-in-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/15/simple-yaml-in-ansible/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/13/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables" itemprop="url">ansible学习笔记(二)Iventory、Variables</a>
   </h1>
   <p class="article-author">By
@@ -629,69 +690,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/24/a-tour-of-go-1/" title="漫游Go语言（一）之包,函数&amp;变量" itemprop="url">漫游Go语言（一）之包,函数&amp;变量</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-24T19:58:05.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>这只是我follow tour.golang.org时的笔记（翻译）。</p>
-<h2 id="Package">Package</h2><p>Go程序都由包组成，从<code>main</code>包开始执行。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span>	</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.<span class="type">Println</span>(<span class="string">"My favorite number is"</span>, rand.<span class="type">Intn</span>(<span class="number">10</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>以上程序导入了<code>match</code> 和<code>math/rand</code>两个包，按约定包名与路径最后一部分相同，比如<code>math/rand</code>目录下的文件都以package rand的声明开头。</p>
-<h2 id="Import">Import</h2><p>可以将多个包用括号一起导入，如<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.<span class="type">Printf</span>(<span class="string">"Now you have %g problems."</span>, math.<span class="type">Sqrt</span>(<span class="number">7</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>当然也可以用多个语句分别导入，但推荐以上方式。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/24/a-tour-of-go-1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/24/a-tour-of-go-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/24/a-tour-of-go-1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -720,15 +718,11 @@
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
@@ -736,23 +730,7 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -760,11 +738,27 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -773,6 +767,14 @@
 		
 			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -785,10 +787,6 @@
 		
 			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>

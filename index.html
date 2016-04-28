@@ -78,6 +78,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/27/introduce-kafka/" title="Kafka简介" itemprop="url">Kafka简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-27T22:49:17.000Z" itemprop="datePublished"> 發表於 2016-04-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Kafka是由<code>LinkedIn</code>开发的一个分布式的消息系统，使用<code>Scala</code>编写，它以可水平扩展和高吞吐率而被广泛使用。目前越来越多的开源分布式处理系统如Cloudera、Apache Storm、Spark都支持与Kafka集成。</p>
+<h2 id="特点">特点</h2><p>Kafka是一种分布式的，基于发布/订阅的消息系统。主要设计目标如下：</p>
+<ul>
+<li>以时间复杂度为O(1)的方式提供消息持久化能力，即使对TB级以上数据也能保证常数时间复杂度的访问性能。</li>
+<li>高吞吐率。即使在非常廉价的商用机器上也能做到单机支持每秒100K条以上消息的传输。</li>
+<li>支持Kafka Server间的消息分区，及分布式消费，同时保证每个Partition内的消息顺序传输。</li>
+<li>同时支持离线数据处理和实时数据处理。</li>
+<li>Scale out：支持在线水平扩展。</li>
+<li>完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现负载均衡；</li>
+<li>支持Hadoop数据并行加载，对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/27/introduce-kafka/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Kafka/">Kafka</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/27/introduce-kafka/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/27/introduce-kafka/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/26/scala-tutorial-4/" title="scala学习笔记（四）循环、函数" itemprop="url">scala学习笔记（四）循环、函数</a>
   </h1>
   <p class="article-author">By
@@ -662,67 +730,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/15/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法" itemprop="url">ansible用到的简单yaml语法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-15T22:11:43.000Z" itemprop="datePublished"> 發表於 2016-04-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>对ansible来说，几乎每个yaml文件都以一个列表开头，而每一项则是一个key-value对。yaml文件可分别以<code>---</code>和<code>...</code>来标识文件的开始和结束。</p>
-<h2 id="list">list</h2><p>ymal列表项起始于同一缩进的<code>-</code>,注意空格不可省略。<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">--</span><br><span class="line"></span># A list of tasty fruits</span><br><span class="line">fruits:</span><br><span class="line">    -<span class="ruby"> <span class="constant">Apple</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Orange</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Strawberry</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Mango</span></span><br><span class="line"></span>...</span><br></pre></td></tr></table></figure></p>
-<h2 id="dictionary">dictionary</h2><p>而字典则是以<code>:</code>分割，空格同样不可省略。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">martin</span>:</span><br><span class="line">    <span class="attribute">name</span>: Martin D'vloper</span><br><span class="line">    <span class="attribute">job</span>: Developer</span><br><span class="line">    <span class="attribute">skill</span>: Elite</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/15/simple-yaml-in-ansible/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ansible/">ansible</a><a href="/tags/yaml/">yaml</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/15/simple-yaml-in-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/15/simple-yaml-in-ansible/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -751,15 +758,11 @@
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
 			
 		
 			
@@ -767,23 +770,7 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -791,11 +778,27 @@
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
@@ -804,6 +807,14 @@
 		
 			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -816,10 +827,6 @@
 		
 			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>
