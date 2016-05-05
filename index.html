@@ -78,6 +78,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/05/04/mysql-transaction-introduction/" title="MySQL事务简介" itemprop="url">MySQL事务简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-04T15:45:04.000Z" itemprop="datePublished"> 發表於 2016-05-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本文将会介绍什么是mysql事务，以及如何用commit和rollback来管理事务。</p>
+<h2 id="mysql事务">mysql事务</h2><p>为了方便理解，通过向样例数据库中添加一个订单来说明什么是事务：</p>
+<ul>
+<li>查询最新的订单号，并使用下一数字作为新增订单号</li>
+<li>在<code>order</code>表中增加订单</li>
+<li>在订单详情表<code>orderdetails</code>中添加订单货物</li>
+<li>查询<code>order</code>和<code>orderdetails</code>表验证结果</li>
+</ul>
+<p>想象一下如果上述步骤中途因为数据库锁或其它原因出错会有什么后果？你可能会得到一个空订单并毫无察觉，你之后可能会要花费巨大的精力去修复这个错误。</p>
+<p>mysql事务就能对付这种情况。所谓事务就是<strong>一组绝不会部分生效mysql操作</strong>：如果中途出错，那么状态会回滚至修改前；如果未出错，当然是一切变动都提交到数据库中。</p>
+<h2 id="使用mysql事务">使用mysql事务</h2><p>在用事务实现上述用例之前，先了解一下最常用的语句。<br><code>start transaction</code>开始事务，<code>rollback</code>撤销操作。<br>需要注意的是有一些语句是不能在事务中使用的，大部分是数据定义语句。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">CREATE</span> / <span class="keyword">ALTER</span> / <span class="keyword">DROP</span> <span class="keyword">DATABASE</span></span><br><span class="line"><span class="keyword">CREATE</span> /<span class="keyword">ALTER</span> / <span class="keyword">DROP</span> / <span class="keyword">RENAME</span> / <span class="keyword">TRUNCATE</span> <span class="keyword">TABLE</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">INDEX</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">EVENT</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">FUNCTION</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">PROCEDURE</span></span></span><br></pre></td></tr></table></figure></p>
+<p><code>commit</code>将事务中的变动提交到数据库中，mysql会默认提交，如果要改为不自动提交，可以<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">SET</span> autocommit = <span class="number">0</span>;</span></span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/05/04/mysql-transaction-introduction/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/mysql/">mysql</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/05/04/mysql-transaction-introduction/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/05/04/mysql-transaction-introduction/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/27/introduce-kafka/" title="Kafka简介" itemprop="url">Kafka简介</a>
   </h1>
   <p class="article-author">By
@@ -666,70 +736,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/17/note-of-ansible-3/" title="ansible学习笔记(三)Pattern" itemprop="url">ansible学习笔记(三)Pattern</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-17T04:09:43.000Z" itemprop="datePublished"> 發表於 2016-04-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible <span class="tag">&lt;<span class="title">pattern_goes_here</span>&gt;</span> -m <span class="tag">&lt;<span class="title">module_name</span>&gt;</span> -a <span class="tag">&lt;<span class="title">arguments</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>如<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible webservers -m service -<span class="tag">a</span> <span class="string">"name=httpd state=restarted"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span>:two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"><span class="number">192.168</span>.<span class="number">1</span>.*</span><br></pre></td></tr></table></figure></p>
-<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>dbservers</span><br></pre></td></tr></table></figure></p>
-<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
-<p>还可以指定交集<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/17/note-of-ansible-3/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ansible/">ansible</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/17/note-of-ansible-3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/17/note-of-ansible-3/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -806,11 +812,11 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			

@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/24/a-tour-of-go-2/" title="漫游Go语言（二）之流程控制与defer" itemprop="url">漫游Go语言（二）之流程控制与defer</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-24T20:53:45.000Z" itemprop="datePublished"> 發表於 2016-03-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="for循环">for循环</h2><p>Go只是一种循环控制语句<code>for</code>，由分号<code>;</code>分开的三部分作为与C同，其初始化部分通常用<code>:=</code>形式的短声明，其作用域只在循环内。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="string">sum :</span>= <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> <span class="string">i :</span>= <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		sum += i</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意与<code>C</code>,<code>java</code>等不同的是，条件部分无括号，而循环体的<code>{}</code>则不可省略。初始化与post循环体语句可省略，<code>;</code>也可以省略，如果什么都不带，则代表死循环。<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="keyword">sum</span> := <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> <span class="keyword">sum</span> &lt; <span class="number">1000</span> &#123;</span><br><span class="line">		<span class="keyword">sum</span> += <span class="keyword">sum</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">sum</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>死循环<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="func"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/24/a-tour-of-go-2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/24/a-tour-of-go-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/24/a-tour-of-go-2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/24/a-tour-of-go-1/" title="漫游Go语言（一）之包,函数&amp;变量" itemprop="url">漫游Go语言（一）之包,函数&amp;变量</a>
   </h1>
   <p class="article-author">By
@@ -328,69 +389,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
-<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
-<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
-<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2015/12/16/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
@@ -443,6 +441,69 @@
 	
 	  	<span></span>
 		<a href="/2015/12/16/Linux-errno-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/Linux-errno-intro/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
+<p>比如说要对以下代码进行原子操作<br><figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">balance </span>=<span class="string"> balance + 1</span></span><br></pre></td></tr></table></figure></p>
+<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex; // some globally-allocated <span class="operator"><span class="keyword">lock</span> ’<span class="keyword">mutex</span>’</span><br><span class="line">...</span><br><span class="line"><span class="keyword">lock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br><span class="line">balance = balance + 1;</span><br><span class="line"><span class="operator"><span class="keyword">unlock</span>(&amp;<span class="keyword">mutex</span>);</span></span><br></pre></td></tr></table></figure></p>
+<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t <span class="operator"><span class="keyword">lock</span> = PTHREAD_MUTEX_INITIALIZER;</span></span><br><span class="line">pthread_mutex_lock(&amp;<span class="operator"><span class="keyword">lock</span>);</span> </span><br><span class="line">balance = balance + 1;</span><br><span class="line">pthread_mutex_unlock(&amp;<span class="operator"><span class="keyword">lock</span>);</span></span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/16/OSTEP-Linux-concurrency-lock/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/16/OSTEP-Linux-concurrency-lock/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -646,70 +707,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/10/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　<code>setmentation</code>因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的<code>page frame</code>，每一个<code>frame</code>可包含一个虚拟内存空间中的<code>page</code>。</p>
-<p>　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。</p>
-<p>　　OS维护一个<code>per-process</code>的结构<code>page table</code>，保存着虚拟page映射到物理frame的地址翻译。</p>
-<h2 id="地址翻译">地址翻译</h2><p>　　将虚拟内存地址分割为<code>virtual page number</code> (VPN)和offset两部分。前者代表page号，后者为page内偏移量。通过page table将VPN替换为对应的<code>physical frame number</code>(PFN),从而可以得到真实的物理地址。</p>
-<p>　　对于一个真实的32位系统，page大小为4K，那么VPN数量为2^20 = 1MB,假设每个page需要4byte信息，那么每个page table大小为4M, 如果系统中有100个进程，那么光page table就要消耗400MB空间。显然这个大小是不可能置于CPU寄存器的，只能放置在内存中（依然很大）。</p>
-<h2 id="Page_Table_Entry_(PTE)">Page Table Entry (PTE)</h2><p>　　最简单的形式就是<code>linear page table</code>,用一人数组来存储，其中下标为VPN，内容为PTE。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg" alt=""></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/10/OSTEP-paging-intro/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/内存虚拟化/">内存虚拟化</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/10/OSTEP-paging-intro/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/10/OSTEP-paging-intro/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -786,11 +783,11 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			

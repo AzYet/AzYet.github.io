@@ -78,6 +78,84 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/28/6stagesInLinuxBootProcess/" title="Linux启动过程中的6个阶段" itemprop="url">Linux启动过程中的6个阶段</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-28T16:46:48.000Z" itemprop="datePublished"> 發表於 2015-05-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>认识Linux的启动过程对每一个Linux使用者和管理员都是必要的，它能使你一幅清晰的Linux如何工作的图景。本文会介绍按下电源到登录提示出现过程中都经历了哪些过程。下图会给你一个简洁明了的整体认识。</p>
+<p>简要启动过程：</p>
+<pre><code><span class="bullet">1. </span>按下电源键
+<span class="bullet">2. </span>CPU跳到BIOS
+<span class="bullet">3. </span>BIOS运行POST
+<span class="bullet">4. </span>寻找第一个可启动设备
+<span class="bullet">5. </span>加载执行MBR
+<span class="bullet">6. </span>加载OS
+<span class="bullet">7. </span>用户提示符
+</code></pre><p>以下是Linux启动过程中的详细阶段。</p>
+<pre><code>1） 系统启动（硬件）
+2） <span class="keyword">Boot</span> Loader阶段1（MBR加载）
+3） <span class="keyword">Boot</span> Loader阶段2（GRUB加载）
+4） Kernel
+5） INIT
+6） 用户提示符
+</code></pre><h2 id="阶段1：系统启动">阶段1：系统启动</h2><p>CPU加电后执行的第一个指令就是将控制交给BIOS进行开机自检，BIOS会执行两个任务：</p>
+<pre><code>执行<span class="keyword">POST</span>
+选择第一个可启动设备
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/28/6stagesInLinuxBootProcess/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/bootloader/">bootloader</a><a href="/tags/grub/">grub</a><a href="/tags/init/">init</a><a href="/tags/启动流程/">启动流程</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/28/6stagesInLinuxBootProcess/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/28/6stagesInLinuxBootProcess/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/27/androidBootProcess/" title="android启动流程" itemprop="url">android启动流程</a>
   </h1>
   <p class="article-author">By
@@ -693,74 +771,6 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/20/zookeeperNote4/" title="ZooKeeper学习笔记（四）之基本概念" itemprop="url">ZooKeeper学习笔记（四）之基本概念</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="ZooKeeper数据模型">ZooKeeper数据模型</h2><p>　　ZooKeeper拥有一个层级结构的目录空间，非常类似分布式文件系统，唯一的不同是每个<strong>node可同时拥有数据和子node</strong>，即文件同时也是目录。<strong>只使用绝对路径</strong>，总的来说任何Unicode字符都可以作为路径的一部分，但遵循以下约束:</p>
-<blockquote>
-<p>null(\u0000)不能用在path中，因为在C中会导致Binding异常。</p>
-<p>以下字符因为不能很好显示或易让人迷惑，不可用在path中：\u0001 - \u0019 and \u007F - \u009F.</p>
-<p>以下字符也不允许使用： \ud800 -uF8FFF, \uFFF0-uFFFF, \uXFFFE - \uXFFFF (X 代表 1 - E), \uF0000 - \uFFFFF.</p>
-<p>.和..可用，但不能单独用来表示node, 亦即/a/b/./c” or “/a/b/../c都是非法的。</p>
-<p>zookeeper是保留字</p>
-</blockquote>
-<h2 id="ZNodes">ZNodes</h2><p>　　ZooKeeper tree中的每一个Node都指向一个znode, znode维护一个状态结构，结构中包含<code>数据/acl  更新的版本号</code>和<code>时间戳</code>，二者共同用于验证缓存和同步更新。znode每更新一次 ，版本号增加，读取数据时会得到相应的<strong>版本号</strong>，更新数据时也应提供版本号，如果版本号不符，操作失败（注：提供强制模式，会忽略版本号）。</p>
-<p>　　Znode是应用访问最多的实体，有以下两个特性值得关注。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/20/zookeeperNote4/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/watch/">watch</a><a href="/tags/znode/">znode</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/20/zookeeperNote4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote4/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -837,11 +847,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
