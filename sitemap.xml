@@ -2,173 +2,178 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2016/06/12/how-to-write-go-code/</loc>
+    <lastmod>2016-06-13T11:51:54.515Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2016/05/04/mysql-transaction-introduction/</loc>
-    <lastmod>2016-05-05T03:46:40.523Z</lastmod>
+    <lastmod>2016-05-05T03:46:40.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/27/introduce-kafka/</loc>
-    <lastmod>2016-04-28T10:50:11.100Z</lastmod>
+    <lastmod>2016-04-28T10:50:11.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/26/scala-tutorial-4/</loc>
-    <lastmod>2016-04-27T10:06:00.112Z</lastmod>
+    <lastmod>2016-04-27T10:06:00.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/26/scala-tutorial-3/</loc>
-    <lastmod>2016-04-26T18:33:49.186Z</lastmod>
+    <lastmod>2016-04-26T18:33:49.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/26/scala-tutorial-2/</loc>
-    <lastmod>2016-04-26T18:24:39.508Z</lastmod>
+    <lastmod>2016-04-26T18:24:39.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/25/scala-tutorial-1/</loc>
-    <lastmod>2016-04-26T12:33:38.092Z</lastmod>
+    <lastmod>2016-04-26T12:33:38.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/21/inspur-ipmi-raid-hot-spare/</loc>
-    <lastmod>2016-04-22T10:57:20.649Z</lastmod>
+    <lastmod>2016-04-22T10:57:20.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/20/nginx-tcp-reverse-proxy/</loc>
-    <lastmod>2016-04-22T06:13:50.219Z</lastmod>
+    <lastmod>2016-04-22T06:13:50.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/19/install-and-config-jumpserver/</loc>
-    <lastmod>2016-04-20T06:33:45.293Z</lastmod>
+    <lastmod>2016-04-20T06:33:45.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/17/note-of-ansible-4/</loc>
-    <lastmod>2016-04-18T13:13:48.980Z</lastmod>
+    <lastmod>2016-04-18T13:13:48.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/17/note-of-ansible-3/</loc>
-    <lastmod>2016-04-17T16:14:30.259Z</lastmod>
+    <lastmod>2016-04-17T16:14:30.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/13/note-of-ansible-2/</loc>
-    <lastmod>2016-04-17T11:52:07.540Z</lastmod>
+    <lastmod>2016-04-17T11:52:07.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/13/note-of-ansible-1/</loc>
-    <lastmod>2016-04-17T10:36:08.681Z</lastmod>
+    <lastmod>2016-04-17T10:36:08.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/15/simple-yaml-in-ansible/</loc>
-    <lastmod>2016-04-16T10:15:44.686Z</lastmod>
+    <lastmod>2016-04-16T10:15:44.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/25/a-tour-of-go-6/</loc>
-    <lastmod>2016-04-06T03:32:20.901Z</lastmod>
+    <lastmod>2016-04-06T03:32:20.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/04/a-tour-of-go-8/</loc>
-    <lastmod>2016-04-06T03:04:56.059Z</lastmod>
+    <lastmod>2016-04-06T03:04:56.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/04/04/a-tour-of-go-7/</loc>
-    <lastmod>2016-04-05T11:10:58.565Z</lastmod>
+    <lastmod>2016-04-05T11:10:58.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/25/a-tour-of-go-5/</loc>
-    <lastmod>2016-03-26T05:53:55.958Z</lastmod>
+    <lastmod>2016-03-26T05:53:55.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/24/a-tour-of-go-4/</loc>
-    <lastmod>2016-03-26T02:31:16.576Z</lastmod>
+    <lastmod>2016-03-26T02:31:16.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/24/a-tour-of-go-3/</loc>
-    <lastmod>2016-03-25T15:04:49.136Z</lastmod>
+    <lastmod>2016-03-25T15:04:49.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/24/a-tour-of-go-2/</loc>
-    <lastmod>2016-03-25T14:27:11.641Z</lastmod>
+    <lastmod>2016-03-25T14:27:11.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/24/a-tour-of-go-1/</loc>
-    <lastmod>2016-03-25T14:25:29.428Z</lastmod>
+    <lastmod>2016-03-25T14:25:29.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/17/setup-nginx-gunicorn-flask-on-ubuntu-15-10/</loc>
-    <lastmod>2016-03-18T10:01:03.780Z</lastmod>
+    <lastmod>2016-03-18T10:01:03.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/17/simple-sytemd-upstart-script/</loc>
-    <lastmod>2016-03-18T06:57:33.177Z</lastmod>
+    <lastmod>2016-03-18T06:57:33.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2016/03/17/mysql-difference-between-2-tables/</loc>
-    <lastmod>2016-03-18T04:01:57.987Z</lastmod>
+    <lastmod>2016-03-18T04:01:57.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/16/OSTEP-Linux-concurrency-lock/</loc>
-    <lastmod>2016-03-18T03:57:48.752Z</lastmod>
+    <lastmod>2016-03-18T03:57:48.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/16/Linux-errno-intro/</loc>
-    <lastmod>2016-03-18T03:56:42.626Z</lastmod>
+    <lastmod>2016-03-18T03:56:42.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/16/android-develop-layout-abse/</loc>
-    <lastmod>2015-12-17T06:58:44.037Z</lastmod>
+    <lastmod>2015-12-17T06:58:44.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/14/CSAPP-linking-and-tools/</loc>
-    <lastmod>2015-12-14T07:32:59.386Z</lastmod>
+    <lastmod>2015-12-14T07:32:59.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/13/OSTEP-smaller-page-table/</loc>
-    <lastmod>2015-12-14T03:00:37.861Z</lastmod>
+    <lastmod>2015-12-14T03:00:37.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/10/OSTEP-paging-intro/</loc>
-    <lastmod>2015-12-11T13:56:17.547Z</lastmod>
+    <lastmod>2015-12-11T13:56:17.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/10/OSTEP-vm-intro/</loc>
-    <lastmod>2015-12-11T08:19:47.486Z</lastmod>
+    <lastmod>2015-12-11T08:19:47.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/10/value-passing-in-c-programming/</loc>
-    <lastmod>2015-12-10T15:11:48.518Z</lastmod>
+    <lastmod>2015-12-10T15:11:48.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/12/05/An-example-of-using-regular-expressions-in-C/</loc>
-    <lastmod>2015-12-07T15:29:32.414Z</lastmod>
+    <lastmod>2015-12-07T15:29:32.000Z</lastmod>
   </url>
   
   <url>
@@ -197,27 +202,22 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/23/sshPortForwarding/</loc>
+    <loc>http://azyet.github.io/2015/04/14/createUbuntuBootUsbDiskInWindows/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/11/natInnerServiceToPublic/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote6/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote4/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote5/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/30/simicsProductFamily/</loc>
+    <loc>http://azyet.github.io/2015/04/14/openvpnOnDroid/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -247,27 +247,32 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/26/ipCommandInLinux/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/08/shortcutsInBash/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote5/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote4/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote3/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote6/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/04/21/insAndconfigVlcCentos/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/06/10/repoLearningNote/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -297,7 +302,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote2/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -332,12 +337,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/14/createUbuntuBootUsbDiskInWindows/</loc>
+    <loc>http://azyet.github.io/2015/05/08/quickSortDesignAndImplement/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote2/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -372,7 +377,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/06/windowsLoginSameSMBHostWithDiffUser/</loc>
+    <loc>http://azyet.github.io/2015/05/11/natInnerServiceToPublic/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -407,42 +412,42 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/10/repoLearningNote/</loc>
+    <loc>http://azyet.github.io/2015/06/08/shortcutsInBash/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote6/</loc>
+    <loc>http://azyet.github.io/2015/05/30/simicsProductFamily/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote5/</loc>
+    <loc>http://azyet.github.io/2015/04/23/sshPortForwarding/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote4/</loc>
+    <loc>http://azyet.github.io/2015/05/22/theGreatCannon/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote3/</loc>
+    <loc>http://azyet.github.io/2015/06/01/ubuntu1404WirelessShare/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote2/</loc>
+    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote/</loc>
+    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/</loc>
+    <loc>http://azyet.github.io/2015/05/06/windowsLoginSameSMBHostWithDiffUser/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -457,27 +462,27 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/08/quickSortDesignAndImplement/</loc>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote1/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/14/openvpnOnDroid/</loc>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote2/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2014/05/21/usefulTagsForMavenPomFile/</loc>
+    <loc>http://azyet.github.io/2015/05/19/zookeeperNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote4/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/01/ubuntu1404WirelessShare/</loc>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote5/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -487,12 +492,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/22/theGreatCannon/</loc>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote6/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/26/ipCommandInLinux/</loc>
+    <loc>http://azyet.github.io/2015/05/28/6stagesInLinuxBootProcess/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   

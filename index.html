@@ -78,6 +78,83 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/06/12/how-to-write-go-code/" title="怎样编写Go程序" itemprop="url">怎样编写Go程序</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-06-12T23:45:16.000Z" itemprop="datePublished"> 發表於 2016-06-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="简介">简介</h2><p>本文演示一个简单的Go包开发过程，并介绍`go tool—-获取，build，安装Go包的标准方式。</p>
+<p><code>go tool</code>要求以特定的方式组织代码，请仔细阅读本文，以便以最简单的方式运行安装你的代码。</p>
+<h2 id="代码组织">代码组织</h2><h3 id="overview">overview</h3><ul>
+<li>一般将所有代码保存在单个<code>workspace</code></li>
+<li>单个workspace包含多个<code>git</code>仓库</li>
+<li>每个git仓库包含一个或多个<code>package</code></li>
+<li>每个package包含一个或多个源文件</li>
+<li>pacage的目录决定其<code>import path</code></li>
+</ul>
+<p>注意这和其它每个工程有单独的workspace、每个workspace都与git仓库关联的编程环境是不太相同的。</p>
+<h3 id="workspace">workspace</h3><p><code>worksapce</code>一个包含以下三个目录的目录结构。</p>
+<ul>
+<li>src 源文件</li>
+<li>pk 包目标文件</li>
+<li>bin 可执行文件</li>
+</ul>
+<p><code>go tool</code>build源文package包到pkg目录，install目标二进制文件到Bin目录。</p>
+<p>典型的src目录下包含多个git仓库，以跟踪每个package的开发。</p>
+<p>以下例子是一个包含两个package的workspace ：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">bin/</span><br><span class="line">    hello                          # <span class="keyword">command</span> <span class="built_in">executable</span></span><br><span class="line">    outyet                         # <span class="keyword">command</span> <span class="built_in">executable</span></span><br><span class="line">pkg/</span><br><span class="line">    linux_amd64/</span><br><span class="line">        github.<span class="keyword">com</span>/golang/example/</span><br><span class="line">            stringutil.<span class="keyword">a</span>           # package object</span><br><span class="line">src/</span><br><span class="line">    github.<span class="keyword">com</span>/golang/example/</span><br><span class="line">        .git/                      # Git repository metadata</span><br><span class="line">	hello/</span><br><span class="line">	    hello.<span class="keyword">go</span>               # <span class="keyword">command</span> <span class="keyword">source</span></span><br><span class="line">	outyet/</span><br><span class="line">	    main.<span class="keyword">go</span>                # <span class="keyword">command</span> <span class="keyword">source</span></span><br><span class="line">	    main_test.<span class="keyword">go</span>           # test <span class="keyword">source</span></span><br><span class="line">	stringutil/</span><br><span class="line">	    <span class="built_in">reverse</span>.<span class="keyword">go</span>             # package <span class="keyword">source</span></span><br><span class="line">	    reverse_test.<span class="keyword">go</span>        # test <span class="keyword">source</span></span><br><span class="line">    golang.org/<span class="keyword">x</span>/image/</span><br><span class="line">        .git/                      # Git repository metadata</span><br><span class="line">	bmp/</span><br><span class="line">	    reader.<span class="keyword">go</span>              # package <span class="keyword">source</span></span><br><span class="line">	    writer.<span class="keyword">go</span>              # package <span class="keyword">source</span></span><br><span class="line">    ... (many more repositories <span class="built_in">and</span> packages omitted) ...</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/06/12/how-to-write-go-code/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/06/12/how-to-write-go-code/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/06/12/how-to-write-go-code/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/05/04/mysql-transaction-introduction/" title="MySQL事务简介" itemprop="url">MySQL事务简介</a>
   </h1>
   <p class="article-author">By
@@ -671,71 +748,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/17/note-of-ansible-4/" title=" ansible学习笔记(四）Ad-Hoc " itemprop="url"> ansible学习笔记(四）Ad-Hoc </a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-18T01:09:43.000Z" itemprop="datePublished"> 發表於 2016-04-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p><code>Ad-Hoc</code>可以理解为临时，一些临时场景只需运行一次的指令，可以用这种模式完成。</p>
-<h2 id="并行和shell">并行和shell</h2><p>在特定时间重启<code>atlanta</code>的所有机器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible atlanta <span class="operator">-a</span> <span class="string">"/sbin/reboot"</span> <span class="operator">-f</span> <span class="number">10</span></span><br></pre></td></tr></table></figure></p>
-<p>如果想用<code>sudo</code>权限的话<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible atlanta -<span class="tag">a</span> <span class="string">"/sbin/reboot"</span> -f <span class="number">10</span> -<span class="tag">b</span> -k</span><br></pre></td></tr></table></figure></p>
-<p>其中<code>-k</code>意为交互式地输入密码，<code>-f</code> 指<code>fork</code>出多个进程来并行</p>
-<p><code>command</code>模块（缺省）并不支持<code>pipe</code>，如果要用命重定向，请使用<code>shell</code>模块。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible raleigh -m <span class="built_in">shell</span> -<span class="operator">a</span> <span class="string">'echo $TERM'</span></span><br></pre></td></tr></table></figure></p>
-<p>当命令中含有引号时一定要特别注意，以免命令在本地被吃掉，比如以上命令如果不使用<code>&#39;</code>而使用双引<code>&quot;</code>,那么变量变会在本地取值。</p>
-<p>实际上大部分<code>ansible</code>模块都与简单地命令不同，它们都是指定状态而过过程，以达到“幂等”的效果，这是<code>ansible</code>的一个重要设计理念。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/17/note-of-ansible-4/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/ansible/">ansible</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/17/note-of-ansible-4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/17/note-of-ansible-4/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -764,11 +776,11 @@
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>9</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
 			
@@ -780,11 +792,11 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -792,7 +804,11 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -800,19 +816,15 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -824,15 +836,15 @@
 			
 		
 			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 		</ul>

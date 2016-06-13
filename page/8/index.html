@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/18/rabbitmqNote2/" title="RabbitMQ学习笔记（二）之Work Queues" itemprop="url">RabbitMQ学习笔记（二）之Work Queues</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T10:20:49.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　本节中我们将新建Work Queue用来在多个工作进程间分发比较耗时的任务。</p>
+<p>　　work queue的主要意图就是避免立即处理资源密集的任务并等待它完成，而是安排它稍后处理。将任务封闭为消息发送给queue，后台的工作进程会取得这个消息并处理它，如果有多个工作进程，它们分担任务。</p>
+<p>　　这种理念在web应用中非常有用，特别是在当无法在一个短时间窗内完成复杂请求时。</p>
+<h2 id="准备工作">准备工作</h2><p>　　方便起见，我们将使用Thread.sleep()来代替一个真正的费时任务，使用<code>.</code>号来代表处理时长，比如消息<code>hello...</code>表示任务将费时3秒。</p>
+<p>　　对上一节的producer进行改动，使之能发送随机时长的任务。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/18/rabbitmqNote2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Work-Queues/">Work Queues</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/18/rabbitmqNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/18/rabbitmqNote/" title="RabbitMQ学习笔记（一）之HelloWorld" itemprop="url">RabbitMQ学习笔记（一）之HelloWorld</a>
   </h1>
   <p class="article-author">By
@@ -646,67 +709,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/06/windowsLoginSameSMBHostWithDiffUser/" title="Windows以不同用户名接入同一文件共享服务器" itemprop="url">Windows以不同用户名接入同一文件共享服务器</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-06T07:14:54.000Z" itemprop="datePublished"> 發表於 2015-05-06</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　Windows有一个很奇怪的设定：对一个文件共享服务器只能使用同一用户名，但是我们知道Samba是允许在同一服务器上创建分属于不同用户的共享目录的，这是一个自然而然的需求,Linux本来就是一个多用户操作系统，同为多用户系统的Windows的这种设定就显得非常奇怪，据微软官方的解释是为了安全，然而我并没有看出来这属于哪门子的安全。</p>
-<p>　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Linux服务器上分别设置了两个共享目录，一个公用一个私用，然而当我接入其中的一个目录之后，连接下一个目录进系统自动使用之前的用户/密码，导致权限出现问题……</p>
-<p>　　我们只能workaround。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/06/windowsLoginSameSMBHostWithDiffUser/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Windows、/">Windows、</a><a href="/tags/samba/">samba</a><a href="/tags/共享目录/">共享目录</a><a href="/tags/多用户名/">多用户名</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/06/windowsLoginSameSMBHostWithDiffUser/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/06/windowsLoginSameSMBHostWithDiffUser/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
@@ -735,11 +737,11 @@
 			
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>9</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>8</sup></a></li>
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
 			
 		
 			
@@ -751,11 +753,11 @@
 			
 		
 			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
 			
 		
 			
@@ -763,7 +765,11 @@
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -771,19 +777,15 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -795,15 +797,15 @@
 			
 		
 			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 		</ul>
