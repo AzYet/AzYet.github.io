@@ -78,6 +78,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/06/14/something-about-golang/" title="有关于Go语言的一些tips" itemprop="url">有关于Go语言的一些tips</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 發表於 2016-06-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Getters_and_Setters">Getters and Setters</h2><p>Go也可以创建<code>Getters</code> and <code>Setters</code>，而且它们并不需要以get或set开头。</p>
+<h2 id="分号">分号</h2><p>Go大部分的<code>;</code>可以省略，是因为它的语法分析器会自动为你加上。</p>
+<h2 id="短声明">短声明</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f, err := os.<span class="function"><span class="title">Open</span><span class="params">(name)</span></span></span><br><span class="line">d, err := f.<span class="function"><span class="title">Stat</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>在第二个语句中，<code>d</code>是新建变量，而<code>err</code>是重新赋值。</p>
+<h2 id="多重赋值">多重赋值</h2><p>Go中没有逗号<code>，</code>运算符，<code>++</code>和<code>--</code>是声明而非语句，但你可以用并列多重赋值来在<code>for</code>循环中操作多个变量<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>, <span class="built_in">j</span> := <span class="number">0</span>, len(a)-<span class="number">1</span>; <span class="built_in">i</span> &lt; <span class="built_in">j</span>; <span class="built_in">i</span>, <span class="built_in">j</span> = <span class="built_in">i</span>+<span class="number">1</span>, <span class="built_in">j</span>-<span class="number">1</span> <span class="cell">&#123;</span><br><span class="line">    a[i], a[j] = a[j], a[i]</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="switch中合并多个case">switch中合并多个case</h2><p>使用逗号<code>，</code>隔开即可<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">func <span class="title">shouldEscape</span><span class="params">(c <span class="keyword">byte</span>)</span> <span class="keyword">bool</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> c &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">' '</span>, <span class="string">'?'</span>, <span class="string">'&amp;'</span>, <span class="string">'='</span>, <span class="string">'#'</span>, <span class="string">'+'</span>, <span class="string">'%'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/06/14/something-about-golang/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/06/14/something-about-golang/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/06/14/something-about-golang/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/06/12/how-to-write-go-code/" title="怎样编写Go程序" itemprop="url">怎样编写Go程序</a>
   </h1>
   <p class="article-author">By
@@ -679,78 +743,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/19/install-and-config-jumpserver/" title="jumpserver的安装和配置" itemprop="url">jumpserver的安装和配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-19T18:30:53.000Z" itemprop="datePublished"> 發表於 2016-04-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="jumpserver">jumpserver</h2><p><code>jumpserver</code>也叫做跳板机，当多人需要对多个机器（集群）进行操作时，为了方便操作、安全、授权管理和审计，可以使用一台机器作为跳板机，所有用户必须也只能先登录此系统再跳转到其它资产。</p>
-<h2 id="安装">安装</h2><p>我们使用了一个国内团队开发的开发跳板机系统<strong><a href="https://github.com/jumpserver/jumpserver">jumpserver</a></strong>。该系统安装简便且功能丰富。CentOS6具体的安装过程如下。<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git -y</span><br></pre></td></tr></table></figure></p>
-<p>下载工程文件<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /<span class="keyword">opt</span></span><br><span class="line">git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/jumpserver/jumpserver.git</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>不要安装到/root目录。</p>
-</blockquote>
-<p>开始安装<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> jumpserver/install</span><br><span class="line"><span class="keyword">python</span> install.<span class="keyword">py</span></span><br></pre></td></tr></table></figure></p>
-<p>安装过程中会询问是否安装mysql，可视自己的情况选择<code>yes</code> or <code>no</code>， 并且要求输入数据库的user password等作息，注意此处输入的是Jumpserver使用的数据库和帐户信息，而不是<code>root</code>用户信息。也就是安装程序并不会创建数据库，需要自己在数据库中预先创建与填入信息相符的数据库。<br>登录数据库：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">mysql</span> -u root -p</span><br></pre></td></tr></table></figure></p>
-<p>输入密码进入：<br>创建数据库<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">database</span> jumpserver;</span></span><br></pre></td></tr></table></figure></p>
-<p>创建用户<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> jumpserver.* <span class="keyword">to</span> <span class="string">'jumpserver'</span>@<span class="string">`localhost' identified by 'password';</span></span></span><br></pre></td></tr></table></figure></p>
-<p>邮箱信息请自行填入和确认，也可以跳过。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/19/install-and-config-jumpserver/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/jumpserver/">jumpserver</a><a href="/tags/operate/">operate</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/19/install-and-config-jumpserver/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/19/install-and-config-jumpserver/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -776,7 +771,7 @@
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>9</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>10</sup></a></li>
 			
 		
 			
@@ -784,19 +779,23 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -812,14 +811,6 @@
 			
 		
 			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
 			
 		
@@ -829,6 +820,10 @@
 		
 			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
 			
 		
 			
