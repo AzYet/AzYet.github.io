@@ -78,6 +78,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/11/11/reflect-of-go/" title="Go的反射法则" itemprop="url">Go的反射法则</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-11T20:31:50.000Z" itemprop="datePublished"> 發表於 2016-11-11</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="前言">前言</h2><p>反射指程序在运行时检查自身结构（尤其 类型）的能力，是元程序设计的一种形式，同时也是很多人为这迷惑的地方。<br>本文针对Go来说明反射如何工作，不同语言反射模型不同，有些语言早根本不支持反射，所以本文内容仅适用Go.</p>
+<h2 id="类型与接口">类型与接口</h2><p>因为反射建立在类型系统之上，首先回顾一下Go的类型。</p>
+<p>Go是<strong>静态类型</strong>。 每个变量都有静态类型，意味着，<strong>编译时*</strong>即有唯一&amp;确定的类型。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type MyInt int</span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> <span class="tag">i</span> int</span><br><span class="line"><span class="tag">var</span> j MyInt</span><br></pre></td></tr></table></figure></p>
+<p>i与j有着不同的静态类型，它们虽然有着相同<code>uderlying type</code>,但未经强制转换不是不能直接相互赋值的。</p>
+<p>接口代表指定的方法集合，是一种重要的类型。接口变量可以存储任何实现了接口所定义方法的类型的变量。比如说io.Reader io.Writer。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// <span class="type">Reader</span> <span class="keyword">is</span> the <span class="keyword">interface</span> that wraps the basic <span class="type">Read</span> <span class="keyword">method</span>.</span><br><span class="line"><span class="keyword">type</span> <span class="type">Reader</span> <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="type">Read</span>(p []byte) (n <span class="type">int</span>, err error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// <span class="type">Writer</span> <span class="keyword">is</span> the <span class="keyword">interface</span> that wraps the basic <span class="type">Write</span> <span class="keyword">method</span>.</span><br><span class="line"><span class="keyword">type</span> <span class="type">Writer</span> <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="type">Write</span>(p []byte) (n <span class="type">int</span>, err error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>任何实现了Read方法的类型都可以赋给io.reader。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> r io<span class="class">.Reader</span></span><br><span class="line">r = os<span class="class">.Stdin</span></span><br><span class="line">r = bufio.<span class="function"><span class="title">NewReader</span><span class="params">(r)</span></span></span><br><span class="line">r = <span class="function"><span class="title">new</span><span class="params">(bytes.Buffer)</span></span></span><br><span class="line"><span class="comment">// and so on</span></span><br></pre></td></tr></table></figure></p>
+<p>需要明白的是，不管r被赋予何值，其类型永远是<code>io.Reader</code>。因为，Go是静态类型的，而r的静态类型是<code>io.Reader</code>.</p>
+<p>一个极其重要的接口类型例子是空接口。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>它代表空方法集合，既然任何类型都有至少0个方法，那么自然都实现了interface{}接口。</p>
+<p>有些人认为Go的接口是动态类型的，这是误解。接口也是静态类型的，一个接口变量永远有着固定的静态类型，虽然在运行其存储的值可以被改变类型，但其值一定是满足接口的。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/11/11/reflect-of-go/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/11/11/reflect-of-go/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/11/11/reflect-of-go/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/06/14/something-about-golang/" title="有关于Go语言的一些tips" itemprop="url">有关于Go语言的一些tips</a>
   </h1>
   <p class="article-author">By
@@ -681,68 +749,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/20/nginx-tcp-reverse-proxy/" title="Nginx 1.9作为TCP反向代理（负载平衡）" itemprop="url">Nginx 1.9作为TCP反向代理（负载平衡）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-20T18:04:47.000Z" itemprop="datePublished"> 發表於 2016-04-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>从nginx 1.9开始，开源版中也有了tcp load balancing，为此投入了很多人力，这也是一个典型的商业软件开发支持开源产品的例子（此特性最早出现于nginx的商业版nginx plus）。</p>
-<h2 id="why_tcp_load_balancing">why tcp load  balancing</h2><p>nginx最初是一个反向代理，如今已经具有非常丰富的特性，web server, 缓存/加速，反向代理 ， 应用网关。</p>
-<p>Nginx一般用作繁忙网站的前端，44.9%的前10000最繁忙商业网站使用了nginx作为前端。</p>
-<p>当你在内部使用nginx为应用实现代理和load balancing时，tcp load balancing将使你受益。现代应用使用各种协议而不只是http，nginx可用来处理这些内部流量，比如mysql load balancing就是一个好例子。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/20/nginx-tcp-reverse-proxy/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/nginx/">nginx</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/20/nginx-tcp-reverse-proxy/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/20/nginx-tcp-reverse-proxy/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -771,7 +777,7 @@
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>10</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
 			
 		
 			

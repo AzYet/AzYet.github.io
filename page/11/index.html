@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/04/01/OvsNeutronPluginConflictsWithSDNController/" title="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题" itemprop="url">[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2014-04-01T12:00:00.000Z" itemprop="datePublished"> 發表於 2014-04-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　Openstack允许不同租户创建自己的网络，并通过租户自己的Router连接到外网。网络是允许重叠的，即不同租户都可以创建了192.168.1.0/24这个网段，都有一个192.168.1.1的IP，这样就需要在底层实现对不同租户网络的隔离。</p>
+<p>　　Neutron（openstack中的网络管理模块)实现隔离的方式不止一种（根据不同的plugin而不同），我只讨论我所配置的Openstack（应该也是最觉的配置方式之一）的情况，即OVS_Neutron_Plugin，即选用Open vSwith作为虚拟网桥的方式，对处于不同物理节点上的ovs bridge，采用GRE隧道的方式连接（另外一种是Vlan）。</p>
+<p>　　根据查看Neutron相关部分代码和实验验证，得知Neutron是通过Vlan的方式来作网络隔离的，这一点也不意外。下表列出了某计算节点上br-int的端口配置情况，可以看到不同的网络分配了不同的tag值，这里的tag就是Vlan ID,所有从这些port进入的数据都会被加上相应的Vlan ID在交换机里传输和处理，不同的Vlan的端口是不会接收到其它Vlan的数据的，这样就在一个物理节点为解决了隔离问题。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2014/04/01/OvsNeutronPluginConflictsWithSDNController/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GRE/">GRE</a><a href="/tags/Openflow/">Openflow</a><a href="/tags/SDN/">SDN</a><a href="/tags/open/">open</a><a href="/tags/openstack/">openstack</a><a href="/tags/vlan/">vlan</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/网络隔离/">网络隔离</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/04/01/OvsNeutronPluginConflictsWithSDNController/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/04/01/OvsNeutronPluginConflictsWithSDNController/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/03/04/checkOFPortAndMAClinkedIn/" title="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC" itemprop="url">[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC</a>
   </h1>
   <p class="article-author">By
@@ -161,7 +222,7 @@
 			
 		
 			
-				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>10</sup></a></li>
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
 			
 		
 			
