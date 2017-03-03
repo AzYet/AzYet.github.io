@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -78,14 +78,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/20/nginx-tcp-reverse-proxy/" title="Nginx 1.9作为TCP反向代理（负载平衡）" itemprop="url">Nginx 1.9作为TCP反向代理（负载平衡）</a>
+      <a href="/2016/04/22/inspur-ipmi-raid-hot-spare/" title="浪潮服务器IPMI与RAID及Hot Spare配置" itemprop="url">浪潮服务器IPMI与RAID及Hot Spare配置</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-20T18:04:47.000Z" itemprop="datePublished"> 發表於 2016-04-20</time>
+    <time datetime="2016-04-21T22:45:34.000Z" itemprop="datePublished"> 發表於 2016-04-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>公司新上架了一批浪潮的服务器，型号为<code>SA5212M4</code>，使用了<code>LSI</code> 的<code>SAS3008</code> 磁盘控制器，安装了<code>CentOS 6.7</code>，在进行一些基础配置如<code>RAID</code> <code>hot spare</code>的时候，走过不少弯路(浪潮的技术支持只能呵呵)。</p>
+<h2 id="IPMI">IPMI</h2><p><code>IPMI</code>是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS甚至BIOS之外的系统，它能管理电源、显示等底层甚至硬件层次的资源，但它也能与OS通信，比如你可以通过ipmitools来设置ipmi的一些参数。</p>
+<h3 id="ipmitool">ipmitool</h3><p><code>ipmitool</code>是一个允许你通过shell来使用ipmi的工具，其它安装过程为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yum install OpenIPMI OpenIPMI-tools</div><div class="line">chkconfig ipmi on</div><div class="line">service ipmi start</div></pre></td></tr></table></figure></p>
+<p>确认服务启动之后，你可以通过它来打印ipmi信息，管理ipmi的用户和密码等<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/22/inspur-ipmi-raid-hot-spare/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/运维/">运维</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/22/inspur-ipmi-raid-hot-spare/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/22/inspur-ipmi-raid-hot-spare/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/21/nginx-tcp-reverse-proxy/" title="Nginx 1.9作为TCP反向代理（负载平衡）" itemprop="url">Nginx 1.9作为TCP反向代理（负载平衡）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-20T18:04:47.000Z" itemprop="datePublished"> 發表於 2016-04-21</time>
     
   </p>
 </header>
@@ -99,7 +161,7 @@
         
         <p class="article-more-link">
           
-            <a href="/2016/04/20/nginx-tcp-reverse-proxy/#more">Read More</a>
+            <a href="/2016/04/21/nginx-tcp-reverse-proxy/#more">Read More</a>
           
        </p>
     </div>
@@ -120,7 +182,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/20/nginx-tcp-reverse-proxy/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/20/nginx-tcp-reverse-proxy/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/21/nginx-tcp-reverse-proxy/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/21/nginx-tcp-reverse-proxy/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -140,35 +202,35 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/19/install-and-config-jumpserver/" title="jumpserver的安装和配置" itemprop="url">jumpserver的安装和配置</a>
+      <a href="/2016/04/20/install-and-config-jumpserver/" title="jumpserver的安装和配置" itemprop="url">jumpserver的安装和配置</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-19T18:30:53.000Z" itemprop="datePublished"> 發表於 2016-04-19</time>
+    <time datetime="2016-04-19T18:30:53.000Z" itemprop="datePublished"> 發表於 2016-04-20</time>
     
   </p>
 </header>
     <div class="article-content">
         
         <h2 id="jumpserver">jumpserver</h2><p><code>jumpserver</code>也叫做跳板机，当多人需要对多个机器（集群）进行操作时，为了方便操作、安全、授权管理和审计，可以使用一台机器作为跳板机，所有用户必须也只能先登录此系统再跳转到其它资产。</p>
-<h2 id="安装">安装</h2><p>我们使用了一个国内团队开发的开发跳板机系统<strong><a href="https://github.com/jumpserver/jumpserver">jumpserver</a></strong>。该系统安装简便且功能丰富。CentOS6具体的安装过程如下。<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git -y</span><br></pre></td></tr></table></figure></p>
-<p>下载工程文件<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /<span class="keyword">opt</span></span><br><span class="line">git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/jumpserver/jumpserver.git</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装">安装</h2><p>我们使用了一个国内团队开发的开发跳板机系统<strong><a href="https://github.com/jumpserver/jumpserver">jumpserver</a></strong>。该系统安装简便且功能丰富。CentOS6具体的安装过程如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install git -y</div></pre></td></tr></table></figure></p>
+<p>下载工程文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /opt</div><div class="line">git clone https://github.com/jumpserver/jumpserver.git</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>不要安装到/root目录。</p>
 </blockquote>
-<p>开始安装<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> jumpserver/install</span><br><span class="line"><span class="keyword">python</span> install.<span class="keyword">py</span></span><br></pre></td></tr></table></figure></p>
-<p>安装过程中会询问是否安装mysql，可视自己的情况选择<code>yes</code> or <code>no</code>， 并且要求输入数据库的user password等作息，注意此处输入的是Jumpserver使用的数据库和帐户信息，而不是<code>root</code>用户信息。也就是安装程序并不会创建数据库，需要自己在数据库中预先创建与填入信息相符的数据库。<br>登录数据库：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">mysql</span> -u root -p</span><br></pre></td></tr></table></figure></p>
-<p>输入密码进入：<br>创建数据库<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">database</span> jumpserver;</span></span><br></pre></td></tr></table></figure></p>
-<p>创建用户<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> jumpserver.* <span class="keyword">to</span> <span class="string">'jumpserver'</span>@<span class="string">`localhost' identified by 'password';</span></span></span><br></pre></td></tr></table></figure></p>
+<p>开始安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd jumpserver/install</div><div class="line">python install.py</div></pre></td></tr></table></figure></p>
+<p>安装过程中会询问是否安装mysql，可视自己的情况选择<code>yes</code> or <code>no</code>， 并且要求输入数据库的user password等作息，注意此处输入的是Jumpserver使用的数据库和帐户信息，而不是<code>root</code>用户信息。也就是安装程序并不会创建数据库，需要自己在数据库中预先创建与填入信息相符的数据库。<br>登录数据库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p</div></pre></td></tr></table></figure></p>
+<p>输入密码进入：<br>创建数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create database jumpserver;</div></pre></td></tr></table></figure></p>
+<p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grant all privileges on jumpserver.* to &apos;jumpserver&apos;@`localhost&apos; identified by &apos;password&apos;;</div></pre></td></tr></table></figure></p>
 <p>邮箱信息请自行填入和确认，也可以跳过。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/19/install-and-config-jumpserver/#more">Read More</a>
+            <a href="/2016/04/20/install-and-config-jumpserver/#more">Read More</a>
           
        </p>
     </div>
@@ -189,7 +251,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/19/install-and-config-jumpserver/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/19/install-and-config-jumpserver/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/20/install-and-config-jumpserver/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/20/install-and-config-jumpserver/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -209,31 +271,31 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/17/note-of-ansible-4/" title=" ansible学习笔记(四）Ad-Hoc " itemprop="url"> ansible学习笔记(四）Ad-Hoc </a>
+      <a href="/2016/04/18/note-of-ansible-4/" title=" ansible学习笔记(四）Ad-Hoc " itemprop="url"> ansible学习笔记(四）Ad-Hoc </a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-18T01:09:43.000Z" itemprop="datePublished"> 發表於 2016-04-17</time>
+    <time datetime="2016-04-18T01:09:43.000Z" itemprop="datePublished"> 發表於 2016-04-18</time>
     
   </p>
 </header>
     <div class="article-content">
         
         <p><code>Ad-Hoc</code>可以理解为临时，一些临时场景只需运行一次的指令，可以用这种模式完成。</p>
-<h2 id="并行和shell">并行和shell</h2><p>在特定时间重启<code>atlanta</code>的所有机器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible atlanta <span class="operator">-a</span> <span class="string">"/sbin/reboot"</span> <span class="operator">-f</span> <span class="number">10</span></span><br></pre></td></tr></table></figure></p>
-<p>如果想用<code>sudo</code>权限的话<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible atlanta -<span class="tag">a</span> <span class="string">"/sbin/reboot"</span> -f <span class="number">10</span> -<span class="tag">b</span> -k</span><br></pre></td></tr></table></figure></p>
+<h2 id="并行和shell">并行和shell</h2><p>在特定时间重启<code>atlanta</code>的所有机器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible atlanta -a &quot;/sbin/reboot&quot; -f 10</div></pre></td></tr></table></figure></p>
+<p>如果想用<code>sudo</code>权限的话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible atlanta -a &quot;/sbin/reboot&quot; -f 10 -b -k</div></pre></td></tr></table></figure></p>
 <p>其中<code>-k</code>意为交互式地输入密码，<code>-f</code> 指<code>fork</code>出多个进程来并行</p>
-<p><code>command</code>模块（缺省）并不支持<code>pipe</code>，如果要用命重定向，请使用<code>shell</code>模块。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible raleigh -m <span class="built_in">shell</span> -<span class="operator">a</span> <span class="string">'echo $TERM'</span></span><br></pre></td></tr></table></figure></p>
+<p><code>command</code>模块（缺省）并不支持<code>pipe</code>，如果要用命重定向，请使用<code>shell</code>模块。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible raleigh -m shell -a &apos;echo $TERM&apos;</div></pre></td></tr></table></figure></p>
 <p>当命令中含有引号时一定要特别注意，以免命令在本地被吃掉，比如以上命令如果不使用<code>&#39;</code>而使用双引<code>&quot;</code>,那么变量变会在本地取值。</p>
 <p>实际上大部分<code>ansible</code>模块都与简单地命令不同，它们都是指定状态而过过程，以达到“幂等”的效果，这是<code>ansible</code>的一个重要设计理念。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/17/note-of-ansible-4/#more">Read More</a>
+            <a href="/2016/04/18/note-of-ansible-4/#more">Read More</a>
           
        </p>
     </div>
@@ -254,7 +316,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/17/note-of-ansible-4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/17/note-of-ansible-4/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/18/note-of-ansible-4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/18/note-of-ansible-4/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -287,11 +349,11 @@
 </header>
     <div class="article-content">
         
-        <h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible <span class="tag">&lt;<span class="title">pattern_goes_here</span>&gt;</span> -m <span class="tag">&lt;<span class="title">module_name</span>&gt;</span> -a <span class="tag">&lt;<span class="title">arguments</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>如<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible webservers -m service -<span class="tag">a</span> <span class="string">"name=httpd state=restarted"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span>:two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"><span class="number">192.168</span>.<span class="number">1</span>.*</span><br></pre></td></tr></table></figure></p>
-<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>dbservers</span><br></pre></td></tr></table></figure></p>
-<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
+        <h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible &lt;pattern_goes_here&gt; -m &lt;module_name&gt; -a &lt;arguments&gt;</div></pre></td></tr></table></figure></p>
+<p>如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible webservers -m service -a &quot;name=httpd state=restarted&quot;</div></pre></td></tr></table></figure></p>
+<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">one.example.com</div><div class="line">one.example.com:two.example.com</div><div class="line">192.168.1.*</div></pre></td></tr></table></figure></p>
+<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:dbservers</div></pre></td></tr></table></figure></p>
+<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:!phoenix</div></pre></td></tr></table></figure></p>
 <p>还可以指定交集<br>
         
         
@@ -338,27 +400,27 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/15/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法" itemprop="url">ansible用到的简单yaml语法</a>
+      <a href="/2016/04/16/simple-yaml-in-ansible/" title="ansible用到的简单yaml语法" itemprop="url">ansible用到的简单yaml语法</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-15T22:11:43.000Z" itemprop="datePublished"> 發表於 2016-04-15</time>
+    <time datetime="2016-04-15T22:11:43.000Z" itemprop="datePublished"> 發表於 2016-04-16</time>
     
   </p>
 </header>
     <div class="article-content">
         
         <p>对ansible来说，几乎每个yaml文件都以一个列表开头，而每一项则是一个key-value对。yaml文件可分别以<code>---</code>和<code>...</code>来标识文件的开始和结束。</p>
-<h2 id="list">list</h2><p>ymal列表项起始于同一缩进的<code>-</code>,注意空格不可省略。<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">--</span><br><span class="line"></span># A list of tasty fruits</span><br><span class="line">fruits:</span><br><span class="line">    -<span class="ruby"> <span class="constant">Apple</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Orange</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Strawberry</span></span><br><span class="line"></span>    -<span class="ruby"> <span class="constant">Mango</span></span><br><span class="line"></span>...</span><br></pre></td></tr></table></figure></p>
-<h2 id="dictionary">dictionary</h2><p>而字典则是以<code>:</code>分割，空格同样不可省略。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">martin</span>:</span><br><span class="line">    <span class="attribute">name</span>: Martin D'vloper</span><br><span class="line">    <span class="attribute">job</span>: Developer</span><br><span class="line">    <span class="attribute">skill</span>: Elite</span><br></pre></td></tr></table></figure></p>
+<h2 id="list">list</h2><p>ymal列表项起始于同一缩进的<code>-</code>,注意空格不可省略。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line"># A list of tasty fruits</div><div class="line">fruits:</div><div class="line">    - Apple</div><div class="line">    - Orange</div><div class="line">    - Strawberry</div><div class="line">    - Mango</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<h2 id="dictionary">dictionary</h2><p>而字典则是以<code>:</code>分割，空格同样不可省略。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">martin:</div><div class="line">    name: Martin D&apos;vloper</div><div class="line">    job: Developer</div><div class="line">    skill: Elite</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/15/simple-yaml-in-ansible/#more">Read More</a>
+            <a href="/2016/04/16/simple-yaml-in-ansible/#more">Read More</a>
           
        </p>
     </div>
@@ -379,7 +441,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/15/simple-yaml-in-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/15/simple-yaml-in-ansible/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/16/simple-yaml-in-ansible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/16/simple-yaml-in-ansible/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -399,28 +461,28 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/13/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables" itemprop="url">ansible学习笔记(二)Iventory、Variables</a>
+      <a href="/2016/04/14/note-of-ansible-2/" title="ansible学习笔记(二)Iventory、Variables" itemprop="url">ansible学习笔记(二)Iventory、Variables</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> 發表於 2016-04-14</time>
     
   </p>
 </header>
     <div class="article-content">
         
         <p><code>ansible</code>同时和多种系统工作，它会选择<code>inventory</code>文件中的部分主机执行不同的操作，这个文件默认位于<code>/etc/ansible/hosts</code>。你也可以同时使用多个<code>inventory</code>或者动态地从云端<code>pull</code>。</p>
-<h2 id="host_and_group">host and group</h2><p><code>inventory</code>文件的模式类似<code>ini</code>：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mail<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[webservers]</span><br><span class="line">foo<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">bar<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"></span><br><span class="line">[dbservers]</span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">three<span class="class">.example</span><span class="class">.com</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="host_and_group">host and group</h2><p><code>inventory</code>文件的模式类似<code>ini</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mail.example.com</div><div class="line"></div><div class="line">[webservers]</div><div class="line">foo.example.com</div><div class="line">bar.example.com</div><div class="line"></div><div class="line">[dbservers]</div><div class="line">one.example.com</div><div class="line">two.example.com</div><div class="line">three.example.com</div></pre></td></tr></table></figure></p>
 <p>方括号中是组名，同个主机可以位于多个组中，此时变量将来自所有其所属的组。如果ssh主机使用非默认的22端口，可以使用<code>:</code>将其指定于主机名之后<code>badwolf.example.com:5309</code>。</p>
-<p>如果是静态IP想取个别名，可使用以下的方式。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">jumper</span> ansible_port=<span class="number">5555</span> ansible_host=<span class="number">192.168.1.50</span></span><br></pre></td></tr></table></figure></p>
+<p>如果是静态IP想取个别名，可使用以下的方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jumper ansible_port=5555 ansible_host=192.168.1.50</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/13/note-of-ansible-2/#more">Read More</a>
+            <a href="/2016/04/14/note-of-ansible-2/#more">Read More</a>
           
        </p>
     </div>
@@ -441,7 +503,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/13/note-of-ansible-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-2/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/14/note-of-ansible-2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/14/note-of-ansible-2/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -461,14 +523,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/13/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接" itemprop="url">Ansible学习笔记(一)SSH连接</a>
+      <a href="/2016/04/14/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接" itemprop="url">Ansible学习笔记(一)SSH连接</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-14T01:09:07.000Z" itemprop="datePublished"> 發表於 2016-04-13</time>
+    <time datetime="2016-04-14T01:09:07.000Z" itemprop="datePublished"> 發表於 2016-04-14</time>
     
   </p>
 </header>
@@ -476,12 +538,12 @@
         
         <h2 id="远程连接信息">远程连接信息</h2><p>了解<code>ansible</code>如何通过<code>ssh</code>与远程主机通信是很重要的。</p>
 <p><code>ansible 1.3</code>和之后版本会默认使用<code>openssh</code>，以支持<code>ControlPersist</code>，<code>Kerberos</code>和<code>~/.ssh/config</code>配置。在一些较老的版本中，如<code>RH/CentOS</code>较早版本时，<code>openssh</code>版本可能太老而不支持部分以上特性，此时<code>ansible</code>会使用<code>python</code>的<code>OpenSSH</code>实现<code>paramiko</code>。如果需要<code>Kerberized ssh</code>，建议使用<code>ubuntu</code>、<code>fedora</code>等<code>openssh</code>版本较新的发行版。<br>而&lt;=1.2的版本中，默认为<code>paramiko</code>，使用<code>-c</code>选项切换到<code>native</code>的<code>ssh.</code><br>有很小的可能会遇到不支持<code>SFTP</code>的情况，此时可以在配置文件中切换到<code>SCP</code>。<br>与远程主机通信时，默认使用<code>ssh key</code>，也可以通过<code>-k</code>选项来使用密码，如果需要sudo特性且sudo要求密码时，可使用<code>--ask-become-pass</code>。<br>也许是常识：控制主机离被控制集群越近，执行速度越快，因此尽量选用较近的主机。<br><code>ansible</code>也并不一定要使用<code>ssh</code>，传输方式是插件式的，支持本地管理方式、<code>chroot,lxc</code>和<code>jail containers, ansible-pull</code>模式能够按日程从中央<code>git</code>服务器中<code>pull</code>指令。</p>
-<h2 id="第一个命令">第一个命令</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -<span class="keyword">m</span> ping -<span class="keyword">u</span> root -b</span><br></pre></td></tr></table></figure>
+<h2 id="第一个命令">第一个命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible all -m ping -u root -b</div></pre></td></tr></table></figure>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/13/note-of-ansible-1/#more">Read More</a>
+            <a href="/2016/04/14/note-of-ansible-1/#more">Read More</a>
           
        </p>
     </div>
@@ -502,7 +564,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/13/note-of-ansible-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/13/note-of-ansible-1/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/14/note-of-ansible-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/14/note-of-ansible-1/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -522,27 +584,27 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/04/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
+      <a href="/2016/04/05/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-05T00:17:46.000Z" itemprop="datePublished"> 發表於 2016-04-04</time>
+    <time datetime="2016-04-05T00:17:46.000Z" itemprop="datePublished"> 發表於 2016-04-05</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="sync-Mutex">sync.Mutex</h2><p>Go为mutual exclusion提供sync.Mutex库的两个方法<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">Lock</span></span><br><span class="line"><span class="keyword">Unlock</span></span></span><br></pre></td></tr></table></figure></p>
+        <h2 id="sync-Mutex">sync.Mutex</h2><p>Go为mutual exclusion提供sync.Mutex库的两个方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Lock</div><div class="line">Unlock</div></pre></td></tr></table></figure></p>
 <p>我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用<code>defer</code>关键字来确保<code>mutex</code>会被释放。</p>
 <h2 id="练习：网页爬虫">练习：网页爬虫</h2><p>在练习将使用Go并发特性来实现并行爬虫。修改<code>Crawl</code>方法并行但不重复地获取URL。<br>提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全的。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/04/a-tour-of-go-8/#more">Read More</a>
+            <a href="/2016/04/05/a-tour-of-go-8/#more">Read More</a>
           
        </p>
     </div>
@@ -563,7 +625,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/04/a-tour-of-go-8/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/04/a-tour-of-go-8/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/05/a-tour-of-go-8/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/05/a-tour-of-go-8/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -583,14 +645,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/04/a-tour-of-go-7/" title="漫游Go语言（七）之goroutine/channel" itemprop="url">漫游Go语言（七）之goroutine/channel</a>
+      <a href="/2016/04/05/a-tour-of-go-7/" title="漫游Go语言（七）之goroutine/channel" itemprop="url">漫游Go语言（七）之goroutine/channel</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-04T17:32:54.000Z" itemprop="datePublished"> 發表於 2016-04-04</time>
+    <time datetime="2016-04-04T17:32:54.000Z" itemprop="datePublished"> 發表於 2016-04-05</time>
     
   </p>
 </header>
@@ -598,13 +660,13 @@
         
         <h2 id="goroutine">goroutine</h2><p><code>goroutine</code>是由<code>go runtime</code>所管理的轻量级线程。<br><code>go f(x,y,z）</code>开启一个运行<code>f(x,y,z)</code>的新goroutine。<code>f</code>,<code>x</code>,<code>y</code>,<code>z</code>值的计算发生在当前<code>goroutine</code>，但f的执行则在新的<code>goroutine</code>中。</p>
 <p><code>goroutine</code>运行在同一地址空间中，所以共享内在的存取必须同步，<code>sync</code>包提供一些有用的基本工具，但一般你用不到它们，因为还有其它的工具。</p>
-<h2 id="channel">channel</h2><p><code>channel</code>是一种有类型的管道，使用<code>&lt;-</code>操作符就可以通过它发送和接收数值。<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">ch</span> &lt;- v    // Send v to channel <span class="number">ch</span>.</span><br><span class="line">v := &lt;-<span class="number">ch</span>  // Receive from <span class="number">ch</span>, <span class="keyword">and</span></span><br><span class="line">           // assign value to v.</span><br></pre></td></tr></table></figure></p>
+<h2 id="channel">channel</h2><p><code>channel</code>是一种有类型的管道，使用<code>&lt;-</code>操作符就可以通过它发送和接收数值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ch &lt;- v    // Send v to channel ch.</div><div class="line">v := &lt;-ch  // Receive from ch, and</div><div class="line">           // assign value to v.</div></pre></td></tr></table></figure></p>
 <p>参数按箭头的方向流动。和<code>map</code>及<code>slice</code>一样，<code>channel</code>也需要先定义再使用。<br>样例代码将<code>slice</code>中数累加，将工作分布在两个<code>goroutine</code>中，当二者完成时，得到最终结果。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/04/a-tour-of-go-7/#more">Read More</a>
+            <a href="/2016/04/05/a-tour-of-go-7/#more">Read More</a>
           
        </p>
     </div>
@@ -625,69 +687,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/04/a-tour-of-go-7/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/04/a-tour-of-go-7/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/25/a-tour-of-go-6/" title="漫游Go语言（六）之Error、Reader和Image练习" itemprop="url">漫游Go语言（六）之Error、Reader和Image练习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-25T18:00:16.000Z" itemprop="datePublished"> 發表於 2016-03-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Error">Error</h2><p><code>Go</code>使用<code>error</code>类型的值来表示错误，这是一个内建的类似<code>Stringer</code>的接口。<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="interface"><span class="keyword">interface</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Error</span>() <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>类似<code>Stringer</code>,<code>fmt</code>包也会寻找<code>error</code>接口来打印值。</p>
-<p>函数经常以<code>error</code>作为返回类型，调用函数的代码应该通过检测<code>error</code>是否为<code>nil</code>并处理处理。一般来说<code>error == nil</code>说明无错误，而非nil则代表failure.</p>
-<h3 id="error练习">error练习</h3><p>实现一个开方函数，除返回结果外，还返回<code>error</code>,当被操作数是负数是返回一个非<code>nil</code>的<code>error</code>，其<code>Error()</code>方法返回“cannot Sqrt negative number: -2”信息。<br>创建一个<code>MyFloat</code>的类<code>type MyFloat float64</code>,然后实现<code>func (mf MyFloat ) Error() string</code>使之成为一个<code>error</code>。<br>这是我的答案<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> ( <span class="string">"fmt"</span></span><br><span class="line">        <span class="string">"math"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="typename">float64</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (mf MyFloat) Error() <span class="typename">string</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"cannot Sqrt negative number:%v.\n"</span>,<span class="typename">float64</span>(mf))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Sqrt(f <span class="typename">float64</span>) (<span class="typename">float64</span>,error)&#123;</span><br><span class="line">    <span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>, MyFloat(f)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> math.Sqrt(f),<span class="constant">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">    fmt.Println(Sqrt(<span class="number">4.3</span>))</span><br><span class="line">    fmt.Println(Sqrt(-<span class="number">5.2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/25/a-tour-of-go-6/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Go语言/">Go语言</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/25/a-tour-of-go-6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/25/a-tour-of-go-6/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/05/a-tour-of-go-7/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/05/a-tour-of-go-7/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -721,7 +721,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -737,11 +737,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -765,11 +765,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -777,23 +777,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -880,7 +880,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

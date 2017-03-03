@@ -11,15 +11,16 @@
     
 
     
-    <meta name="description" content="Queue接口与List、Set同一级别，都是继承了Collection接口。LinkedList实现了Queue接 口。12345678add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException">
+    <meta name="description" content="Queue接口与List、Set同一级别，都是继承了Collection接口。LinkedList实现了Queue接 口。12345678add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementExcepti">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java中的Queue">
 <meta property="og:url" content="http://azyet.github.io/2015/04/23/javaQueue/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
-<meta property="og:description" content="Queue接口与List、Set同一级别，都是继承了Collection接口。LinkedList实现了Queue接 口。12345678add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException">
+<meta property="og:description" content="Queue接口与List、Set同一级别，都是继承了Collection接口。LinkedList实现了Queue接 口。12345678add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementExcepti">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java中的Queue">
-<meta name="twitter:description" content="Queue接口与List、Set同一级别，都是继承了Collection接口。LinkedList实现了Queue接 口。12345678add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException">
+<meta name="twitter:description" content="Queue接口与List、Set同一级别，都是继承了Collection接口。LinkedList实现了Queue接 口。12345678add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementExcepti">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -32,7 +33,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -96,7 +97,7 @@
 		
 		</div>
 		
-		<p>　　Queue接口与List、Set同一级别，都是继承了Collection接口。<strong>LinkedList</strong>实现了Queue接 口。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">add</span>        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常</span><br><span class="line">remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException异常</span><br><span class="line"><span class="keyword">element</span>  返回队列头部的元素             如果队列为空，则抛出一个NoSuchElementException异常</span><br><span class="line">offer       添加一个元素并返回<span class="constant">true</span>       如果队列已满，则返回<span class="constant">false</span></span><br><span class="line">poll         移除并返问队列头部的元素    如果队列为空，则返回<span class="constant">null</span></span><br><span class="line">peek       返回队列头部的元素             如果队列为空，则返回<span class="constant">null</span></span><br><span class="line"><span class="built_in">put</span>         添加一个元素                      如果队列满，则阻塞</span><br><span class="line">take        移除并返回队列头部的元素     如果队列为空，则阻塞</span><br></pre></td></tr></table></figure></p>
+		<p>　　Queue接口与List、Set同一级别，都是继承了Collection接口。<strong>LinkedList</strong>实现了Queue接 口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">add        增加一个元索                     如果队列已满，则抛出一个IIIegaISlabEepeplian异常</div><div class="line">remove   移除并返回队列头部的元素    如果队列为空，则抛出一个NoSuchElementException异常</div><div class="line">element  返回队列头部的元素             如果队列为空，则抛出一个NoSuchElementException异常</div><div class="line">offer       添加一个元素并返回true       如果队列已满，则返回false</div><div class="line">poll         移除并返问队列头部的元素    如果队列为空，则返回null</div><div class="line">peek       返回队列头部的元素             如果队列为空，则返回null</div><div class="line">put         添加一个元素                      如果队列满，则阻塞</div><div class="line">take        移除并返回队列头部的元素     如果队列为空，则阻塞</div></pre></td></tr></table></figure></p>
 <p> 　　阻塞队列的操作可以根据它们的响应方式分为以下三类：<strong>aad、removee和element</strong>操作在你试图为一个已满的队列增加元素或从空队列取得元素时 抛出异常。当然，在多线程程序中，队列在任何时间都可能变成满的或空的，所以你可能想使用**offer、poll、peek方法。这些方法在无法完成任务时 只是给出一个出错示而不会抛出异常。</p>
   
 	</div>
@@ -106,7 +107,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Queue/">Queue</a><a href="/tags/java/">java</a><a href="/tags/阻塞/">阻塞</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/Queue/">Queue</a><a href="/tags/阻塞/">阻塞</a>
   </div>
 
 </div>
@@ -175,7 +176,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -191,11 +192,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -219,11 +220,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -231,23 +232,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -334,7 +335,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

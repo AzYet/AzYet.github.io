@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -78,6 +78,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/05/21/usefulTagsForMavenPomFile/" title="[maven]POM文件中的一些常用标签和m2eclipse插件的安装" itemprop="url">[maven]POM文件中的一些常用标签和m2eclipse插件的安装</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2014-05-21T07:32:00.000Z" itemprop="datePublished"> 發表於 2014-05-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>之前一直在一些导入的开源工程里编写一些Java代码，所以不怎么遇到依赖问题，最近学习Hadoop，由于安装的是2.4.0版本，在编写hadoop、hbase相关程序的时候，遇到一些依赖问题难以解决，网上搜索结果无论英文还是中文一般都是hadoop 1.x的版本，但是1.x和2.x的包结构根本不一样，尝试了很久手动搜索然后一个一个jar包导入的方式，最后还是提示有问题，这时候我想到了maven工具，虽然一直没有真正使用过，但是知道它在管理依赖方面有很大的优势，所以这两天粗略学习了一下。</p>
+<p>　　学习一个东西最好的（最适合我的）方式，还是去official site看 getting started 之类的tutorial, 在看过30分钟的入门教程之后（实质follow完远不止30分钟），对Maven有了一个初步的了解，已经能够使用它来创建工程和导入第三方的Jar包了。</p>
+<p>　　getting started里提到的都是一些最常见的标签，于是我又尝试阅读了一下两个开源项目的POM文件，试着往自己工程的POM里添加相应的标签，最终终于成功编译了一个hbase的程序，之后又尝试了一些restlet等框架，总体感觉maven在解决依赖关系方面确实非常强大，当然Maven远不止是一个为依赖关系而设计的工具，还需要进一步的学习和体会 。</p>
+<p>在开始之前，除上官网教程中生成maven工程的命令：相关的package和jar名都可以修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mvn archetype:generate \</div><div class="line">  -DarchetypeGroupId=org.apache.maven.archetypes \</div><div class="line">  -DgroupId=com.mycompany.app \</div><div class="line">  -DartifactId=my-app</div></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2014/05/21/usefulTagsForMavenPomFile/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/maven/">maven</a><a href="/tags/eclipse/">eclipse</a><a href="/tags/标签/">标签</a><a href="/tags/依赖/">依赖</a><a href="/tags/Java/">Java</a><a href="/tags/可运行jar/">可运行jar</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/05/21/usefulTagsForMavenPomFile/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/05/21/usefulTagsForMavenPomFile/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/04/01/OvsNeutronPluginConflictsWithSDNController/" title="[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题" itemprop="url">[openstack/neutron]OVS_Neutron_Plugin网络隔离的实现及与控制器的兼容问题</a>
   </h1>
   <p class="article-author">By
@@ -108,7 +170,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/GRE/">GRE</a><a href="/tags/Openflow/">Openflow</a><a href="/tags/SDN/">SDN</a><a href="/tags/open/">open</a><a href="/tags/openstack/">openstack</a><a href="/tags/vlan/">vlan</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/网络隔离/">网络隔离</a>
+  <span></span> <a href="/tags/Openflow/">Openflow</a><a href="/tags/open/">open</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/SDN/">SDN</a><a href="/tags/openstack/">openstack</a><a href="/tags/网络隔离/">网络隔离</a><a href="/tags/vlan/">vlan</a><a href="/tags/GRE/">GRE</a>
   </div>
 
 </div>
@@ -152,8 +214,8 @@
 </header>
     <div class="article-content">
         
-        <p>　　在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用<br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ovs-ofctl <span class="literal">show</span> bridge</span><br></pre></td></tr></table></figure></p>
-<p>就能得到。如<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root<span class="annotation">@vaio</span>:~# ovs-ofctl show br-<span class="typename">int</span></span><br><span class="line">OFPT_FEATURES_REPLY (xid=<span class="number">0x2</span>): <span class="string">dpid:</span><span class="number">0000</span>da9142cdfb44</span><br><span class="line"><span class="string">n_tables:</span><span class="number">254</span>, <span class="string">n_buffers:</span><span class="number">256</span></span><br><span class="line"><span class="string">capabilities:</span> FLOW_STATS TABLE_STATS PORT_STATS QUEUE_STATS ARP_MATCH_IP</span><br><span class="line"><span class="string">actions:</span> OUTPUT SET_VLAN_VID SET_VLAN_PCP STRIP_VLAN SET_DL_SRC SET_DL_DST SET_NW_SRC SET_NW_DST SET_NW_TOS SET_TP_SRC SET_TP_DST ENQUEUE</span><br><span class="line"> <span class="number">1</span>(patch-tun): <span class="string">addr:</span><span class="number">6</span><span class="string">e:</span><span class="number">4</span><span class="string">b:</span><span class="number">44</span>:<span class="number">8</span><span class="string">e:</span><span class="string">f8:</span>d7</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     speed:</span> <span class="number">0</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> <span class="number">18</span>(tap0): <span class="string">addr:</span><span class="string">ea:</span><span class="number">58</span>:<span class="string">d5:</span><span class="string">f8:</span><span class="number">26</span>:<span class="number">4</span>e</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     current:</span>    <span class="number">10</span>MB-FD COPPER</span><br><span class="line"><span class="label">     speed:</span> <span class="number">10</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> <span class="number">19</span>(tap1): <span class="string">addr:</span><span class="number">96</span>:<span class="string">fc:</span><span class="number">5</span><span class="string">d:</span><span class="string">b6:</span><span class="number">43</span>:d6</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     current:</span>    <span class="number">10</span>MB-FD COPPER</span><br><span class="line"><span class="label">     speed:</span> <span class="number">10</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> LOCAL(br-<span class="typename">int</span>): <span class="string">addr:</span><span class="string">da:</span><span class="number">91</span>:<span class="number">42</span>:<span class="string">cd:</span><span class="string">fb:</span><span class="number">44</span></span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     speed:</span> <span class="number">0</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line">OFPT_GET_CONFIG_REPLY (xid=<span class="number">0x4</span>): frags=normal miss_send_len=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+        <p>　　在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ovs-ofctl show bridge</div></pre></td></tr></table></figure></p>
+<p>就能得到。如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">root@vaio:~# ovs-ofctl show br-int</div><div class="line">OFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9142cdfb44</div><div class="line">n_tables:254, n_buffers:256</div><div class="line">capabilities: FLOW_STATS TABLE_STATS PORT_STATS QUEUE_STATS ARP_MATCH_IP</div><div class="line">actions: OUTPUT SET_VLAN_VID SET_VLAN_PCP STRIP_VLAN SET_DL_SRC SET_DL_DST SET_NW_SRC SET_NW_DST SET_NW_TOS SET_TP_SRC SET_TP_DST ENQUEUE</div><div class="line"> 1(patch-tun): addr:6e:4b:44:8e:f8:d7</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     speed: 0 Mbps now, 0 Mbps max</div><div class="line"> 18(tap0): addr:ea:58:d5:f8:26:4e</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     current:    10MB-FD COPPER</div><div class="line">     speed: 10 Mbps now, 0 Mbps max</div><div class="line"> 19(tap1): addr:96:fc:5d:b6:43:d6</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     current:    10MB-FD COPPER</div><div class="line">     speed: 10 Mbps now, 0 Mbps max</div><div class="line"> LOCAL(br-int): addr:da:91:42:cd:fb:44</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     speed: 0 Mbps now, 0 Mbps max</div><div class="line">OFPT_GET_CONFIG_REPLY (xid=0x4): frags=normal miss_send_len=0</div></pre></td></tr></table></figure></p>
 <p>　　当一个bridge上连接有多台虚拟机（或VM有多个IF）时，我们还常常需要知道VM的IF与bridge  port的对应，这时候可以使用：<br>
         
         
@@ -169,7 +231,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/MAC/">MAC</a><a href="/tags/Openflow/">Openflow</a><a href="/tags/SDN/">SDN</a><a href="/tags/open/">open</a><a href="/tags/openstack/">openstack</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/端口/">端口</a><a href="/tags/虚拟机/">虚拟机</a>
+  <span></span> <a href="/tags/Openflow/">Openflow</a><a href="/tags/open/">open</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/SDN/">SDN</a><a href="/tags/openstack/">openstack</a><a href="/tags/端口/">端口</a><a href="/tags/MAC/">MAC</a><a href="/tags/虚拟机/">虚拟机</a>
   </div>
 
 </div>
@@ -214,7 +276,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -230,11 +292,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -258,11 +320,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -270,23 +332,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -373,7 +435,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

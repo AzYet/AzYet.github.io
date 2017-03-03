@@ -12,17 +12,18 @@
 
     
     <meta name="description" content="Windows有一个很奇怪的设定：对一个文件共享服务器只能使用同一用户名，但是我们知道Samba是允许在同一服务器上创建分属于不同用户的共享目录的，这是一个自然而然的需求,Linux本来就是一个多用户操作系统，同为多用户系统的Windows的这种设定就显得非常奇怪，据微软官方的解释是为了安全，然而我并没有看出来这属于哪门子的安全。
-　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Linux">
+　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Lin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Windows以不同用户名接入同一文件共享服务器">
 <meta property="og:url" content="http://azyet.github.io/2015/05/06/windowsLoginSameSMBHostWithDiffUser/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="Windows有一个很奇怪的设定：对一个文件共享服务器只能使用同一用户名，但是我们知道Samba是允许在同一服务器上创建分属于不同用户的共享目录的，这是一个自然而然的需求,Linux本来就是一个多用户操作系统，同为多用户系统的Windows的这种设定就显得非常奇怪，据微软官方的解释是为了安全，然而我并没有看出来这属于哪门子的安全。
-　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Linux">
+　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Lin">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Windows以不同用户名接入同一文件共享服务器">
 <meta name="twitter:description" content="Windows有一个很奇怪的设定：对一个文件共享服务器只能使用同一用户名，但是我们知道Samba是允许在同一服务器上创建分属于不同用户的共享目录的，这是一个自然而然的需求,Linux本来就是一个多用户操作系统，同为多用户系统的Windows的这种设定就显得非常奇怪，据微软官方的解释是为了安全，然而我并没有看出来这属于哪门子的安全。
-　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Linux">
+　　吐槽归吐槽，然而从XP到Win8也没有改变，现在我在Lin">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -35,7 +36,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -106,9 +107,9 @@
 <blockquote>
 <p>如果再加上IPv6，就能支持到3个了，因为似乎并不支持直接使用IPv6，需要设置hostname，所以是3个。</p>
 </blockquote>
-<h2 id="使用虚拟网口">使用虚拟网口</h2><p>　　如果是建立在Linux上的Samba，那么可以使用virtual interface，即给同个网卡配置多个IP，这种做法最典型的应用是在同一服务器上运行多个Apache提供80服务，现在我们也可以把它用到samba上，具体的做法：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># dhcp</span></span><br><span class="line"><span class="title">sudo</span> dhclient eth3:<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
-<p>　　这样就会多出一个接口eth0:0<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">eth3:</span><span class="number">0</span>    Link <span class="string">encap:</span>以太网  硬件地址 <span class="string">b8:</span><span class="number">2</span><span class="string">a:</span><span class="number">72</span>:<span class="string">d1:</span><span class="string">a1:</span>c0  </span><br><span class="line">          inet 地址:<span class="number">10.103</span>.25.141  广播:<span class="number">10.103</span>.27.255  掩码:<span class="number">255.255</span>.252.0</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  <span class="string">MTU:</span><span class="number">1500</span>  跃点数:<span class="number">1</span></span><br><span class="line">          中断:<span class="number">36</span></span><br></pre></td></tr></table></figure></p>
-<p>　　如果是静态IP，那么需要配置相应的配置文件，比如<code>/etc/network/interfaces</code>，加入<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">auto <span class="string">eth0:</span><span class="number">0</span></span><br><span class="line">iface <span class="string">eth0:</span><span class="number">0</span> inet <span class="keyword">static</span></span><br><span class="line">address <span class="number">192.168</span>.200.130</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用虚拟网口">使用虚拟网口</h2><p>　　如果是建立在Linux上的Samba，那么可以使用virtual interface，即给同个网卡配置多个IP，这种做法最典型的应用是在同一服务器上运行多个Apache提供80服务，现在我们也可以把它用到samba上，具体的做法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># dhcp</div><div class="line">sudo dhclient eth3:0</div></pre></td></tr></table></figure></p>
+<p>　　这样就会多出一个接口eth0:0<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">eth3:0    Link encap:以太网  硬件地址 b8:2a:72:d1:a1:c0  </div><div class="line">          inet 地址:10.103.25.141  广播:10.103.27.255  掩码:255.255.252.0</div><div class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1</div><div class="line">          中断:36</div></pre></td></tr></table></figure></p>
+<p>　　如果是静态IP，那么需要配置相应的配置文件，比如<code>/etc/network/interfaces</code>，加入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">auto eth0:0</div><div class="line">iface eth0:0 inet static</div><div class="line">address 192.168.200.130</div><div class="line">……</div></pre></td></tr></table></figure></p>
 <p>　　这样服务器就具有了多个不同ip，Windows连接多个共享目录使用不同的IP即可。</p>
 <h2 id="其它">其它</h2><p>　　最后需要注意的一点是：最好不要使你的共享目录用户名密码与Windows系统的用户名密码相同，否则系统会自动使用系统用户名去连接。如果该目录不属于系统同名用户，但又是browsable的话，那么就没有让你更改用户的机会了。</p>
   
@@ -119,7 +120,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Windows、/">Windows、</a><a href="/tags/samba/">samba</a><a href="/tags/共享目录/">共享目录</a><a href="/tags/多用户名/">多用户名</a>
+  <span></span> <a href="/tags/共享目录/">共享目录</a><a href="/tags/多用户名/">多用户名</a><a href="/tags/Windows、/">Windows、</a><a href="/tags/samba/">samba</a>
   </div>
 
 </div>
@@ -188,7 +189,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -204,11 +205,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -232,11 +233,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -244,23 +245,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -347,7 +348,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

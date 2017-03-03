@@ -22,11 +22,13 @@
 然而政策如此，短期内没有改变的迹象，只有自己想对策了。
 开发IPv6潜能长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1er5kqe08bmj20qk0eltaw.jpg">
+<meta property="og:updated_time" content="2015-12-06T14:45:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过IPv6“免费”上网">
 <meta name="twitter:description" content="2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。
 然而政策如此，短期内没有改变的迹象，只有自己想对策了。
 开发IPv6潜能长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1er5kqe08bmj20qk0eltaw.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -39,7 +41,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -107,9 +109,9 @@
 <p>然而政策如此，短期内没有改变的迹象，只有自己想对策了。</p>
 <h2 id="开发IPv6潜能">开发IPv6潜能</h2><p>长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然是运行于IPv4的网络中，而IPv6与v4网络的互通一直不好，所以v6的可用资源少得可怜。</p>
 <hr>
-<p>更新详细教程：  <strong><a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/" target="_blank" rel="external">为VPS创建IPv6隧道</a></strong></p>
+<p>更新详细教程：  <strong><a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/">为VPS创建IPv6隧道</a></strong></p>
 <a id="more"></a>
-<h3 id="直接使用v6上网">直接使用v6上网</h3><p>详细教程：  <strong><a href="http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/" target="_blank" rel="external">为VPS创建IPv6隧道</a></strong></p>
+<h3 id="直接使用v6上网">直接使用v6上网</h3><p>详细教程：  <strong><a href="http://azyet.github.io/2015/04/19/easyWay4IPv6toV4World/">为VPS创建IPv6隧道</a></strong></p>
 <p><strong>方法：</strong><br>手动设置DNS64，禁用IPv4，只使用v6栈，或者禁用v4网络的缺省路由等，以免自动跳转到登录页。<br><strong>效果：</strong><br>1.偶尔可以访问部分国内网站，如weibo,youku等，另一部分则不能，估计和DNS的转换有关。<br>2.访问延时很大，因为绕道了国外的NAT64路由，同时也导致一些视频因地区版权问题无法观看。</p>
 <h3 id="IPv6配合GoAgent">IPv6配合GoAgent</h3><p>Google作为技术巨头，拥有大量的v6服务器，而GoAgent应该是最普及的翻土啬工具了，将其设置为v6模式，再配合代理设置，几乎可以访问所有的网页，而且速度还不慢。<br><strong>缺点：</strong><br>只能作为HTTP代理，其它非80的服务无法使用。</p>
 <h3 id="绕道境外VM／VPS">绕道境外VM／VPS</h3><p>这应该是终极的解决方案了，也是我最近正在用的方案,总体来说还不错，流量几乎无限，虽然延迟有点大，但是顺带可以方便地使用google,dropbox,onedrive,github等服务了，总体来说还是比较满意的。<br>这个方案严格来说并不是免费的，但是每月5元左右的花费，除了以上便利之外还能得到一个个人服务器，不管怎么说还是很值得的吧。</p>
@@ -117,7 +119,7 @@
 <h2 id="将VPS加入到IPv6网络">将VPS加入到IPv6网络</h2><p>VPS是没有v6地址的，我们需要建立v6-v4的隧道，还好有免费提供的运营商，<a href="tnnelbroker.net">tnnelbroker.net</a>,最后就是VPS并没有IPv6 Module，由于没有独立内核你也不能自己加载，只能使用userspace的程序来建立v6接口，可以到这里下载<a href="https://code.google.com/p/tb-tun/" target="_blank" rel="external">tb_userspace</a>。</p>
 <h2 id="通过VPS访问IPv4网络">通过VPS访问IPv4网络</h2><p>现在你可以用IPv6的方式访问VPS,而VPS是同时有v4地址的，自然就可以以它作为中继访问v4网络的内容。</p>
 <h3 id="http代理（不推荐）">http代理（不推荐）</h3><p>http代理是最传统的方式了，但是其只能代理网页内容，且第三内容容易被检测到，所以并不实用，但是优势是速度快。如果想使用，可以安装squid。</p>
-<h3 id="使用ssh转发（推荐＊＊＊＊）">使用ssh转发（推荐＊＊＊＊）</h3><p><strong>优点</strong><br>架设简单，一句ssh命令就能建立代理；功能比较全面，是socks5代理，配合工具软件基本可实现全局代理；socks5和ssh都是安全性比较高的方式，访问点敏感内容也无妨，但不要滥用，否则一样会被制裁的（了解GFW的强大了吧）。<br><strong><em>linux下建立方式：</em></strong><br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">ssh</span> -qTfNnD 「本地地址:」本地端口 user<span class="variable">@vpsIPv6Address</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="使用ssh转发（推荐＊＊＊＊）">使用ssh转发（推荐＊＊＊＊）</h3><p><strong>优点</strong><br>架设简单，一句ssh命令就能建立代理；功能比较全面，是socks5代理，配合工具软件基本可实现全局代理；socks5和ssh都是安全性比较高的方式，访问点敏感内容也无妨，但不要滥用，否则一样会被制裁的（了解GFW的强大了吧）。<br><strong><em>linux下建立方式：</em></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -qTfNnD 「本地地址:」本地端口 user@vpsIPv6Address</div></pre></td></tr></table></figure></p>
 <p>这样你的本地端口就成为socks5代理入口了，本地地址缺省为lo地址，如果设为0或IP的话，其它机器也可以使用（centos还需要添加防火墙规则）。</p>
 <p>如Dropbox之类的客户端自己就带proxy设置，对于无此种设置的，linux下可用proxychains,windows下可以用proxifier（相当强大）。</p>
 <h3 id="shadowsocks（推荐＊＊＊）">shadowsocks（推荐＊＊＊）</h3><p>shadowssocks可以说是目前最稳定的FQ工具了，据说采用了一系列的手段来掩盖流量特征，不容易被墙，使用对称加密，速度很快。</p>
@@ -128,10 +130,10 @@
 <h2 id="组合使用">组合使用</h2><p>openVPN结合ssh代理是很好的互补：ssh无需安装，启用只需一句命令，加密好更安全和稳定；VPN无需对应用作设置，使用方便，且对包括无法设置代理的应用（比如steam)都是万能的。我目前就是使用这样的组合，整体体验还不错，如果买的是日本的云机的话，估计综合体验会完全超过本地网络吧。顺便一提的是，bandwagon显示上月用掉了150多G的流量，而校园网流量则还剩余。如果没有ipv6，这得交300元网费了。</p>
 <h2 id="关于手机端">关于手机端</h2><p>google和gmail和paly还是很有需求的，而且既然能免流量，那手机上看看视频也很不错。</p>
 <p>ssh、shdowsocks和openvpn都有手机端应用，个人openVPN和shadowsocks都有使用，感觉都不错，SS配置简单一些，似乎也更省电。</p>
-<h2 id="关于速度">关于速度</h2><p>通过v6与vps的连接速度<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:/data/AzYet.github.io$ ping6 centos6</span><br><span class="line">PING centos6(centos6) <span class="number">56</span> data <span class="keyword">bytes</span></span><br><span class="line"><span class="number">64</span> <span class="keyword">bytes</span> <span class="built_in">from</span> centos6: icmp_seq=<span class="number">1</span> ttl=<span class="number">47</span> <span class="built_in">time</span>=<span class="number">165</span> ms</span><br><span class="line"><span class="number">64</span> <span class="keyword">bytes</span> <span class="built_in">from</span> centos6: icmp_seq=<span class="number">2</span> ttl=<span class="number">47</span> <span class="built_in">time</span>=<span class="number">165</span> ms</span><br><span class="line"><span class="number">64</span> <span class="keyword">bytes</span> <span class="built_in">from</span> centos6: icmp_seq=<span class="number">3</span> ttl=<span class="number">47</span> <span class="built_in">time</span>=<span class="number">165</span> ms</span><br></pre></td></tr></table></figure></p>
+<h2 id="关于速度">关于速度</h2><p>通过v6与vps的连接速度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/AzYet.github.io$ ping6 centos6</div><div class="line">PING centos6(centos6) 56 data bytes</div><div class="line">64 bytes from centos6: icmp_seq=1 ttl=47 time=165 ms</div><div class="line">64 bytes from centos6: icmp_seq=2 ttl=47 time=165 ms</div><div class="line">64 bytes from centos6: icmp_seq=3 ttl=47 time=165 ms</div></pre></td></tr></table></figure></p>
 <p>由于绕道了国外的两个站点（隧道入口和VPS），那么就有额外的延时开销，访问国内WEB比较难受（网页包含请求太多），但是对于国外网站基本可以忽略，另外要说明的，虽然延时较大，但是带宽却是几乎无影响的，我终于又可以毫无顾忌地下载大文件，在线看高清电影和视频直播了！至于下载速度，无论国内外资源，飚到4、5MByte/S（相当40M带宽）是很正常的。<br>来一张VPS的网速图：<br><img src="http://ww2.sinaimg.cn/large/55f247cbgw1er5kqe08bmj20qk0eltaw.jpg" alt="连接界面"> </p>
 <h2 id="后记">后记</h2><p>最后本文只能算是一个综述，供大家参照比较，根据自己的需求和环境选择合适的方式。虽然以上提到的内容我都实践过，但是网上不难找到相应的教程，所以并没有记录具体安装配置过程，也许以后更换系统或者更换本子，需要重装服务时，会顺便写下step by step的教程。</p>
-<p><strong>创建v6隧道的详细教程</strong>可以看这里 <a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/" target="_blank" rel="external">为VPS创建IPv6隧道</a></p>
+<p><strong>创建v6隧道的详细教程</strong>可以看这里 <a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/">为VPS创建IPv6隧道</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -209,7 +211,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -225,11 +227,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -253,11 +255,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -265,23 +267,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -368,7 +370,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

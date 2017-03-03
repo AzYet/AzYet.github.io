@@ -1,0 +1,601 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>gRPC和protobuff | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="protobuf是google的语言、平台中立，可扩展的结构数据序列化机制。你可以定义数据结构一次，然后用专门生成的代码来方便地读写结构数据，支持多种语言。
+proto3版本支持go语言。
+下面以一个简单的例子来演示如何使用proto3来生成Go代码。
+大致分为三步
+
+定义数据结构
+使用Protobuf编译器
+使用Go协议buffer接口读写数据
+
+相对于其它序列化方式，protobuf可以根据.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gRPC和protobuff">
+<meta property="og:url" content="http://azyet.github.io/2017/03/04/protobuff-and-grpc/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="protobuf是google的语言、平台中立，可扩展的结构数据序列化机制。你可以定义数据结构一次，然后用专门生成的代码来方便地读写结构数据，支持多种语言。
+proto3版本支持go语言。
+下面以一个简单的例子来演示如何使用proto3来生成Go代码。
+大致分为三步
+
+定义数据结构
+使用Protobuf编译器
+使用Go协议buffer接口读写数据
+
+相对于其它序列化方式，protobuf可以根据.">
+<meta property="og:updated_time" content="2017-03-03T20:04:21.791Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gRPC和protobuff">
+<meta name="twitter:description" content="protobuf是google的语言、平台中立，可扩展的结构数据序列化机制。你可以定义数据结构一次，然后用专门生成的代码来方便地读写结构数据，支持多种语言。
+proto3版本支持go语言。
+下面以一个简单的例子来演示如何使用proto3来生成Go代码。
+大致分为三步
+
+定义数据结构
+使用Protobuf编译器
+使用Go协议buffer接口读写数据
+
+相对于其它序列化方式，protobuf可以根据.">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/04/protobuff-and-grpc/" title="gRPC和protobuff" itemprop="url">gRPC和protobuff</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-03T20:00:52.000Z" itemprop="datePublished"> 發表於 2017-03-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-proto格式来定义数据结构"><span class="toc-number">1.</span> <span class="toc-text">使用.proto格式来定义数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译proto文件"><span class="toc-number">2.</span> <span class="toc-text">编译proto文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用protobuff"><span class="toc-number">3.</span> <span class="toc-text">使用protobuff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成带方法的结构GRPC"><span class="toc-number">4.</span> <span class="toc-text">生成带方法的结构GRPC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gRPC支持"><span class="toc-number">5.</span> <span class="toc-text">gRPC支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<p>protobuf是google的语言、平台中立，可扩展的结构数据序列化机制。你可以定义数据结构一次，然后用专门生成的代码来方便地读写结构数据，支持多种语言。</p>
+<p>proto3版本支持go语言。</p>
+<p>下面以一个简单的例子来演示如何使用proto3来生成Go代码。</p>
+<p>大致分为三步</p>
+<ol>
+<li>定义数据结构</li>
+<li>使用Protobuf编译器</li>
+<li>使用Go协议buffer接口读写数据</li>
+</ol>
+<p>相对于其它序列化方式，protobuf可以根据<code>.proto</code>格式的模板文件来生成自带高效的二进制格式的<code>codec</code>方法的类，同时类利用getter和setter管理数据读写的细节，<br>另外重要的数据可以扩展，方便以后的更新而不影响旧有功能。<br><a id="more"></a></p>
+<h2 id="使用-proto格式来定义数据结构">使用.proto格式来定义数据结构</h2><p>在proto文件中，使用message{}来定义一个需要序列化的结构，在花括号中加上需要的数据名称和类型。</p>
+<p>如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">message Person &#123;</div><div class="line">  string name = 1;</div><div class="line">  int32 id = 2;  // Unique ID number for this person.</div><div class="line">  string email = 3;</div><div class="line"></div><div class="line">  enum PhoneType &#123;</div><div class="line">    MOBILE = 0;</div><div class="line">    HOME = 1;</div><div class="line">    WORK = 2;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  message PhoneNumber &#123;</div><div class="line">    string number = 1;</div><div class="line">    PhoneType type = 2;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  repeated PhoneNumber phones = 4;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Our address book file is just one of these.</div><div class="line">message AddressBook &#123;</div><div class="line">  repeated Person people = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>还有许多常见的数据类型<code>bool, int32, float, double，bytes</code></p>
+<p>如上所示，数据结构可以嵌套，也可以在Message中定义枚举类型。</p>
+<p>field后面的 <code>=1， =2</code>id是用于二进制中的唯一标识<code>tag</code>。由于1-15占用字节更少，所以建议优先使用。嵌套结构中id是可以与外层复用的。如果有重复的成员，那么将需要独立的Id,这种情况下可以使用<code>repeated field</code></p>
+<p>如果成员值没有初始化，那么将被设置为默认值，这个有点像Golang的规则。</p>
+<p>完整的proto编写手册在<a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank" rel="external">Protocol Buffer Language Guide </a>。<br>protobuf并不支持继承机制。</p>
+<h2 id="编译proto文件">编译proto文件</h2><p>首先需要安装编译器,非c++用户可以直接下载预编译版本。 <a href="https://github.com/google/protobuf/releases" target="_blank" rel="external">https://github.com/google/protobuf/releases</a></p>
+<p>1 Go语言使用cpp版的编译器。</p>
+<p>2 go编译器，当然作为一名go语言使用者，你应该已经有了</p>
+<p>3 <code>go get</code>相关的包<code>go get -u github.com/golang/protobuf/{proto,protoc-gen-go}</code><br>编译器插件将被置于<code>$GOPATH/bin</code></p>
+<p>以上软件有两部分，<code>协议编译插件</code>用于生成go代码，一个提供运行时支持的库，codec和存取协议buffer。</p>
+<h2 id="使用protobuff">使用protobuff</h2><p>1 编译.proto生成go代码 ， 使用go_out来指定文件输出目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc --go_out=. *.proto</div></pre></td></tr></table></figure></p>
+<p><code>请确保你的protoc和protoc-gen-go二进制文件都在环境PATH之下</code></p>
+<h2 id="生成带方法的结构GRPC">生成带方法的结构GRPC</h2><p>使用以上命令生成的代码是不包含自定义方法的。要使用更多的参数，—go_output=<code>k1=v1,k2=v2</code></p>
+<p>如<code>protoc --go_out=plugins=grpc,import_path=mypackage:. *.proto</code></p>
+<p><code>import_prefix=xxx</code> xxx会加在所有import包的前面，比如<code>xxx/github.com/xx/xxx</code><br><code>import_path=foo/bar</code> 包名<br><code>plugins=plugin1+plugin2</code> 插件，<code>https://github.com/golang/protobuf</code>中只有 <code>grpc</code>这个插件<br><code>Mfoo/bar.proto=quux/shme</code> 声明<code>foo/bar.proto</code>与package<code>quux/shme</code>关联，服从于<code>import_prefix</code>参数</p>
+<h2 id="gRPC支持">gRPC支持</h2><p>如果proto文件指定了RPC服务，通常使用以下方式，将其加在—go_out参数中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc --go_out=plugins=grpc:. *.proto</div></pre></td></tr></table></figure></p>
+<h2 id="总结">总结</h2><p>最终个人使用的命令如下（/ssd/GOPATH/bin/protoc-gen-go不在PATH中）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export PATH=$PATH:/ssd/GOPATH/bin</div><div class="line"></div><div class="line">protoc  --go_out=import_path=common,plugins=grpc:/tmp/grpc  -I=/ssd/GOPATH/src/baishancloud.com/wow/host_data/ /ssd/GOPATH/src/baishancloud.com/wow/host_data/hostdata.proto</div></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a><a href="/tags/内存虚拟化/">内存虚拟化</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2017/03/04/protobuff-and-grpc/" data-title="gRPC和protobuff | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/11/12/reflect-of-go/"  title="Go的反射法则">
+ <strong>下一篇：</strong><br/> 
+ <span>Go的反射法则
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/03/04/protobuff-and-grpc/" data-title="gRPC和protobuff" data-url="http://azyet.github.io/2017/03/04/protobuff-and-grpc/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-proto格式来定义数据结构"><span class="toc-number">1.</span> <span class="toc-text">使用.proto格式来定义数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译proto文件"><span class="toc-number">2.</span> <span class="toc-text">编译proto文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用protobuff"><span class="toc-number">3.</span> <span class="toc-text">使用protobuff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成带方法的结构GRPC"><span class="toc-number">4.</span> <span class="toc-text">生成带方法的结构GRPC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gRPC支持"><span class="toc-number">5.</span> <span class="toc-text">gRPC支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

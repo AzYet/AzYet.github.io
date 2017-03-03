@@ -1,0 +1,587 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux下的ip命令 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="linux下的ip命令有点类似ifconfig命令，但是更强大，且有意取代它。使用ip命令可以完成多项网络管理操作，ifconfig是net-tools工具下的一个命令，而这个工具已经多年没有维护，已不建议使用的，而iproute2保留并增强了它的许多功能。
+许多的Linux发行版都已经内置了iproute2工具集。
+IP地址相关操作ip命令使用CIDR格式来表示MASK，更直观也更方便输入，不用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下的ip命令">
+<meta property="og:url" content="http://azyet.github.io/2015/05/27/ipCommandInLinux/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="linux下的ip命令有点类似ifconfig命令，但是更强大，且有意取代它。使用ip命令可以完成多项网络管理操作，ifconfig是net-tools工具下的一个命令，而这个工具已经多年没有维护，已不建议使用的，而iproute2保留并增强了它的许多功能。
+许多的Linux发行版都已经内置了iproute2工具集。
+IP地址相关操作ip命令使用CIDR格式来表示MASK，更直观也更方便输入，不用">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下的ip命令">
+<meta name="twitter:description" content="linux下的ip命令有点类似ifconfig命令，但是更强大，且有意取代它。使用ip命令可以完成多项网络管理操作，ifconfig是net-tools工具下的一个命令，而这个工具已经多年没有维护，已不建议使用的，而iproute2保留并增强了它的许多功能。
+许多的Linux发行版都已经内置了iproute2工具集。
+IP地址相关操作ip命令使用CIDR格式来表示MASK，更直观也更方便输入，不用">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/27/ipCommandInLinux/" title="Linux下的ip命令" itemprop="url">Linux下的ip命令</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-26T16:58:38.000Z" itemprop="datePublished"> 發表於 2015-05-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP地址相关操作"><span class="toc-number">1.</span> <span class="toc-text">IP地址相关操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#显示IP"><span class="toc-number">1.1.</span> <span class="toc-text">显示IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加或删除IP"><span class="toc-number">1.2.</span> <span class="toc-text">增加或删除IP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#路由相关操作"><span class="toc-number">2.</span> <span class="toc-text">路由相关操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看路由"><span class="toc-number">2.1.</span> <span class="toc-text">查看路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试IP将匹配的路由项"><span class="toc-number">2.2.</span> <span class="toc-text">测试IP将匹配的路由项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加路由"><span class="toc-number">2.3.</span> <span class="toc-text">添加路由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络统计"><span class="toc-number">3.</span> <span class="toc-text">网络统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#所有接口统计"><span class="toc-number">3.1.</span> <span class="toc-text">所有接口统计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指定接口统计"><span class="toc-number">3.2.</span> <span class="toc-text">指定接口统计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARP表"><span class="toc-number">4.</span> <span class="toc-text">ARP表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监控网络连接"><span class="toc-number">5.</span> <span class="toc-text">监控网络连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#激活与关闭网络接口"><span class="toc-number">6.</span> <span class="toc-text">激活与关闭网络接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#帮助"><span class="toc-number">7.</span> <span class="toc-text">帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#隧道"><span class="toc-number">8.</span> <span class="toc-text">隧道</span></a></li></ol>
+		
+		</div>
+		
+		<p>linux下的<code>ip</code>命令有点类似<code>ifconfig</code>命令，但是更强大，且有意取代它。使用ip命令可以完成多项网络管理操作，ifconfig是net-tools工具下的一个命令，而这个工具已经多年没有维护，已不建议使用的，而iproute2保留并增强了它的许多功能。</p>
+<p>许多的Linux发行版都已经内置了iproute2工具集。</p>
+<h2 id="IP地址相关操作">IP地址相关操作</h2><p>ip命令使用CIDR格式来表示MASK，更直观也更方便输入，不用输入长串的255了。</p>
+<h3 id="显示IP">显示IP</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">chen@vaio:~$ ip addr show eth0</div><div class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</div><div class="line">    link/ether 30:f9:ed:fe:66:4d brd ff:ff:ff:ff:ff:ff</div><div class="line">    inet 10.210.106.20/27 brd 10.210.106.31 scope global eth0</div><div class="line">       valid_lft forever preferred_lft forever</div><div class="line">    inet6 2001:da8:215:fa50:a55d:8c14:6748:xxxx/64 scope global temporary dynamic </div><div class="line">       valid_lft 569852sec preferred_lft 50852sec</div><div class="line">    inet6 2001:da8:215:fa50:32f9:edff:fefe:xxxx/64 scope global mngtmpaddr noprefixroute dynamic </div><div class="line">       valid_lft 2591880sec preferred_lft 604680sec</div><div class="line">    inet6 fe80::32f9:edff:fefe:664d/64 scope link </div><div class="line">       valid_lft forever preferred_lft forever</div></pre></td></tr></table></figure>
+<h3 id="增加或删除IP">增加或删除IP</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip addr add 192.168.0.193/24 dev wlan0</div><div class="line"></div><div class="line">ip addr del 192.168.0.193/24 dev wlan0</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="路由相关操作">路由相关操作</h2><p>使用ip route <em>[show]</em>可以查看和设置数据包的路由规则。</p>
+<h3 id="查看路由">查看路由</h3><p>第一项为系统的default route，是我的VPN端口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">chen@vaio:~$ ip route </div><div class="line">0.0.0.0/1 via 10.8.0.5 dev tun0  proto static  metric 950 </div><div class="line">default via 10.210.106.1 dev eth0 </div><div class="line">10.0.0.0/8 via 10.210.106.1 dev eth0 </div><div class="line">10.8.0.1 via 10.8.0.5 dev tun0  proto static  metric 950 </div><div class="line">10.8.0.5 dev tun0  proto kernel  scope link  src 10.8.0.6 </div><div class="line">10.210.106.0/27 dev eth0  proto kernel  scope link  src 10.210.106.20 </div><div class="line">128.0.0.0/1 via 10.8.0.5 dev tun0  proto static  metric 950 </div><div class="line">169.254.0.0/16 dev vmnet1  scope link  metric 1000 </div><div class="line">172.16.65.0/24 dev vmnet1  proto kernel  scope link  src 172.16.65.1 </div><div class="line">192.168.98.0/24 dev vmnet8  proto kernel  scope link  src 192.168.98.1</div></pre></td></tr></table></figure></p>
+<h3 id="测试IP将匹配的路由项">测试IP将匹配的路由项</h3><p>当你怀疑你的路由设置出现问题时，可以用这个命令进行验证和排查。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/blogeditor$ ip route get 8.8.8.8</div><div class="line">8.8.8.8 via 10.8.0.5 dev tun0  src 10.8.0.6 </div><div class="line">    cache</div></pre></td></tr></table></figure>
+<h3 id="添加路由">添加路由</h3><p>添加默认路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip route add default via 192.168.155.1</div></pre></td></tr></table></figure></p>
+<p>添加静态路由</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip route add 10.0.0.0/8 via 10.210.106.1</div></pre></td></tr></table></figure>
+<p>以上命令可以确保在使用了VPN的情况下，校园网依然走本地接口</p>
+<h2 id="网络统计">网络统计</h2><p><code>ip -s link</code>可以用来显示相关的网络统计数字</p>
+<h3 id="所有接口统计">所有接口统计</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/blogeditor$ ip -s link</div><div class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default </div><div class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</div><div class="line">    RX: bytes  packets  errors  dropped overrun mcast   </div><div class="line">    3397099573 2787056  0       0       0       0      </div><div class="line">    TX: bytes  packets  errors  dropped carrier collsns </div><div class="line">    3397099573 2787056  0       0       0       0      </div><div class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000</div><div class="line">    link/ether 30:f9:ed:fe:66:4d brd ff:ff:ff:ff:ff:ff</div><div class="line">    RX: bytes  packets  errors  dropped overrun mcast   </div><div class="line">    6752615606 4912166  0       0       0       0      </div><div class="line">    TX: bytes  packets  errors  dropped carrier collsns </div><div class="line">    408634823  2919179  0       0       0       0      </div><div class="line">6: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 100</div><div class="line">    link/none </div><div class="line">    RX: bytes  packets  errors  dropped overrun mcast   </div><div class="line">    50024014   102216   0       0       0       0      </div><div class="line">    TX: bytes  packets  errors  dropped carrier collsns </div><div class="line">    123137376  126954   0       8       0       0</div></pre></td></tr></table></figure>
+<h3 id="指定接口统计">指定接口统计</h3><p>使用ls参数可以指定要统计的接口，使用额外的-s参数会打印更详细的统计数据，这个命令也可以用于网络诊断。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/blogeditor$ ip -s -s link ls tun0</div><div class="line">6: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 100</div><div class="line">    link/none </div><div class="line">    RX: bytes  packets  errors  dropped overrun mcast   </div><div class="line">    50044817   102270   0       0       0       0      </div><div class="line">    RX errors: length  crc     frame   fifo    missed</div><div class="line">               0        0       0       0       0      </div><div class="line">    TX: bytes  packets  errors  dropped carrier collsns </div><div class="line">    123190189  127059   0       8       0       0      </div><div class="line">    TX errors: aborted fifo    window  heartbeat transns</div><div class="line">               0        0       0       0        0</div></pre></td></tr></table></figure>
+<h2 id="ARP表">ARP表</h2><p><code>ip neigh</code>可用来查看arp表项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/blogeditor$ ip neigh</div><div class="line">10.210.106.11 dev eth0 lladdr 00:90:f5:eb:0b:da STALE</div><div class="line">10.210.106.6 dev eth0 lladdr 00:90:f5:eb:0b:da STALE</div><div class="line">10.210.106.1 dev eth0 lladdr 3c:e5:a6:d2:37:cd REACHABLE</div></pre></td></tr></table></figure>
+<p>当然也可以使用add / del 来增加或者删除表项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip neigh add 10.210.106.30 dev eth0 lladdr aa:bb:cc:dd:ee:ff:00</div></pre></td></tr></table></figure>
+<h2 id="监控网络连接">监控网络连接</h2><p><code>ip monitor</code>命令将会持续监控连接状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/blogeditor$ ip monitor all</div><div class="line">[NEIGH]10.210.106.1 dev eth0 lladdr 3c:e5:a6:d2:37:cd STALE</div><div class="line">[NEIGH]10.210.106.1 dev eth0 lladdr 3c:e5:a6:d2:37:cd REACHABLE</div><div class="line">[NEIGH]10.210.106.1 dev eth0 lladdr 3c:e5:a6:d2:37:cd STALE</div><div class="line">[NEIGH]10.210.106.1 dev eth0 lladdr 3c:e5:a6:d2:37:cd REACHABLE</div></pre></td></tr></table></figure>
+<h2 id="激活与关闭网络接口">激活与关闭网络接口</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip set link wlan0 up/down</div></pre></td></tr></table></figure>
+<h2 id="帮助">帮助</h2><p>ip的每个子命令都可以使用help，如<code>ip route help</code></p>
+<h2 id="隧道">隧道</h2><p>最后来介绍一下<code>ip tunnel</code>命令，上一节创建IPv6隧道时使用好如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip tunnel add he-ipv6 mode sit remote 66.220.18.42 local 104.194.xx.xx ttl 255</div></pre></td></tr></table></figure></p>
+<p>sit模式意为Simple Internet Transition，主要用于连接孤立的IPv6网络，它需要使用ipv6内核模块.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ip/">ip</a><a href="/tags/网络/">网络</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/27/ipCommandInLinux/" data-title="Linux下的ip命令 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/28/androidBootProcess/" title="android启动流程">
+  <strong>上一篇：</strong><br/>
+  <span>
+  android启动流程</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/25/ipv6TunneltoVps/"  title="为VPS创建IPv6隧道">
+ <strong>下一篇：</strong><br/> 
+ <span>为VPS创建IPv6隧道
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/27/ipCommandInLinux/" data-title="Linux下的ip命令" data-url="http://azyet.github.io/2015/05/27/ipCommandInLinux/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP地址相关操作"><span class="toc-number">1.</span> <span class="toc-text">IP地址相关操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#显示IP"><span class="toc-number">1.1.</span> <span class="toc-text">显示IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加或删除IP"><span class="toc-number">1.2.</span> <span class="toc-text">增加或删除IP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#路由相关操作"><span class="toc-number">2.</span> <span class="toc-text">路由相关操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看路由"><span class="toc-number">2.1.</span> <span class="toc-text">查看路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试IP将匹配的路由项"><span class="toc-number">2.2.</span> <span class="toc-text">测试IP将匹配的路由项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加路由"><span class="toc-number">2.3.</span> <span class="toc-text">添加路由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络统计"><span class="toc-number">3.</span> <span class="toc-text">网络统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#所有接口统计"><span class="toc-number">3.1.</span> <span class="toc-text">所有接口统计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指定接口统计"><span class="toc-number">3.2.</span> <span class="toc-text">指定接口统计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARP表"><span class="toc-number">4.</span> <span class="toc-text">ARP表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监控网络连接"><span class="toc-number">5.</span> <span class="toc-text">监控网络连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#激活与关闭网络接口"><span class="toc-number">6.</span> <span class="toc-text">激活与关闭网络接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#帮助"><span class="toc-number">7.</span> <span class="toc-text">帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#隧道"><span class="toc-number">8.</span> <span class="toc-text">隧道</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -43,6 +43,7 @@ A: 好的。[ACK]
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1erk25pcr1bj20gs062dio.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1erk29ccakhj20g40dywj2.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1erk2bvuftnj20lw01vjsj.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从一次HTTP访问解析TCP协议的连接建立与释放">
 <meta name="twitter:description" content="要理解TCP的连接和断开其实不难，需要自己代入情境，如果是你来设计网络协议你会如何做。
@@ -55,6 +56,7 @@ A: 好的。[ACK]
 
 
 　　所谓三次握手，其实是发了三次包，代表一次握手过程中的三个步骤而已。">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1erk1lcl4slj20kp02pq48.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -67,7 +69,7 @@ A: 好的。[ACK]
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -162,7 +164,7 @@ A: 好的。[ACK]
 <h3 id="面向字节流">面向字节流</h3><p>　　TCP没有protoTypea或者类似etherType的标志位，虽然会对数据分块，但是也没有类似IP那样的分片标志。因为TCP是<strong>面向字节流</strong>的，对PDU的内容不关心，由上层应用去解析。</p>
 <p>　　Server对二次GET的响应内容较长，使用了多个TCP包来传送，可以看到client<strong>没有再逐个ACK</strong>。<br>　　Server发送数据期间，Client只收不发，所以Server方报文的ACK一直不变，而client的ACK号相应增加。</p>
 <p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1erk1zrgajxj20lk04dwhb.jpg" alt=""></p>
-<p>　　另外如果检查TCP的PDU(第一个segment)，可以发现其内容直接就是：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="string">Server:</span> nginx</span><br><span class="line"><span class="string">Date:</span> Mon, <span class="number">27</span> Apr <span class="number">2015</span> <span class="number">02</span>:<span class="number">51</span>:<span class="number">14</span> GMT</span><br><span class="line">Content-<span class="string">Type:</span> text/html; charset=utf-<span class="number">8</span></span><br><span class="line">.......</span><br></pre></td></tr></table></figure></p>
+<p>　　另外如果检查TCP的PDU(第一个segment)，可以发现其内容直接就是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">Server: nginx</div><div class="line">Date: Mon, 27 Apr 2015 02:51:14 GMT</div><div class="line">Content-Type: text/html; charset=utf-8</div><div class="line">.......</div></pre></td></tr></table></figure></p>
 <p>　　下图中TCP头部以后，数据段起始前四字节，数值为<strong>0x48 0x54 0x54 0x50</strong></p>
 <p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1erk25pcr1bj20gs062dio.jpg" alt=""></p>
 <p>　　0x48 0x54 0x54 0x50对应<strong>ascii</strong>就是<strong>HTTP</strong></p>
@@ -255,7 +257,7 @@ A: 好的。[ACK]
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -271,11 +273,11 @@ A: 好的。[ACK]
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -299,11 +301,11 @@ A: 好的。[ACK]
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -311,23 +313,23 @@ A: 好的。[ACK]
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -414,7 +416,7 @@ A: 好的。[ACK]
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

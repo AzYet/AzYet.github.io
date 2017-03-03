@@ -12,20 +12,22 @@
 
     
     <meta name="description" content="之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。　　　　以下面的图为测试样本：
- 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于">
+ 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="最短路径dijkstra算法实践：理解再实现">
 <meta property="og:url" content="http://azyet.github.io/2015/05/09/dijkstraAnlalizeAndImplement/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。　　　　以下面的图为测试样本：
- 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于">
+ 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="最短路径dijkstra算法实践：理解再实现">
 <meta name="twitter:description" content="之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。　　　　以下面的图为测试样本：
- 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于">
+ 　　　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -38,7 +40,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -103,11 +105,11 @@
 		</div>
 		
 		<p>　　之前在做SDN网络控制器时，写过一个dijkstra的最短路径算法，现在回顾重温一下。<br>　　<br>　　以下面的图为测试样本：</p>
-<p> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""><br>　　<br>　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于之前的记录，则更新记录；直到所有点都被遍历。<br>　　<a id="more"></a><br>　　依旧，为了方便，使用python语言，图用边的集合来表示：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">g</span> = [(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="number">6</span>), (<span class="string">"A"</span>, <span class="string">"C"</span>, <span class="number">3</span>), (<span class="string">"B"</span>, <span class="string">"C"</span>, <span class="number">2</span>), (<span class="string">"B"</span>, <span class="string">"D"</span>, <span class="number">5</span>), (<span class="string">"C"</span>, <span class="string">"D"</span>, <span class="number">3</span>), (<span class="string">"C"</span>, <span class="string">"E"</span>, <span class="number">4</span>), (<span class="string">"D"</span>, <span class="string">"F"</span>, <span class="number">3</span>),</span><br><span class="line">     (<span class="string">"D"</span>, <span class="string">"E"</span>, <span class="number">2</span>), (<span class="string">"E"</span>, <span class="string">"F"</span>, <span class="number">6</span>)]</span><br></pre></td></tr></table></figure></p>
+<p> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""><br>　　<br>　　dijkstar算法的大致思想是（假设起点为A）：每新到达一个点V，探测所有与该点直接相邻的点（V’）及之间的距离d(V,V’)，如果V`是第一次探测到，那么记录其距离d(A,V’) = d(A,V) + d(V,V’)，如果已有记录但d(A,V) + d(V,V’)小于之前的记录，则更新记录；直到所有点都被遍历。<br>　　<a id="more"></a><br>　　依旧，为了方便，使用python语言，图用边的集合来表示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">g = [(&quot;A&quot;, &quot;B&quot;, 6), (&quot;A&quot;, &quot;C&quot;, 3), (&quot;B&quot;, &quot;C&quot;, 2), (&quot;B&quot;, &quot;D&quot;, 5), (&quot;C&quot;, &quot;D&quot;, 3), (&quot;C&quot;, &quot;E&quot;, 4), (&quot;D&quot;, &quot;F&quot;, 3),</div><div class="line">     (&quot;D&quot;, &quot;E&quot;, 2), (&quot;E&quot;, &quot;F&quot;, 6)]</div></pre></td></tr></table></figure></p>
 <p>　　</p>
 <h2 id="初始状态">初始状态</h2><p>　　从A开始探测，则已知距离d(A,A) = 0 。 </p>
-<h2 id="对单个点的处理">对单个点的处理</h2><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">map=</span>&#123;<span class="string">"A"</span>:<span class="number">0</span>&#125; <span class="comment">#初始记录</span></span><br><span class="line"><span class="comment">#对点"A"进行处理</span></span><br><span class="line">for e <span class="keyword">in</span> g:                 <span class="comment">#遍历所有边 (e = edge)</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"A"</span> <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:       <span class="comment">#与A相连的边</span></span><br><span class="line">        <span class="variable">d =</span> <span class="built_in">map</span>[<span class="string">"A"</span>]+e[<span class="number">2</span>]   <span class="comment">#计算距离</span></span><br><span class="line">        <span class="comment">#添加记录（初始map为空，暂不考虑记录已存在的情况）</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">"A"</span> == e[<span class="number">0</span>]:     <span class="comment">#无向边，需要确定另一顶点名称</span></span><br><span class="line">            <span class="built_in">map</span>[e[<span class="number">1</span>]] = d</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">map</span>[e[<span class="number">0</span>]] = d</span><br><span class="line">print <span class="built_in">map</span></span><br></pre></td></tr></table></figure>
-<p>输出<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'A'</span>: <span class="number">0</span>, <span class="string">'C'</span>: <span class="number">3</span>, <span class="string">'B'</span>: <span class="number">6</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="对单个点的处理">对单个点的处理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">map=&#123;&quot;A&quot;:0&#125; #初始记录</div><div class="line">#对点&quot;A&quot;进行处理</div><div class="line">for e in g:                 #遍历所有边 (e = edge)</div><div class="line">    if &quot;A&quot; in e[0:2]:       #与A相连的边</div><div class="line">        d = map[&quot;A&quot;]+e[2]   #计算距离</div><div class="line">        #添加记录（初始map为空，暂不考虑记录已存在的情况）</div><div class="line">        if &quot;A&quot; == e[0]:     #无向边，需要确定另一顶点名称</div><div class="line">            map[e[1]] = d</div><div class="line">        else:</div><div class="line">            map[e[0]] = d</div><div class="line">print map</div></pre></td></tr></table></figure>
+<p>输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&apos;A&apos;: 0, &apos;C&apos;: 3, &apos;B&apos;: 6&#125;</div></pre></td></tr></table></figure></p>
 <p>　　一轮探测完以后，记录中新增了B C两点及它们与起点A的距离 ，那么接下来就要对B，C依次进行同样的处理了，随后对与B,C相连的点的处理……直到所有点处理完。</p>
 <h2 id="完成算法（使用队列）">完成算法（使用队列）</h2><p>　　对旧有代码进行改造：</p>
 <blockquote>
@@ -117,11 +119,11 @@
 </ol>
 </blockquote>
 <p>　　增加以上功能后的代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">map=&#123;<span class="string">"A"</span>:<span class="number">0</span>&#125;</span><br><span class="line">vp = Queue.Queue(maxsize=<span class="number">0</span>)             <span class="comment">#新建队列</span></span><br><span class="line">vp.put(<span class="string">"A"</span>)                             <span class="comment">#初始化待处理点，将“A”加入队列</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">not</span> vp.empty()):                  <span class="comment">#队列不为空，执行</span></span><br><span class="line">    v=vp.get()                          <span class="comment">#取队首点v（vertex）</span></span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> g:                         <span class="comment">#遍历边集</span></span><br><span class="line">        <span class="keyword">if</span> v <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:                 <span class="comment">#边e与v相连        </span></span><br><span class="line">            d = map[v]+e[<span class="number">2</span>]             <span class="comment">#计算A经由v到达v1的距离     </span></span><br><span class="line">            <span class="keyword">if</span> v == e[<span class="number">0</span>]:               <span class="comment">#无向边，需要确定另一顶点v1</span></span><br><span class="line">                v1 = e[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                v1 = e[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> v1 <span class="keyword">not</span> <span class="keyword">in</span> map:     <span class="comment">#v1不在记录中（新探测到的点）</span></span><br><span class="line">                vp.put(v1)        <span class="comment">#v1加入队列尾（待处理点）</span></span><br><span class="line">                map[v1] = d       <span class="comment">#新增记录</span></span><br><span class="line">            <span class="keyword">elif</span> d &lt; map[v1]:     <span class="comment">#v1已在记录中，但新路径更短</span></span><br><span class="line">                map[v1] = d       <span class="comment">#更新记录</span></span><br><span class="line"><span class="keyword">print</span> map</span><br></pre></td></tr></table></figure>
-<p>输出为：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'A'</span>: <span class="number">0</span>, <span class="string">'C'</span>: <span class="number">3</span>, <span class="string">'B'</span>: <span class="number">5</span>, <span class="string">'E'</span>: <span class="number">7</span>, <span class="string">'D'</span>: <span class="number">6</span>, <span class="string">'F'</span>: <span class="number">9</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">map=&#123;<span class="string">"A"</span>:<span class="number">0</span>&#125;</div><div class="line">vp = Queue.Queue(maxsize=<span class="number">0</span>)             <span class="comment">#新建队列</span></div><div class="line">vp.put(<span class="string">"A"</span>)                             <span class="comment">#初始化待处理点，将“A”加入队列</span></div><div class="line"></div><div class="line"><span class="keyword">while</span>(<span class="keyword">not</span> vp.empty()):                  <span class="comment">#队列不为空，执行</span></div><div class="line">    v=vp.get()                          <span class="comment">#取队首点v（vertex）</span></div><div class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> g:                         <span class="comment">#遍历边集</span></div><div class="line">        <span class="keyword">if</span> v <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:                 <span class="comment">#边e与v相连        </span></div><div class="line">            d = map[v]+e[<span class="number">2</span>]             <span class="comment">#计算A经由v到达v1的距离     </span></div><div class="line">            <span class="keyword">if</span> v == e[<span class="number">0</span>]:               <span class="comment">#无向边，需要确定另一顶点v1</span></div><div class="line">                v1 = e[<span class="number">1</span>]</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                v1 = e[<span class="number">0</span>]</div><div class="line">            <span class="keyword">if</span> v1 <span class="keyword">not</span> <span class="keyword">in</span> map:     <span class="comment">#v1不在记录中（新探测到的点）</span></div><div class="line">                vp.put(v1)        <span class="comment">#v1加入队列尾（待处理点）</span></div><div class="line">                map[v1] = d       <span class="comment">#新增记录</span></div><div class="line">            <span class="keyword">elif</span> d &lt; map[v1]:     <span class="comment">#v1已在记录中，但新路径更短</span></div><div class="line">                map[v1] = d       <span class="comment">#更新记录</span></div><div class="line"><span class="keyword">print</span> map</div></pre></td></tr></table></figure>
+<p>输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&apos;A&apos;: 0, &apos;C&apos;: 3, &apos;B&apos;: 5, &apos;E&apos;: 7, &apos;D&apos;: 6, &apos;F&apos;: 9&#125;</div></pre></td></tr></table></figure></p>
 <p>将图拿来确认一下正确性。（算法到此已可算完成了。）<br> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""></p>
-<h2 id="记录路径">记录路径</h2><p>　　以上只是输出了最短距离，但并没有记录路径，再稍微改造一下，并改以B为起点，并增加一些打印信息，方便了解算法运行过程：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">map=</span>&#123;<span class="string">"B"</span>:[<span class="string">"B"</span>,<span class="number">0</span>]&#125;</span><br><span class="line"><span class="variable">vp =</span> Queue.Queue(<span class="variable">maxsize=</span><span class="number">0</span>)</span><br><span class="line">vp.put(<span class="string">"B"</span>)</span><br><span class="line"><span class="comment">#first step</span></span><br><span class="line">while(not vp.empty()):</span><br><span class="line">    <span class="variable">v=</span>vp.get()                          <span class="comment">#对待处理点v，执行</span></span><br><span class="line">    print <span class="string">"dealing with: "</span>+v</span><br><span class="line">    for e <span class="keyword">in</span> g:                         <span class="comment">#遍历边集</span></span><br><span class="line">        <span class="keyword">if</span> v <span class="keyword">in</span> e[<span class="number">0</span>:<span class="number">2</span>]:                 <span class="comment">#与v相连的边</span></span><br><span class="line">            <span class="variable">d =</span> <span class="built_in">map</span>[v][<span class="number">1</span>]+e[<span class="number">2</span>]          <span class="comment">#计算距离</span></span><br><span class="line">            <span class="keyword">if</span> <span class="variable">v =</span>= e[<span class="number">0</span>]:               <span class="comment">#无向边，需要确定另一顶点v1</span></span><br><span class="line">                <span class="variable">v1 =</span> e[<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="variable">v1 =</span> e[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> v1 not <span class="keyword">in</span> <span class="built_in">map</span>:                   <span class="comment">#v1不在记录中</span></span><br><span class="line">                print <span class="string">"adding :"</span>+v1</span><br><span class="line">                <span class="built_in">map</span>[v1] = [<span class="built_in">map</span>[v][<span class="number">0</span>]+v1,d]       <span class="comment">#加入记录</span></span><br><span class="line">                print <span class="built_in">map</span></span><br><span class="line">                vp.put(v1)                      <span class="comment">#将v1加入待处理点</span></span><br><span class="line">            elif d &lt; <span class="built_in">map</span>[v1][<span class="number">1</span>]:                <span class="comment">#已有记录，但新路径更短</span></span><br><span class="line">                print <span class="string">"update :"</span>+v1</span><br><span class="line">                <span class="built_in">map</span>[v1] = [<span class="built_in">map</span>[v][<span class="number">0</span>]+v1,d]       <span class="comment">#更新记录</span></span><br><span class="line">                print <span class="built_in">map</span></span><br></pre></td></tr></table></figure></p>
-<p>输出为：<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">B</span> </span><br><span class="line"><span class="atom">adding</span> :<span class="name">A</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BA'</span>, <span class="number">6</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>]&#125;</span><br><span class="line"><span class="atom">adding</span> :<span class="name">C</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BA'</span>, <span class="number">6</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>]&#125;</span><br><span class="line"><span class="atom">adding</span> :<span class="name">D</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BA'</span>, <span class="number">6</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>]&#125;</span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">A</span></span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">C</span></span><br><span class="line"><span class="atom">update</span> :<span class="name">A</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BCA'</span>, <span class="number">5</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>]&#125;</span><br><span class="line"><span class="atom">adding</span> :<span class="name">E</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BCA'</span>, <span class="number">5</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'E'</span>: [<span class="string">'BCE'</span>, <span class="number">6</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>]&#125;</span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">D</span></span><br><span class="line"><span class="atom">adding</span> :<span class="name">F</span></span><br><span class="line">&#123;<span class="string">'A'</span>: [<span class="string">'BCA'</span>, <span class="number">5</span>], <span class="string">'C'</span>: [<span class="string">'BC'</span>, <span class="number">2</span>], <span class="string">'B'</span>: [<span class="string">'B'</span>, <span class="number">0</span>], <span class="string">'E'</span>: [<span class="string">'BCE'</span>, <span class="number">6</span>], <span class="string">'D'</span>: [<span class="string">'BD'</span>, <span class="number">5</span>], <span class="string">'F'</span>: [<span class="string">'BDF'</span>, <span class="number">8</span>]&#125;</span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">E</span></span><br><span class="line"><span class="atom">dealing</span> <span class="atom">with</span>: <span class="name">F</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="记录路径">记录路径</h2><p>　　以上只是输出了最短距离，但并没有记录路径，再稍微改造一下，并改以B为起点，并增加一些打印信息，方便了解算法运行过程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">map=&#123;&quot;B&quot;:[&quot;B&quot;,0]&#125;</div><div class="line">vp = Queue.Queue(maxsize=0)</div><div class="line">vp.put(&quot;B&quot;)</div><div class="line">#first step</div><div class="line">while(not vp.empty()):</div><div class="line">    v=vp.get()                          #对待处理点v，执行</div><div class="line">    print &quot;dealing with: &quot;+v</div><div class="line">    for e in g:                         #遍历边集</div><div class="line">        if v in e[0:2]:                 #与v相连的边</div><div class="line">            d = map[v][1]+e[2]          #计算距离</div><div class="line">            if v == e[0]:               #无向边，需要确定另一顶点v1</div><div class="line">                v1 = e[1]</div><div class="line">            else:</div><div class="line">                v1 = e[0]</div><div class="line">            if v1 not in map:                   #v1不在记录中</div><div class="line">                print &quot;adding :&quot;+v1</div><div class="line">                map[v1] = [map[v][0]+v1,d]       #加入记录</div><div class="line">                print map</div><div class="line">                vp.put(v1)                      #将v1加入待处理点</div><div class="line">            elif d &lt; map[v1][1]:                #已有记录，但新路径更短</div><div class="line">                print &quot;update :&quot;+v1</div><div class="line">                map[v1] = [map[v][0]+v1,d]       #更新记录</div><div class="line">                print map</div></pre></td></tr></table></figure></p>
+<p>输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">dealing with: B </div><div class="line">adding :A</div><div class="line">&#123;&apos;A&apos;: [&apos;BA&apos;, 6], &apos;B&apos;: [&apos;B&apos;, 0]&#125;</div><div class="line">adding :C</div><div class="line">&#123;&apos;A&apos;: [&apos;BA&apos;, 6], &apos;C&apos;: [&apos;BC&apos;, 2], &apos;B&apos;: [&apos;B&apos;, 0]&#125;</div><div class="line">adding :D</div><div class="line">&#123;&apos;A&apos;: [&apos;BA&apos;, 6], &apos;C&apos;: [&apos;BC&apos;, 2], &apos;B&apos;: [&apos;B&apos;, 0], &apos;D&apos;: [&apos;BD&apos;, 5]&#125;</div><div class="line">dealing with: A</div><div class="line">dealing with: C</div><div class="line">update :A</div><div class="line">&#123;&apos;A&apos;: [&apos;BCA&apos;, 5], &apos;C&apos;: [&apos;BC&apos;, 2], &apos;B&apos;: [&apos;B&apos;, 0], &apos;D&apos;: [&apos;BD&apos;, 5]&#125;</div><div class="line">adding :E</div><div class="line">&#123;&apos;A&apos;: [&apos;BCA&apos;, 5], &apos;C&apos;: [&apos;BC&apos;, 2], &apos;B&apos;: [&apos;B&apos;, 0], &apos;E&apos;: [&apos;BCE&apos;, 6], &apos;D&apos;: [&apos;BD&apos;, 5]&#125;</div><div class="line">dealing with: D</div><div class="line">adding :F</div><div class="line">&#123;&apos;A&apos;: [&apos;BCA&apos;, 5], &apos;C&apos;: [&apos;BC&apos;, 2], &apos;B&apos;: [&apos;B&apos;, 0], &apos;E&apos;: [&apos;BCE&apos;, 6], &apos;D&apos;: [&apos;BD&apos;, 5], &apos;F&apos;: [&apos;BDF&apos;, 8]&#125;</div><div class="line">dealing with: E</div><div class="line">dealing with: F</div></pre></td></tr></table></figure></p>
 <p>再次将图拿来确认一下正确性。<br> <img src="http://ww2.sinaimg.cn/large/55f247cbgw1ery11zd5kaj20kh0alwh1.jpg" alt=""><br>算法至此完成。</p>
 <h2 id="总结">总结</h2><p>　　dijkstar算法的正确性是如何保证的呢？因为算法在任一时刻，都保证了：</p>
 <blockquote>
@@ -139,7 +141,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/dijkstra/">dijkstra</a><a href="/tags/图论/">图论</a><a href="/tags/最短路径/">最短路径</a><a href="/tags/算法/">算法</a>
+  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/dijkstra/">dijkstra</a><a href="/tags/最短路径/">最短路径</a><a href="/tags/图论/">图论</a>
   </div>
 
 </div>
@@ -162,7 +164,7 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/05/09/hex2decStr/" title="C语言笔试题：十六与十进制字符串转换">
+ <a href="/2015/05/10/hex2decStr/" title="C语言笔试题：十六与十进制字符串转换">
   <strong>上一篇：</strong><br/>
   <span>
   C语言笔试题：十六与十进制字符串转换</span>
@@ -208,7 +210,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -224,11 +226,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -252,11 +254,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -264,23 +266,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -367,7 +369,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

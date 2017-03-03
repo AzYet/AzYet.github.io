@@ -19,6 +19,7 @@
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="sqlite3通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。sqliste3包含很多有用的命令，如.dump可以打印数据库内容，.schema可以打印现在table的sql create声明，而且执行的速度很快。
 你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="adb学习笔记(三)之sqlite3,屏幕录制,logcat,monkey,wifi连接及其它">
 <meta name="twitter:description" content="sqlite3通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。sqliste3包含很多有用的命令，如.dump可以打印数据库内容，.schema可以打印现在table的sql create声明，而且执行的速度很快。
@@ -35,7 +36,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -102,14 +103,14 @@
 		<h2 id="sqlite3">sqlite3</h2><p>通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。<code>sqliste3</code>包含很多有用的命令，如<code>.dump</code>可以打印数据库内容，<code>.schema</code>可以打印现在table的sql create声明，而且执行的速度很快。</p>
 <p>你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目录：<code>/data/data/&lt;package_name&gt;/databases/</code></p>
 <p>以下是一个例子：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">adb -<span class="keyword">s</span> emulator-<span class="number">5554</span> <span class="keyword">shell</span></span><br><span class="line"># sqlite3 /data/data/<span class="keyword">com</span>.example.google.rss.rssexample/databases/rssitems.db</span><br><span class="line">SQLite <span class="keyword">version</span> <span class="number">3.3</span>.<span class="number">12</span></span><br><span class="line">Enter <span class="string">".help"</span> <span class="keyword">for</span> instructions</span><br><span class="line">.... enter commands, then <span class="keyword">quit</span>...</span><br><span class="line">sqlite&gt; .<span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">adb -s emulator-5554 shell</div><div class="line"># sqlite3 /data/data/com.example.google.rss.rssexample/databases/rssitems.db</div><div class="line">SQLite version 3.3.12</div><div class="line">Enter &quot;.help&quot; for instructions</div><div class="line">.... enter commands, then quit...</div><div class="line">sqlite&gt; .exit</div></pre></td></tr></table></figure>
 <p>进入sqlite3后就可以使用sqlite3的命令了,退出可使用<code>exit</code>或者<code>ctrl+d</code>.</p>
 <a id="more"></a>
 <h2 id="屏幕录制">屏幕录制</h2><p><code>screenrecord</code>命令是一个用以录制android 4.4以上版本的设备显示的shell工具,将activity显示录入mpeg4文件中,你可以拿来当作视频展示用.也可用于录制视频宣传和教程.</p>
 <p>其命令格式如下</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>adb shell screenrecord /sdcard/demo.mp4</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb shell screenrecord /sdcard/demo.mp4</div></pre></td></tr></table></figure>
 <p>使用ctrl+c来停止录制,或者3分钟后自动结束,或者可以用<code>--set-limit</code>来设定超时时间.</p>
-<p>以下是录制与下载视频文件的过程<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ adb <span class="built_in">shell</span></span><br><span class="line"><span class="built_in">shell</span>@ $ screenrecord <span class="comment">--verbose /sdcard/demo.mp4</span></span><br><span class="line">(press Ctrl-C <span class="built_in">to</span> <span class="built_in">stop</span>)</span><br><span class="line"><span class="built_in">shell</span>@ $ exit</span><br><span class="line">$ adb pull /sdcard/demo.mp4</span><br></pre></td></tr></table></figure></p>
+<p>以下是录制与下载视频文件的过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ adb shell</div><div class="line">shell@ $ screenrecord --verbose /sdcard/demo.mp4</div><div class="line">(press Ctrl-C to stop)</div><div class="line">shell@ $ exit</div><div class="line">$ adb pull /sdcard/demo.mp4</div></pre></td></tr></table></figure></p>
 <p>screenrecord使用设备的显示分辨率和方向作为默认值,也可设定为任意支持的分辨率和比特率. </p>
 <p>你应该知道的screenrecord局限:</p>
 <ol>
@@ -124,9 +125,9 @@
 <h4 id="—verbose">—verbose</h4><p>在CLI中打印日志,如果不设置运行时将无任何输出.</p>
 <h2 id="Monkey">Monkey</h2><p>UI/Application Exerciser  Monkey是一个测试用的程序,它能产生大量伪随机但可重复的用户动作,如点击,按压,手势以及一些系统级的事件.</p>
 <p>简单的使用命令如下,它将打开应用,发送500个随机操作.</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell monkey -v -<span class="tag">p</span> your<span class="class">.package</span><span class="class">.name</span> <span class="number">500</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell monkey -v -p your.package.name 500</div></pre></td></tr></table></figure>
 <p>更详细的文档参见<a href="http://developer.android.com/tools/help/monkey.html" target="_blank" rel="external"> UI/Application Exerciser Monkey</a></p>
-<h2 id="其它shell命令">其它shell命令</h2><p>以下操作会列出所有可用shell命令<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="keyword">shell</span> <span class="keyword">ls</span> /<span class="built_in">system</span>/bin</span><br></pre></td></tr></table></figure></p>
+<h2 id="其它shell命令">其它shell命令</h2><p>以下操作会列出所有可用shell命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell ls /system/bin</div></pre></td></tr></table></figure></p>
 <p>大部命令都有帮助信息.</p>
 <p>下表列出最常用的5个命令的简介.</p>
 <h3 id="dumpsys">dumpsys</h3><p>dump系统数据到屏幕</p>
@@ -136,7 +137,7 @@
 <h3 id="start/stop">start/stop</h3><p>开始(停止执行)一个设备实例</p>
 <h2 id="开启logcat">开启logcat</h2><p>安卓的日志系统提供一种收集和查看系统调试信息的机制. 来自应用的系统不同部分的日志被缓存到一个环形的系列日志中,可以被logcat命令查看和过滤.</p>
 <p>logcat的基本用法为:</p>
-<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="atom">adb</span>] <span class="atom">logcat</span> [<span class="atom">option</span>] ... [<span class="atom">filter</span>-<span class="atom">spec</span>] ...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[adb] logcat [option] ... [filter-spec] ...</div></pre></td></tr></table></figure>
 <h2 id="关闭adb_server">关闭adb server</h2><p>在一些情况下可能需要关闭adb server再启动,比如失去响应时,重启可能会解决问题.</p>
 <p>使用kill-server命令可以终止server, 再次使用adb命令会自动启动server.</p>
 <h2 id="无线使用">无线使用</h2><p>adb通常通过USB使用,但是也可以使用WIFI连接.</p>
@@ -144,17 +145,17 @@
 <li>将设备和adb主机连接到同一wifi下,但并不一定所有的wifi都适合, 也许还需要配置合适的防火墙规则.</li>
 <li>将设备用USB连接到主机</li>
 <li><p>确保adb以usb方式运行</p>
-<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb usb</span><br><span class="line">restarting <span class="flow">in</span> USB <span class="built_in">mode</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb usb</div><div class="line">restarting in USB mode</div></pre></td></tr></table></figure>
 </li>
 <li><p>通过usb连接设备</p>
 </li>
 <li><p>将adb主机以tcpip方式重启</p>
-<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb tcpip <span class="number">5555</span></span><br><span class="line">restarting <span class="flow">in</span> TCP <span class="built_in">mode</span> port: <span class="number">5555</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb tcpip 5555</div><div class="line">restarting in TCP mode port: 5555</div></pre></td></tr></table></figure>
 </li>
 <li><p>查看设备的ip</p>
 </li>
 <li><p>将adb主机连接到设备</p>
-<figure class="highlight ruleslanguage"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb connect <span class="array">#.</span><span class="array">#.</span><span class="array">#.</span>#</span><br><span class="line">connected to <span class="array">#.</span><span class="array">#.</span><span class="array">#.</span>#:<span class="number">5555</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb connect #.#.#.#</div><div class="line">connected to #.#.#.#:5555</div></pre></td></tr></table></figure>
 </li>
 <li><p>断开usb,确认连接正常</p>
 </li>
@@ -168,7 +169,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/andorid/">andorid</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/adb/">adb</a><a href="/tags/andorid/">andorid</a>
   </div>
 
 </div>
@@ -237,7 +238,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -253,11 +254,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -281,11 +282,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -293,23 +294,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -396,7 +397,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

@@ -12,17 +12,18 @@
 
     
     <meta name="description" content="近日实验室一合作项目需要将校内的某web站点发现到公网，但是校内的地址都是10.0.0.0/8的私网地址，对外不可见。如果要向校方申请公网ip未免太过麻烦，想到自己有一VPS，拿来做端口转发应该是满足这个需求的。
-　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用loc">
+　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用l">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用ssh端口转发使内网服务对公网可见">
 <meta property="og:url" content="http://azyet.github.io/2015/04/23/sshPortForwarding/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="近日实验室一合作项目需要将校内的某web站点发现到公网，但是校内的地址都是10.0.0.0/8的私网地址，对外不可见。如果要向校方申请公网ip未免太过麻烦，想到自己有一VPS，拿来做端口转发应该是满足这个需求的。
-　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用loc">
+　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用l">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用ssh端口转发使内网服务对公网可见">
 <meta name="twitter:description" content="近日实验室一合作项目需要将校内的某web站点发现到公网，但是校内的地址都是10.0.0.0/8的私网地址，对外不可见。如果要向校方申请公网ip未免太过麻烦，想到自己有一VPS，拿来做端口转发应该是满足这个需求的。
-　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用loc">
+　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用l">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -35,7 +36,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -114,14 +115,14 @@
 <li>VPS的ipv6地址：2001:470:66:x::x</li>
 </ul>
 </blockquote>
-<p>　　在VPS上运行:<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -<span class="constant">L </span><span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span><span class="symbol">:</span><span class="number">8080</span><span class="symbol">:localhost</span><span class="symbol">:</span><span class="number">80</span> user<span class="variable">@2001</span><span class="symbol">:da8</span><span class="symbol">:</span><span class="number">215</span><span class="symbol">:</span><span class="number">306</span><span class="symbol">:</span><span class="number">8024</span><span class="symbol">:x</span><span class="symbol">:x</span><span class="symbol">:x</span></span><br></pre></td></tr></table></figure></p>
+<p>　　在VPS上运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -L 0.0.0.0:8080:localhost:80 user@2001:da8:215:306:8024:x:x:x</div></pre></td></tr></table></figure></p>
 <p>通过-L参数指定本地和远程地址＋端口，就将ＶＰＳ的8080端口映射到了校内主机的80端口，所有访问104.x.x.x:8080的流量将通过ssh连接转向10.x.x.x:80。</p>
 <p>　　所以这种方式是有限制的，如果没有ipv6的条件，就只能用以下的方式了。</p>
-<h2 id="Remote方式">Remote方式</h2><p>　　和本地转发类似的，这次是将远程的某端口映射到本地某端口，在我们的场景下，这次就要在本地主机(10.x.x.x)上操作了。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -R <span class="number">8080</span>:localhost:<span class="number">80</span> user@<span class="number">104</span><span class="class">.x</span><span class="class">.x</span><span class="class">.x</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Remote方式">Remote方式</h2><p>　　和本地转发类似的，这次是将远程的某端口映射到本地某端口，在我们的场景下，这次就要在本地主机(10.x.x.x)上操作了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -R 8080:localhost:80 user@104.x.x.x</div></pre></td></tr></table></figure></p>
 <p>当然使用IPv6地址也是可以。这次使用的参数是-R，地址端口指定的顺序也相应地变成了先远程后本地。</p>
 <p>光这样还是不行的，因为需要远程主机的sshd（server）作端口转发，所以相应地要对其sshd作配置。</p>
-<p>以下是对远程主机的操作(VPS):<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#edit file /etc/ssh/sshd_config, add the following line</span></span><br><span class="line"><span class="title">GatewayPorts</span> <span class="built_in">yes</span></span><br></pre></td></tr></table></figure></p>
-<p>重启sshd<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/i</span>nit.d<span class="regexp">/sshd restart</span></span><br></pre></td></tr></table></figure></p>
+<p>以下是对远程主机的操作(VPS):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#edit file /etc/ssh/sshd_config, add the following line</div><div class="line">GatewayPorts yes</div></pre></td></tr></table></figure></p>
+<p>重启sshd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/sshd restart</div></pre></td></tr></table></figure></p>
 <p>还需要重新ssh连接，才最终完成。</p>
   
 	</div>
@@ -131,7 +132,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/port-forwarding/">port forwarding</a><a href="/tags/ssh/">ssh</a><a href="/tags/公网/">公网</a><a href="/tags/端口转发/">端口转发</a>
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/ssh/">ssh</a><a href="/tags/port-forwarding/">port forwarding</a><a href="/tags/端口转发/">端口转发</a><a href="/tags/公网/">公网</a>
   </div>
 
 </div>
@@ -200,7 +201,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -216,11 +217,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -244,11 +245,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -256,23 +257,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -359,7 +360,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

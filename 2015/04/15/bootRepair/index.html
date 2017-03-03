@@ -23,11 +23,13 @@
 整体来说，">
 <meta property="og:image" content="http://pix.toile-libre.org/upload/original/1335260967.png">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1er6kx8z3clj20gl0cumzv.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重装Windows后的Grub修复">
 <meta name="twitter:description" content="众所周知windows安装会覆盖Grub信息，导致Linux无法启动，修复的方法大概有两种，一种是继续使用windows的引导，加上Linux的Entry，另一种则是重新安装grub。
 个人来说偏好第二种，windows的BCD比较简陋，功能也很简单，而grub则要漂亮和强大一些。另外就是LInux的liveCD也使得grub的安装非常方便，推荐使用ubuntu的Desktop版CD。
 整体来说，">
+<meta name="twitter:image" content="http://pix.toile-libre.org/upload/original/1335260967.png">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -40,7 +42,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -107,10 +109,10 @@
 		<p>众所周知windows安装会覆盖Grub信息，导致Linux无法启动，修复的方法大概有两种，一种是继续使用windows的引导，加上Linux的Entry，另一种则是重新安装grub。</p>
 <p>个人来说偏好第二种，windows的BCD比较简陋，功能也很简单，而grub则要漂亮和强大一些。另外就是LInux的liveCD也使得grub的安装非常方便，推荐使用ubuntu的Desktop版CD。</p>
 <p>整体来说，重装windows后grub的修复有以下几步。<br><a id="more"></a></p>
-<h3 id="一、制作启动U盘">一、制作启动U盘</h3><p>如果你还有光驱和光盘，那就直接用光盘吧。启动盘的制作看<a href="http://azyet.github.io/2015/04/14/createUbuntuBootUsbDiskInWindows/" target="_blank" rel="external">这里</a>。之后从U盘（光盘）启动进入Ubuntu。</p>
+<h3 id="一、制作启动U盘">一、制作启动U盘</h3><p>如果你还有光驱和光盘，那就直接用光盘吧。启动盘的制作看<a href="http://azyet.github.io/2015/04/14/createUbuntuBootUsbDiskInWindows/">这里</a>。之后从U盘（光盘）启动进入Ubuntu。</p>
 <h3 id="二、安装Boot-Repair">二、安装Boot-Repair</h3><p>BootRepair是一款图形化的全自动Grub安装修复工具，它能自动检测你所有硬盘上的操作系统并生成相应的Grub配置并将其安装到硬盘上。</p>
 <p>LiveCD是不包含BootRepair的，所以需要自己安装，在这之前，确保网络通畅。</p>
-<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo<span class="instruction"> add-apt-repository </span>ppa:yannubuntu/boot-repair</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y boot-repair &amp;&amp; boot-repair</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo add-apt-repository ppa:yannubuntu/boot-repair</div><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install -y boot-repair &amp;&amp; boot-repair</div></pre></td></tr></table></figure>
 <h3 id="三、修复">三、修复</h3><p><img src="http://pix.toile-libre.org/upload/original/1335260967.png" alt="boorepair"><br>上面的命令在安装完成之后就会立即启动bootRepair，出现如上界面之后，直接点击Recommended repair就行了。注意点击之后可能很长时间长有反应，因为它立刻会去扫描你的硬盘，时间长短视你的硬盘数量和分区情况而异，不要重复点击或者关闭程序。</p>
 <p><strong>在修复过程中，可能会有一些对话框出现，请仔细阅读其文字遵照执行。</strong></p>
 <p>很可能会遇到的一个情况就是要包含grub的源，直接打开software center，在设置中将<strong>universe</strong>勾上。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1er6kx8z3clj20gl0cumzv.jpg" alt="add universe "><br>然后<strong>apt-get update</strong>即可。</p>
@@ -119,7 +121,7 @@
 <p>当提示修复安装完成后，就可以reboot了，记得这次要从硬盘启动。</p>
 <h3 id="五、其它">五、其它</h3><p>重启之后，你应该就能看到熟悉的Grub已经回来了，但是可能选项却不齐全。没有关系，只要你的能够进行Ubuntu，一切都好说。</p>
 <p>我遇到的情况就是BootRepair为我自动添加了windows和Ubuntu，但是没有Centos 7。</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> update-grub</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo update-grub</div></pre></td></tr></table></figure>
 <p>一个指令就让CentOS回来了，不得不说Ubuntu在易用性方面还是非常不错，虽然用久就总是会有一些莫明的错误。</p>
   
 	</div>
@@ -129,7 +131,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/grub/">grub</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/修复/">修复</a><a href="/tags/启动/">启动</a><a href="/tags/引导/">引导</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/grub/">grub</a><a href="/tags/修复/">修复</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/启动/">启动</a><a href="/tags/引导/">引导</a>
   </div>
 
 </div>
@@ -198,7 +200,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -214,11 +216,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -242,11 +244,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -254,23 +256,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -357,7 +359,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

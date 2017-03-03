@@ -12,18 +12,20 @@
 
     
     <meta name="description" content="在多个主机间共享文件，Samba是一个不错的选择，速度快而且稳定，不同系统之间都可以访问，包括Android，用它架设一个简单媒体服务器是不错的选择。之前在Ubuntu开启共享是十分简单地，文件管理里自带设置，在其它CentOS6的VPS上我也设置过，并不复杂，但是在CentOS7上同样设置之后，虽然能查到到共享目录，但是无法打开，显示没有权限。　　
-　　几经折腾之后，怀疑是SELinux在作祟，">
+　　几经折腾之后，怀疑是SELinux在作">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS7上开启Samba服务，其它主机没有权限访问的问题">
 <meta property="og:url" content="http://azyet.github.io/2015/04/21/sambaCounterNoPermission/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="在多个主机间共享文件，Samba是一个不错的选择，速度快而且稳定，不同系统之间都可以访问，包括Android，用它架设一个简单媒体服务器是不错的选择。之前在Ubuntu开启共享是十分简单地，文件管理里自带设置，在其它CentOS6的VPS上我也设置过，并不复杂，但是在CentOS7上同样设置之后，虽然能查到到共享目录，但是无法打开，显示没有权限。　　
-　　几经折腾之后，怀疑是SELinux在作祟，">
+　　几经折腾之后，怀疑是SELinux在作">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1erddz8kp5yj20eu05ewff.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7上开启Samba服务，其它主机没有权限访问的问题">
 <meta name="twitter:description" content="在多个主机间共享文件，Samba是一个不错的选择，速度快而且稳定，不同系统之间都可以访问，包括Android，用它架设一个简单媒体服务器是不错的选择。之前在Ubuntu开启共享是十分简单地，文件管理里自带设置，在其它CentOS6的VPS上我也设置过，并不复杂，但是在CentOS7上同样设置之后，虽然能查到到共享目录，但是无法打开，显示没有权限。　　
-　　几经折腾之后，怀疑是SELinux在作祟，">
+　　几经折腾之后，怀疑是SELinux在作">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1erddz8kp5yj20eu05ewff.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -36,7 +38,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -113,11 +115,11 @@
 <ol>
 <li>强制(enforcing) 所有违反策略的行为都会被禁止，并被内核记录</li>
 <li>允许(permissive) 违反策略的行为不被禁止，但会产生警告</li>
-<li>禁用(disabled) 禁用SELinux<br>　　所以简单地设置其模式为permissive就可以让samba工作了．<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">setenforce</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<li>禁用(disabled) 禁用SELinux<br>　　所以简单地设置其模式为permissive就可以让samba工作了．<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setenforce 0</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="设置SELinux">设置SELinux</h2><p>　　既然SELinux如此强大（已经是Linux内核一部分了）,那么还是学习一下简单地设置吧.<br>　　打开samba_domain_controller配置<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setsebool -P samba_domain_controller <span class="function_start"><span class="keyword">on</span></span></span><br></pre></td></tr></table></figure></p>
-<p>　　利用 semanage 打开你期望在网络上分享的目录，否则只能看到空目录．<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">semanage fcontext -a -t samba_share_t '/<span class="variable">&lt;share_dir&gt;</span>(/.<span class="keyword">*</span>)?'</span><br><span class="line">restorecon -R /<span class="variable">&lt;share_dir&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="设置SELinux">设置SELinux</h2><p>　　既然SELinux如此强大（已经是Linux内核一部分了）,那么还是学习一下简单地设置吧.<br>　　打开samba_domain_controller配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setsebool -P samba_domain_controller on</div></pre></td></tr></table></figure></p>
+<p>　　利用 semanage 打开你期望在网络上分享的目录，否则只能看到空目录．<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">semanage fcontext -a -t samba_share_t &apos;/&lt;share_dir&gt;(/.*)?&apos;</div><div class="line">restorecon -R /&lt;share_dir&gt;</div></pre></td></tr></table></figure></p>
 <p>至此Samba的SELinux相关设置完成.</p>
   
 	</div>
@@ -127,7 +129,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/CentOS/">CentOS</a><a href="/tags/Samba/">Samba</a><a href="/tags/selinux/">selinux</a><a href="/tags/共享/">共享</a><a href="/tags/没有权限/">没有权限</a>
+  <span></span> <a href="/tags/Samba/">Samba</a><a href="/tags/CentOS/">CentOS</a><a href="/tags/没有权限/">没有权限</a><a href="/tags/selinux/">selinux</a><a href="/tags/共享/">共享</a>
   </div>
 
 </div>
@@ -196,7 +198,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -212,11 +214,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -240,11 +242,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -252,23 +254,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -355,7 +357,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

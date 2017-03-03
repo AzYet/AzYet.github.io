@@ -22,11 +22,13 @@
 在网络设置中共享
 点击桌面右上角的网络连接图标，选择最后一项e">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1esow7dhwtcj20b4094ab9.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ubuntu14.04无线共享设置">
 <meta name="twitter:description" content="在ubuntu中设置无线共享是很方便的，有许多开源的工具可以使用，例如hostapd+dnsmasq，但是升级到14.10之后似乎以前的方法不太适用了，未知是因为否与系统的network-manager冲突的关系。即使如此，不妨就使用network-manager来设置，但是总也不成功。经过一番google，终于找到了一个可行的方案。
 在网络设置中共享
 点击桌面右上角的网络连接图标，选择最后一项e">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1esow7dhwtcj20b4094ab9.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -39,7 +41,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -121,13 +123,13 @@
 <li><p>现在可以保存了。</p>
 </li>
 </ol>
-<h2 id="对生成的配置文件进行修改">对生成的配置文件进行修改</h2><p>如果创建时没有设置自己的“connection name”，那么<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi <span class="regexp">/etc/</span>NetworkManager<span class="regexp">/system-connections/</span>Wi-Fi\ connection\ <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="对生成的配置文件进行修改">对生成的配置文件进行修改</h2><p>如果创建时没有设置自己的“connection name”，那么<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/NetworkManager/system-connections/Wi-Fi\ connection\ 1</div></pre></td></tr></table></figure></p>
 <p>如果自定义了name，那么将路径最后的Wi-Fi\ connection\ 1 换成自己的名字</p>
-<p>将以下三处修改，分别为第一组中的<code>type</code> , 第二组的<code>[组名]</code>，以及<code>mode</code><br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[connection]</span></span><br><span class="line"><span class="setting">id=<span class="value">vaio-infras</span></span></span><br><span class="line"><span class="setting">uuid=<span class="value"><span class="number">923</span>e05e6-<span class="number">30</span>b8-<span class="number">455</span>a-bf4a-<span class="number">40</span>a0d6bdb6f9</span></span></span><br><span class="line"><span class="setting">type=<span class="value"><span class="number">802</span>-<span class="number">11</span>-wireless</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">[802-11-wireless]</span></span><br><span class="line"><span class="setting">ssid=<span class="value">vaio-infras</span></span></span><br><span class="line"><span class="setting">mode=<span class="value">ap</span></span></span><br></pre></td></tr></table></figure></p>
+<p>将以下三处修改，分别为第一组中的<code>type</code> , 第二组的<code>[组名]</code>，以及<code>mode</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[connection]</div><div class="line">id=vaio-infras</div><div class="line">uuid=923e05e6-30b8-455a-bf4a-40a0d6bdb6f9</div><div class="line">type=802-11-wireless</div><div class="line"></div><div class="line">[802-11-wireless]</div><div class="line">ssid=vaio-infras</div><div class="line">mode=ap</div></pre></td></tr></table></figure></p>
 <h2 id="启用">启用</h2><p>依然从右上角的连接图标进入，选择<code>connect to hidden wifi network</code>，在弹出的窗口中选择自己刚刚创建的连接名，一会之后可以查看无线连接状态，应该已经连接了自定义的网络。</p>
 <p>这进你就可以用手机或者其它电脑连接此SSID，共享网络完成。</p>
 <h2 id="后记">后记</h2><p>我的PC是开启了VPN的，所以当创建网络共享以后，所有连接此wifi的电脑无需任何设置也接入了VPN，可谓“一人得道，鸡犬升天”，非常的高效:p</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chen<span class="variable">@vaio</span><span class="symbol">:/etc/NetworkManager/system-connections</span><span class="variable">$ </span>sudo iptables -t nat  -<span class="constant">L POSTROUTING </span>-nvx</span><br><span class="line"><span class="constant">Chain POSTROUTING </span>(policy <span class="constant">ACCEPT </span><span class="number">1580</span> packets, <span class="number">122353</span> bytes)</span><br><span class="line">    pkts      bytes target     prot opt <span class="keyword">in</span>     out     source               destination         </span><br><span class="line">    <span class="number">1182</span>    <span class="number">71680</span> <span class="constant">MASQUERADE </span> all  --  *      *       <span class="number">10.42</span>.<span class="number">0</span>.<span class="number">0</span>/<span class="number">24</span>        !<span class="number">10.42</span>.<span class="number">0</span>.<span class="number">0</span>/<span class="number">24</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/etc/NetworkManager/system-connections$ sudo iptables -t nat  -L POSTROUTING -nvx</div><div class="line">Chain POSTROUTING (policy ACCEPT 1580 packets, 122353 bytes)</div><div class="line">    pkts      bytes target     prot opt in     out     source               destination         </div><div class="line">    1182    71680 MASQUERADE  all  --  *      *       10.42.0.0/24        !10.42.0.0/24</div></pre></td></tr></table></figure>
 <p>这是因为NAT设置的出口是系统默认网关。</p>
   
 	</div>
@@ -137,7 +139,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/wifi/">wifi</a><a href="/tags/wireless/">wireless</a><a href="/tags/无线共享/">无线共享</a><a href="/tags/网络/">网络</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/网络/">网络</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/无线共享/">无线共享</a><a href="/tags/wifi/">wifi</a><a href="/tags/wireless/">wireless</a>
   </div>
 
 </div>
@@ -169,7 +171,7 @@
 
 
 <div class="next">
-<a href="/2015/05/30/hindsightLearningNote3/"  title="simics hindsight学习笔记（三）">
+<a href="/2015/05/31/hindsightLearningNote3/"  title="simics hindsight学习笔记（三）">
  <strong>下一篇：</strong><br/> 
  <span>simics hindsight学习笔记（三）
 </span>
@@ -206,7 +208,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -222,11 +224,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -250,11 +252,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -262,23 +264,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -365,7 +367,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

@@ -13,22 +13,24 @@
     
     <meta name="description" content="校园网关登录的常规方式是打开浏览器打开任意（百度）网址，就会自动重定向到登录页面，输入用户名密码即可。但是对于远程Linux服务器或者实验用的虚拟机来说，通常是没有浏览器或者Xserver的，那么就只能用脚本来登录了。
 　　校内论坛上有同学早些时候放出的版本，但是已经失效了，应该是登录页更新所致，粗略一看脚本并不复杂，所以不如自己搞一个。
-网页登录时的后台动作　　祭出Chrome，看看在点击登录按">
+网页登录时的后台动作　　祭出Chrome，看看在点击登">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell登录校园网关">
 <meta property="og:url" content="http://azyet.github.io/2015/05/05/loginCampusNetworkViaShellScript/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="校园网关登录的常规方式是打开浏览器打开任意（百度）网址，就会自动重定向到登录页面，输入用户名密码即可。但是对于远程Linux服务器或者实验用的虚拟机来说，通常是没有浏览器或者Xserver的，那么就只能用脚本来登录了。
 　　校内论坛上有同学早些时候放出的版本，但是已经失效了，应该是登录页更新所致，粗略一看脚本并不复杂，所以不如自己搞一个。
-网页登录时的后台动作　　祭出Chrome，看看在点击登录按">
+网页登录时的后台动作　　祭出Chrome，看看在点击登">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1ertfhqilo9j20lr04bmxt.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/55f247cbgw1ertfnc9v9tj209k05ujrt.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1ertg0xoc5tj209j043aaa.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell登录校园网关">
 <meta name="twitter:description" content="校园网关登录的常规方式是打开浏览器打开任意（百度）网址，就会自动重定向到登录页面，输入用户名密码即可。但是对于远程Linux服务器或者实验用的虚拟机来说，通常是没有浏览器或者Xserver的，那么就只能用脚本来登录了。
 　　校内论坛上有同学早些时候放出的版本，但是已经失效了，应该是登录页更新所致，粗略一看脚本并不复杂，所以不如自己搞一个。
-网页登录时的后台动作　　祭出Chrome，看看在点击登录按">
+网页登录时的后台动作　　祭出Chrome，看看在点击登">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1ertfhqilo9j20lr04bmxt.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -41,7 +43,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -111,10 +113,10 @@
 <p>　　用Chrome打开登录页，按F12打开页面审查，切换到network页，输入用户名&amp;密码点击登录：</p>
 <p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1ertfhqilo9j20lr04bmxt.jpg" alt=""><br><a id="more"></a><br>　　第一行的POST就是登录发送的数据了，点击查看详情：</p>
 <p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1ertfnc9v9tj209k05ujrt.jpg" alt=""></p>
-<p>　　只需要注意Request URL和Form Data部分，<code>Request URL:http://10.3.8.211/</code>就是POST的目标地址，<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DDDDD:xxxxxxx(UserID)</span><br><span class="line">upass:<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>(password)</span><br><span class="line">0MKKey:</span><br></pre></td></tr></table></figure></p>
+<p>　　只需要注意Request URL和Form Data部分，<code>Request URL:http://10.3.8.211/</code>就是POST的目标地址，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">DDDDD:xxxxxxx(UserID)</div><div class="line">upass:******(password)</div><div class="line">0MKKey:</div></pre></td></tr></table></figure></p>
 <p>就是POST发送的数据了。</p>
 <h2 id="用Shell复现浏览器动作">用Shell复现浏览器动作</h2><p>　　既然如此简单，那么用shell完成就很直接了，用我比较熟悉的<code>curl</code>命令</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">curl</span> --silent -d <span class="string">'DDDDD=用户名&amp;upass=密码&amp;AMKKey='</span> <span class="number">10.3.8.211</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl --silent -d &apos;DDDDD=用户名&amp;upass=密码&amp;AMKKey=&apos; 10.3.8.211</div></pre></td></tr></table></figure>
 <p>　　登录完成，就是如此简单！当然如果不想看到输出的大段html，可以将其 <code>&gt; /dev/null</code>。</p>
 <h2 id="登出">登出</h2><p>　　那么Logout又是如何完成呢？同样的办法再操作一遍。</p>
 <p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1ertg0xoc5tj209j043aaa.jpg" alt=""></p>
@@ -129,7 +131,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/shell脚本/">shell脚本</a><a href="/tags/校园网/">校园网</a><a href="/tags/网关登录/">网关登录</a>
+  <span></span> <a href="/tags/校园网/">校园网</a><a href="/tags/网关登录/">网关登录</a><a href="/tags/shell脚本/">shell脚本</a>
   </div>
 
 </div>
@@ -198,7 +200,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -214,11 +216,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -242,11 +244,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -254,23 +256,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -357,7 +359,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

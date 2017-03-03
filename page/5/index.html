@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -78,6 +78,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/20/configureAndMakeInstall/" title="configure和make install背后的故事" itemprop="url">configure和make install背后的故事</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-20T08:11:57.000Z" itemprop="datePublished"> 發表於 2015-06-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>接触过Linux开发的人都知道从源代码安装需要执行类似以下的步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure>
+<p>目前为止我执行上述命令已经很多次了，但是并不知道它背后的逻辑。在跟进一个还在开发中的项目的时候，上要述步骤并不能完美执行，需要针对作一些修改，是时候挖掘这些咒语背后的操作了。</p>
+<h2 id="configure">configure</h2><p><code>configure</code>脚本负责在特定的系统上执行build的准备工作。这确认后续的build和install的依赖关系已经满足，找出使用这些依赖需要知道的所有信息。</p>
+<p>Linux程序通常是用C编写的，所以我们需要C编译器，configure脚本通常会检查系统有合适的C编译器，它在哪里以及如何调用。</p>
+<h2 id="Build">Build</h2><p>一旦configure完成，我们就可以执行<code>make</code>命令来build软件。它执行一系列在Makefile中定义的操作来编译写好的源代码。</p>
+<p>通常下载的源文件tarball中不包含Makefile，取而代之的是一个模板文件<code>Makefile.in</code>，configure脚本产生一个针对你的系统定制的Makefile文件。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/20/configureAndMakeInstall/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/20/configureAndMakeInstall/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/20/configureAndMakeInstall/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/10/repoLearningNote/" title="repo命令参考手册" itemprop="url">repo命令参考手册</a>
   </h1>
   <p class="article-author">By
@@ -92,11 +157,11 @@
     <div class="article-content">
         
         <p>repo用法的基本形式为:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span> <span class="tag">&lt;<span class="title">OPTIONS</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</span></span><br><span class="line">repo sync <span class="annotation">[&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo &lt;COMMAND&gt; &lt;OPTIONS&gt;</div></pre></td></tr></table></figure>
+<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">repo sync [&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</div><div class="line">repo sync [&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</div></pre></td></tr></table></figure></p>
 <h2 id="help">help</h2><p>使用<code>help</code>命令可以获得最新的帮助文档,由各子命令来组织.</p>
-<p>你也可以查看子命令的帮助<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo help <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="init">init</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ repo init -u &lt;URL&gt; <span class="annotation">[&lt;OPTIONS&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>你也可以查看子命令的帮助<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo help &lt;COMMAND&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="init">init</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ repo init -u &lt;URL&gt; [&lt;OPTIONS&gt;]</div></pre></td></tr></table></figure>
 <p>在当前目录安装repo, 将创建一个<code>.repo</code>目录,内含源代码的git仓库和标准android manifest 文件, 同时还有一个<code>manifest.xml</code>文件,指向<code>.repo/manifests/</code>目录中的定manifest.<br>参数:</p>
 <p><code>-u</code> URL,指定manifest位置</p>
 <p><code>-m</code> 选择仓库中的manifest文件,缺省为<code>default.xml</code></p>
@@ -118,7 +183,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/android/">android</a><a href="/tags/repo/">repo</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/android/">android</a><a href="/tags/repo/">repo</a>
   </div>
 
 </div>
@@ -165,7 +230,7 @@
         <h2 id="sqlite3">sqlite3</h2><p>通过adb shell可以使用sqlite的命令来接入应用创建的sqlite数据库。<code>sqliste3</code>包含很多有用的命令，如<code>.dump</code>可以打印数据库内容，<code>.schema</code>可以打印现在table的sql create声明，而且执行的速度很快。</p>
 <p>你可以先连接到目标设备的远程shell再使用sqlite3命令，或者同时指定你要连接的数据库的full path，sqlite3的数据库保存在如下目录：<code>/data/data/&lt;package_name&gt;/databases/</code></p>
 <p>以下是一个例子：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">adb -<span class="keyword">s</span> emulator-<span class="number">5554</span> <span class="keyword">shell</span></span><br><span class="line"># sqlite3 /data/data/<span class="keyword">com</span>.example.google.rss.rssexample/databases/rssitems.db</span><br><span class="line">SQLite <span class="keyword">version</span> <span class="number">3.3</span>.<span class="number">12</span></span><br><span class="line">Enter <span class="string">".help"</span> <span class="keyword">for</span> instructions</span><br><span class="line">.... enter commands, then <span class="keyword">quit</span>...</span><br><span class="line">sqlite&gt; .<span class="keyword">exit</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">adb -s emulator-5554 shell</div><div class="line"># sqlite3 /data/data/com.example.google.rss.rssexample/databases/rssitems.db</div><div class="line">SQLite version 3.3.12</div><div class="line">Enter &quot;.help&quot; for instructions</div><div class="line">.... enter commands, then quit...</div><div class="line">sqlite&gt; .exit</div></pre></td></tr></table></figure>
 <p>进入sqlite3后就可以使用sqlite3的命令了,退出可使用<code>exit</code>或者<code>ctrl+d</code>.</p>
         
         
@@ -181,7 +246,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/andorid/">andorid</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/adb/">adb</a><a href="/tags/andorid/">andorid</a>
   </div>
 
 </div>
@@ -289,9 +354,9 @@
     <div class="article-content">
         
         <h2 id="activity_manager_（am）">activity manager （am）</h2><p>　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am &lt;<span class="command"><span class="keyword">command</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">am &lt;command&gt;</div></pre></td></tr></table></figure>
 <p>　　也要可以不进入shell直接执行命令：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -<span class="tag">a</span> android<span class="class">.intent</span><span class="class">.action</span><span class="class">.VIEW</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell am start -a android.intent.action.VIEW</div></pre></td></tr></table></figure>
 <h3 id="am命令及参数">am命令及参数</h3><h4 id="start_[options]_&lt;INTENT&gt;">start [options] &lt;INTENT&gt;</h4><p>　　通过指定Intent启动activity。</p>
 <p>　　options有：</p>
 <p><code>-D</code>      开启debug</p>
@@ -312,7 +377,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/android/">android</a><a href="/tags/adb/">adb</a>
   </div>
 
 </div>
@@ -364,7 +429,7 @@
 </ul>
 <p>　　此命令位于<code>&lt;sdk&gt;/platform-tools</code>下。</p>
 <p>　　当你使用adb client时，它首先尝试与server进程连接，如果没有则启动server，server使用5037端口来监听来自所有client的连接。随便server扫描所有5555-5585之间的奇数端口来发现与开发机连接的设备/模拟器。每个android设备/模拟器要求开发一对连续的端口，其中偶数用于console，奇数用于adb，例如</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Emulator <span class="number">1</span>, <span class="string">console:</span> <span class="number">5554</span></span><br><span class="line">Emulator <span class="number">1</span>, <span class="string">adb:</span> <span class="number">5555</span></span><br><span class="line">Emulator <span class="number">2</span>, <span class="string">console:</span> <span class="number">5556</span></span><br><span class="line">Emulator <span class="number">2</span>, <span class="string">adb:</span> <span class="number">5557</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Emulator 1, console: 5554</div><div class="line">Emulator 1, adb: 5555</div><div class="line">Emulator 2, console: 5556</div><div class="line">Emulator 2, adb: 5557</div></pre></td></tr></table></figure>
 <p>　　因为有Server的存在，你可以从任意CLI中连入任何与开发机相连的android设备。</p>
         
         
@@ -380,7 +445,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/android/">android</a><a href="/tags/adb/">adb</a>
   </div>
 
 </div>
@@ -411,14 +476,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/07/basicAptCommands/" title="包管理之apt-get和apt-cache的基本命令" itemprop="url">包管理之apt-get和apt-cache的基本命令</a>
+      <a href="/2015/06/08/basicAptCommands/" title="包管理之apt-get和apt-cache的基本命令" itemprop="url">包管理之apt-get和apt-cache的基本命令</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-07T17:57:22.000Z" itemprop="datePublished"> 發表於 2015-06-07</time>
+    <time datetime="2015-06-07T17:57:22.000Z" itemprop="datePublished"> 發表於 2015-06-08</time>
     
   </p>
 </header>
@@ -427,13 +492,13 @@
         <p>　　本方介绍如何在Debian/Ubuntu系统中快速地使用apt工具安装、卸载和查询软件包。</p>
 <h2 id="什么是apt-cache">什么是apt-cache</h2><p>　　这个命对搜索软件包缓存非常有用，简单地说，它就是用来搜索和收集软件包信息，查找可安装包的。 下面介绍5个基本命令</p>
 <h3 id="pkgnames-查询安装包名">pkgnames-查询安装包名</h3><p>　　如果要显示所有可安装包信息，可以用以下命令</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo apt-cache pkgnames</span><br></pre></td></tr></table></figure>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">account</span>-plugin-yahoojp</span><br><span class="line"><span class="title">ceph</span>-fuse</span><br><span class="line"><span class="title">dvd</span>+rw-tools</span><br><span class="line"><span class="title">e3</span></span><br><span class="line"><span class="title">gnome</span>-commander-<span class="typedef"><span class="keyword">data</span></span></span><br><span class="line"><span class="title">grub</span>-gfxpayload-lists</span><br><span class="line"><span class="title">gweled</span></span><br><span class="line"><span class="title">libannotation</span>-indexer-java-doc</span><br><span class="line"><span class="title">libboost</span>-timer-dev</span><br><span class="line"><span class="title">libdune</span>-istl-dev</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-cache pkgnames</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">account-plugin-yahoojp</div><div class="line">ceph-fuse</div><div class="line">dvd+rw-tools</div><div class="line">e3</div><div class="line">gnome-commander-data</div><div class="line">grub-gfxpayload-lists</div><div class="line">gweled</div><div class="line">libannotation-indexer-java-doc</div><div class="line">libboost-timer-dev</div><div class="line">libdune-istl-dev</div><div class="line">……</div></pre></td></tr></table></figure>
         
         
         <p class="article-more-link">
           
-            <a href="/2015/06/07/basicAptCommands/#more">Read More</a>
+            <a href="/2015/06/08/basicAptCommands/#more">Read More</a>
           
        </p>
     </div>
@@ -454,7 +519,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/06/07/basicAptCommands/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/07/basicAptCommands/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/06/08/basicAptCommands/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/08/basicAptCommands/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -568,7 +633,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/wifi/">wifi</a><a href="/tags/wireless/">wireless</a><a href="/tags/无线共享/">无线共享</a><a href="/tags/网络/">网络</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/网络/">网络</a><a href="/tags/ubuntu/">ubuntu</a><a href="/tags/无线共享/">无线共享</a><a href="/tags/wifi/">wifi</a><a href="/tags/wireless/">wireless</a>
   </div>
 
 </div>
@@ -599,14 +664,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/30/hindsightLearningNote3/" title="simics hindsight学习笔记（三）" itemprop="url">simics hindsight学习笔记（三）</a>
+      <a href="/2015/05/31/hindsightLearningNote3/" title="simics hindsight学习笔记（三）" itemprop="url">simics hindsight学习笔记（三）</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-31T02:20:16.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
+    <time datetime="2015-05-31T02:20:16.000Z" itemprop="datePublished"> 發表於 2015-05-31</time>
     
   </p>
 </header>
@@ -614,14 +679,14 @@
         
         <p>继续上一节，学习simics hindsight使用，命令行参数部分。</p>
 <h2 id="帮助系统">帮助系统</h2><p>simics常用命令按类别分组，要查看分类，可以输入help。</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; <span class="keyword">help</span></span><br><span class="line">[...]</span><br><span class="line">To <span class="built_in">get</span> you started, here <span class="keyword">is</span> <span class="keyword">a</span> <span class="keyword">list</span> of <span class="keyword">command</span> categorie<span class="variable">s:</span></span><br><span class="line">Breakpoints                 Files <span class="built_in">and</span> Directories       Python</span><br><span class="line">CD-ROM                      GUI Real                    Network</span><br><span class="line">Changing Simulated State    Haps                        Registers</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">simics&gt; help</div><div class="line">[...]</div><div class="line">To get you started, here is a list of command categories:</div><div class="line">Breakpoints                 Files and Directories       Python</div><div class="line">CD-ROM                      GUI Real                    Network</div><div class="line">Changing Simulated State    Haps                        Registers</div></pre></td></tr></table></figure>
 <p>使用<code>help catogory</code>打印该分类下的命令清单：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; help <span class="string">"Changing Simulated State"</span></span><br><span class="line">Commands available <span class="operator">in</span> <span class="operator">the</span> Changing Simulated State category:</span><br><span class="line"></span><br><span class="line">&lt;image&gt;.<span class="built_in">set</span>                     <span class="built_in">set</span> <span class="keyword">bytes</span> <span class="operator">in</span> image <span class="built_in">to</span> specified <span class="built_in">value</span></span><br><span class="line">&lt;memory-<span class="constant">space</span>&gt;.<span class="built_in">load</span>-binary      <span class="built_in">load</span> binary (executable) <span class="built_in">file</span> <span class="keyword">into</span> memory</span><br><span class="line">&lt;memory-<span class="constant">space</span>&gt;.<span class="built_in">load</span>-<span class="built_in">file</span>        <span class="built_in">load</span> <span class="built_in">file</span> <span class="keyword">into</span> memory</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">simics&gt; help &quot;Changing Simulated State&quot;</div><div class="line">Commands available in the Changing Simulated State category:</div><div class="line"></div><div class="line">&lt;image&gt;.set                     set bytes in image to specified value</div><div class="line">&lt;memory-space&gt;.load-binary      load binary (executable) file into memory</div><div class="line">&lt;memory-space&gt;.load-file        load file into memory</div></pre></td></tr></table></figure>
         
         
         <p class="article-more-link">
           
-            <a href="/2015/05/30/hindsightLearningNote3/#more">Read More</a>
+            <a href="/2015/05/31/hindsightLearningNote3/#more">Read More</a>
           
        </p>
     </div>
@@ -631,7 +696,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/simics/">simics</a><a href="/tags/hindsight/">hindsight</a>
   </div>
 
 </div>
@@ -642,70 +707,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/30/hindsightLearningNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote3/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/30/hindsightLearningNote2/" title="simics hindsight学习笔记（二）" itemprop="url">simics hindsight学习笔记（二）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-30T15:18:18.000Z" itemprop="datePublished"> 發表於 2015-05-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　继续学习simics的使用。</p>
-<h1 id="CLI命令行界面">CLI命令行界面</h1><p>　　simics CLI是一种基于文本的高级用户界面，内置<strong>帮助</strong>系统，上下文敏感可用<strong>tab</strong>补全，支持<strong>脚本</strong>编程，作为hindsight的一部分一起提供。</p>
-<p>　　如果使用了GUI，那么可以通过Control Window的<code>Tools → Command Line Window</code>来启动。Eclipse中位于Console View中。如果未使用GUI，则位于启动simics的shell中。</p>
-<h2 id="调用命令">调用命令</h2><p>　　在命令行中输入命令+参数来使用，可以在reference manual中找到许多例子，以下是两个例子：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SYNOPSIS</span><br><span class="line">    command1 -x -y -small [cpu-<span class="keyword">name</span>] address (<span class="built_in">size</span>|<span class="keyword">name</span>)</span><br><span class="line">SYNOPSIS</span><br><span class="line">    command2 files . . .</span><br></pre></td></tr></table></figure></p>
-<p>　　以<strong>短横线</strong>开头的选项都是flag并且<strong>总是可选</strong>的，flag长度可能不止一个字符，且<strong>不能以-xy</strong>的形式来表示-x -y，位置不敏感，可位于参数列表中的任意位置。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/30/hindsightLearningNote2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/30/hindsightLearningNote2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/hindsightLearningNote2/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/31/hindsightLearningNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/hindsightLearningNote3/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -739,7 +741,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -755,11 +757,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -783,11 +785,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -795,23 +797,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -898,7 +900,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

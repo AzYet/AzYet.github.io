@@ -23,6 +23,7 @@
 背包问题给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价值最高。
 不同于上节钢条切割的地方是，物品的重量不是连续的，所以事先并不能知道任意物品组成的总重会的集合。
 为">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态规划实战（二）：背包问题">
 <meta name="twitter:description" content="上一节中对动态规划有了一个初步的认识，现在通过更多的例子来加深印象，在网上搜索了一下关于动态规划的经典问题，其中第一个就是所谓“背包问题”，事实上它也很类似上一节中的钢条切割，稍有不同。
@@ -41,7 +42,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -123,8 +124,8 @@
 </ol>
 </blockquote>
 <h2 id="自底向上">自底向上</h2><p>尝试使用bottom up的方式，从小到大求解最优解，直到满足问题的输入值n。</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">def bottom_up_bag(n, p):</span><br><span class="line">    <span class="comment"># make sure that records in mem is an optimal solution</span></span><br><span class="line">    <span class="comment"># init. &#123; n: [ maxWeight, "combination"] &#125;  </span></span><br><span class="line">    mem = &#123;<span class="number">0</span>: [<span class="number">0</span>, <span class="string">""</span>]&#125;</span><br><span class="line">    <span class="built_in">keys</span> = p.<span class="built_in">keys</span>()</span><br><span class="line">    <span class="built_in">keys</span>.<span class="built_in">sort</span>()</span><br><span class="line">    <span class="built_in">max</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">sum</span> <span class="operator">in</span> range(<span class="built_in">min</span>(p.<span class="built_in">keys</span>()), n + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="operator">in</span> <span class="built_in">keys</span>:</span><br><span class="line">            <span class="keyword">if</span> i &gt; <span class="built_in">sum</span>:</span><br><span class="line">                break</span><br><span class="line">            sub = <span class="built_in">sum</span> - i</span><br><span class="line">            <span class="keyword">if</span> sub <span class="operator">in</span> mem:</span><br><span class="line">                t = p[i] + mem[sub][<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> t &gt; <span class="built_in">max</span> <span class="operator">and</span> (<span class="built_in">sum</span> <span class="operator">not</span> <span class="operator">in</span> mem <span class="operator">or</span> t &gt; mem[<span class="built_in">sum</span>][<span class="number">0</span>]):</span><br><span class="line">                    mem[<span class="built_in">sum</span>] = [t, mem[sub][<span class="number">1</span>] + str(i) + <span class="string">" "</span>]</span><br><span class="line">                    <span class="built_in">max</span> = t</span><br><span class="line">    <span class="constant">return</span> mem</span><br></pre></td></tr></table></figure>
-<h3 id="测试和输出">测试和输出</h3><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 测试代码</span><br><span class="line"># 先用较少的物品，作便于分析</span><br><span class="line"><span class="atom">p</span> = &#123;<span class="number">3</span>: <span class="number">8</span>, <span class="number">5</span>: <span class="number">10</span>&#125;</span><br><span class="line"><span class="atom">r</span> = <span class="atom">bottom_up_bag</span>(<span class="number">14</span>,<span class="atom">p</span>)</span><br><span class="line"><span class="atom">for</span> <span class="atom">i</span> <span class="atom">in</span> <span class="atom">r</span>:</span><br><span class="line">    <span class="atom">print</span> <span class="atom">i</span>, <span class="atom">r</span>[<span class="atom">i</span>]</span><br><span class="line">######以下为输出######</span><br><span class="line"><span class="number">0</span> [<span class="number">0</span>, <span class="string">''</span>]</span><br><span class="line"><span class="number">3</span> [<span class="number">8</span>, <span class="string">'3 '</span>]</span><br><span class="line"><span class="number">5</span> [<span class="number">10</span>, <span class="string">'5 '</span>]</span><br><span class="line"><span class="number">6</span> [<span class="number">16</span>, <span class="string">'3 3 '</span>]</span><br><span class="line"><span class="number">8</span> [<span class="number">18</span>, <span class="string">'5 3 '</span>]</span><br><span class="line"><span class="number">9</span> [<span class="number">24</span>, <span class="string">'3 3 3 '</span>]</span><br><span class="line"><span class="number">11</span> [<span class="number">26</span>, <span class="string">'5 3 3 '</span>]</span><br><span class="line"><span class="number">12</span> [<span class="number">32</span>, <span class="string">'3 3 3 3 '</span>]</span><br><span class="line"><span class="number">14</span> [<span class="number">34</span>, <span class="string">'5 3 3 3 '</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">def bottom_up_bag(n, p):</div><div class="line">    # make sure that records in mem is an optimal solution</div><div class="line">    # init. &#123; n: [ maxWeight, &quot;combination&quot;] &#125;  </div><div class="line">    mem = &#123;0: [0, &quot;&quot;]&#125;</div><div class="line">    keys = p.keys()</div><div class="line">    keys.sort()</div><div class="line">    max = 0</div><div class="line">    for sum in range(min(p.keys()), n + 1):</div><div class="line">        for i in keys:</div><div class="line">            if i &gt; sum:</div><div class="line">                break</div><div class="line">            sub = sum - i</div><div class="line">            if sub in mem:</div><div class="line">                t = p[i] + mem[sub][0]</div><div class="line">                if t &gt; max and (sum not in mem or t &gt; mem[sum][0]):</div><div class="line">                    mem[sum] = [t, mem[sub][1] + str(i) + &quot; &quot;]</div><div class="line">                    max = t</div><div class="line">    return mem</div></pre></td></tr></table></figure>
+<h3 id="测试和输出">测试和输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"># 测试代码</div><div class="line"># 先用较少的物品，作便于分析</div><div class="line">p = &#123;3: 8, 5: 10&#125;</div><div class="line">r = bottom_up_bag(14,p)</div><div class="line">for i in r:</div><div class="line">    print i, r[i]</div><div class="line">######以下为输出######</div><div class="line">0 [0, &apos;&apos;]</div><div class="line">3 [8, &apos;3 &apos;]</div><div class="line">5 [10, &apos;5 &apos;]</div><div class="line">6 [16, &apos;3 3 &apos;]</div><div class="line">8 [18, &apos;5 3 &apos;]</div><div class="line">9 [24, &apos;3 3 3 &apos;]</div><div class="line">11 [26, &apos;5 3 3 &apos;]</div><div class="line">12 [32, &apos;3 3 3 3 &apos;]</div><div class="line">14 [34, &apos;5 3 3 3 &apos;]</div></pre></td></tr></table></figure>
 <p>可以看到输出并不是连续的，4、7等是因为无法组合得到，而10是因为5+5组合价值为20,不及重量为9最优解24</p>
 <p>这些不连续的值的最优解为与其相邻较小值的最优解，如背包容量为7时，最优解同容量6,为3+3；容量为10时，同容量9,取3+3+3</p>
 <h3 id="分析-1">分析</h3><p>算法的正确性是如何保证的？依然如前一节中所说，自底向上的算法的关键在于计算子问题时，确保更小的子问题已经求解。</p>
@@ -135,11 +136,11 @@
 尝试所有可能的拆分：单个物品+子最优解（规模更小，一定已知），并取最大值（且要求较前一容量递增）
 </code></pre><p>这种方法不是很严谨，因为无法预知可能组合成哪些数值，所以采用了++1这样的方式来试探，如果物品重量值很大，性能将非常低下</p>
 <h2 id="带备忘的自顶向下">带备忘的自顶向下</h2><p>这是更适合背包问题的解法，同样的分解思路，不过这次是自顶向下的递归调用</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recurse_bag</span><span class="params">(n, p)</span>:</span></span><br><span class="line">    <span class="comment"># make sure that records in mem is an optimal solution</span></span><br><span class="line">    mem = &#123;<span class="number">0</span>: [<span class="number">0</span>, <span class="string">""</span>]&#125;</span><br><span class="line">    keys = p.keys()</span><br><span class="line">    keys.sort()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">(n, p)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> n <span class="keyword">in</span> mem:</span><br><span class="line">            <span class="keyword">return</span> mem[n]</span><br><span class="line">        <span class="keyword">if</span> n &lt; min(keys):</span><br><span class="line">            <span class="keyword">return</span> [<span class="number">0</span>,<span class="string">""</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> keys:</span><br><span class="line">            <span class="keyword">if</span> i &lt;= n:</span><br><span class="line">                s = inner(n - i, p)</span><br><span class="line">                t = p[i] + s[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> n <span class="keyword">not</span> <span class="keyword">in</span> mem <span class="keyword">or</span> t &gt; mem[n][<span class="number">0</span>]:</span><br><span class="line">                    mem[n] = [t, <span class="string">"%s %s"</span> % (s[<span class="number">1</span>], str(i))]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> mem[n]</span><br><span class="line"></span><br><span class="line">    inner(n,p)</span><br><span class="line">    <span class="keyword">return</span> mem</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">def recurse_bag(n, p):</div><div class="line">    # make sure that records in mem is an optimal solution</div><div class="line">    mem = &#123;0: [0, &quot;&quot;]&#125;</div><div class="line">    keys = p.keys()</div><div class="line">    keys.sort()</div><div class="line"></div><div class="line">    def inner(n, p):</div><div class="line">        if n in mem:</div><div class="line">            return mem[n]</div><div class="line">        if n &lt; min(keys):</div><div class="line">            return [0,&quot;&quot;]</div><div class="line">        for i in keys:</div><div class="line">            if i &lt;= n:</div><div class="line">                s = inner(n - i, p)</div><div class="line">                t = p[i] + s[0]</div><div class="line">                if n not in mem or t &gt; mem[n][0]:</div><div class="line">                    mem[n] = [t, &quot;%s %s&quot; % (s[1], str(i))]</div><div class="line">            else:</div><div class="line">                break</div><div class="line">        return mem[n]</div><div class="line"></div><div class="line">    inner(n,p)</div><div class="line">    return mem</div></pre></td></tr></table></figure>
 <p>子问题一旦求解一次，就存储在备忘map中（变量mem），每次求解向查找备忘，无记录才求解，递归的另一个好处就是不必在意物品能组合成哪些数值。</p>
-<h3 id="对比测试与输出">对比测试与输出</h3><p>测试代码<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="number">3</span>: <span class="number">8</span>, <span class="number">5</span>: <span class="number">10</span>, <span class="number">8</span>: <span class="number">20</span>&#125;</span><br><span class="line">vol = <span class="number">14</span></span><br><span class="line"><span class="literal">r1</span> = recurse_bag(vol, p)</span><br><span class="line"><span class="literal">r2</span> = bottom_up_bag(vol, p)</span><br><span class="line"><span class="literal">k1</span> = <span class="literal">r1</span>.keys()</span><br><span class="line"><span class="literal">k2</span> = <span class="literal">r2</span>.keys()</span><br><span class="line"><span class="literal">k1</span>.sort()</span><br><span class="line"><span class="literal">k2</span>.sort()</span><br><span class="line">for i <span class="keyword">in</span> range(max(len(<span class="literal">k1</span>), len(<span class="literal">k2</span>))):</span><br><span class="line">    if i &lt; len(<span class="literal">k1</span>):</span><br><span class="line">        print <span class="literal">k1</span>[i], <span class="literal">r1</span>[<span class="literal">k1</span>[i]], <span class="string">"\t\t\t\t\t\t"</span>,</span><br><span class="line">    if i &lt; len(<span class="literal">k2</span>):</span><br><span class="line">        print <span class="literal">k2</span>[i], <span class="literal">r2</span>[<span class="literal">k2</span>[i]],</span><br><span class="line">    print <span class="string">""</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="对比测试与输出">对比测试与输出</h3><p>测试代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">p = &#123;3: 8, 5: 10, 8: 20&#125;</div><div class="line">vol = 14</div><div class="line">r1 = recurse_bag(vol, p)</div><div class="line">r2 = bottom_up_bag(vol, p)</div><div class="line">k1 = r1.keys()</div><div class="line">k2 = r2.keys()</div><div class="line">k1.sort()</div><div class="line">k2.sort()</div><div class="line">for i in range(max(len(k1), len(k2))):</div><div class="line">    if i &lt; len(k1):</div><div class="line">        print k1[i], r1[k1[i]], &quot;\t\t\t\t\t\t&quot;,</div><div class="line">    if i &lt; len(k2):</div><div class="line">        print k2[i], r2[k2[i]],</div><div class="line">    print &quot;&quot;</div></pre></td></tr></table></figure></p>
 <p>输出情况</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> [<span class="number">0</span>, '']                       <span class="number">0</span> [<span class="number">0</span>, ''] </span><br><span class="line"><span class="number">3</span> [<span class="number">8</span>, ' <span class="number">3</span>']                         <span class="number">3</span> [<span class="number">8</span>, ' <span class="number">3</span>'] </span><br><span class="line"><span class="number">4</span> [<span class="number">8</span>, ' <span class="number">3</span>']                         <span class="number">5</span> [<span class="number">10</span>, ' <span class="number">5</span>'] </span><br><span class="line"><span class="number">5</span> [<span class="number">10</span>, ' <span class="number">5</span>']                        <span class="number">6</span> [<span class="number">16</span>, ' <span class="number">3</span> <span class="number">3</span>'] </span><br><span class="line"><span class="number">6</span> [<span class="number">16</span>, ' <span class="number">3</span> <span class="number">3</span>']                      <span class="number">8</span> [<span class="number">20</span>, ' <span class="number">8</span>'] </span><br><span class="line"><span class="number">8</span> [<span class="number">20</span>, ' <span class="number">8</span>']                        <span class="number">9</span> [<span class="number">24</span>, ' <span class="number">3</span> <span class="number">3</span> <span class="number">3</span>'] </span><br><span class="line"><span class="number">9</span> [<span class="number">24</span>, ' <span class="number">3</span> <span class="number">3</span> <span class="number">3</span>']                        <span class="number">11</span> [<span class="number">28</span>, ' <span class="number">8</span> <span class="number">3</span>'] </span><br><span class="line"><span class="number">11</span> [<span class="number">28</span>, ' <span class="number">8</span> <span class="number">3</span>']                         <span class="number">12</span> [<span class="number">32</span>, ' <span class="number">3</span> <span class="number">3</span> <span class="number">3</span> <span class="number">3</span>'] </span><br><span class="line"><span class="number">14</span> [<span class="number">36</span>, ' <span class="number">8</span> <span class="number">3</span> <span class="number">3</span>']                       <span class="number">14</span> [<span class="number">36</span>, ' <span class="number">8</span> <span class="number">3</span> <span class="number">3</span>']</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">0 [0, &apos;&apos;]                       0 [0, &apos;&apos;] </div><div class="line">3 [8, &apos; 3&apos;]                         3 [8, &apos; 3&apos;] </div><div class="line">4 [8, &apos; 3&apos;]                         5 [10, &apos; 5&apos;] </div><div class="line">5 [10, &apos; 5&apos;]                        6 [16, &apos; 3 3&apos;] </div><div class="line">6 [16, &apos; 3 3&apos;]                      8 [20, &apos; 8&apos;] </div><div class="line">8 [20, &apos; 8&apos;]                        9 [24, &apos; 3 3 3&apos;] </div><div class="line">9 [24, &apos; 3 3 3&apos;]                        11 [28, &apos; 8 3&apos;] </div><div class="line">11 [28, &apos; 8 3&apos;]                         12 [32, &apos; 3 3 3 3&apos;] </div><div class="line">14 [36, &apos; 8 3 3&apos;]                       14 [36, &apos; 8 3 3&apos;]</div></pre></td></tr></table></figure>
 <p>二者的记录的值并不一样，但对应的容量和最优解是一致的，递归比较能体现求解的过程，bottom up则列出了规模范围内所有的解。</p>
   
 	</div>
@@ -149,7 +150,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/动态规划/">动态规划</a><a href="/tags/算法/">算法</a><a href="/tags/背包问题/">背包问题</a>
+  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/动态规划/">动态规划</a><a href="/tags/背包问题/">背包问题</a>
   </div>
 
 </div>
@@ -172,7 +173,7 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/05/24/ipv6TunneltoVps/" title="为VPS创建IPv6隧道">
+ <a href="/2015/05/25/ipv6TunneltoVps/" title="为VPS创建IPv6隧道">
   <strong>上一篇：</strong><br/>
   <span>
   为VPS创建IPv6隧道</span>
@@ -218,7 +219,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -234,11 +235,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -262,11 +263,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -274,23 +275,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -377,7 +378,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

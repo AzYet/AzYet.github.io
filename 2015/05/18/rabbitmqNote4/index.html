@@ -12,26 +12,25 @@
 
     
     <meta name="description" content="这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。
-Bindings上一节已经提到Binding，代码如下：1channel.queueBind(queueName, EXCHANGE_NAME, &quot;&quot;);
-Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。
-B">
+Bindings上一节已经提到Binding，代码如下：1channel.queueBind(queueName, EXCHANGE_NAME, &amp;quot;&amp;quot;);
+Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ学习笔记（四）之消息路由">
 <meta property="og:url" content="http://azyet.github.io/2015/05/18/rabbitmqNote4/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。
-Bindings上一节已经提到Binding，代码如下：1channel.queueBind(queueName, EXCHANGE_NAME, &quot;&quot;);
-Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。
-B">
+Bindings上一节已经提到Binding，代码如下：1channel.queueBind(queueName, EXCHANGE_NAME, &amp;quot;&amp;quot;);
+Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange">
 <meta property="og:image" content="https://www.rabbitmq.com/img/tutorials/direct-exchange.png">
 <meta property="og:image" content="https://www.rabbitmq.com/img/tutorials/direct-exchange-multiple.png">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1es8ss3zvcmj20zy0iy151.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ学习笔记（四）之消息路由">
 <meta name="twitter:description" content="这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。
-Bindings上一节已经提到Binding，代码如下：1channel.queueBind(queueName, EXCHANGE_NAME, &quot;&quot;);
-Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。
-B">
+Bindings上一节已经提到Binding，代码如下：1channel.queueBind(queueName, EXCHANGE_NAME, &amp;quot;&amp;quot;);
+Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange">
+<meta name="twitter:image" content="https://www.rabbitmq.com/img/tutorials/direct-exchange.png">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -44,7 +43,7 @@ B">
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -109,9 +108,9 @@ B">
 		</div>
 		
 		<p>这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。</p>
-<h2 id="Bindings">Bindings</h2><p>上一节已经提到Binding，代码如下：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="Bindings">Bindings</h2><p>上一节已经提到Binding，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">channel.queueBind(queueName, EXCHANGE_NAME, &quot;&quot;);</div></pre></td></tr></table></figure></p>
 <p>Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。</p>
-<p>Binding可以添加额外的路由参数，为免混淆，这里称为bindingKey。以下是使用BindingKey来绑定：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">"black"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>Binding可以添加额外的路由参数，为免混淆，这里称为bindingKey。以下是使用BindingKey来绑定：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">channel.queueBind(queueName, EXCHANGE_NAME, &quot;black&quot;);</div></pre></td></tr></table></figure></p>
 <p>BindingKey的解释取决于Exchange类型，fanout类Exchange直接无视BindingKey.</p>
 <a id="more"></a>
 <h2 id="Direct_exchange">Direct exchange</h2><p>我们希望通过日志级别来区别对待，Fanout只会无脑广播肯定不行，这里我们使用Direct Exchange。它的路由算法也很简单：如消息的`routingKey == BindingKey``,则推送到相应的Queue中。</p>
@@ -121,16 +120,16 @@ B">
 <h2 id="Multiple_bindings">Multiple bindings</h2><p>多个Queue指定相同的BindingKey也是完全合法的，此时Exhange行为类似Fanout。</p>
 <p><img src="https://www.rabbitmq.com/img/tutorials/direct-exchange-multiple.png" alt=""></p>
 <h2 id="产生日志">产生日志</h2><p>我们将使用Direct Exchange，同时为消息指定routingKey代表日志级别。</p>
-<p>首先，你得有一个Exchange。<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"direct"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>首先，你得有一个Exchange。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">channel.exchangeDeclare(EXCHANGE_NAME, &quot;direct&quot;);</div></pre></td></tr></table></figure></p>
 <p>可以发送消息了：</p>
-<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish(EXCHANGE_NAME, <span class="keyword">severity</span>, <span class="keyword">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());</div></pre></td></tr></table></figure>
 <p>日志级别可以是以下之一： debug, warning, error.</p>
-<h2 id="订阅">订阅</h2><p>consumer和之前差不多，只是将分别指定BindingKey。<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span> queueName = channel.queueDeclare().getQueue();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">String</span> severity : argv)&#123;    </span><br><span class="line">  channel.queueBind(queueName, EXCHANGE_NAME, severity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="订阅">订阅</h2><p>consumer和之前差不多，只是将分别指定BindingKey。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String queueName = channel.queueDeclare().getQueue();</div><div class="line"></div><div class="line">for(String severity : argv)&#123;    </div><div class="line">  channel.queueBind(queueName, EXCHANGE_NAME, severity);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="汇总">汇总</h2><p>这次producer consumer都用参数来指定key,bindingKey可以指定多个。</p>
 <p>运行效果：</p>
 <p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1es8ss3zvcmj20zy0iy151.jpg" alt=""></p>
-<h3 id="producer源码">producer源码</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeoutException;</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * rabbitmq producer</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> class MQSender &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> QUEUE_NAME = <span class="string">"TEST_QUEUE"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> EXCHANGE_NAME = <span class="string">"TEST_DIRECT_EXCHANGE"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(MQSender.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            logger.error(<span class="string">"input param"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Connection conn = factory.newConnection();</span><br><span class="line">            <span class="keyword">final</span> Channel channel = conn.createChannel();</span><br><span class="line">            channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"direct"</span>);</span><br><span class="line">            <span class="built_in">boolean</span> durable = <span class="keyword">true</span>;</span><br><span class="line">            channel.close();</span><br><span class="line">            conn.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (TimeoutException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="consumer">consumer</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.github.azyet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * rabbitmq consumer</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> class MQConsummer</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> EXCHANGE_NAME = <span class="string">"TEST_DIRECT_EXCHANGE"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(MQConsummer.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main( <span class="keyword">String</span>[] args )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            logger.error(<span class="string">"need param"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Connection conn = factory.newConnection();</span><br><span class="line">            Channel channel = conn.createChannel();</span><br><span class="line">            <span class="built_in">boolean</span> durable = <span class="keyword">true</span>;</span><br><span class="line">            channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"direct"</span>);</span><br><span class="line">            <span class="keyword">String</span> queueName = channel.queueDeclare().getQueue();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">String</span> arg : args) &#123;</span><br><span class="line">                channel.queueBind(queueName, EXCHANGE_NAME, arg);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">int</span> prefetchCount = <span class="number">1</span>;</span><br><span class="line">            channel.basicQos(prefetchCount);</span><br><span class="line">            logger.debug(<span class="string">"waiting for message..."</span>);</span><br><span class="line"></span><br><span class="line">            QueueingConsumer consumer = <span class="keyword">new</span> QueueingConsumer(channel);</span><br><span class="line">            <span class="built_in">boolean</span> autoAck = <span class="keyword">false</span>;</span><br><span class="line">            channel.basicConsume(queueName, autoAck, consumer);</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                QueueingConsumer.Delivery delivery = consumer.nextDelivery();</span><br><span class="line">                <span class="keyword">String</span> message = <span class="keyword">new</span> <span class="keyword">String</span>(delivery.getBody());</span><br><span class="line">                logger.debug(<span class="string">"received a message &#123;&#125;"</span>,message);</span><br><span class="line">                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), <span class="keyword">false</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ShutdownSignalException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="producer源码">producer源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">package io.github.azyet;</div><div class="line"></div><div class="line">import com.rabbitmq.client.Channel;</div><div class="line">import com.rabbitmq.client.Connection;</div><div class="line">import com.rabbitmq.client.ConnectionFactory;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">import java.util.concurrent.TimeoutException;</div><div class="line">/**</div><div class="line"> * rabbitmq producer</div><div class="line"> */</div><div class="line">public class MQSender &#123;</div><div class="line">    private static String QUEUE_NAME = &quot;TEST_QUEUE&quot;;</div><div class="line">    private static String EXCHANGE_NAME = &quot;TEST_DIRECT_EXCHANGE&quot;;</div><div class="line">    private static Logger logger = LoggerFactory.getLogger(MQSender.class);</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        if (args.length &lt; 1) &#123;</div><div class="line">            logger.error(&quot;input param&quot;);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        ConnectionFactory factory = new ConnectionFactory();</div><div class="line">        factory.setHost(&quot;localhost&quot;);</div><div class="line">        try &#123;</div><div class="line">            Connection conn = factory.newConnection();</div><div class="line">            final Channel channel = conn.createChannel();</div><div class="line">            channel.exchangeDeclare(EXCHANGE_NAME, &quot;direct&quot;);</div><div class="line">            boolean durable = true;</div><div class="line">            channel.close();</div><div class="line">            conn.close();</div><div class="line">        &#125; catch (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (TimeoutException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="consumer">consumer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">package io.github.azyet;</div><div class="line"></div><div class="line">import com.rabbitmq.client.*;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">/**</div><div class="line"> * rabbitmq consumer</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class MQConsummer</div><div class="line">&#123;</div><div class="line">    private static String EXCHANGE_NAME = &quot;TEST_DIRECT_EXCHANGE&quot;;</div><div class="line">    private static Logger logger = LoggerFactory.getLogger(MQConsummer.class);</div><div class="line"></div><div class="line">    public static void main( String[] args )</div><div class="line">    &#123;</div><div class="line">        if (args.length &lt; 1) &#123;</div><div class="line">            logger.error(&quot;need param&quot;);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        ConnectionFactory factory = new ConnectionFactory();</div><div class="line">        factory.setHost(&quot;localhost&quot;);</div><div class="line">        try &#123;</div><div class="line">            Connection conn = factory.newConnection();</div><div class="line">            Channel channel = conn.createChannel();</div><div class="line">            boolean durable = true;</div><div class="line">            channel.exchangeDeclare(EXCHANGE_NAME, &quot;direct&quot;);</div><div class="line">            String queueName = channel.queueDeclare().getQueue();</div><div class="line">            for (String arg : args) &#123;</div><div class="line">                channel.queueBind(queueName, EXCHANGE_NAME, arg);</div><div class="line">            &#125;</div><div class="line">            int prefetchCount = 1;</div><div class="line">            channel.basicQos(prefetchCount);</div><div class="line">            logger.debug(&quot;waiting for message...&quot;);</div><div class="line"></div><div class="line">            QueueingConsumer consumer = new QueueingConsumer(channel);</div><div class="line">            boolean autoAck = false;</div><div class="line">            channel.basicConsume(queueName, autoAck, consumer);</div><div class="line">            while (true) &#123;</div><div class="line">                QueueingConsumer.Delivery delivery = consumer.nextDelivery();</div><div class="line">                String message = new String(delivery.getBody());</div><div class="line">                logger.debug(&quot;received a message &#123;&#125;&quot;,message);</div><div class="line">                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);</div><div class="line">            &#125;</div><div class="line">        &#125; catch (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (ShutdownSignalException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -139,7 +138,7 @@ B">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/消息路由/">消息路由</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/消息路由/">消息路由</a>
   </div>
 
 </div>
@@ -162,7 +161,7 @@ B">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/05/18/rabbitmqNote5/" title="RabbitMQ学习笔记（五）之Topics">
+ <a href="/2015/05/19/rabbitmqNote5/" title="RabbitMQ学习笔记（五）之Topics">
   <strong>上一篇：</strong><br/>
   <span>
   RabbitMQ学习笔记（五）之Topics</span>
@@ -208,7 +207,7 @@ B">
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -224,11 +223,11 @@ B">
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -252,11 +251,11 @@ B">
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -264,23 +263,23 @@ B">
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -367,7 +366,7 @@ B">
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

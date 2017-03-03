@@ -31,6 +31,7 @@ daemon 运行于设备/模拟器上的后台进程
 
 　　此命令位于&amp;lt;sdk&amp;gt;/platform-tools下。
 　　当你使用adb client时，它首先尝">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="adb学习笔记(一)之基本使用">
 <meta name="twitter:description" content="adb是一个能与android模拟器/设备交互的非常有用的工具，它由以下三部分组成。
@@ -53,7 +54,7 @@ daemon 运行于设备/模拟器上的后台进程
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -125,13 +126,13 @@ daemon 运行于设备/模拟器上的后台进程
 </ul>
 <p>　　此命令位于<code>&lt;sdk&gt;/platform-tools</code>下。</p>
 <p>　　当你使用adb client时，它首先尝试与server进程连接，如果没有则启动server，server使用5037端口来监听来自所有client的连接。随便server扫描所有5555-5585之间的奇数端口来发现与开发机连接的设备/模拟器。每个android设备/模拟器要求开发一对连续的端口，其中偶数用于console，奇数用于adb，例如</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Emulator <span class="number">1</span>, <span class="string">console:</span> <span class="number">5554</span></span><br><span class="line">Emulator <span class="number">1</span>, <span class="string">adb:</span> <span class="number">5555</span></span><br><span class="line">Emulator <span class="number">2</span>, <span class="string">console:</span> <span class="number">5556</span></span><br><span class="line">Emulator <span class="number">2</span>, <span class="string">adb:</span> <span class="number">5557</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Emulator 1, console: 5554</div><div class="line">Emulator 1, adb: 5555</div><div class="line">Emulator 2, console: 5556</div><div class="line">Emulator 2, adb: 5557</div></pre></td></tr></table></figure>
 <p>　　因为有Server的存在，你可以从任意CLI中连入任何与开发机相连的android设备。</p>
 <a id="more"></a>
 <h2 id="设备开启adb">设备开启adb</h2><p>　　须在<code>开发者选项</code>中开启<code>adb调度</code>，在此之前，可能需要连续点击<code>关于手机</code>的android版本号来显示<code>开发者选项</code>。</p>
 <p>　　如果是4.2.2以上的设备，可以设置RSA key来开启验证，adb版本也相应需要1.0.31以上。</p>
 <h2 id="语法">语法</h2><p>你可以在开发机的CLI中或者脚本中使用以下格式的命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb [<span class="operator">-d</span>|<span class="operator">-e</span>|<span class="operator">-s</span> &lt;serialNumber&gt;] &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb [-d|-e|-s &lt;serialNumber&gt;] &lt;command&gt;</div></pre></td></tr></table></figure>
 <p>　　如果只有一台android设备与开发机连接，命令将直接发送，如果有多台，就需要指定<code>-d, -e, or -s</code>选项来选择设备。</p>
 <h2 id="命令与参数">命令与参数</h2><p>　　分类介绍</p>
 <h3 id="目标设备相关">目标设备相关</h3><pre><code>-<span class="ruby">d  指定目标为usb连接设备，当有多台usb设备时报错
@@ -151,7 +152,7 @@ daemon 运行于设备/模拟器上的后台进程
 
 <span class="tag">jdwp</span>    <span class="tag">list</span>目标设备上的所有<span class="tag">JDWP</span>进程
 </code></pre><blockquote>
-<p>可以使用<code>forward jdwp:&lt;pid&gt;</code>来进行端口转发，如:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;adb forward <span class="string">tcp:</span><span class="number">8000</span> <span class="string">jdwp:</span><span class="number">472</span></span><br><span class="line">&gt;jdb -attach <span class="string">localhost:</span><span class="number">8000</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以使用<code>forward jdwp:&lt;pid&gt;</code>来进行端口转发，如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;adb forward tcp:8000 jdwp:472</div><div class="line">&gt;jdb -attach localhost:8000</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
 </blockquote>
 <h3 id="数据">数据</h3><pre><code>install path-<span class="keyword">to</span>-apk     在设备上安装apk
 
@@ -185,29 +186,29 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 </blockquote>
 <pre><code>状态： 可能值有offline（未连接或无响应），<span class="literal">device</span>(已连接，但如前已指出的，不一定完全启动），no <span class="literal">device</span>（无设备连接）
 </code></pre><p>　　例如：</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">adb</span> devices</span><br></pre></td></tr></table></figure>
-<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">List</span> of devices attached</span><br><span class="line">emulator-<span class="number">5554</span>  <span class="literal">device</span></span><br><span class="line">emulator-<span class="number">5556</span>  <span class="literal">device</span></span><br><span class="line">emulator-<span class="number">5558</span>  <span class="literal">device</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb devices</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">List of devices attached</div><div class="line">emulator-5554  device</div><div class="line">emulator-5556  device</div><div class="line">emulator-5558  device</div></pre></td></tr></table></figure>
 <h3 id="连接到指定设备">连接到指定设备</h3><p>　　如果多个设备连接到开发机，可以使用 -s <serialnumber>，如：</serialnumber></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="operator">-s</span> emulator-<span class="number">5556</span> install helloWorld.apk</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb -s emulator-5556 install helloWorld.apk</div></pre></td></tr></table></figure>
 <p>　　如果虽然有多个设备相连，但是只有一个是通usb/模拟器相连，那么可以使用<code>-d</code>或<code>-e</code>参数 。</p>
 <h3 id="安装App">安装App</h3><p>　　adb可以将开发机上的apk安装到目标设备中：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install <span class="tag">&lt;<span class="title">path_to_apk</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb install &lt;path_to_apk&gt;</div></pre></td></tr></table></figure>
 <p>　　如果使用集成开发环境，那么IDE将自动调用ADB安装程序。</p>
-<p>　　可以将对开发机任意端口的请求转发到目标设备的某指定端口，如：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb forward <span class="string">tcp:</span><span class="number">6100</span> <span class="string">tcp:</span><span class="number">7100</span></span><br></pre></td></tr></table></figure></p>
+<p>　　可以将对开发机任意端口的请求转发到目标设备的某指定端口，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb forward tcp:6100 tcp:7100</div></pre></td></tr></table></figure></p>
 <p>　　访问host 6100将等同于访问android设备的7100端口。</p>
 <p>　　也可以使用UNIX domain来表示端口：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb forward <span class="string">tcp:</span><span class="number">6100</span> <span class="string">local:</span>logd</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb forward tcp:6100 local:logd</div></pre></td></tr></table></figure>
 <h3 id="宿主机与目标设备间copy文件">宿主机与目标设备间copy文件</h3><p>　　使用<code>pull</code>和<code>push</code>命令可以在开发机与目标机之间copy文件。</p>
 <p>　　从设备到开发机：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb pull <span class="tag">&lt;<span class="title">remote</span>&gt;</span> <span class="tag">&lt;<span class="title">local</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>　　从开发机到设备：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb push <span class="tag">&lt;<span class="title">local</span>&gt;</span> <span class="tag">&lt;<span class="title">remote</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb pull &lt;remote&gt; &lt;local&gt;</div></pre></td></tr></table></figure>
+<p>　　从开发机到设备：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb push &lt;local&gt; &lt;remote&gt;</div></pre></td></tr></table></figure></p>
 <p>　　以上<code>local</code>指开发机文件path，<code>remote</code>指android设备path,如：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="keyword">push</span> foo.txt <span class="regexp">/sdcard/</span>foo.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb push foo.txt /sdcard/foo.txt</div></pre></td></tr></table></figure>
 <h3 id="执行命令">执行命令</h3><p>　　adb提供一个目标设备的Shell，可以执行位于android设备<code>/system/bin/...</code>等位置的命令。<br>　　最常用的两个命令是 activity manager (<code>am</code>) 和 package manager (<code>pm</code>)。</p>
 <p>　　如果不想进入shell，可以：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb [<span class="operator">-d</span>|<span class="operator">-e</span>|<span class="operator">-s</span> &lt;serialNumber&gt;] shell &lt;shell_<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb [-d|-e|-s &lt;serialNumber&gt;] shell &lt;shell_command&gt;</div></pre></td></tr></table></figure>
 <p>　　直接打开android设备的shell：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb [<span class="operator">-d</span>|<span class="operator">-e</span>|<span class="operator">-s</span> &lt;serialNumber&gt;] shell</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb [-d|-e|-s &lt;serialNumber&gt;] shell</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -216,7 +217,7 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/android/">android</a><a href="/tags/adb/">adb</a>
   </div>
 
 </div>
@@ -248,7 +249,7 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 
 
 <div class="next">
-<a href="/2015/06/07/basicAptCommands/"  title="包管理之apt-get和apt-cache的基本命令">
+<a href="/2015/06/08/basicAptCommands/"  title="包管理之apt-get和apt-cache的基本命令">
  <strong>下一篇：</strong><br/> 
  <span>包管理之apt-get和apt-cache的基本命令
 </span>
@@ -285,7 +286,7 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -301,11 +302,11 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -329,11 +330,11 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -341,23 +342,23 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -444,7 +445,7 @@ wait-<span class="keyword">for</span>-device 在设备状态为<span class="stri
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

@@ -27,6 +27,7 @@
 简单的递归求解r(n)表示规模为n问题的最优解，p(i">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1esfj7uxi75j20h402b0sv.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1esfj8c9txlj206a01m0sk.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态规划实战（一）：理解再实现">
 <meta name="twitter:description" content="动态规划很像分治法，都是通过分解成子问题并结合其结果来得到原问题的解。区别在于法的子问题不相交，但是动态规划的子问题是重叠的。
@@ -34,6 +35,7 @@
 钢条切割问题将长度为n的钢条切割成若干短钢条出售，切割成本不计，钢条长度与售价关系如下表，求一种售价最大的切割法（含不切割情况）。
 
 简单的递归求解r(n)表示规模为n问题的最优解，p(i">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1esfj7uxi75j20h402b0sv.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -46,7 +48,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -116,14 +118,14 @@
 <p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1esfj7uxi75j20h402b0sv.jpg" alt=""></p>
 <h2 id="简单的递归求解">简单的递归求解</h2><p>r(n)表示规模为n问题的最优解，p(i)为长i钢条的售价：</p>
 <p><img src="http://ww1.sinaimg.cn/large/55f247cbgw1esfj8c9txlj206a01m0sk.jpg" alt=""></p>
-<p>以下为Python的代码实现：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">p=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">17</span>,<span class="number">17</span>,<span class="number">20</span>,<span class="number">24</span>,<span class="number">30</span>]</span><br><span class="line"></span><br><span class="line">def <span class="function"><span class="title">cut_rod</span><span class="params">(n,p)</span></span>:</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        return <span class="number">0</span></span><br><span class="line">    q=-<span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> <span class="tag">i</span> <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">1</span>,n+<span class="number">1</span>)</span></span>:</span><br><span class="line">        t= <span class="tag">p</span>[i]+<span class="function"><span class="title">cut_rod</span><span class="params">(n-i,p)</span></span></span><br><span class="line">        <span class="keyword">if</span> t &gt; <span class="tag">q</span>:</span><br><span class="line">            q=t</span><br><span class="line">    return <span class="tag">q</span></span><br><span class="line"></span><br><span class="line">print <span class="function"><span class="title">cut_rod</span><span class="params">(<span class="number">9</span>,p)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>以下为Python的代码实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">p=[0,1,5,8,9,10,17,17,20,24,30]</div><div class="line"></div><div class="line">def cut_rod(n,p):</div><div class="line">    if n == 0:</div><div class="line">        return 0</div><div class="line">    q=-1</div><div class="line">    for i in range(1,n+1):</div><div class="line">        t= p[i]+cut_rod(n-i,p)</div><div class="line">        if t &gt; q:</div><div class="line">            q=t</div><div class="line">    return q</div><div class="line"></div><div class="line">print cut_rod(9,p)</div></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>运行结果为25</p>
 <p>但是这种方法对同样的规模的问题进行了多次重复的运算，即对2^(n-1)种切割都进行了计算，规模越小的问题重复次数越多，性能很差，时间性能为O(2^n).</p>
 <h2 id="使用动态规划">使用动态规划</h2><p>动态规划仔细安排求解，对每个子问题只求解一次，将结果保存，用额外的空间换取时间。有两种等价的实现方式：</p>
 <h3 id="带备忘的自顶向下">带备忘的自顶向下</h3><p>仍然按自然的递归形式编写过程，但过程中保存每个子问题的解，遇到子问题时先从存档中查找，若无记录再计算。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cut_rod_mem</span><span class="params">(n, p)</span>:</span></span><br><span class="line">    m = [<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        m.append(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">(n, p)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> m[n]!=-<span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> m[n]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            t = p[i] + inner(n - i, p)</span><br><span class="line">            <span class="keyword">if</span> t &gt; m[n]:</span><br><span class="line">                m[n] = t</span><br><span class="line">        <span class="keyword">return</span> m[n]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> inner(n,p)</span><br></pre></td></tr></table></figure>
-<h3 id="自底向上">自底向上</h3><p>可以将子问题按规模排序，由小到进行求解，确保每次求解更小的子问题已有存档。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def <span class="function"><span class="title">bottom_up</span><span class="params">(n, p)</span></span>:</span><br><span class="line">    m = [<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> <span class="tag">i</span> <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">10</span>)</span></span>:</span><br><span class="line">        m.<span class="function"><span class="title">append</span><span class="params">(-<span class="number">1</span>)</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> <span class="tag">i</span> <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">1</span>, n + <span class="number">1</span>)</span></span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">1</span>, i + <span class="number">1</span>)</span></span>:</span><br><span class="line">            t = <span class="tag">p</span>[j] + m[<span class="tag">i</span> - j]</span><br><span class="line">            <span class="keyword">if</span> t &gt; m[i]:</span><br><span class="line">                m[i] = t</span><br><span class="line">    return m[n]</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def cut_rod_mem(n, p):</div><div class="line">    m = [0]</div><div class="line">    for i in range(10):</div><div class="line">        m.append(-1)</div><div class="line"></div><div class="line">    def inner(n, p):</div><div class="line">        if m[n]!=-1:</div><div class="line">            return m[n]</div><div class="line">        for i in range(1, n + 1):</div><div class="line">            t = p[i] + inner(n - i, p)</div><div class="line">            if t &gt; m[n]:</div><div class="line">                m[n] = t</div><div class="line">        return m[n]</div><div class="line"></div><div class="line">    return inner(n,p)</div></pre></td></tr></table></figure>
+<h3 id="自底向上">自底向上</h3><p>可以将子问题按规模排序，由小到进行求解，确保每次求解更小的子问题已有存档。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">def bottom_up(n, p):</div><div class="line">    m = [0]</div><div class="line">    for i in range(10):</div><div class="line">        m.append(-1)</div><div class="line"></div><div class="line">    for i in range(1, n + 1):</div><div class="line">        for j in range(1, i + 1):</div><div class="line">            t = p[j] + m[i - j]</div><div class="line">            if t &gt; m[i]:</div><div class="line">                m[i] = t</div><div class="line">    return m[n]</div></pre></td></tr></table></figure></p>
 <p>以上两种方法的渐近时间是一样的，为多项式级性能，只在特定的情形下有差异。由于bottom up的方法没有递归中频繁的函数调用开销，性能更好。</p>
 <h2 id="小结">小结</h2><p>这种问题的特性为</p>
 <pre><code>原问题可以分解为形式一致，但规模更小的子问题
@@ -143,7 +145,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/动态规划/">动态规划</a><a href="/tags/算法/">算法</a><a href="/tags/钢条切割/">钢条切割</a>
+  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/动态规划/">动态规划</a><a href="/tags/钢条切割/">钢条切割</a>
   </div>
 
 </div>
@@ -212,7 +214,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -228,11 +230,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -256,11 +258,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -268,23 +270,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -371,7 +373,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

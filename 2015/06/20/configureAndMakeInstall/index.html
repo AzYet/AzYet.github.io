@@ -23,6 +23,7 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 123./configuremakemake install
 目前为止我执行上述命令已经很多次了，但是并不知道它背后的逻辑。在跟进一个还在开发中的项目的时候，上要述步骤并不能完美执行，需要针对作一些修改，是时候挖掘这些咒语背后的操作了。
 configureconfigure脚本负责在特定的系统上执行build的准备工作。这确认后续">
+<meta property="og:updated_time" content="2015-12-04T00:24:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="configure和make install背后的故事">
 <meta name="twitter:description" content="接触过Linux开发的人都知道从源代码安装需要执行类似以下的步骤：
@@ -41,7 +42,7 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -106,7 +107,7 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 		</div>
 		
 		<p>接触过Linux开发的人都知道从源代码安装需要执行类似以下的步骤：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./configure</div><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure>
 <p>目前为止我执行上述命令已经很多次了，但是并不知道它背后的逻辑。在跟进一个还在开发中的项目的时候，上要述步骤并不能完美执行，需要针对作一些修改，是时候挖掘这些咒语背后的操作了。</p>
 <h2 id="configure">configure</h2><p><code>configure</code>脚本负责在特定的系统上执行build的准备工作。这确认后续的build和install的依赖关系已经满足，找出使用这些依赖需要知道的所有信息。</p>
 <p>Linux程序通常是用C编写的，所以我们需要C编译器，configure脚本通常会检查系统有合适的C编译器，它在哪里以及如何调用。</p>
@@ -123,47 +124,47 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 <p>使用这种方式安装的程序通常使用叫做<code>autotools</code>的工具包来管理，工具包包括<code>autoconf</code>,<code>automake</code>和很多其它工具，它们一起使得软件维护大为简化。最终用户见不到这些工具，但是它们消除了在不同系统上频繁配置安装过程的麻烦。</p>
 <h2 id="Hello_World">Hello World</h2><p>下面以一个简单的hello world程序为例来演示如何使用<code>autotools</code>.</p>
 <p>程序源代码如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span></span><br><span class="line"><span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Hello world\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int</div><div class="line">main(int argc, char* argv[])</div><div class="line">&#123;</div><div class="line">    printf(&quot;Hello world\n&quot;);</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="创建configure脚本">创建configure脚本</h2><p>我们不手工编写configure脚本，而是使用m4sh来编写configure.ac文件来定义configure中的操作。m4sh是m4 macro和shell的结合。</p>
 <p>第一个调用的m4 marco是<code>AC_INIT</code>，它会初始化<code>autoconf</code>并设置一些关于 我们要打包的程序的基本信息。程序名为hellworld,版本为0.1, 维护者为abc@124.com:</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">AC_INIT</span>(<span class="attr_selector">[helloworld]</span>, <span class="attr_selector">[0.1]</span>, <span class="attr_selector">[abc@124.com]</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AC_INIT([helloworld], [0.1], [abc@124.com])</div></pre></td></tr></table></figure>
 <p>我们将使用<code>automake</code>工具，所以调用AM_INIT_AUTOMAKE macro：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AM_INIT_AUTOMAKE</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AM_INIT_AUTOMAKE</div></pre></td></tr></table></figure>
 <p>接下来定义依赖关系，程序依赖C编译器，所以 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AC_PROG_CC</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AC_PROG_CC</div></pre></td></tr></table></figure>
 <p>如果还有其它的依赖，我们可以使用其它marco来发现，例如<a href="https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Configuration-Files.html" target="_blank" rel="external"><code>AC_PATH_PROG</code></a>可以在用户PATH下查找程序。</p>
 <p>依赖关系完成以后，接下就要使用这些信息生成Makefile了。</p>
-<p>使用<a href="https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Configuration-Files.html" target="_blank" rel="external"><code>AC_CONFIG_FILES</code></a>告诉autoconf脚本需要找到Makefile.in,替换变量（如@PACKAGE_VERSION@）为某值（如0.1），将结果写入Makefile。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">AC_CONFIG_FILES</span><span class="params">([Makefile])</span></span></span><br></pre></td></tr></table></figure></p>
+<p>使用<a href="https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Configuration-Files.html" target="_blank" rel="external"><code>AC_CONFIG_FILES</code></a>告诉autoconf脚本需要找到Makefile.in,替换变量（如@PACKAGE_VERSION@）为某值（如0.1），将结果写入Makefile。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AC_CONFIG_FILES([Makefile])</div></pre></td></tr></table></figure></p>
 <p>当一切定义完之后，使用<code>AC_OUTPUT</code>来输出脚本。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AC_OUTPUT</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AC_OUTPUT</div></pre></td></tr></table></figure>
 <p>以下是全部的内容：</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">AC_INIT</span>(<span class="attr_selector">[helloworld]</span>, <span class="attr_selector">[0.1]</span>, <span class="attr_selector">[abc@124.com]</span>)</span><br><span class="line">AM_INIT_AUTOMAKE</span><br><span class="line">AC_PROG_CC</span><br><span class="line"><span class="function">AC_CONFIG_FILES</span>(<span class="attr_selector">[Makefile]</span>)</span><br><span class="line">AC_OUTPUT</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">AC_INIT([helloworld], [0.1], [abc@124.com])</div><div class="line">AM_INIT_AUTOMAKE</div><div class="line">AC_PROG_CC</div><div class="line">AC_CONFIG_FILES([Makefile])</div><div class="line">AC_OUTPUT</div></pre></td></tr></table></figure>
 <p>至此已经接近完成了，马上就可以发现软件包了，但是我们还没有创建Makefile.in文件。</p>
 <h2 id="创建Makefile">创建Makefile</h2><p>类似Makefile，Makefile.in也会很长，所以我们写一个<code>Makefile.am</code>文件给automake来创建模板文件。</p>
 <p>首先设置一些选项来告诉automake关于项目的结构信息。由于我们没有遵照GNU规范，所以它是一个<code>foreign</code>类型的工程</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">AUTOMAKE_OPTIONS</span> = <span class="foreign"><span class="keyword">foreign</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AUTOMAKE_OPTIONS = foreign</div></pre></td></tr></table></figure>
 <p>工程名为helloworld</p>
-<figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">bin_PROGRAMS </span>=<span class="string"> helloworld</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin_PROGRAMS = helloworld</div></pre></td></tr></table></figure>
 <p>这一行中包含了许多信息，多亏了automake的<code>uniform naming scheme</code></p>
 <p>PROGRAMS的前缀称为<code>primary</code>，告诉automake工程有哪些properties。例如PROGRAMS需要build，但数据和脚本不需要。</p>
 <p><code>bin</code>前缀告诉automake此处列出的文件应该安装到变量<code>bindir</code>指定的目录，autotools定义了一系列的目录，包括<code>bindir</code>，<code>libdir</code>和<code>pkglibdir</code>，还可以定义自己的目录。</p>
 <p>如果想安装一些RUBY脚本作为程序的一部分，可以定义<code>rubydir</code>并告诉automake安装ruby脚本到此。</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">rubydir</span> = <span class="variable">$(datadir)</span>/ruby</span><br><span class="line"><span class="constant">ruby_DATA</span> = my_script.rb my_other_script.rb</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rubydir = $(datadir)/ruby</div><div class="line">ruby_DATA = my_script.rb my_other_script.rb</div></pre></td></tr></table></figure>
 <p>额外的前缀可以加在安装目录前来定义automake的具体行为。</p>
 <p>因为我们定义了一个<code>PROGRAM</code>，需要告诉automake源文件位置，前缀为程序名。</p>
-<figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">helloworld_SOURCES </span>=<span class="string"> main.c</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">helloworld_SOURCES = main.c</div></pre></td></tr></table></figure>
 <p>以下是Makefile.am的全文，它比Makefile或者Makefile.in要短很多。</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">AUTOMAKE_OPTIONS = <span class="value">foreign</span></span></span><br><span class="line"><span class="setting">bin_PROGRAMS = <span class="value">helloworld</span></span></span><br><span class="line"><span class="setting">helloworld_SOURCES = <span class="value">main.c</span></span></span><br></pre></td></tr></table></figure>
-<h2 id="汇总">汇总</h2><p>现在可以生成自己的configure和makefile.in了。首先需要生成autotools使用的m4环境变量。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aclocal</span><br></pre></td></tr></table></figure></p>
-<p>现在可以运行autoconf来将configure.ac转换为configure文件，automake则生成Makefile.in<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">autoconf</span><br><span class="line">automake <span class="comment">--add-missing</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">AUTOMAKE_OPTIONS = foreign</div><div class="line">bin_PROGRAMS = helloworld</div><div class="line">helloworld_SOURCES = main.c</div></pre></td></tr></table></figure>
+<h2 id="汇总">汇总</h2><p>现在可以生成自己的configure和makefile.in了。首先需要生成autotools使用的m4环境变量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">aclocal</div></pre></td></tr></table></figure></p>
+<p>现在可以运行autoconf来将configure.ac转换为configure文件，automake则生成Makefile.in<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">autoconf</div><div class="line">automake --add-missing</div></pre></td></tr></table></figure></p>
 <h2 id="发布程序">发布程序</h2><p>最终用户只需configure和Makefile.in而不需要autotools生成以上文件的相关文件，所幸autotools也包含发布功能。Makefile包含所有有趣的目标，例如build一个包含发布工程所需的所有文件的tarball。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line"><span class="built_in">make</span> dist</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./configure</div><div class="line">make dist</div></pre></td></tr></table></figure>
 <p>甚至可以测试该tarball在不同条件下的可安装性</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> distcheck</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make distcheck</div></pre></td></tr></table></figure>
 <h2 id="总结">总结</h2><p>现在我们知道那些咒语的奥秘了<br>在维护者这里</p>
-<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">aclocal # <span class="keyword">Set</span> up an m4 environment</span><br><span class="line">autoconf # Generate configure <span class="keyword">from</span> configure.ac</span><br><span class="line">automake --<span class="keyword">add</span>-missing # Generate Makefile.<span class="keyword">in</span> <span class="keyword">from</span> Makefile.am</span><br><span class="line">./configure # Generate Makefile <span class="keyword">from</span> Makefile.<span class="keyword">in</span></span><br><span class="line">make distcheck # Use Makefile <span class="keyword">to</span> build <span class="keyword">and</span> test a tarball <span class="keyword">to</span> distribute</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">aclocal # Set up an m4 environment</div><div class="line">autoconf # Generate configure from configure.ac</div><div class="line">automake --add-missing # Generate Makefile.in from Makefile.am</div><div class="line">./configure # Generate Makefile from Makefile.in</div><div class="line">make distcheck # Use Makefile to build and test a tarball to distribute</div></pre></td></tr></table></figure>
 <p>在使用者那里</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure # Generate Makefile from Makefile.<span class="type">in</span></span><br><span class="line">make # <span class="keyword">Use</span> Makefile to build the <span class="function"><span class="keyword">program</span></span></span><br><span class="line">make install # <span class="keyword">Use</span> Makefile to install the <span class="function"><span class="keyword">program</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./configure # Generate Makefile from Makefile.in</div><div class="line">make # Use Makefile to build the program</div><div class="line">make install # Use Makefile to install the program</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -241,7 +242,7 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -257,11 +258,11 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -285,11 +286,11 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -297,23 +298,23 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -400,7 +401,7 @@ configureconfigure脚本负责在特定的系统上执行build的准备工作。
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

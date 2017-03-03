@@ -1,0 +1,595 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ZooKeeper学习笔记（三）之开发入门-续 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。
+Barrier 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.
+测试代码12345678910 ZKBarrier zkBarrier = new ZKBarrier(&amp;quot;dell:2181&amp;quot;, &amp;quot;/testRoo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper学习笔记（三）之开发入门-续">
+<meta property="og:url" content="http://azyet.github.io/2015/05/20/zookeeperNote3/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。
+Barrier 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.
+测试代码12345678910 ZKBarrier zkBarrier = new ZKBarrier(&amp;quot;dell:2181&amp;quot;, &amp;quot;/testRoo">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper学习笔记（三）之开发入门-续">
+<meta name="twitter:description" content="这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。
+Barrier 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.
+测试代码12345678910 ZKBarrier zkBarrier = new ZKBarrier(&amp;quot;dell:2181&amp;quot;, &amp;quot;/testRoo">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-19T17:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Barrier"><span class="toc-number">1.</span> <span class="toc-text">Barrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码"><span class="toc-number">1.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志输出设置"><span class="toc-number">1.2.</span> <span class="toc-text">日志输出设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行结果与分析"><span class="toc-number">1.3.</span> <span class="toc-text">运行结果与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Queue"><span class="toc-number">2.</span> <span class="toc-text">Queue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码-1"><span class="toc-number">2.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出与分析"><span class="toc-number">2.2.</span> <span class="toc-text">输出与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附完整代码"><span class="toc-number">3.</span> <span class="toc-text">附完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SysncPrimitive"><span class="toc-number">3.1.</span> <span class="toc-text">SysncPrimitive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkQueue"><span class="toc-number">3.2.</span> <span class="toc-text">zkQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkBarrier"><span class="toc-number">3.3.</span> <span class="toc-text">zkBarrier</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p> 这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。</p>
+<h2 id="Barrier">Barrier</h2><p> 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.</p>
+<h3 id="测试代码">测试代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> ZKBarrier zkBarrier = new ZKBarrier(&quot;dell:2181&quot;, &quot;/testRoot3&quot;, 3);</div><div class="line"> </div><div class="line">//purge the children under testrRoot</div><div class="line"></div><div class="line">zkBarrier.name = args[0];</div><div class="line">System.out.println(&quot;Entering the Barrier&quot;);</div><div class="line">zkBarrier.enter();</div><div class="line">System.out.println(&quot;Work done, leaving&quot;);</div><div class="line">zkBarrier.leave();</div><div class="line">return;</div></pre></td></tr></table></figure>
+<p> 大致的流程如下：</p>
+<pre><code>等待其它进程（总数3）就绪
+开始工作
+等待所有Node删除，退出
+</code></pre><a id="more"></a>
+<h3 id="日志输出设置">日志输出设置</h3><p>enter方法中有如下打印语句：</p>
+<p>监听也是在enter方法中设置的<code>List&lt;String&gt; list = zk.getChildren(root, true);</code>第二个参数<code>True</code>代表监听root Node，Node的任何更新都会被通知.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">ArrayList&lt;String&gt; list = (ArrayList&lt;String&gt;) zk.getChildren(root, true);</div><div class="line">if (list.size() &gt; 0) &#123;</div><div class="line"></div><div class="line">    System.out.print(list.size()+&quot; children: &quot;);</div><div class="line">    for (String s : list) &#123;</div><div class="line">        System.out.print(s + &quot; &quot;);</div><div class="line">    &#125;</div><div class="line">    System.out.print(&quot;\n&quot;);</div></pre></td></tr></table></figure>
+<p>每次收到消息，即打印children node, 数量到达3时， 将进入工作阶段。</p>
+<p>leave方法中也有类似日志输出，当数量为0时，退出程序。</p>
+<h3 id="运行结果与分析">运行结果与分析</h3><p>首先运行nodej进程，再依次运行node1 和node2进程。</p>
+<p>nodej输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Entering the Barrier</div><div class="line">1 children: nodej </div><div class="line">2 children: node1 nodej </div><div class="line">3 children: node2 node1 nodej </div><div class="line">time to work!!!</div><div class="line">Work done, leaving</div><div class="line">1children: node1</div></pre></td></tr></table></figure>
+<p>Node1输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Entering the Barrier</div><div class="line">2 children: node1 nodej </div><div class="line">3 children: node2 node1 nodej </div><div class="line">time to work!!!</div><div class="line">Work done, leaving</div></pre></td></tr></table></figure>
+<p>Node2 输出:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Entering the Barrier</div><div class="line">3 children: node2 node1 nodej </div><div class="line">time to work!!!</div><div class="line">Work done, leaving</div></pre></td></tr></table></figure>
+<p>可以看到，Nodej Node1 Node2依次进入Barrier。每次有Node进入，在线的Node都会收到消息（广播），打印信息。当Node2进入时，达到预定数量3, 所有进程退出enter方法开始进入工作状态（只是打印一句日志），完成后开始进入退出状态。退出时，每个进程删除自己对应的Node，但是并不立即退出方法，而是待到所有Node删除后才返回。</p>
+<pre><code>这里测试模拟的工作时间很短，过程中出现过问题，即Node2刚创建，Node1 Nodej结束等待并瞬间工作完毕，删除自身Node，导致Node2尚未进入工作状态，因而将一直在等待。加一句<span class="function"><span class="title">sleep</span><span class="params">(<span class="number">1000</span>)</span></span>延长工作时间可解决。实际应用中如果任务运行时间很短，也需要考虑这个问题。
+</code></pre><p>通过以上机制，分布式的三个进程实现了同时开始工作和同时退出，也就是达到了协同的效果。</p>
+<h2 id="Queue">Queue</h2><p>我们之前介绍了RabbitMQ，它是一个专门的AMQP应用，使用ZooKeeper的znode的有序性，也可以实现类似的功能。</p>
+<h3 id="测试代码-1">测试代码</h3><p>依然采用了main方法来测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">ZKQueue zkQueue = new ZKQueue(&quot;dell:2181&quot;, &quot;/queueRoot1&quot;);</div><div class="line"></div><div class="line">if (zkQueue == null) &#123;</div><div class="line">    return;</div><div class="line">&#125;</div><div class="line"></div><div class="line">if (args.length == 1) &#123;</div><div class="line">    zkQueue.produce(Integer.parseInt(args[0]));</div><div class="line">&#125; else &#123;</div><div class="line">    while (true) &#123;</div><div class="line">        System.out.println(&quot;node value is:&quot; + zkQueue.consume());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code>无参时作为consumer一直监听消息，有参时作为producer发送参数值（整数）。
+</code></pre><h3 id="输出与分析">输出与分析</h3><p>producer：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ java -jar target/zkQueue-1.0-SNAPSHOT.jar 1</div><div class="line"></div><div class="line">$ java -jar target/zkQueue-1.0-SNAPSHOT.jar 2</div><div class="line"></div><div class="line">$ java -jar target/zkQueue-1.0-SNAPSHOT.jar 5</div></pre></td></tr></table></figure>
+<p>consumer</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Going to wait</div><div class="line">node name: element0000000003</div><div class="line">Temporary value: /queueRoot1/element0000000003</div><div class="line">node value is:1</div><div class="line">Going to wait</div><div class="line">node name: element0000000004</div><div class="line">Temporary value: /queueRoot1/element0000000004</div><div class="line">node value is:2</div><div class="line">Going to wait</div><div class="line">node name: element0000000005</div><div class="line">Temporary value: /queueRoot1/element0000000005</div><div class="line">node value is:5</div><div class="line">Going to wait</div></pre></td></tr></table></figure>
+<p>这里我们可以看到，当创建模式为<code>EPHEMERAL_SEQUENTIAL</code>时，ZooKeeper会为节点名自动添加序号，对应是创建的顺序。因为只有一个producer，任务也简单，所以Node数总是1。如果有多个consumer，上述代码就会出错，因为消息是广播的，获取节点数据之后二者都会执行删除操作。可见它用来实现1对1的通信还是比较便捷的，但如果要实现工作队列来在多个线程中分发任务，实现并行处理和负载平衡，就不是很方便。</p>
+<h2 id="附完整代码">附完整代码</h2><p>实质上一节的代码有一些小Bug，这里附上完整的代码</p>
+<h3 id="SysncPrimitive">SysncPrimitive</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">package io.github.azyet;</div><div class="line"></div><div class="line">import org.apache.zookeeper.KeeperException;</div><div class="line">import org.apache.zookeeper.WatchedEvent;</div><div class="line">import org.apache.zookeeper.Watcher;</div><div class="line">import org.apache.zookeeper.ZooKeeper;</div><div class="line">import org.apache.zookeeper.proto.WatcherEvent;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by chen on 15-5-19.</div><div class="line"> */</div><div class="line">public class SyncPrimitive implements Watcher &#123;</div><div class="line">    static ZooKeeper zk = null;</div><div class="line">    static final Object mutex = new Object();</div><div class="line"></div><div class="line">    String root;</div><div class="line"></div><div class="line">    SyncPrimitive(String address)</div><div class="line">            throws KeeperException, IOException &#123;</div><div class="line">        if (zk == null) &#123;</div><div class="line">            System.out.println(&quot;Starting ZK:&quot;);</div><div class="line">            zk = new ZooKeeper(address, 3000, (Watcher) this);</div><div class="line">            System.out.println(&quot;Finished starting ZK: &quot; + zk);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void process(WatchedEvent watchedEvent) &#123;</div><div class="line">        synchronized (mutex) &#123;</div><div class="line">            mutex.notify();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="zkQueue">zkQueue</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div></pre></td><td class="code"><pre><div class="line">package io.github.azyet;</div><div class="line"></div><div class="line">import org.apache.zookeeper.CreateMode;</div><div class="line">import org.apache.zookeeper.KeeperException;</div><div class="line">import org.apache.zookeeper.ZooDefs;</div><div class="line">import org.apache.zookeeper.data.Stat;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">import java.nio.ByteBuffer;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Hello world!</div><div class="line"> */</div><div class="line">public class ZKQueue extends SyncPrimitive &#123;</div><div class="line"></div><div class="line">    ZKQueue(String address, String name)</div><div class="line">            throws KeeperException, InterruptedException, IOException &#123;</div><div class="line">        super(address);</div><div class="line">        this.root = name;</div><div class="line">        // Create ZK node name</div><div class="line">        if (zk != null) &#123;</div><div class="line">            Stat s = zk.exists(root, false);</div><div class="line">            if (s == null) &#123;</div><div class="line">                zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * ****** Add element to the queue.</div><div class="line">     * ******</div><div class="line">     * ****** @param i</div><div class="line">     * ****** @return</div><div class="line">     *******/</div><div class="line"></div><div class="line">    boolean produce(int i) throws KeeperException, InterruptedException &#123;</div><div class="line">        ByteBuffer b = ByteBuffer.allocate(4);</div><div class="line">        byte[] value;</div><div class="line"></div><div class="line">//      Add child with value i</div><div class="line">        b.putInt(i);</div><div class="line">        value = b.array();</div><div class="line">        zk.create(root + &quot;/element&quot;, value, ZooDefs.Ids.OPEN_ACL_UNSAFE,</div><div class="line">                CreateMode.EPHEMERAL_SEQUENTIAL);</div><div class="line"></div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * ****** Remove first element from the queue.</div><div class="line">     * ******</div><div class="line">     * ****** @return</div><div class="line">     * ****** @throws KeeperException</div><div class="line">     * ****** @throws InterruptedException</div><div class="line">     *******/</div><div class="line">    int consume() throws KeeperException, InterruptedException &#123;</div><div class="line">        int retvalue = -1;</div><div class="line">        Stat stat = null;</div><div class="line"></div><div class="line">// Get the first element available</div><div class="line">        while (true) &#123;</div><div class="line">            synchronized (mutex) &#123;</div><div class="line">                List&lt;String&gt; list = zk.getChildren(root, true);</div><div class="line">                if (list.isEmpty()) &#123;</div><div class="line">                    System.out.println(&quot;Going to wait&quot;);</div><div class="line">                    mutex.wait();</div><div class="line">                &#125; else &#123;</div><div class="line">                    for (String s : list) &#123;</div><div class="line">                        System.out.println(&quot;node name: &quot; + s);</div><div class="line">                    &#125;</div><div class="line">                    Integer min = new Integer(list.get(0).substring(7));</div><div class="line">                    String minName = list.get(0);</div><div class="line">                    for (String s : list) &#123;</div><div class="line">                        Integer tempValue = new Integer(s.substring(7));</div><div class="line">                        if (tempValue &lt; min) &#123;</div><div class="line">                            min = tempValue;</div><div class="line">                            minName = s;</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    System.out.println(&quot;Temporary value: &quot; + root + &quot;/&quot; + minName);</div><div class="line">                    byte[] b = zk.getData(root + &quot;/&quot; + minName, false, stat);</div><div class="line">                    zk.delete(root + &quot;/&quot; + minName, 0);</div><div class="line">                    ByteBuffer buffer = ByteBuffer.wrap(b);</div><div class="line">                    retvalue = buffer.getInt();</div><div class="line"></div><div class="line">                    return retvalue;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String args[]) throws KeeperException, InterruptedException, IOException &#123;</div><div class="line">        ZKQueue zkQueue = new ZKQueue(&quot;dell:2181&quot;, &quot;/queueRoot1&quot;);</div><div class="line"></div><div class="line">        if (zkQueue == null) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (args.length == 1) &#123;</div><div class="line">            zkQueue.produce(Integer.parseInt(args[0]));</div><div class="line">        &#125; else &#123;</div><div class="line">            while (true) &#123;</div><div class="line">                System.out.println(&quot;node value is:&quot; + zkQueue.consume());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="zkBarrier">zkBarrier</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div></pre></td><td class="code"><pre><div class="line">package io.github.azyet;</div><div class="line"></div><div class="line">import org.apache.zookeeper.CreateMode;</div><div class="line">import org.apache.zookeeper.KeeperException;</div><div class="line">import org.apache.zookeeper.ZooDefs;</div><div class="line">import org.apache.zookeeper.data.Stat;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">import java.net.InetAddress;</div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Hello world!</div><div class="line"> */</div><div class="line">public class ZKBarrier extends SyncPrimitive &#123;</div><div class="line"></div><div class="line">    String root;</div><div class="line">    private String name;</div><div class="line">    private int size;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * ****** Barrier constructor</div><div class="line">     * ******</div><div class="line">     * ****** @param address</div><div class="line">     * ****** @param name</div><div class="line">     * ****** @param size</div><div class="line">     *******/</div><div class="line">    ZKBarrier(String address, String rootNode, int size)</div><div class="line">            throws KeeperException, InterruptedException, IOException &#123;</div><div class="line">        super(address);</div><div class="line">        this.root = rootNode;</div><div class="line">        this.size = size;</div><div class="line"></div><div class="line">        // Create barrier node</div><div class="line">        if (zk != null) &#123;</div><div class="line">            Stat s = zk.exists(this.root, false);</div><div class="line">            if (s == null) &#123;</div><div class="line">                zk.create(this.root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // My node name</div><div class="line">        name = new String(InetAddress.getLocalHost().getCanonicalHostName().toString());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    boolean enter() throws KeeperException, InterruptedException &#123;</div><div class="line">        zk.create(root + &quot;/&quot; + name, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE,</div><div class="line">                CreateMode.EPHEMERAL);</div><div class="line">        while (true) &#123;</div><div class="line">            synchronized (mutex) &#123;</div><div class="line">                List&lt;String&gt; list = zk.getChildren(root, true);</div><div class="line"></div><div class="line">                System.out.print(list.size()+&quot; children: &quot;);</div><div class="line">                for (String s : list) &#123;</div><div class="line">                    System.out.print(s+&quot; &quot;);</div><div class="line">                &#125;</div><div class="line">                System.out.print(&quot;\n&quot;);</div><div class="line"></div><div class="line">                if (list.size() &lt; size) &#123;</div><div class="line">                    mutex.wait();</div><div class="line">                &#125; else &#123;</div><div class="line">                    System.out.println(&quot;time to work!!!&quot;);</div><div class="line">                    return true;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * ****** Wait until all reach barrier</div><div class="line">     * ******</div><div class="line">     * ****** @return</div><div class="line">     * ****** @throws KeeperException</div><div class="line">     * ****** @throws InterruptedException</div><div class="line">     *******/</div><div class="line"></div><div class="line">    boolean leave() throws KeeperException, InterruptedException &#123;</div><div class="line">        zk.delete(root + &quot;/&quot; + name, 0);</div><div class="line">        while (true) &#123;</div><div class="line">            synchronized (mutex) &#123;</div><div class="line">                ArrayList&lt;String&gt; list = (ArrayList&lt;String&gt;) zk.getChildren(root, true);</div><div class="line">                if (list.size() &gt; 0) &#123;</div><div class="line"></div><div class="line">                    System.out.print(list.size()+&quot; children: &quot;);</div><div class="line">                    for (String s : list) &#123;</div><div class="line">                        System.out.print(s + &quot; &quot;);</div><div class="line">                    &#125;</div><div class="line">                    Thread.sleep(1000);</div><div class="line">                    System.out.print(&quot;\n&quot;);</div><div class="line"></div><div class="line">                    mutex.wait();</div><div class="line">                &#125; else &#123;</div><div class="line">                    return true;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        if (args.length &lt; 1) &#123;</div><div class="line">            System.out.println(&quot;input node name&quot;);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            ZKBarrier zkBarrier = new ZKBarrier(&quot;dell:2181&quot;, &quot;/testRoot3&quot;, 3);</div><div class="line">            //purge the children under testrRoot</div><div class="line"></div><div class="line">            zkBarrier.name = args[0];</div><div class="line">            System.out.println(&quot;Entering the Barrier&quot;);</div><div class="line">            zkBarrier.enter();</div><div class="line">            System.out.println(&quot;Work done, leaving&quot;);</div><div class="line">            zkBarrier.leave();</div><div class="line">            return;</div><div class="line"></div><div class="line">        &#125; catch (KeeperException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/20/zookeeperNote3/" data-title="ZooKeeper学习笔记（三）之开发入门-续 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/20/zookeeperNote4/" title="ZooKeeper学习笔记（四）之基本概念">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ZooKeeper学习笔记（四）之基本概念</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/19/zookeeperNote2/"  title="ZooKeeper学习笔记（二）之开发入门">
+ <strong>下一篇：</strong><br/> 
+ <span>ZooKeeper学习笔记（二）之开发入门
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/20/zookeeperNote3/" data-title="ZooKeeper学习笔记（三）之开发入门-续" data-url="http://azyet.github.io/2015/05/20/zookeeperNote3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Barrier"><span class="toc-number">1.</span> <span class="toc-text">Barrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码"><span class="toc-number">1.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志输出设置"><span class="toc-number">1.2.</span> <span class="toc-text">日志输出设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行结果与分析"><span class="toc-number">1.3.</span> <span class="toc-text">运行结果与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Queue"><span class="toc-number">2.</span> <span class="toc-text">Queue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试代码-1"><span class="toc-number">2.1.</span> <span class="toc-text">测试代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出与分析"><span class="toc-number">2.2.</span> <span class="toc-text">输出与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附完整代码"><span class="toc-number">3.</span> <span class="toc-text">附完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SysncPrimitive"><span class="toc-number">3.1.</span> <span class="toc-text">SysncPrimitive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkQueue"><span class="toc-number">3.2.</span> <span class="toc-text">zkQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zkBarrier"><span class="toc-number">3.3.</span> <span class="toc-text">zkBarrier</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

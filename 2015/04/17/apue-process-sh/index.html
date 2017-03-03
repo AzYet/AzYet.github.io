@@ -17,6 +17,7 @@
 <meta property="og:url" content="http://azyet.github.io/2015/04/17/apue-process-sh/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="重看APUE最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以">
+<meta property="og:updated_time" content="2015-12-06T14:43:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APUE学习笔记之：进程入门">
 <meta name="twitter:description" content="重看APUE最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以">
@@ -32,7 +33,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -98,8 +99,8 @@
 		
 		<h2 id="重看APUE">重看APUE</h2><p>最近在折腾一些东西的时候，发现自己的操作系统知识很可怜，于是打算抽点时间学习APUE。其实与其说是重看，和第一次看也没有太多区别，之前上过一次选修但是很可惜当时没有心境沉下来上课，都做项目去了。现在我很想从头到尾认真的看一遍，虽然目前是做到了，但是以后可能时间吃紧，只能挑着看了。<br>最好的学习方法当然是看与写结合，所以我第一个例程，我看懂原理之后就会尝试自己“写”一遍，实际情况看比你”自以为看懂”地浏览过去效果要好。<br><a id="more"></a></p>
 <h2 id="进程">进程</h2><p>这一部分内容是我遇到的第一个觉得比较有意思的程序，今天就写这个吧,下面是一个简单shell的程序。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "apue.h"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span>    buff[MAXLINE];</span><br><span class="line">    pid_t   pid;</span><br><span class="line">    <span class="keyword">int</span>     status;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%%"</span>);       <span class="comment">//打印提示符，两个%%</span></span><br><span class="line">    <span class="keyword">while</span>(fgets(buff,MAXLINE,stdin)!=NULL)&#123;     <span class="comment">//遇到 EOF会返回NULL，所以可以ctrl+D退出这个shell</span></span><br><span class="line">        <span class="keyword">if</span>( (pid = fork()) &lt;<span class="number">0</span> )&#123;                <span class="comment">//尝试fork，返回负则表示失败,如果成功则会产生父进程的copy</span></span><br><span class="line">            err_sys(<span class="string">"failed to fork"</span>);                    </span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;                     <span class="comment">//fork对子进程返回0，以下进入子进程</span></span><br><span class="line">            buff[<span class="built_in">strlen</span>(buff)-<span class="number">1</span>]=<span class="number">0</span>;             <span class="comment">//细节，将回车替换为0</span></span><br><span class="line">            execlp(buff, buff, (<span class="keyword">char</span> *) <span class="number">0</span>);     <span class="comment">//execlp会加载指定程序，并覆盖当前进程数据（也就是说没以下两条指令的事了)</span></span><br><span class="line">            err_ret(<span class="string">"could not exec %s"</span>,buff);  <span class="comment">//如果进入到这里，则说明加载程序失败了(数据没被erase)</span></span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">127</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//return to the main process, 既然是开启了新进程，自然会立刻返回主进程，我们要设置等待</span></span><br><span class="line">        pid = waitpid(pid, &amp;status , <span class="number">0</span>);        <span class="comment">//这个status是子进程的返回状态，这时并没有检查该值</span></span><br><span class="line">        <span class="keyword">if</span>(pid &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            err_sys(<span class="string">"wait pid error"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">"%%"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行效果<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:/data/apue.2e/chen$ ./a.out </span><br><span class="line"><span class="tag">%<span class="title">ls</span></span></span><br><span class="line">a.out  apue.h  error.c  mycat.c  mycatstdio.c  myls.c  mysh.c  pid.c</span><br><span class="line"><span class="tag">%<span class="title">pwd</span></span></span><br><span class="line"><span class="comment">/data/apue.2e/chen</span></span><br><span class="line"><span class="tag">%<span class="title">date</span></span></span><br><span class="line">2015年 04月 17日 星期五 02:08:15 CST</span><br><span class="line"><span class="tag">%</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">#include &quot;apue.h&quot;</div><div class="line"></div><div class="line">int main(void)&#123;</div><div class="line">    </div><div class="line">    char    buff[MAXLINE];</div><div class="line">    pid_t   pid;</div><div class="line">    int     status;</div><div class="line"></div><div class="line"></div><div class="line">    printf(&quot;%%&quot;);       //打印提示符，两个%%</div><div class="line">    while(fgets(buff,MAXLINE,stdin)!=NULL)&#123;     //遇到 EOF会返回NULL，所以可以ctrl+D退出这个shell</div><div class="line">        if( (pid = fork()) &lt;0 )&#123;                //尝试fork，返回负则表示失败,如果成功则会产生父进程的copy</div><div class="line">            err_sys(&quot;failed to fork&quot;);                    </div><div class="line">        &#125;else if(pid == 0)&#123;                     //fork对子进程返回0，以下进入子进程</div><div class="line">            buff[strlen(buff)-1]=0;             //细节，将回车替换为0</div><div class="line">            execlp(buff, buff, (char *) 0);     //execlp会加载指定程序，并覆盖当前进程数据（也就是说没以下两条指令的事了)</div><div class="line">            err_ret(&quot;could not exec %s&quot;,buff);  //如果进入到这里，则说明加载程序失败了(数据没被erase)</div><div class="line">            exit(127);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        //return to the main process, 既然是开启了新进程，自然会立刻返回主进程，我们要设置等待</div><div class="line">        pid = waitpid(pid, &amp;status , 0);        //这个status是子进程的返回状态，这时并没有检查该值</div><div class="line">        if(pid &lt; 0)&#123;</div><div class="line">            err_sys(&quot;wait pid error&quot;);</div><div class="line">        &#125;</div><div class="line">        printf (&quot;%%&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/apue.2e/chen$ ./a.out </div><div class="line">%ls</div><div class="line">a.out  apue.h  error.c  mycat.c  mycatstdio.c  myls.c  mysh.c  pid.c</div><div class="line">%pwd</div><div class="line">/data/apue.2e/chen</div><div class="line">%date</div><div class="line">2015年 04月 17日 星期五 02:08:15 CST</div><div class="line">%</div></pre></td></tr></table></figure></p>
 <h2 id="总结">总结</h2><p>这个程序有两个比较有意思的地方:</p>
 <ol>
 <li><strong>fork一次调用两次返回。以命令执行成功为例，第一个else中返回0给子进程，waitpid时父进程使用的是另一返回值，即子进程ID。</strong></li>
@@ -113,7 +114,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/APUE/">APUE</a><a href="/tags/exec/">exec</a><a href="/tags/fork/">fork</a><a href="/tags/进程/">进程</a>
+  <span></span> <a href="/tags/APUE/">APUE</a><a href="/tags/进程/">进程</a><a href="/tags/fork/">fork</a><a href="/tags/exec/">exec</a>
   </div>
 
 </div>
@@ -182,7 +183,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -198,11 +199,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -226,11 +227,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -238,23 +239,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -341,7 +342,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

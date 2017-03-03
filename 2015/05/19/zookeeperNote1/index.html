@@ -20,10 +20,12 @@
 <meta property="og:description" content="ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。
 什么是ZooKeeperZookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理">
 <meta property="og:image" content="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&modificationDate=1295027310000&api=v2">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ZooKeeper学习笔记（一）之概览">
 <meta name="twitter:description" content="ZooKeeper致力于开发一种能提供高可靠分布式协同的开源服务。
 什么是ZooKeeperZookeeper是一个集中式的服务，提供配置信息维护、命名（目录）、分布式同步和组服务功能。上述服务在分布式系统中被广泛地以各种形式使用。这些服务通常伴随着大量不可避免的Bug和竞争条件。正因为上述服务的实施困难，应用程序通常在开始时会在此妥协，导致程序脆弱和难于维护。即使没有错误，不同的部署也会导致管理">
+<meta name="twitter:image" content="https://cwiki.apache.org/confluence/download/attachments/24193436/service.png?version=1&modificationDate=1295027310000&api=v2">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -36,7 +38,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -123,7 +125,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/概览/">概览</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/概览/">概览</a>
   </div>
 
 </div>
@@ -155,7 +157,7 @@
 
 
 <div class="next">
-<a href="/2015/05/18/junitNote1/"  title="单元测试之JUnit学习笔记">
+<a href="/2015/05/19/junitNote1/"  title="单元测试之JUnit学习笔记">
  <strong>下一篇：</strong><br/> 
  <span>单元测试之JUnit学习笔记
 </span>
@@ -192,7 +194,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -208,11 +210,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -236,11 +238,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -248,23 +250,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -351,7 +353,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

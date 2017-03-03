@@ -20,10 +20,12 @@
 <meta property="og:description" content="client选用OpenVPN Connect 1.1.16软件界面挺土的，无所谓了，这种软件功能稳定就行。
 生成keys使用和生成server端keys相同的pem文件和ca.crt文件先导入环境变量">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1er51gfae87j208t0fo0tb.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安卓手机端配置OpenVPN via IPv6">
 <meta name="twitter:description" content="client选用OpenVPN Connect 1.1.16软件界面挺土的，无所谓了，这种软件功能稳定就行。
 生成keys使用和生成server端keys相同的pem文件和ca.crt文件先导入环境变量">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1er51gfae87j208t0fo0tb.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -36,7 +38,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -101,10 +103,10 @@
 		</div>
 		
 		<h2 id="client选用">client选用</h2><p>OpenVPN Connect 1.1.16<br>软件界面挺土的，无所谓了，这种软件功能稳定就行。</p>
-<h2 id="生成keys">生成keys</h2><p>使用和生成server端keys相同的pem文件和ca.crt文件<br>先导入环境变量<a id="more"></a><br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">.  </span>vars</span><br></pre></td></tr></table></figure></p>
-<p>这个文件应该是在你之前生成server端Keys时就编辑好了的<br>再用easy－rsa工具生成keys<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">build-key <span class="tag">&lt;<span class="title">keyname</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="生成keys">生成keys</h2><p>使用和生成server端keys相同的pem文件和ca.crt文件<br>先导入环境变量<a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.  vars</div></pre></td></tr></table></figure></p>
+<p>这个文件应该是在你之前生成server端Keys时就编辑好了的<br>再用easy－rsa工具生成keys<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">build-key &lt;keyname&gt;</div></pre></td></tr></table></figure></p>
 <p>这个文件应该是在你之前生成server端Keys时就编辑好了的<br>生成过程中唯一需要设置的是common name，请使用唯一的名字</p>
-<h2 id="编辑profile">编辑profile</h2><p>可以找一个profile的样板，我们只需要改几个地方<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">proto</span> udp6</span><br><span class="line">remote <span class="variable">&lt;ipv6_address&gt;</span> <span class="variable">&lt;port&gt;</span> <span class="comment">#远程主机的inetaddress</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="编辑profile">编辑profile</h2><p>可以找一个profile的样板，我们只需要改几个地方<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">proto udp6</div><div class="line">remote &lt;ipv6_address&gt; &lt;port&gt; #远程主机的inetaddress</div></pre></td></tr></table></figure></p>
 <p>注明使用udp6，写入server的v6地址<br>后面的ca,cert,key字段请将ca.crt，client的crt和Key文件的内容复制进去</p>
 <h2 id="完成">完成</h2><p>打开手机端的openVPN，从菜单选择导入&gt;从SD卡导入，选择刚才编辑好的文件，导入成功后就可以连接了。</p>
 <p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1er51gfae87j208t0fo0tb.jpg" alt="连接界面"> </p>
@@ -116,7 +118,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/android/">android</a><a href="/tags/ipv6/">ipv6</a><a href="/tags/openvpn/">openvpn</a>
+  <span></span> <a href="/tags/android/">android</a><a href="/tags/openvpn/">openvpn</a><a href="/tags/ipv6/">ipv6</a>
   </div>
 
 </div>
@@ -185,7 +187,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -201,11 +203,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -229,11 +231,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -241,23 +243,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -344,7 +346,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

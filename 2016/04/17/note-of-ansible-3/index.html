@@ -12,20 +12,21 @@
 
     
     <meta name="description" content="patternansible的命令格式为1ansible &amp;lt;pattern_goes_here&amp;gt; -m &amp;lt;module_name&amp;gt; -a &amp;lt;arguments&amp;gt;
-如1ansible webservers -m service -a &quot;name=httpd state=restarted&quot;
-Pattern支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集">
+如1ansible webservers -m service -a &amp;quot;name=httpd state=restarted&amp;quot;
+Pattern支持常用的通配符和部分正则表达式，来指定">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ansible学习笔记(三)Pattern">
 <meta property="og:url" content="http://azyet.github.io/2016/04/17/note-of-ansible-3/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="patternansible的命令格式为1ansible &amp;lt;pattern_goes_here&amp;gt; -m &amp;lt;module_name&amp;gt; -a &amp;lt;arguments&amp;gt;
-如1ansible webservers -m service -a &quot;name=httpd state=restarted&quot;
-Pattern支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集">
+如1ansible webservers -m service -a &amp;quot;name=httpd state=restarted&amp;quot;
+Pattern支持常用的通配符和部分正则表达式，来指定">
+<meta property="og:updated_time" content="2016-04-17T16:14:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ansible学习笔记(三)Pattern">
 <meta name="twitter:description" content="patternansible的命令格式为1ansible &amp;lt;pattern_goes_here&amp;gt; -m &amp;lt;module_name&amp;gt; -a &amp;lt;arguments&amp;gt;
-如1ansible webservers -m service -a &quot;name=httpd state=restarted&quot;
-Pattern支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集">
+如1ansible webservers -m service -a &amp;quot;name=httpd state=restarted&amp;quot;
+Pattern支持常用的通配符和部分正则表达式，来指定">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -38,7 +39,7 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -102,20 +103,20 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 		
 		</div>
 		
-		<h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible <span class="tag">&lt;<span class="title">pattern_goes_here</span>&gt;</span> -m <span class="tag">&lt;<span class="title">module_name</span>&gt;</span> -a <span class="tag">&lt;<span class="title">arguments</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>如<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible webservers -m service -<span class="tag">a</span> <span class="string">"name=httpd state=restarted"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one<span class="class">.example</span><span class="class">.com</span></span><br><span class="line">one<span class="class">.example</span><span class="class">.com</span>:two<span class="class">.example</span><span class="class">.com</span></span><br><span class="line"><span class="number">192.168</span>.<span class="number">1</span>.*</span><br></pre></td></tr></table></figure></p>
-<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>dbservers</span><br></pre></td></tr></table></figure></p>
-<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
-<p>还可以指定交集<br><a id="more"></a><br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">webservers:</span>&amp;staging</span><br></pre></td></tr></table></figure></p>
-<p>或者以上运算的组合<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">webservers:</span><span class="string">dbservers:</span>&amp;<span class="string">staging:</span>!phoenix</span><br></pre></td></tr></table></figure></p>
-<p>以上表达式的含义大致为( webservers 并 <code>dbserver )</code> 交 （<code>staging</code>） 交 （<code>pheonix</code>补） 。<br>你也可以使用通过-e参数传入的变量，不过这种用法不常见。<br><figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">webservers:!</span><span class="expression">&#123;&#123;<span class="variable">excluded</span>&#125;&#125;</span><span class="xml">:&amp;</span><span class="expression">&#123;&#123;<span class="variable">required</span>&#125;&#125;</span><span class="xml"></span></span><br></pre></td></tr></table></figure></p>
-<p>通配和组也可以混用<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">one*<span class="class">.com</span>:dbservers</span><br></pre></td></tr></table></figure></p>
-<p>还可以用类似数组的方式来引用组中的特定成员<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">webservers</span><span class="attr_selector">[0]</span>       </span><br><span class="line"><span class="tag">webservers</span><span class="attr_selector">[-1]</span>      </span><br><span class="line"><span class="tag">webservers</span><span class="attr_selector">[0:1]</span>     </span><br><span class="line"><span class="tag">webservers</span><span class="attr_selector">[1:]</span></span><br></pre></td></tr></table></figure></p>
+		<h2 id="pattern">pattern</h2><p><code>ansible</code>的命令格式为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible &lt;pattern_goes_here&gt; -m &lt;module_name&gt; -a &lt;arguments&gt;</div></pre></td></tr></table></figure></p>
+<p>如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible webservers -m service -a &quot;name=httpd state=restarted&quot;</div></pre></td></tr></table></figure></p>
+<p><code>Pattern</code>支持常用的通配符和部分正则表达式，来指定符合某种模式的主机集。<br><code>all</code>和<code>*</code>表示所有主机<br>也可以指定单个或多个或模糊匹配主机<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">one.example.com</div><div class="line">one.example.com:two.example.com</div><div class="line">192.168.1.*</div></pre></td></tr></table></figure></p>
+<p>也可以指定多个<code>group</code>，即属于任意一个即可，用<code>:</code>分隔。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:dbservers</div></pre></td></tr></table></figure></p>
+<p>也可以排除某些主机，如属于<code>webserver</code>但不属于<code>pheonix</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:!phoenix</div></pre></td></tr></table></figure></p>
+<p>还可以指定交集<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:&amp;staging</div></pre></td></tr></table></figure></p>
+<p>或者以上运算的组合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:dbservers:&amp;staging:!phoenix</div></pre></td></tr></table></figure></p>
+<p>以上表达式的含义大致为( webservers 并 <code>dbserver )</code> 交 （<code>staging</code>） 交 （<code>pheonix</code>补） 。<br>你也可以使用通过-e参数传入的变量，不过这种用法不常见。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webservers:!&#123;&#123;excluded&#125;&#125;:&amp;&#123;&#123;required&#125;&#125;</div></pre></td></tr></table></figure></p>
+<p>通配和组也可以混用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">one*.com:dbservers</div></pre></td></tr></table></figure></p>
+<p>还可以用类似数组的方式来引用组中的特定成员<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">webservers[0]       </div><div class="line">webservers[-1]      </div><div class="line">webservers[0:1]     </div><div class="line">webservers[1:]</div></pre></td></tr></table></figure></p>
 <p>语法有点类似python</p>
-<p>一般人不太可能用到正则表达式，但是是支持的，用～开头来标识这是一个<code>regex</code><br><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="special">~</span>(web|db).*<span class="command">\.</span>example<span class="command">\.</span>com</span><br></pre></td></tr></table></figure></p>
-<p>也可以在命令行中使用<code>-l</code>来指定子集：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook site<span class="class">.yml</span> --limit datacenter2</span><br></pre></td></tr></table></figure></p>
-<p>或者通过文件指定<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook site<span class="class">.yml</span> --limit @retry_hosts.txt</span><br></pre></td></tr></table></figure></p>
+<p>一般人不太可能用到正则表达式，但是是支持的，用～开头来标识这是一个<code>regex</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">~(web|db).*\.example\.com</div></pre></td></tr></table></figure></p>
+<p>也可以在命令行中使用<code>-l</code>来指定子集：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible-playbook site.yml --limit datacenter2</div></pre></td></tr></table></figure></p>
+<p>或者通过文件指定<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible-playbook site.yml --limit @retry_hosts.txt</div></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -147,7 +148,7 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/04/17/note-of-ansible-4/" title=" ansible学习笔记(四）Ad-Hoc ">
+ <a href="/2016/04/18/note-of-ansible-4/" title=" ansible学习笔记(四）Ad-Hoc ">
   <strong>上一篇：</strong><br/>
   <span>
    ansible学习笔记(四）Ad-Hoc </span>
@@ -156,7 +157,7 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 
 
 <div class="next">
-<a href="/2016/04/15/simple-yaml-in-ansible/"  title="ansible用到的简单yaml语法">
+<a href="/2016/04/16/simple-yaml-in-ansible/"  title="ansible用到的简单yaml语法">
  <strong>下一篇：</strong><br/> 
  <span>ansible用到的简单yaml语法
 </span>
@@ -193,7 +194,7 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -209,11 +210,11 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -237,11 +238,11 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -249,23 +250,23 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -352,7 +353,7 @@ Pattern支持常用的通配符和部分正则表达式，来指定符合某种�
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

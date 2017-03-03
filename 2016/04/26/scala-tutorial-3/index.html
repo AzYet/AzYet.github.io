@@ -19,6 +19,7 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="访问修饰符在package , class , object 的成员声明时使用private和protected关键字可改变其访问权限，如果包含访问修饰，则是public。
 private私有成员只被该类内部的代码可见。直接看例子。123456789class Outer &amp;#123;    class Inner &amp;#123;        private def f() &amp;#123; prin">
+<meta property="og:updated_time" content="2016-04-26T18:33:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="scala学习笔记（三）访问权限、操作符/优先级及条件语句">
 <meta name="twitter:description" content="访问修饰符在package , class , object 的成员声明时使用private和protected关键字可改变其访问权限，如果包含访问修饰，则是public。
@@ -35,7 +36,7 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -100,14 +101,14 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 		</div>
 		
 		<h2 id="访问修饰符">访问修饰符</h2><p>在<code>package</code> , <code>class</code> , <code>object</code> 的成员声明时使用<code>private</code>和<code>protected</code>关键字可改变其访问权限，如果包含访问修饰，则是<code>public</code>。</p>
-<h3 id="private">private</h3><p>私有成员只被该类<code>内部的代码</code>可见。直接看例子。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> &#123;</span></span><br><span class="line">        <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">f</span>(</span>) &#123; println(<span class="string">"f"</span>) &#125;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">InnerMost</span> &#123;</span></span><br><span class="line">            f() <span class="comment">// OK</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    (<span class="keyword">new</span> <span class="type">Inner</span>).f() <span class="comment">// Error: f is not accessible</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="private">private</h3><p>私有成员只被该类<code>内部的代码</code>可见。直接看例子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Outer &#123;</div><div class="line">    class Inner &#123;</div><div class="line">        private def f() &#123; println(&quot;f&quot;) &#125;</div><div class="line">        class InnerMost &#123;</div><div class="line">            f() // OK</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    (new Inner).f() // Error: f is not accessible</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><code>(new Inner).f()</code>非法而<code>InnerMost</code>的调用则是合法，因为<code>InnerMost</code>在<code>Inner</code>类的内部定义，<code>java</code>会允许内部类访问外部类的私有成员。</p>
 <h3 id="protected">protected</h3><p>scala的<code>protected</code>成员是真正地只被其子类访问。</p>
 <blockquote>
 <p>而在java中，它还可以被同一<code>package</code>下的类访问。<br><a id="more"></a></p>
 </blockquote>
 <h3 id="public">public</h3><p>可被任意访问，scala中并<strong>无public关键字</strong></p>
-<h3 id="保护范围">保护范围</h3><p>scala中的访问范围可被<code>qualifier</code>放大，形如<code>private[X]</code>or<code>protected[X]</code>的修辞符，意为被修辞对象对<code>X</code>的属性。<code>X</code>是package class 或object这样的封装。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="package"><span class="keyword">package</span> <span class="title">society</span> &#123;</span></span><br><span class="line">  <span class="package"><span class="keyword">package</span> <span class="title">professional</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Executive</span> </span>&#123;</span><br><span class="line">      <span class="keyword">private</span>[professional] <span class="keyword">var</span> workDetails = <span class="literal">null</span></span><br><span class="line">      <span class="keyword">private</span>[society] <span class="keyword">var</span> friends = <span class="literal">null</span></span><br><span class="line">      <span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> secrets = <span class="literal">null</span></span><br><span class="line">      def help(another : Executive) &#123;</span><br><span class="line">        println(another.workDetails)</span><br><span class="line">        println(another.secrets) <span class="comment">//ERROR</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="保护范围">保护范围</h3><p>scala中的访问范围可被<code>qualifier</code>放大，形如<code>private[X]</code>or<code>protected[X]</code>的修辞符，意为被修辞对象对<code>X</code>的属性。<code>X</code>是package class 或object这样的封装。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">package society &#123;</div><div class="line">  package professional &#123;</div><div class="line">    class Executive &#123;</div><div class="line">      private[professional] var workDetails = null</div><div class="line">      private[society] var friends = null</div><div class="line">      private[this] var secrets = null</div><div class="line">      def help(another : Executive) &#123;</div><div class="line">        println(another.workDetails)</div><div class="line">        println(another.secrets) //ERROR</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ul>
 <li><code>workDetail 对</code>professional`包中的任何类可见</li>
 <li><code>friends</code> 对 <code>society</code>包中的任何类可见</li>
@@ -265,7 +266,7 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 </tr>
 </tbody>
 </table>
-<h2 id="if-else">if-else</h2><p>scala的<code>if-else</code>与java无二致，支持<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if () &#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;</span><br><span class="line">--------</span></span><br><span class="line">if () &#123;</span><br><span class="line"></span><br><span class="line">&#125; else &#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;</span><br><span class="line">--------</span></span><br><span class="line">if()&#123;</span><br><span class="line"></span><br><span class="line">&#125;else if()&#123;</span><br><span class="line"></span><br><span class="line">&#125;else if()&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;...</span><br><span class="line">---------</span></span><br><span class="line">if()&#123;</span><br><span class="line"><span class="code">  if()&#123;</span></span><br><span class="line"><span class="code">  </span></span><br><span class="line"><span class="code">  &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="if-else">if-else</h2><p>scala的<code>if-else</code>与java无二致，支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">if () &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">--------</div><div class="line">if () &#123;</div><div class="line"></div><div class="line">&#125; else &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">--------</div><div class="line">if()&#123;</div><div class="line"></div><div class="line">&#125;else if()&#123;</div><div class="line"></div><div class="line">&#125;else if()&#123;</div><div class="line"></div><div class="line">&#125;...</div><div class="line">---------</div><div class="line">if()&#123;</div><div class="line">  if()&#123;</div><div class="line">  </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -297,7 +298,7 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/04/26/scala-tutorial-4/" title="scala学习笔记（四）循环、函数">
+ <a href="/2016/04/27/scala-tutorial-4/" title="scala学习笔记（四）循环、函数">
   <strong>上一篇：</strong><br/>
   <span>
   scala学习笔记（四）循环、函数</span>
@@ -343,7 +344,7 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -359,11 +360,11 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -387,11 +388,11 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -399,23 +400,23 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -502,7 +503,7 @@ private私有成员只被该类内部的代码可见。直接看例子。1234567
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

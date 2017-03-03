@@ -15,7 +15,7 @@
 关于堆　　看了一下wiki的前两段，大致知道了此处堆实质是二叉树，常用一维数组来表示，有一个很重要的规律，对于以0开头的数组：左右子节点的序号分别为2*i+1, 2*i+2。
 　　作为一个喜欢用理解帮助记忆的人，想弄明白为何如此。
 
-对每个节点，i = 前（上层及">
+对每个节点，i = 前（上">
 <meta property="og:type" content="article">
 <meta property="og:title" content="堆排序实战：理解再实现">
 <meta property="og:url" content="http://azyet.github.io/2015/05/10/heapSortAnalizeAndImplement/index.html">
@@ -24,14 +24,15 @@
 关于堆　　看了一下wiki的前两段，大致知道了此处堆实质是二叉树，常用一维数组来表示，有一个很重要的规律，对于以0开头的数组：左右子节点的序号分别为2*i+1, 2*i+2。
 　　作为一个喜欢用理解帮助记忆的人，想弄明白为何如此。
 
-对每个节点，i = 前（上层及">
+对每个节点，i = 前（上">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆排序实战：理解再实现">
 <meta name="twitter:description" content="堆排序我已经遗忘得差不多了，只记得有这么一种方式，且时间复杂度为n*log(n)。下面要做的是根据其算法描述来自行实现，作为一种练习。
 关于堆　　看了一下wiki的前两段，大致知道了此处堆实质是二叉树，常用一维数组来表示，有一个很重要的规律，对于以0开头的数组：左右子节点的序号分别为2*i+1, 2*i+2。
 　　作为一个喜欢用理解帮助记忆的人，想弄明白为何如此。
 
-对每个节点，i = 前（上层及">
+对每个节点，i = 前（上">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -44,7 +45,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -130,15 +131,15 @@
 <li>将root与左右子节点的最大者互换（如果root已是最大，直接结束）</li>
 <li>被替换的节点成为root，继续与其子节点替换，直到无子节点。</li>
 </ol>
-<p>　　用代码实现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">siftDown</span><span class="params">(a, s, e)</span>:</span></span><br><span class="line">    root = s</span><br><span class="line">    <span class="keyword">while</span> <span class="number">2</span> * root + <span class="number">1</span> &lt;= e:</span><br><span class="line">        c = <span class="number">2</span> * root + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> a[c] &lt;= a[c + <span class="number">1</span>]:</span><br><span class="line">            c += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> a[root] &lt; a[c]:</span><br><span class="line">            a[root], a[c] = a[c], a[root]</span><br><span class="line">        root = c</span><br></pre></td></tr></table></figure></p>
+<p>　　用代码实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def siftDown(a, s, e):</div><div class="line">    root = s</div><div class="line">    while 2 * root + 1 &lt;= e:</div><div class="line">        c = 2 * root + 1</div><div class="line">        if a[c] &lt;= a[c + 1]:</div><div class="line">            c += 1</div><div class="line">        if a[root] &lt; a[c]:</div><div class="line">            a[root], a[c] = a[c], a[root]</div><div class="line">        root = c</div></pre></td></tr></table></figure></p>
 <h2 id="Build-Max-Heap">Build-Max-Heap</h2><ol>
 <li>对于没有后代的节点，视为最大堆。</li>
 <li>从最后一个有子节点的点开始，往前执行1，这样能够保证，每个被处理的节点的子树都是最大堆（1的条件）</li>
 <li>一直执行到root，这样整个堆都是最大堆</li>
 </ol>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build max heap</span></span><br><span class="line"><span class="function"><span class="keyword">end</span> = <span class="title">len</span>(<span class="title">a</span>) - <span class="title">1</span></span></span><br><span class="line"><span class="keyword">for</span> i <span class="operator">in</span> range((<span class="function"><span class="keyword">end</span> - <span class="title">1</span>) / <span class="title">2</span>, -<span class="title">1</span>, -<span class="title">1</span>):</span></span><br><span class="line">    siftDown(<span class="operator">a</span>, i, <span class="function"><span class="keyword">end</span>)</span></span><br></pre></td></tr></table></figure>
-<h2 id="Heap-Sort">Heap-Sort</h2><p>　　首尾互换，最大值已在数组尾，对a[0,end-1]部分执行1,直到到达头部。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="function"><span class="keyword">end</span> &gt;= <span class="title">0</span>:</span></span><br><span class="line">    <span class="operator">a</span>[<span class="number">0</span>], <span class="operator">a</span>[<span class="function"><span class="keyword">end</span>] = <span class="title">a</span>[<span class="title">end</span>], <span class="title">a</span>[<span class="title">0</span>]</span></span><br><span class="line">    <span class="function"><span class="keyword">end</span> -= <span class="title">1</span></span></span><br><span class="line">    siftDown(<span class="operator">a</span>, <span class="number">0</span>, <span class="function"><span class="keyword">end</span>)</span></span><br><span class="line">print <span class="operator">a</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="输出与比较">输出与比较</h2><p>　　对20000个随机整数进行<code>快速</code>，<code>堆</code>和<code>冒泡</code>排序，其时间分别为：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0.0850009918213</span><br><span class="line">0.141738891602</span><br><span class="line">36.0431509018</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># build max heap</div><div class="line">end = len(a) - 1</div><div class="line">for i in range((end - 1) / 2, -1, -1):</div><div class="line">    siftDown(a, i, end)</div></pre></td></tr></table></figure>
+<h2 id="Heap-Sort">Heap-Sort</h2><p>　　首尾互换，最大值已在数组尾，对a[0,end-1]部分执行1,直到到达头部。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">while end &gt;= 0:</div><div class="line">    a[0], a[end] = a[end], a[0]</div><div class="line">    end -= 1</div><div class="line">    siftDown(a, 0, end)</div><div class="line">print a</div></pre></td></tr></table></figure></p>
+<h2 id="输出与比较">输出与比较</h2><p>　　对20000个随机整数进行<code>快速</code>，<code>堆</code>和<code>冒泡</code>排序，其时间分别为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">0.0850009918213</div><div class="line">0.141738891602</div><div class="line">36.0431509018</div></pre></td></tr></table></figure></p>
 <p>　　可见堆排序和快速排序同为n*log(n)时间性能，稍劣于快速排序，较n^2的冒泡排序快2个数量级。</p>
   
 	</div>
@@ -148,7 +149,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/堆排序/">堆排序</a><a href="/tags/实现/">实现</a><a href="/tags/算法/">算法</a>
+  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/堆排序/">堆排序</a><a href="/tags/实现/">实现</a>
   </div>
 
 </div>
@@ -180,7 +181,7 @@
 
 
 <div class="next">
-<a href="/2015/05/09/hex2decStr/"  title="C语言笔试题：十六与十进制字符串转换">
+<a href="/2015/05/10/hex2decStr/"  title="C语言笔试题：十六与十进制字符串转换">
  <strong>下一篇：</strong><br/> 
  <span>C语言笔试题：十六与十进制字符串转换
 </span>
@@ -217,7 +218,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -233,11 +234,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -261,11 +262,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -273,23 +274,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -376,7 +377,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

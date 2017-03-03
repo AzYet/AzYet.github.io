@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -78,6 +78,73 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/19/rabbitmqNote5/" title="RabbitMQ学习笔记（五）之Topics" itemprop="url">RabbitMQ学习笔记（五）之Topics</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T16:48:00.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>上一节中，使用Dircet Exchange结合routingKey及bindingKey可以实现选择性地接收消息。但是它也有局限性，无法基于多种尺度来路由。</p>
+<p>比如说日志系统中我们可能不仅希望根据级别，还希望根据日志发出者的身份来进行路由。比如<code>syslog unix</code>工具，就是根据severity和facility(auth/cron/kern…)来进行路由的。</p>
+<p>这各方式更具灵活性，比如我想接收来自cron的Error信息和来自Kern的所有信息。</p>
+<p>要实现这样的功能我们需要学习更复杂的Topic exchange。</p>
+<h2 id="Topic_exchange">Topic exchange</h2><p>发送给topic exchange的信息的routingKey必须是一个word的list，用.号分隔。习惯上用一些能够代表消息特征单词来作为word，比如<code>stock.usd.nyse</code>是一个合法的routingKey。word不限个数，但总长不能超过255 Byte。</p>
+<p>bindingKey也必须是这样的形式，而路由逻辑则和Direct方式相似，消息将被发送给所有bindingKey和RoutingKey匹配的队列。但是有两wildcard：</p>
+<pre><code>\* 能替换成任何一个(单个)<span class="literal">word</span>
+# 能替换成任意（0-<span class="keyword">n</span>）个<span class="literal">word</span>
+</code></pre><p><img src="https://www.rabbitmq.com/img/tutorials/python-five.png" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/rabbitmqNote5/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/Topic-Exchange/">Topic Exchange</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/19/rabbitmqNote5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/rabbitmqNote5/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/18/rabbitmqNote4/" title="RabbitMQ学习笔记（四）之消息路由" itemprop="url">RabbitMQ学习笔记（四）之消息路由</a>
   </h1>
   <p class="article-author">By
@@ -92,9 +159,9 @@
     <div class="article-content">
         
         <p>这节中我们将实现只订阅消息的一个子集。例如，只接收Error的日志保存到磁盘，而将debug类的信息直接在console打印。</p>
-<h2 id="Bindings">Bindings</h2><p>上一节已经提到Binding，代码如下：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="Bindings">Bindings</h2><p>上一节已经提到Binding，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">channel.queueBind(queueName, EXCHANGE_NAME, &quot;&quot;);</div></pre></td></tr></table></figure></p>
 <p>Binding是Exchange与Queue之间的关系，可以理解为：queue对Exchange中的消息感兴趣。</p>
-<p>Binding可以添加额外的路由参数，为免混淆，这里称为bindingKey。以下是使用BindingKey来绑定：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">"black"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>Binding可以添加额外的路由参数，为免混淆，这里称为bindingKey。以下是使用BindingKey来绑定：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">channel.queueBind(queueName, EXCHANGE_NAME, &quot;black&quot;);</div></pre></td></tr></table></figure></p>
 <p>BindingKey的解释取决于Exchange类型，fanout类Exchange直接无视BindingKey.</p>
         
         
@@ -110,7 +177,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/消息路由/">消息路由</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/消息路由/">消息路由</a>
   </div>
 
 </div>
@@ -178,7 +245,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/订阅与发布/">订阅与发布</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/订阅与发布/">订阅与发布</a>
   </div>
 
 </div>
@@ -241,7 +308,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Work-Queues/">Work Queues</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/Work-Queues/">Work Queues</a>
   </div>
 
 </div>
@@ -288,9 +355,9 @@
         <p>　　rabbitmq是AMQP的一种实现，可为分布式系统提供可靠的消息通信机制。它从生产者接收消息，并将其传递给消费者，并可二者之间可以提供路由、缓冲和存留功能。</p>
 <p><code>queue</code>一个无限缓冲，可以存储任意多的消息。多个<code>producer</code>可以将消息发送给同一queue，多个<code>consumer</code>也可以从同一queue接收消息。<br><img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt=""></p>
 <p>　　在使用RabbitMQ之前，需要有RabbitMQ-server,如果是ubuntu，可以用如下命令安装</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> rabbitmq-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install rabbitmq-server</div></pre></td></tr></table></figure>
 <h2 id="Hello_World!">Hello World!</h2><p>　　以下使用Java编写一个Hello world例程，包含两个程序，一个producer和一个consumer。</p>
-<p>　　如果使用Maven工具，可以在pom.xml添加如下的依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.rabbitmq<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>amqp-client<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.5.2<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>　　如果使用Maven工具，可以在pom.xml添加如下的依赖：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;com.rabbitmq&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;amqp-client&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;3.5.2&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
@@ -305,7 +372,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a>
   </div>
 
 </div>
@@ -336,14 +403,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/15/detectLoopInLinkedList/" title="检测并定位链表中的环" itemprop="url">检测并定位链表中的环</a>
+      <a href="/2015/05/16/detectLoopInLinkedList/" title="检测并定位链表中的环" itemprop="url">检测并定位链表中的环</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-15T17:48:19.000Z" itemprop="datePublished"> 發表於 2015-05-15</time>
+    <time datetime="2015-05-15T17:48:19.000Z" itemprop="datePublished"> 發表於 2015-05-16</time>
     
   </p>
 </header>
@@ -359,7 +426,7 @@
         
         <p class="article-more-link">
           
-            <a href="/2015/05/15/detectLoopInLinkedList/#more">Read More</a>
+            <a href="/2015/05/16/detectLoopInLinkedList/#more">Read More</a>
           
        </p>
     </div>
@@ -369,7 +436,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/检测/">检测</a><a href="/tags/环/">环</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/链表/">链表</a>
+  <span></span> <a href="/tags/链表/">链表</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/检测/">检测</a><a href="/tags/环/">环</a>
   </div>
 
 </div>
@@ -380,7 +447,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/15/detectLoopInLinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/detectLoopInLinkedList/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/16/detectLoopInLinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/16/detectLoopInLinkedList/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -400,14 +467,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/15/ObjectAndXmlInServlet/" title="Java对象与xml的相互转换" itemprop="url">Java对象与xml的相互转换</a>
+      <a href="/2015/05/16/ObjectAndXmlInServlet/" title="Java对象与xml的相互转换" itemprop="url">Java对象与xml的相互转换</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-15T16:17:29.000Z" itemprop="datePublished"> 發表於 2015-05-15</time>
+    <time datetime="2015-05-15T16:17:29.000Z" itemprop="datePublished"> 發表於 2015-05-16</time>
     
   </p>
 </header>
@@ -416,12 +483,12 @@
         <p>　　Rest API中使用最多的参数类型是Json和xml，而在之前的项目一直接触的也是Json，实际上我也认为Json更简洁更直观。但是最近导师和某研究院签了一个合作项目，对方的前端使用的是xml，所以我也跟着查找了一下java对象与xml的转换方法。</p>
 <p>　　Servlet是自带json和xml两种返回格式的，在Get时返回xml非常简单,使用annotation指定xml即可。
 　　</p>
-<h2 id="GET">GET</h2><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Get(<span class="string">"xml"</span>)</span><br><span class="line"><span class="keyword">public</span> Object handleGetRequest() &#123;</span><br><span class="line">    <span class="keyword">log</span><span class="built_in">.</span>debug(<span class="string">"received a Get Request"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">new</span> <span class="keyword">Order</span>(<span class="string">"id123"</span>,<span class="string">"user1"</span>,<span class="literal">new</span> <span class="built_in">Date</span>(),<span class="string">"scan"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="GET">GET</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Get(&quot;xml&quot;)</div><div class="line">public Object handleGetRequest() &#123;</div><div class="line">    log.debug(&quot;received a Get Request&quot;);</div><div class="line">    return new Order(&quot;id123&quot;,&quot;user1&quot;,new Date(),&quot;scan&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
         
         <p class="article-more-link">
           
-            <a href="/2015/05/15/ObjectAndXmlInServlet/#more">Read More</a>
+            <a href="/2015/05/16/ObjectAndXmlInServlet/#more">Read More</a>
           
        </p>
     </div>
@@ -431,7 +498,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/servlet/">servlet</a><a href="/tags/xml/">xml</a><a href="/tags/对象/">对象</a><a href="/tags/转换/">转换</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/对象/">对象</a><a href="/tags/xml/">xml</a><a href="/tags/转换/">转换</a><a href="/tags/servlet/">servlet</a>
   </div>
 
 </div>
@@ -442,7 +509,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/15/ObjectAndXmlInServlet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/15/ObjectAndXmlInServlet/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/16/ObjectAndXmlInServlet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/16/ObjectAndXmlInServlet/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -479,7 +546,7 @@
 <p>　　其实作为在校生，面试官不会对你有多高的期望，最看重的就是你的基本素质，而我恰恰忽略了这方面的准备。虽然项目期间写了不少代码，但是Java本身就提供种类容器，很少遇到要自己去处理链表、排序之类的操作。所以乍一问及，也没来得及细想，就凭印象给出了一个错误答案。<br>　　<br>　　所以后来找了一些关于链表的常见问题，亡羊补牢一下。
 　　</p>
 <h2 id="链表反转">链表反转</h2><p>　　所这个其实没有多少算法，凭直觉就能写出代码。考虑到笔试中使用C语言较多，所以这次用C来实现。说起来本科直接学的C++，与C的不同还是很明显的。</p>
-<h3 id="节点定义">节点定义</h3><p>链表名+next指针<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> Node &#123;</span><br><span class="line">    <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="keyword">struct</span> Node *next;</span><br><span class="line">&#125; Node;</span><br></pre></td></tr></table></figure></p>
+<h3 id="节点定义">节点定义</h3><p>链表名+next指针<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">typedef struct Node &#123;</div><div class="line">    char *name;</div><div class="line">    struct Node *next;</div><div class="line">&#125; Node;</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
@@ -494,7 +561,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/中点/">中点</a><a href="/tags/反转/">反转</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a><a href="/tags/链表/">链表</a>
+  <span></span> <a href="/tags/链表/">链表</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/反转/">反转</a><a href="/tags/算法/">算法</a><a href="/tags/中点/">中点</a>
   </div>
 
 </div>
@@ -540,7 +607,7 @@
         
         <p>　　情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。</p>
 <p>　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要将虚拟机8000服务映射到宿主机外网IP 10.103.25.248的某端口上上，这就是端口映射，亦即PNAT。</p>
-<h2 id="选定端口">选定端口</h2><p>　　查看宿主机端口占用情况：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@dell</span><span class="symbol">:~</span><span class="comment"># sudo lsof -i:8000</span></span><br><span class="line"><span class="constant">COMMAND </span> <span class="constant">PID </span>      <span class="constant">USER </span>  <span class="constant">FD </span>  <span class="constant">TYPE DEVICE SIZE/OFF NODE NAME</span></span><br><span class="line">java    <span class="number">2466</span> confluence   <span class="number">37</span>u  <span class="constant">IPv6 </span> <span class="number">23593</span>      0t<span class="number">0</span>  <span class="constant">TCP </span><span class="symbol">localhost:</span><span class="number">8000</span> (<span class="constant">LISTEN)</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="选定端口">选定端口</h2><p>　　查看宿主机端口占用情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@dell:~# sudo lsof -i:8000</div><div class="line">COMMAND  PID       USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</div><div class="line">java    2466 confluence   37u  IPv6  23593      0t0  TCP localhost:8000 (LISTEN)</div></pre></td></tr></table></figure></p>
 <p>　　8000已被使用，选择使用空闲的8880端口，即实现10.103.25.248：8880 &lt;===&gt; 192.168.83.131:8000的映射。<br>
         
         
@@ -556,7 +623,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/NAT/">NAT</a><a href="/tags/内外/">内外</a><a href="/tags/外网/">外网</a>
+  <span></span> <a href="/tags/外网/">外网</a><a href="/tags/NAT/">NAT</a><a href="/tags/内外/">内外</a>
   </div>
 
 </div>
@@ -624,7 +691,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/堆排序/">堆排序</a><a href="/tags/实现/">实现</a><a href="/tags/算法/">算法</a>
+  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/堆排序/">堆排序</a><a href="/tags/实现/">实现</a>
   </div>
 
 </div>
@@ -636,70 +703,6 @@
 	
 	  	<span></span>
 		<a href="/2015/05/10/heapSortAnalizeAndImplement/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/10/heapSortAnalizeAndImplement/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/09/hex2decStr/" title="C语言笔试题：十六与十进制字符串转换" itemprop="url">C语言笔试题：十六与十进制字符串转换</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-09T16:58:53.000Z" itemprop="datePublished"> 發表於 2015-05-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="原题">原题</h2><blockquote>
-<p>请用C语言编写一个函数char <em> hexStr2DecStr(char </em>hexStr),将类似1B, 1C这样字符串转化为十进制字符串26, 27,输入字符串的范围了[0,1000]。<br>注意不要使用函数库。</p>
-</blockquote>
-<p><img src="http://ww3.sinaimg.cn/large/55f247cbgw1eryixt6uj5j20cd0283yk.jpg" alt=""></p>
-<h2 id="一种解法">一种解法</h2><p>　　以上是题目内容，这个其实没有什么算法，就是看你对C语言的熟悉程度。事实上我已经很久没有编写过C程序，许多语法特点都已经和java混淆了，但是考虑到面试笔试有不少C程序，所以既然遇到就拿来练习一下吧。</p>
-<p>　　题目要求不使用函数库，这对我这种C语言渣渣来说正中下怀，因为我根本不记得什么函数库。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/09/hex2decStr/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/十六进制/">十六进制</a><a href="/tags/十进制/">十进制</a><a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a><a href="/tags/转换/">转换</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/09/hex2decStr/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/09/hex2decStr/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -733,7 +736,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -749,11 +752,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -777,11 +780,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -789,23 +792,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -892,7 +895,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

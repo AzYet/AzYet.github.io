@@ -27,6 +27,7 @@
 
 思路第一反应是穷举，即列举所有长度从1到全集的所有子集的和，但是这肯定是效率很低的方法。
 当时解题的思路就是分析人工计算时，">
+<meta property="og:updated_time" content="2015-12-04T00:28:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一道笔试题：求数组元素和最大的子集">
 <meta name="twitter:description" content="题目昨天参加腾讯旗下某公司的笔试，其中唯一的算法题是这样的（大致描述）：
@@ -47,7 +48,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -121,8 +122,8 @@
 <li>从第一个元素开始往后累加，更新记录过程中的最大和<br>2.如果和为负，则抛弃前面的和，从后续元素开始重新累加<br>3.直到数组尾，得到最大值</li>
 </ol>
 <a id="more"></a>
-<h2 id="代码">代码</h2><p>那么用代码实现就是这样的：<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">package io.github.azyet;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> maxSum(<span class="keyword">int</span> a[], <span class="keyword">int</span> len) &#123;<span class="comment">//求最大子集和的方法</span></span><br><span class="line">        <span class="keyword">int</span> max = <span class="number">0</span>;                <span class="comment">//最大和</span></span><br><span class="line">        <span class="keyword">int</span> <span class="keyword">sum</span> = <span class="number">0</span>;                <span class="comment">//当前累加和</span></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;                  <span class="comment">//当前指针 </span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (i &lt; len - <span class="number">1</span> &amp;&amp; a[i] &lt;= <span class="number">0</span>) i++;       <span class="comment">//从第一个正值元素开始累加</span></span><br><span class="line">        max = a[i];                             </span><br><span class="line">        <span class="keyword">sum</span> = a[i];                                 <span class="comment">//初始化</span></span><br><span class="line">        i++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (i &lt; len) &#123;                           <span class="comment">//累加开始</span></span><br><span class="line">            <span class="keyword">sum</span> += a[i];                            </span><br><span class="line">            <span class="keyword">if</span> (max &lt; <span class="keyword">sum</span>) max = <span class="keyword">sum</span>;               <span class="comment">//更新最大和</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">sum</span> &lt;= <span class="number">0</span>) &#123;                         <span class="comment">//累加和为负，则舍弃</span></span><br><span class="line">                <span class="keyword">while</span>(a[++i]&lt;=<span class="number">0</span>);                   <span class="comment">//找到下一个正值元素，重新初始化</span></span><br><span class="line">                <span class="keyword">sum</span> = a[i++];</span><br><span class="line">            &#125;<span class="keyword">else</span>                                   <span class="comment">//累加和为正，则继续</span></span><br><span class="line">                i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">int</span> testArray[] = &#123;-<span class="number">2</span>, -<span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>, -<span class="number">6</span>, -<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>&#125;;<span class="comment">// &#123;20,-22,-2, -3, 4, 5, -2, -4, 8,2&#125;;</span></span><br><span class="line">        System.out.printf(<span class="string">"max subset sum is: %d.\n"</span>, maxSum(testArray, testArray.length));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="输出与分析">输出与分析</h2><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">max</span> subset <span class="built_in">sum</span> is: <span class="number">8.</span></span><br></pre></td></tr></table></figure>
+<h2 id="代码">代码</h2><p>那么用代码实现就是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">package io.github.azyet;</div><div class="line"></div><div class="line"></div><div class="line">public class App &#123;</div><div class="line"></div><div class="line">    static int maxSum(int a[], int len) &#123;//求最大子集和的方法</div><div class="line">        int max = 0;                //最大和</div><div class="line">        int sum = 0;                //当前累加和</div><div class="line">        int i = 0;                  //当前指针 </div><div class="line"></div><div class="line">        while (i &lt; len - 1 &amp;&amp; a[i] &lt;= 0) i++;       //从第一个正值元素开始累加</div><div class="line">        max = a[i];                             </div><div class="line">        sum = a[i];                                 //初始化</div><div class="line">        i++;</div><div class="line"></div><div class="line">        while (i &lt; len) &#123;                           //累加开始</div><div class="line">            sum += a[i];                            </div><div class="line">            if (max &lt; sum) max = sum;               //更新最大和</div><div class="line">            if (sum &lt;= 0) &#123;                         //累加和为负，则舍弃</div><div class="line">                while(a[++i]&lt;=0);                   //找到下一个正值元素，重新初始化</div><div class="line">                sum = a[i++];</div><div class="line">            &#125;else                                   //累加和为正，则继续</div><div class="line">                i++;</div><div class="line">        &#125;</div><div class="line">        return max;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        int testArray[] = &#123;-2, -4, 3, 5, -6, -3, 2, 4&#125;;// &#123;20,-22,-2, -3, 4, 5, -2, -4, 8,2&#125;;</div><div class="line">        System.out.printf(&quot;max subset sum is: %d.\n&quot;, maxSum(testArray, testArray.length));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="输出与分析">输出与分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">max subset sum is: 8.</div></pre></td></tr></table></figure>
 <p>从实现上看，只用了一层循环和常数个变量，因此此实现的时间性能为线性，空间性能为常数。</p>
 <h2 id="总结">总结</h2><p>此类题型并没有遇到过，头脑中往往会有第一反应的方法，可以简单分析一下是不是合理的方法，比如实现上的复杂程序和性能角度，如果不是很理想，就应思考更伏方法。而方式则还是根据问题去分解、分析，可模拟平日求解普通数学问题的过程，演绎得到可行方法后，再细化过程，写下详细的算法步骤，最后就可以用代码实现了。</p>
   
@@ -156,7 +157,7 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/12/05/An-example-of-using-regular-expressions-in-C/" title="例程：在C语言中使用正则表达式">
+ <a href="/2015/12/06/An-example-of-using-regular-expressions-in-C/" title="例程：在C语言中使用正则表达式">
   <strong>上一篇：</strong><br/>
   <span>
   例程：在C语言中使用正则表达式</span>
@@ -202,7 +203,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -218,11 +219,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -246,11 +247,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -258,23 +259,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -361,7 +362,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

@@ -27,6 +27,7 @@
 模拟硬件的二进制接口，任何硬件上运行的软件在target上也能运行
 　　包括firmawre,硬件驱动，操作系统和用户程序在内的任何软件都能在target上运行。
 　　simics的时间系统非常简单，例如它默认所有指令的执行时间是一样的，利用这点将可以编写简单程序来">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="simics hindsight学习笔记（一）">
 <meta name="twitter:description" content="概念　　以下介绍一些关于模拟的基本概念。
@@ -47,7 +48,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -129,16 +130,16 @@
 </code></pre><p>　　以上对任何target系统适用，无论是简单系统还是计算网络。</p>
 <h1 id="命令行工具">命令行工具</h1><p>　　本节介绍simics的命令行选项及环境变量。</p>
 <p>　　从命令行启动simics，在<strong>工程目录</strong>下运行：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">project</span>]$ .<span class="regexp">/simics targets/m</span>pc8641-simple<span class="regexp">/mpc8641d-simple-linux.simics</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[project]$ ./simics targets/mpc8641-simple/mpc8641d-simple-linux.simics</div></pre></td></tr></table></figure>
 <p>　　simics也可以在目录下启动，以无项目状态运行，但是并不推荐。</p>
 <p>　　以上命令将运行指定脚本，它将以缺省配置启动<code>MPC8641-Simple</code>机器。</p>
 <h2 id="模拟模式">模拟模式</h2><p>　　模拟模式（simulation mode）用来控制可获得的特性：<code>instruction and data profiling</code>, <code>memory timing</code>。最佳性能模式无以上特性的，simics以<strong>独立处理器</strong>形式实现，这也是simics的缺省模式。</p>
-<h3 id="命令行指定模式">命令行指定模式</h3><p>fast / stall<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">simics<span class="class">.bat</span> -stall ...</span><br><span class="line"></span><br><span class="line">simics<span class="class">.bat</span> -fast ...</span><br></pre></td></tr></table></figure></p>
+<h3 id="命令行指定模式">命令行指定模式</h3><p>fast / stall<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">simics.bat -stall ...</div><div class="line"></div><div class="line">simics.bat -fast ...</div></pre></td></tr></table></figure></p>
 <p>　　不能在运行时改变模式，可以<strong>先保存再更换模式加载</strong></p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">simics&gt; <span class="built_in">write</span>-configuration <span class="keyword">at</span>-workload-<span class="built_in">start</span>.ckpt</span><br><span class="line">simics&gt; quit</span><br><span class="line"></span><br><span class="line">$ ./simics -stall -c <span class="keyword">at</span>-workload-<span class="built_in">start</span>.ckpt</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">simics&gt; write-configuration at-workload-start.ckpt</div><div class="line">simics&gt; quit</div><div class="line"></div><div class="line">$ ./simics -stall -c at-workload-start.ckpt</div></pre></td></tr></table></figure>
 <h3 id="GUI方式指定模式">GUI方式指定模式</h3><p><code>Simics Control</code>窗口中，选择<code>Edit</code> → <code>Preferences</code>→<br><code>Startup</code></p>
 <p>　　更改此处将导<strong>致默认模式更改</strong>。如果需要在<strong>运行中更改</strong>模式，同时可以先<strong>保存checkpoint再load</strong>：</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">File</span> → <span class="keyword">Save</span> Checkpoint <span class="keyword">As</span>. . . </span><br><span class="line"><span class="keyword">File</span> → <span class="keyword">Open</span> Checkpoint</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">File → Save Checkpoint As. . . </div><div class="line">File → Open Checkpoint</div></pre></td></tr></table></figure>
 <h3 id="normal_mode">normal mode</h3><p>　　快速模式，为<strong>模拟器风格</strong>的使用而优化，以下特性将不可用：</p>
 <pre><code>Instruction <span class="literal">and</span> <span class="built_in">data</span> profiling 
 
@@ -228,7 +229,7 @@ Attaching timing<span class="attribute">-models</span> <span class="literal">and
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/hindsight/">hindsight</a><a href="/tags/simics/">simics</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/simics/">simics</a><a href="/tags/hindsight/">hindsight</a>
   </div>
 
 </div>
@@ -297,7 +298,7 @@ Attaching timing<span class="attribute">-models</span> <span class="literal">and
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -313,11 +314,11 @@ Attaching timing<span class="attribute">-models</span> <span class="literal">and
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -341,11 +342,11 @@ Attaching timing<span class="attribute">-models</span> <span class="literal">and
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -353,23 +354,23 @@ Attaching timing<span class="attribute">-models</span> <span class="literal">and
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -456,7 +457,7 @@ Attaching timing<span class="attribute">-models</span> <span class="literal">and
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

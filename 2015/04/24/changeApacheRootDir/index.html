@@ -12,17 +12,18 @@
 
     
     <meta name="description" content="测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。12345Not FoundThe requested URL / was not found on this server.Apache/2.2.22 (Ubuntu) Server at dell Port 8800
-　　查看error.log，发现许多123[">
+　　查看error.log，发现许多12">
 <meta property="og:type" content="article">
 <meta property="og:title" content="修改Apache2的根目录">
 <meta property="og:url" content="http://azyet.github.io/2015/04/24/changeApacheRootDir/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。12345Not FoundThe requested URL / was not found on this server.Apache/2.2.22 (Ubuntu) Server at dell Port 8800
-　　查看error.log，发现许多123[">
+　　查看error.log，发现许多12">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="修改Apache2的根目录">
 <meta name="twitter:description" content="测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。12345Not FoundThe requested URL / was not found on this server.Apache/2.2.22 (Ubuntu) Server at dell Port 8800
-　　查看error.log，发现许多123[">
+　　查看error.log，发现许多12">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -35,7 +36,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -99,10 +100,10 @@
 		
 		</div>
 		
-		<p>　　测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Not Found</span><br><span class="line"></span><br><span class="line">The requested <span class="built_in">URL</span> / was <span class="operator">not</span> found <span class="command"><span class="keyword">on</span> <span class="title">this</span> <span class="title">server</span>.</span></span><br><span class="line"></span><br><span class="line">Apache/<span class="number">2.2</span>.22 (Ubuntu) Server <span class="keyword">at</span> dell Port <span class="number">8800</span></span><br></pre></td></tr></table></figure></p>
-<p>　　查看error.log，发现许多<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Fri Apr <span class="number">24</span> <span class="number">15</span>:<span class="number">36</span>:<span class="number">30</span> <span class="number">2015</span>] [<span class="keyword">error</span>] [client <span class="number">10.210</span>.106.16] File <span class="keyword">does</span> <span class="keyword">not</span> exist: /etc/apache2/htdocs</span><br><span class="line">[Fri Apr <span class="number">24</span> <span class="number">15</span>:<span class="number">36</span>:<span class="number">30</span> <span class="number">2015</span>] [<span class="keyword">error</span>] [client <span class="number">10.210</span>.106.16] File <span class="keyword">does</span> <span class="keyword">not</span> exist: /etc/apache2/htdocs</span><br><span class="line">[Fri Apr <span class="number">24</span> <span class="number">15</span>:<span class="number">36</span>:<span class="number">31</span> <span class="number">2015</span>] [<span class="keyword">error</span>] [client <span class="number">10.210</span>.106.16] File <span class="keyword">does</span> <span class="keyword">not</span> exist: /etc/apache2/htdocs</span><br></pre></td></tr></table></figure></p>
-<p>　　显然apache将/etc/apache2/htdocs当作了根目录，试着创建该目录，能正常访问了。<br>　　但是显然根目录设置于此是不合适的，根据网上的搜索结果更改sites-availabe , sites-enabled都没有解决问题。<br>　　用find命令在/etc/apache2下查找htdocs字段，也没有结果。<br>　　最后在一个不起眼的小页面上找到了答案。<br>创建文件:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/etc/</span>apache2<span class="regexp">/conf.d/</span><span class="keyword">default</span>-documentroot</span><br></pre></td></tr></table></figure></p>
-<p>内容为:<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DocumentRoot /<span class="reserved">var</span>/www <span class="comment">#你想设置的目录</span></span><br></pre></td></tr></table></figure></p>
+		<p>　　测试需要安装了一个apache，由于80端口已经被nginx占用了，于是修改到了8800端口。然后当访问地址时，总是提示找不到/目录。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Not Found</div><div class="line"></div><div class="line">The requested URL / was not found on this server.</div><div class="line"></div><div class="line">Apache/2.2.22 (Ubuntu) Server at dell Port 8800</div></pre></td></tr></table></figure></p>
+<p>　　查看error.log，发现许多<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[Fri Apr 24 15:36:30 2015] [error] [client 10.210.106.16] File does not exist: /etc/apache2/htdocs</div><div class="line">[Fri Apr 24 15:36:30 2015] [error] [client 10.210.106.16] File does not exist: /etc/apache2/htdocs</div><div class="line">[Fri Apr 24 15:36:31 2015] [error] [client 10.210.106.16] File does not exist: /etc/apache2/htdocs</div></pre></td></tr></table></figure></p>
+<p>　　显然apache将/etc/apache2/htdocs当作了根目录，试着创建该目录，能正常访问了。<br>　　但是显然根目录设置于此是不合适的，根据网上的搜索结果更改sites-availabe , sites-enabled都没有解决问题。<br>　　用find命令在/etc/apache2下查找htdocs字段，也没有结果。<br>　　最后在一个不起眼的小页面上找到了答案。<br>创建文件:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/apache2/conf.d/default-documentroot</div></pre></td></tr></table></figure></p>
+<p>内容为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DocumentRoot /var/www #你想设置的目录</div></pre></td></tr></table></figure></p>
 <p>问题解决。</p>
   
 	</div>
@@ -112,7 +113,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/DocumentRoot/">DocumentRoot</a><a href="/tags/apache2/">apache2</a><a href="/tags/修改/">修改</a><a href="/tags/根目录/">根目录</a>
+  <span></span> <a href="/tags/apache2/">apache2</a><a href="/tags/DocumentRoot/">DocumentRoot</a><a href="/tags/根目录/">根目录</a><a href="/tags/修改/">修改</a>
   </div>
 
 </div>
@@ -181,7 +182,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -197,11 +198,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -225,11 +226,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -237,23 +238,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -340,7 +341,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

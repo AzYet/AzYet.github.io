@@ -20,10 +20,12 @@
 <meta property="og:description" content="配置vnc server实在是一个特别诡异的事，我在不同的ubuntu机器上配置服务时，总是遇到千奇百怪的问题，大部分情况下比较顺利，将~/.vnc/xstartup最后一句x-window-manager&amp;amp;替换为gnome-session&amp;amp;就能顺利地出现桌面，而有些则不行，需要改为gnome-session --session=ubuntu-2d&amp;amp;……
 问题而今天遇到的u">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1esr8it2734j20sw0meafj.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ubuntu运行VNC Server无桌面时的解决方案">
 <meta name="twitter:description" content="配置vnc server实在是一个特别诡异的事，我在不同的ubuntu机器上配置服务时，总是遇到千奇百怪的问题，大部分情况下比较顺利，将~/.vnc/xstartup最后一句x-window-manager&amp;amp;替换为gnome-session&amp;amp;就能顺利地出现桌面，而有些则不行，需要改为gnome-session --session=ubuntu-2d&amp;amp;……
 问题而今天遇到的u">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/55f247cbgw1esr8it2734j20sw0meafj.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -36,7 +38,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -105,9 +107,9 @@
 <p>查阅了很多博文，有说需要安装<code>gnome-session-fallback</code>的，有说需要安装<code>gdm</code>的，也有用<code>kde</code>的，除了kde我没有尝试，另外两种验证无效，依然只有一个灰色背景。</p>
 <p>最后用xfce4桌面解决，选择些方案一是因为xfce相对较小，gnome-session死活不行的情况下，再将一个kde未免太过兴师动众，xfce我使用过一段时间，是一个相当轻量级的GUI环境，清爽易用，功能一点不含糊。决定之后，一次尝试即成功。</p>
 <a id="more"></a>
-<h2 id="安装xfce">安装xfce</h2><p>此安装约消耗50MB空间，还可以接受, 当然根据不同的机器已安装的库可能具体值不一样。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install gnome-core xfce4</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装xfce">安装xfce</h2><p>此安装约消耗50MB空间，还可以接受, 当然根据不同的机器已安装的库可能具体值不一样。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install gnome-core xfce4</div></pre></td></tr></table></figure></p>
 <h2 id="配置">配置</h2><p>编辑<code>~/.vnc/xstartup</code>文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/sh</span></span><br><span class="line"><span class="built_in">unset</span> SESSION_MANAGER</span><br><span class="line"><span class="built_in">unset</span> DBUS_SESSION_BUS_ADDRESS</span><br><span class="line">startxfce4 &amp;</span><br><span class="line"></span><br><span class="line">[ -x /etc/vnc/xstartup ] &amp;&amp; <span class="built_in">exec</span> /etc/vnc/xstartup</span><br><span class="line">[ -r <span class="variable">$HOME</span>/.Xresources ] &amp;&amp; xrdb <span class="variable">$HOME</span>/.Xresources</span><br><span class="line">xsetroot -solid grey</span><br><span class="line">vncconfig -iconic &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#!/bin/sh</div><div class="line">unset SESSION_MANAGER</div><div class="line">unset DBUS_SESSION_BUS_ADDRESS</div><div class="line">startxfce4 &amp;</div><div class="line"></div><div class="line">[ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup</div><div class="line">[ -r $HOME/.Xresources ] &amp;&amp; xrdb $HOME/.Xresources</div><div class="line">xsetroot -solid grey</div><div class="line">vncconfig -iconic &amp;</div></pre></td></tr></table></figure>
 <h2 id="启动vnc_server">启动vnc server</h2><p>根据你安装的是vnc4server 或者 tightvncserver ,直接运行无参数了以上两个命令之一即可。</p>
 <p>如果需要指定分辨率，可以加<code>-geometry 1366x768</code>类似参数，可以指定多个分辨率，以方便在客户端使用<code>xrandr</code>切换。</p>
 <p><img src="http://ww2.sinaimg.cn/large/55f247cbgw1esr8it2734j20sw0meafj.jpg" alt=""></p>
@@ -142,7 +144,7 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/06/07/basicAptCommands/" title="包管理之apt-get和apt-cache的基本命令">
+ <a href="/2015/06/08/basicAptCommands/" title="包管理之apt-get和apt-cache的基本命令">
   <strong>上一篇：</strong><br/>
   <span>
   包管理之apt-get和apt-cache的基本命令</span>
@@ -188,7 +190,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -204,11 +206,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -232,11 +234,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -244,23 +246,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -347,7 +349,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

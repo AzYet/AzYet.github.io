@@ -21,6 +21,7 @@
 <meta property="og:description" content="用ZooKeeper构建高级结构　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。
 　　有意思的是虽然ZooKeeper使用异步通知，却可以用它来构造一致同步的基元，比如队列和锁。这是因为ZooKeeper实现了更新的整体有序，并有向外展示这种有序的机制。
 　　所有设">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ZooKeeper学习笔记（七）之方法和解决方案">
 <meta name="twitter:description" content="用ZooKeeper构建高级结构　　这节中讲述使用ZooKeeper构建高级功能的方法，都是一些传统的，不需要ZooKeeper特殊支持的功能。希望社区能够在client端的库中考虑这些传统来简化使用和促进标准化。
@@ -38,7 +39,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -183,7 +184,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/leader-election/">leader election</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/leader-election/">leader election</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a>
   </div>
 
 </div>
@@ -215,7 +216,7 @@
 
 
 <div class="next">
-<a href="/2015/05/20/zookeeperNote6/"  title="ZooKeeper学习笔记（六）之Java例程">
+<a href="/2015/05/21/zookeeperNote6/"  title="ZooKeeper学习笔记（六）之Java例程">
  <strong>下一篇：</strong><br/> 
  <span>ZooKeeper学习笔记（六）之Java例程
 </span>
@@ -252,7 +253,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -268,11 +269,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -296,11 +297,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -308,23 +309,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -411,7 +412,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

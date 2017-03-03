@@ -21,6 +21,7 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 <meta property="og:description" content="此文由来由于在ubuntu下误将win8分区格式化，所以重新安装了win8，而大家都知道win8安装是会覆盖掉grub的，所以就无法进入Linux了，必须要用Linux的LiveCD来修改Grub。
 Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat ubuntu.iso &amp;gt; /dev/sdx
 只需要将iso文件原样刻录进u盘的即可，无需写入引导信息之类的额外操">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在windows/Linux下制作ubuntu 14.10的启动U盘">
 <meta name="twitter:description" content="此文由来由于在ubuntu下误将win8分区格式化，所以重新安装了win8，而大家都知道win8安装是会覆盖掉grub的，所以就无法进入Linux了，必须要用Linux的LiveCD来修改Grub。
@@ -38,7 +39,7 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -103,10 +104,10 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 		</div>
 		
 		<h3 id="此文由来">此文由来</h3><p>由于在ubuntu下误将win8分区格式化，所以重新安装了win8，而大家都知道win8安装是会覆盖掉grub的，所以就无法进入Linux了，必须要用Linux的LiveCD来修改Grub。</p>
-<h2 id="Linux下制作启动U盘">Linux下制作启动U盘</h2><p>在linux下制作ubuntu的启动盘再简单不过<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ubuntu<span class="class">.iso</span> &gt; /dev/sdx</span><br></pre></td></tr></table></figure></p>
+<h2 id="Linux下制作启动U盘">Linux下制作启动U盘</h2><p>在linux下制作ubuntu的启动盘再简单不过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat ubuntu.iso &gt; /dev/sdx</div></pre></td></tr></table></figure></p>
 <p>只需要将iso文件原样刻录进u盘的即可，无需写入引导信息之类的额外操作。<a id="more"></a></p>
-<p>关于查询磁盘和分区情况，有一个非常好用的工具lsblk<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">chen<span class="annotation">@vaio</span>:/data/AzYet.github.io$ lsblk</span><br><span class="line">NAME            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT</span><br><span class="line">sda               <span class="number">8</span>:<span class="number">0</span>    <span class="number">0</span> <span class="number">465.8</span>G  <span class="number">0</span> disk </span><br><span class="line">├─sda1            <span class="number">8</span>:<span class="number">1</span>    <span class="number">0</span>  <span class="number">78.1</span>G  <span class="number">0</span> <span class="literal">part</span> </span><br><span class="line">├─sda2            <span class="number">8</span>:<span class="number">2</span>    <span class="number">0</span>     <span class="number">1</span>K  <span class="number">0</span> <span class="literal">part</span> </span><br><span class="line">├─sda3            <span class="number">8</span>:<span class="number">3</span>    <span class="number">0</span>    <span class="number">15</span>G  <span class="number">0</span> <span class="literal">part</span> </span><br><span class="line">├─sda4            <span class="number">8</span>:<span class="number">4</span>    <span class="number">0</span>    <span class="number">24</span>G  <span class="number">0</span> <span class="literal">part</span> </span><br><span class="line">│ ├─centos-home <span class="number">252</span>:<span class="number">0</span>    <span class="number">0</span>    <span class="number">20</span>G  <span class="number">0</span> lvm  /chome</span><br><span class="line">│ └─centos-swap <span class="number">252</span>:<span class="number">1</span>    <span class="number">0</span>     <span class="number">4</span>G  <span class="number">0</span> lvm  [SWAP]</span><br><span class="line">├─sda5            <span class="number">8</span>:<span class="number">5</span>    <span class="number">0</span> <span class="number">107.4</span>G  <span class="number">0</span> <span class="literal">part</span> /media/chen/doc</span><br><span class="line">├─sda6            <span class="number">8</span>:<span class="number">6</span>    <span class="number">0</span> <span class="number">136.7</span>G  <span class="number">0</span> <span class="literal">part</span> /data</span><br><span class="line">├─sda7            <span class="number">8</span>:<span class="number">7</span>    <span class="number">0</span>  <span class="number">23.3</span>G  <span class="number">0</span> <span class="literal">part</span> /</span><br><span class="line">├─sda8            <span class="number">8</span>:<span class="number">8</span>    <span class="number">0</span>  <span class="number">38.2</span>G  <span class="number">0</span> <span class="literal">part</span> /home</span><br><span class="line">└─sda9            <span class="number">8</span>:<span class="number">9</span>    <span class="number">0</span>     <span class="number">4</span>G  <span class="number">0</span> <span class="literal">part</span> [SWAP]</span><br><span class="line">sdb               <span class="number">8</span>:<span class="number">16</span>   <span class="number">0</span>  <span class="number">29.8</span>G  <span class="number">0</span> disk </span><br><span class="line">└─sdb1            <span class="number">8</span>:<span class="number">17</span>   <span class="number">0</span>  <span class="number">29.8</span>G  <span class="number">0</span> <span class="literal">part</span> /media/chen/U-disk</span><br><span class="line">sdc               <span class="number">8</span>:<span class="number">32</span>   <span class="number">0</span> <span class="number">465.8</span>G  <span class="number">0</span> disk </span><br><span class="line">└─sdc1            <span class="number">8</span>:<span class="number">33</span>   <span class="number">0</span> <span class="number">465.8</span>G  <span class="number">0</span> <span class="literal">part</span></span><br></pre></td></tr></table></figure></p>
-<p>另有<em>blkid</em>命令，能显示分区格式，和UUID等信息，这在你要编辑fstab时是非常有用的<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:/data/AzYet.github.io$ sudo blkid</span><br><span class="line">[sudo] password for chen: </span><br><span class="line">/dev/sda1: <span class="variable">LABEL=</span><span class="string">"pro"</span> <span class="variable">UUID=</span><span class="string">"5666E0654D6F9DE1"</span> <span class="variable">TYPE=</span><span class="string">"ntfs"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-01"</span> </span><br><span class="line">/dev/sda3: <span class="variable">LABEL=</span><span class="string">"centos"</span> <span class="variable">UUID=</span><span class="string">"5921ab8d-1812-40f8-9f78-2ab52f1e2911"</span> <span class="variable">TYPE=</span><span class="string">"ext4"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-03"</span> </span><br><span class="line">/dev/sda4: <span class="variable">UUID=</span><span class="string">"GxqXzg-34UR-mJaJ-k6fd-lWNe-lc46-zrpthJ"</span> <span class="variable">TYPE=</span><span class="string">"LVM2_member"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-04"</span> </span><br><span class="line">/dev/sda5: <span class="variable">LABEL=</span><span class="string">"doc"</span> <span class="variable">UUID=</span><span class="string">"1180873237A49857"</span> <span class="variable">TYPE=</span><span class="string">"ntfs"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-05"</span> </span><br><span class="line">/dev/sda6: <span class="variable">LABEL=</span><span class="string">"data"</span> <span class="variable">UUID=</span><span class="string">"f712a921-907c-417a-bbab-554d1973bdcb"</span> <span class="variable">TYPE=</span><span class="string">"ext4"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-06"</span> </span><br><span class="line">/dev/sda7: <span class="variable">UUID=</span><span class="string">"836d502a-d150-4879-8a36-fb9ca6348896"</span> <span class="variable">TYPE=</span><span class="string">"ext4"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-07"</span> </span><br><span class="line">/dev/sda8: <span class="variable">UUID=</span><span class="string">"8268f3fc-a2b6-486d-ab58-50278ce5d890"</span> <span class="variable">TYPE=</span><span class="string">"ext4"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-08"</span> </span><br><span class="line">/dev/sda9: <span class="variable">UUID=</span><span class="string">"05048cdd-ebaf-42db-9d98-97e9ceab433a"</span> <span class="variable">TYPE=</span><span class="string">"swap"</span> <span class="variable">PARTUUID=</span><span class="string">"72b40c28-09"</span> </span><br><span class="line">/dev/sdb1: <span class="variable">LABEL=</span><span class="string">"U-disk"</span> <span class="variable">UUID=</span><span class="string">"5CB0540E504BAFFA"</span> <span class="variable">TYPE=</span><span class="string">"ntfs"</span> <span class="variable">PARTUUID=</span><span class="string">"6b3d9688-01"</span> </span><br><span class="line">/dev/mapper/centos-home: <span class="variable">LABEL=</span><span class="string">"chome"</span> <span class="variable">UUID=</span><span class="string">"63402874-d8d1-41bf-8e69-c9faeaf196ca"</span> <span class="variable">TYPE=</span><span class="string">"ext4"</span> </span><br><span class="line">/dev/mapper/centos-swap: <span class="variable">UUID=</span><span class="string">"649cf6d0-fe22-4ca9-9c5c-d1cddaebd2b9"</span> <span class="variable">TYPE=</span><span class="string">"swap"</span></span><br></pre></td></tr></table></figure></p>
+<p>关于查询磁盘和分区情况，有一个非常好用的工具lsblk<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/AzYet.github.io$ lsblk</div><div class="line">NAME            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT</div><div class="line">sda               8:0    0 465.8G  0 disk </div><div class="line">├─sda1            8:1    0  78.1G  0 part </div><div class="line">├─sda2            8:2    0     1K  0 part </div><div class="line">├─sda3            8:3    0    15G  0 part </div><div class="line">├─sda4            8:4    0    24G  0 part </div><div class="line">│ ├─centos-home 252:0    0    20G  0 lvm  /chome</div><div class="line">│ └─centos-swap 252:1    0     4G  0 lvm  [SWAP]</div><div class="line">├─sda5            8:5    0 107.4G  0 part /media/chen/doc</div><div class="line">├─sda6            8:6    0 136.7G  0 part /data</div><div class="line">├─sda7            8:7    0  23.3G  0 part /</div><div class="line">├─sda8            8:8    0  38.2G  0 part /home</div><div class="line">└─sda9            8:9    0     4G  0 part [SWAP]</div><div class="line">sdb               8:16   0  29.8G  0 disk </div><div class="line">└─sdb1            8:17   0  29.8G  0 part /media/chen/U-disk</div><div class="line">sdc               8:32   0 465.8G  0 disk </div><div class="line">└─sdc1            8:33   0 465.8G  0 part</div></pre></td></tr></table></figure></p>
+<p>另有<em>blkid</em>命令，能显示分区格式，和UUID等信息，这在你要编辑fstab时是非常有用的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">chen@vaio:/data/AzYet.github.io$ sudo blkid</div><div class="line">[sudo] password for chen: </div><div class="line">/dev/sda1: LABEL=&quot;pro&quot; UUID=&quot;5666E0654D6F9DE1&quot; TYPE=&quot;ntfs&quot; PARTUUID=&quot;72b40c28-01&quot; </div><div class="line">/dev/sda3: LABEL=&quot;centos&quot; UUID=&quot;5921ab8d-1812-40f8-9f78-2ab52f1e2911&quot; TYPE=&quot;ext4&quot; PARTUUID=&quot;72b40c28-03&quot; </div><div class="line">/dev/sda4: UUID=&quot;GxqXzg-34UR-mJaJ-k6fd-lWNe-lc46-zrpthJ&quot; TYPE=&quot;LVM2_member&quot; PARTUUID=&quot;72b40c28-04&quot; </div><div class="line">/dev/sda5: LABEL=&quot;doc&quot; UUID=&quot;1180873237A49857&quot; TYPE=&quot;ntfs&quot; PARTUUID=&quot;72b40c28-05&quot; </div><div class="line">/dev/sda6: LABEL=&quot;data&quot; UUID=&quot;f712a921-907c-417a-bbab-554d1973bdcb&quot; TYPE=&quot;ext4&quot; PARTUUID=&quot;72b40c28-06&quot; </div><div class="line">/dev/sda7: UUID=&quot;836d502a-d150-4879-8a36-fb9ca6348896&quot; TYPE=&quot;ext4&quot; PARTUUID=&quot;72b40c28-07&quot; </div><div class="line">/dev/sda8: UUID=&quot;8268f3fc-a2b6-486d-ab58-50278ce5d890&quot; TYPE=&quot;ext4&quot; PARTUUID=&quot;72b40c28-08&quot; </div><div class="line">/dev/sda9: UUID=&quot;05048cdd-ebaf-42db-9d98-97e9ceab433a&quot; TYPE=&quot;swap&quot; PARTUUID=&quot;72b40c28-09&quot; </div><div class="line">/dev/sdb1: LABEL=&quot;U-disk&quot; UUID=&quot;5CB0540E504BAFFA&quot; TYPE=&quot;ntfs&quot; PARTUUID=&quot;6b3d9688-01&quot; </div><div class="line">/dev/mapper/centos-home: LABEL=&quot;chome&quot; UUID=&quot;63402874-d8d1-41bf-8e69-c9faeaf196ca&quot; TYPE=&quot;ext4&quot; </div><div class="line">/dev/mapper/centos-swap: UUID=&quot;649cf6d0-fe22-4ca9-9c5c-d1cddaebd2b9&quot; TYPE=&quot;swap&quot;</div></pre></td></tr></table></figure></p>
 <h3 id="Windows下Ubuntu14-10启动U盘制作">Windows下Ubuntu14.10启动U盘制作</h3><p>以前的Ubuntu版本，我都是用UltraISO来制作启动U盘的，但是14.10这个版本却多次失败，总是提示syslinux找不到指定文件，搜索了一下似乎Ubuntu14.10不是使用的syslinux来引导，所以以前的方法不再适用了。<br>但是联想到Linux下的制作方法，我们需要一个能原样刻录数据的工具</p>
 <h2 id="关键道具">关键道具</h2><p>首先找到的是USBWriter，但是在我的win8.1 64位环境下，它无法找到U盘，或许其它不同系统可以尝试一下。<br>最后成功完成制作的是Win32DiskImager-0.9.5，看起来像32位程序，我安装完无法运行，但重启后意外可以使用了？！<br>于是顺利通过它完成了制作。<br>过程很简单，指定ISO文件和U盘就可以了，没有其它设置。</p>
 <h2 id="关于格式化">关于格式化</h2><p>如果U盘是ntfs格式，请转换为FAT32格式，否则可能无法正常工作。</p>
@@ -119,7 +120,7 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/blkid/">blkid</a><a href="/tags/lsblk/">lsblk</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/u盘/">u盘</a><a href="/tags/启动盘/">启动盘</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/启动盘/">启动盘</a><a href="/tags/u盘/">u盘</a><a href="/tags/lsblk/">lsblk</a><a href="/tags/blkid/">blkid</a>
   </div>
 
 </div>
@@ -188,7 +189,7 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -204,11 +205,11 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -232,11 +233,11 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -244,23 +245,23 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -347,7 +348,7 @@ Linux下制作启动U盘在linux下制作ubuntu的启动盘再简单不过1cat u
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

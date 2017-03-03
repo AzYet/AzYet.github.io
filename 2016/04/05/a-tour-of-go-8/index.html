@@ -1,0 +1,565 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>漫游Go语言（八）之sync.Mutex | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="sync.MutexGo为mutual exclusion提供sync.Mutex库的两个方法12LockUnlock
+我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用defer关键字来确保mutex会被释放。
+练习：网页爬虫在练习将使用Go并发特性来实现并行爬虫。修改Crawl方法并行但不重复地获取URL。提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫游Go语言（八）之sync.Mutex">
+<meta property="og:url" content="http://azyet.github.io/2016/04/05/a-tour-of-go-8/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="sync.MutexGo为mutual exclusion提供sync.Mutex库的两个方法12LockUnlock
+我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用defer关键字来确保mutex会被释放。
+练习：网页爬虫在练习将使用Go并发特性来实现并行爬虫。修改Crawl方法并行但不重复地获取URL。提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全">
+<meta property="og:updated_time" content="2016-04-06T03:04:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漫游Go语言（八）之sync.Mutex">
+<meta name="twitter:description" content="sync.MutexGo为mutual exclusion提供sync.Mutex库的两个方法12LockUnlock
+我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用defer关键字来确保mutex会被释放。
+练习：网页爬虫在练习将使用Go并发特性来实现并行爬虫。修改Crawl方法并行但不重复地获取URL。提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/05/a-tour-of-go-8/" title="漫游Go语言（八）之sync.Mutex" itemprop="url">漫游Go语言（八）之sync.Mutex</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-05T00:17:46.000Z" itemprop="datePublished"> 發表於 2016-04-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sync-Mutex"><span class="toc-number">1.</span> <span class="toc-text">sync.Mutex</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#练习：网页爬虫"><span class="toc-number">2.</span> <span class="toc-text">练习：网页爬虫</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="sync-Mutex">sync.Mutex</h2><p>Go为mutual exclusion提供sync.Mutex库的两个方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Lock</div><div class="line">Unlock</div></pre></td></tr></table></figure></p>
+<p>我们可以将一块代码用Lock和Unlock包围以实现互斥运行，还可以用<code>defer</code>关键字来确保<code>mutex</code>会被释放。</p>
+<h2 id="练习：网页爬虫">练习：网页爬虫</h2><p>在练习将使用Go并发特性来实现并行爬虫。修改<code>Crawl</code>方法并行但不重复地获取URL。<br>提示，可用一个Map来保存已获取的URL，但Map本身并不是线程安全的。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	&quot;fmt&quot;</div><div class="line">)</div><div class="line"></div><div class="line">type Fetcher interface &#123;</div><div class="line">	// Fetch returns the body of URL and</div><div class="line">	// a slice of URLs found on that page.</div><div class="line">	Fetch(url string) (body string, urls []string, err error)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Crawl uses fetcher to recursively crawl</div><div class="line">// pages starting with url, to a maximum of depth.</div><div class="line">func Crawl(url string, depth int, fetcher Fetcher) &#123;</div><div class="line">	// TODO: Fetch URLs in parallel.</div><div class="line">	// TODO: Don&apos;t fetch the same URL twice.</div><div class="line">	// This implementation doesn&apos;t do either:</div><div class="line">	if depth &lt;= 0 &#123;</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line">	body, urls, err := fetcher.Fetch(url)</div><div class="line">	if err != nil &#123;</div><div class="line">		fmt.Println(err)</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line">	fmt.Printf(&quot;found: %s %q\n&quot;, url, body)</div><div class="line">	for _, u := range urls &#123;</div><div class="line">		Crawl(u, depth-1, fetcher)</div><div class="line">	&#125;</div><div class="line">	return</div><div class="line">&#125;</div><div class="line"></div><div class="line">func main() &#123;</div><div class="line">	Crawl(&quot;http://golang.org/&quot;, 4, fetcher)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// fakeFetcher is Fetcher that returns canned results.</div><div class="line">type fakeFetcher map[string]*fakeResult</div><div class="line"></div><div class="line">type fakeResult struct &#123;</div><div class="line">	body string</div><div class="line">	urls []string</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (f fakeFetcher) Fetch(url string) (string, []string, error) &#123;</div><div class="line">	if res, ok := f[url]; ok &#123;</div><div class="line">		return res.body, res.urls, nil</div><div class="line">	&#125;</div><div class="line">	return &quot;&quot;, nil, fmt.Errorf(&quot;not found: %s&quot;, url)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// fetcher is a populated fakeFetcher.</div><div class="line">var fetcher = fakeFetcher&#123;</div><div class="line">	&quot;http://golang.org/&quot;: &amp;fakeResult&#123;</div><div class="line">		&quot;The Go Programming Language&quot;,</div><div class="line">		[]string&#123;</div><div class="line">			&quot;http://golang.org/pkg/&quot;,</div><div class="line">			&quot;http://golang.org/cmd/&quot;,</div><div class="line">		&#125;,</div><div class="line">	&#125;,</div><div class="line">	&quot;http://golang.org/pkg/&quot;: &amp;fakeResult&#123;</div><div class="line">		&quot;Packages&quot;,</div><div class="line">		[]string&#123;</div><div class="line">			&quot;http://golang.org/&quot;,</div><div class="line">			&quot;http://golang.org/cmd/&quot;,</div><div class="line">			&quot;http://golang.org/pkg/fmt/&quot;,</div><div class="line">			&quot;http://golang.org/pkg/os/&quot;,</div><div class="line">		&#125;,</div><div class="line">	&#125;,</div><div class="line">	&quot;http://golang.org/pkg/fmt/&quot;: &amp;fakeResult&#123;</div><div class="line">		&quot;Package fmt&quot;,</div><div class="line">		[]string&#123;</div><div class="line">			&quot;http://golang.org/&quot;,</div><div class="line">			&quot;http://golang.org/pkg/&quot;,</div><div class="line">		&#125;,</div><div class="line">	&#125;,</div><div class="line">	&quot;http://golang.org/pkg/os/&quot;: &amp;fakeResult&#123;</div><div class="line">		&quot;Package os&quot;,</div><div class="line">		[]string&#123;</div><div class="line">			&quot;http://golang.org/&quot;,</div><div class="line">			&quot;http://golang.org/pkg/&quot;,</div><div class="line">		&#125;,</div><div class="line">	&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>题目很长，但是需要修改的部分只是Crawl函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">var m = make(map[string]int)</div><div class="line">var mtx sync.Mutex</div><div class="line"></div><div class="line">// Crawl uses fetcher to recursively crawl</div><div class="line">// pages starting with url, to a maximum of depth.</div><div class="line">func Crawl(url string, depth int, fetcher Fetcher) &#123;</div><div class="line">	// TODO: Fetch URLs in parallel.</div><div class="line">	// TODO: Don&apos;t fetch the same URL twice.</div><div class="line">	// This implementation doesn&apos;t do either:</div><div class="line"></div><div class="line">	if depth &lt;= 0 &#123;</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line">	mtx.Lock()</div><div class="line">	if m[url] == 0 &#123;</div><div class="line">		body, urls, err := fetcher.Fetch(url)</div><div class="line">		m[url] = 1</div><div class="line">		mtx.Unlock()</div><div class="line">		if err != nil &#123;</div><div class="line">			fmt.Println(err)</div><div class="line">			return</div><div class="line">		&#125;</div><div class="line">		fmt.Printf(&quot;found: %s %q\n&quot;, url, body)</div><div class="line">		for _, u := range urls &#123;</div><div class="line">			go Crawl(u, depth-1, fetcher)</div><div class="line">		&#125;</div><div class="line">	&#125;else&#123;</div><div class="line">		mtx.Unlock()</div><div class="line">	&#125;</div><div class="line">	return</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在函数外部定义了一个map和mutex用来保存url是否被访问过，并确保其操作的互斥。<br>在访问下级url时，使用go语句实现并行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">found: http://golang.org/ &quot;The Go Programming Language&quot;</div><div class="line">found: http://golang.org/pkg/ &quot;Packages&quot;</div><div class="line">found: http://golang.org/pkg/os/ &quot;Package os&quot;</div><div class="line">not found: http://golang.org/cmd/</div><div class="line">found: http://golang.org/pkg/fmt/ &quot;Package fmt&quot;</div></pre></td></tr></table></figure></p>
+<p>至此基本的教程就已经结束了，接下来就应该开始实战提高了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/04/05/a-tour-of-go-8/" data-title="漫游Go语言（八）之sync.Mutex | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/14/note-of-ansible-1/" title="Ansible学习笔记(一)SSH连接">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Ansible学习笔记(一)SSH连接</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/05/a-tour-of-go-7/"  title="漫游Go语言（七）之goroutine/channel">
+ <strong>下一篇：</strong><br/> 
+ <span>漫游Go语言（七）之goroutine/channel
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/05/a-tour-of-go-8/" data-title="漫游Go语言（八）之sync.Mutex" data-url="http://azyet.github.io/2016/04/05/a-tour-of-go-8/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sync-Mutex"><span class="toc-number">1.</span> <span class="toc-text">sync.Mutex</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#练习：网页爬虫"><span class="toc-number">2.</span> <span class="toc-text">练习：网页爬虫</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

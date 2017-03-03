@@ -12,22 +12,24 @@
 
     
     <meta name="description" content="最近需要在项目中使用到消息队列，虽然之前有过使用经验，但是因为当时并无具体要求，所以只是在看完RabbitMQ的tutorial之后就自行实现了，并不知道合理性和效率如何。所以在新的项目设计时，打算借鉴一下Openstack中AMQP的使用经验 
-Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许它们">
+Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nova中的RabbitMQ">
 <meta property="og:url" content="http://azyet.github.io/2015/06/28/rabbitmqInNova/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="最近需要在项目中使用到消息队列，虽然之前有过使用经验，但是因为当时并无具体要求，所以只是在看完RabbitMQ的tutorial之后就自行实现了，并不知道合理性和效率如何。所以在新的项目设计时，打算借鉴一下Openstack中AMQP的使用经验 
-Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许它们">
+Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许">
 <meta property="og:image" content="http://docs.openstack.org/developer/nova/_images/arch.png">
 <meta property="og:image" content="http://docs.openstack.org/developer/nova/_images/rabt.png">
 <meta property="og:image" content="http://docs.openstack.org/developer/nova/_images/flow1.png">
 <meta property="og:image" content="http://docs.openstack.org/developer/nova/_images/flow2.png">
 <meta property="og:image" content="http://docs.openstack.org/developer/nova/_images/state.png">
+<meta property="og:updated_time" content="2015-12-04T00:27:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nova中的RabbitMQ">
 <meta name="twitter:description" content="最近需要在项目中使用到消息队列，虽然之前有过使用经验，但是因为当时并无具体要求，所以只是在看完RabbitMQ的tutorial之后就自行实现了，并不知道合理性和效率如何。所以在新的项目设计时，打算借鉴一下Openstack中AMQP的使用经验 
-Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许它们">
+Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理，不管是RabbitMQ或者Qpid，位于两个Nova组件之间并允许">
+<meta name="twitter:image" content="http://docs.openstack.org/developer/nova/_images/arch.png">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -40,7 +42,7 @@ Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理�
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -261,7 +263,7 @@ Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -277,11 +279,11 @@ Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理�
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -305,11 +307,11 @@ Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理�
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -317,23 +319,23 @@ Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理�
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -420,7 +422,7 @@ Nova消息队列　　Openstack云选用AMQP作为其消息技术。AMQP代理�
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

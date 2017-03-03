@@ -21,6 +21,7 @@
 <meta property="og:description" content="C没有引用传递C没有引用！C没有引用！C没有引用！重要的事说3遍。
 12345//file: refer.cvoid swap(int &amp;amp;a,int &amp;amp;b)&amp;#123;&amp;#125;int main()&amp;#123;&amp;#125;
 用C编译器编译：1234$ cc refer.crefer.c:1:15: error: expected ‘;’, ‘,’ or ‘)’ before ‘&amp;">
+<meta property="og:updated_time" content="2015-12-10T15:11:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C语言的参数传递与返回值">
 <meta name="twitter:description" content="C没有引用传递C没有引用！C没有引用！C没有引用！重要的事说3遍。
@@ -38,7 +39,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -103,25 +104,25 @@
 		</div>
 		
 		<h2 id="C没有引用传递">C没有引用传递</h2><p>C没有引用！C没有引用！C没有引用！重要的事说3遍。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//file: refer.c</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> &amp;a,<span class="keyword">int</span> &amp;b)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>用C编译器编译：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cc refer.c</span><br><span class="line">refer.<span class="string">c:</span><span class="number">1</span>:<span class="number">15</span>: <span class="string">error:</span> expected ‘;’, ‘,’ or ‘)’ before ‘&amp;’ token</span><br><span class="line"> <span class="typename">void</span> swap(<span class="typename">int</span> &amp;a,<span class="typename">int</span> &amp;b)&#123;</span><br><span class="line">               ^</span><br></pre></td></tr></table></figure></p>
-<p>C++中才有引用<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ g++ refer<span class="class">.c</span></span><br><span class="line">$</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//file: refer.c</div><div class="line">void swap(int &amp;a,int &amp;b)&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">int main()&#123;&#125;</div></pre></td></tr></table></figure>
+<p>用C编译器编译：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cc refer.c</div><div class="line">refer.c:1:15: error: expected ‘;’, ‘,’ or ‘)’ before ‘&amp;’ token</div><div class="line"> void swap(int &amp;a,int &amp;b)&#123;</div><div class="line">               ^</div></pre></td></tr></table></figure></p>
+<p>C++中才有引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ g++ refer.c</div><div class="line">$</div></pre></td></tr></table></figure></p>
 <p>很多博文C与C++不分，误导了不少人（例如我）。<br><a id="more"></a></p>
 <h2 id="其实都是值传递">其实都是值传递</h2><p>　　教材中通常讲值传递，地址传递，其实都是值传递，本质没有区别。所谓地址传递，不过传递的是地址值而已，遵循同样的法则，没有任何特殊。</p>
 <p>　　比如传递进入一个指针，如果你又对指针值进行了修改，那么修改之后的任何改动都不会影响到外部了，因为这也是值传递，形参不过是实参的一个copy。所以如果想要通过指针对外部数据进行修改，而不要修改指针p本身,而是对*p进行操作。
 　　</p>
-<h2 id="返回数据的方式">返回数据的方式</h2><p>　　由于C值传递的特性，再加上其自动变量都保存于栈中，作用域都只限于函数或语句块内，所以返回于函数中创建的数组、结构指针等都是没有意义的。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>* func2()&#123;</span><br><span class="line">    <span class="keyword">int</span> a[<span class="number">3</span>] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>尝试编译, 将发出警告：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test.c: <span class="type">In</span> <span class="function"><span class="keyword">function</span></span> ‘func2’:</span><br><span class="line">test.c:<span class="number">20</span>:<span class="number">5</span>: warning: <span class="function"><span class="keyword">function</span></span> returns address of local variable [-Wreturn-local-addr]</span><br><span class="line">     <span class="keyword">return</span> a;</span><br><span class="line">     ^</span><br></pre></td></tr></table></figure></p>
+<h2 id="返回数据的方式">返回数据的方式</h2><p>　　由于C值传递的特性，再加上其自动变量都保存于栈中，作用域都只限于函数或语句块内，所以返回于函数中创建的数组、结构指针等都是没有意义的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">int* func2()&#123;</div><div class="line">    int a[3] = &#123;1,2,3&#125;;</div><div class="line">    return a;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>尝试编译, 将发出警告：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">test.c: In function ‘func2’:</div><div class="line">test.c:20:5: warning: function returns address of local variable [-Wreturn-local-addr]</div><div class="line">     return a;</div><div class="line">     ^</div></pre></td></tr></table></figure></p>
 <p>　　所以我们经常可以看到C函数参数经常带有很多指针，指向空的或者待修改的结构/数据，它们的作用不是用于传入信息，而主要是为了输出结果。<br>　　比如上一篇中提到的编译正则表达式的<code>regcomp</code>函数：</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int regcomp(regex_t *preg, const char *regex, int cflags);</div></pre></td></tr></table></figure>
 <p>　　第一个参数就是用来传入一个空的<code>regex_t</code>结构的指针，这个函数的作用就是将这个结构填入编译结果，这个指针才是真正的”返回值”，而return则只是一个状态码。<br>　　其它一些高级OOP（如JAVA）语言是很不一样的，例如Java的对象（数组也是对象）保存在堆中，在哪里创建对象并不影响其生存期。所以Java可以直接返回在任何方法在创建的对象，而不用担心作用域问题。</p>
 <p>　　1、直接返回值。适合基本类型，理论上返回结构也可以，但是返回大型结构会导致大量copy操作影响执行效率。<br>　　2、传入指针。这是C中常用的方法。<br>　　3、效仿高级语言，返回在局部方法中创建的堆指针。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>&lt;stdlib.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span>&lt;stdio.h&gt;</span></span><br><span class="line"><span class="keyword">int</span>* func()&#123;</span><br><span class="line">    <span class="keyword">int</span> *a= <span class="built_in">malloc</span>(<span class="number">3</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line">main()&#123;</span><br><span class="line">    <span class="keyword">int</span> *p = func();</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span> ; i&lt;<span class="number">3</span>;i++)&#123;</span><br><span class="line">        p[i] = i;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,p[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>　　方法3听起来错，不用在参数中传递一大堆指针。理论上也是可行的(如上)，但是有一个问题，即内存的分配和释放会不在同一地点（一个函数内，一个在函数外，可能位于不同源文件），易导致内存泄漏，所以并不推荐使用。<br>　　实际上<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>的例子，也是在外部分配空间<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regex_t *r = malloc<span class="list">(<span class="keyword">sizeof</span><span class="list">(<span class="keyword">regex_t</span>)</span>)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
-<p>后将指针传入的，那么如果这样行不行呢？<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//主函数中</span></span><br><span class="line">regex_t *r;</span><br><span class="line"><span class="comment">//regcom函数中</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>&#123;</span><br><span class="line">    preg = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(regex_t));</span><br><span class="line">    <span class="comment">//other codes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#include&lt;stdlib.h&gt;</div><div class="line">#include&lt;stdio.h&gt;</div><div class="line">int* func()&#123;</div><div class="line">    int *a= malloc(3*sizeof(int));</div><div class="line">    return a;</div><div class="line">&#125;</div><div class="line">main()&#123;</div><div class="line">    int *p = func();</div><div class="line">    int i;</div><div class="line">    for(i = 0 ; i&lt;3;i++)&#123;</div><div class="line">        p[i] = i;</div><div class="line">        printf(&quot;%d\n&quot;,p[i]);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　　方法3听起来错，不用在参数中传递一大堆指针。理论上也是可行的(如上)，但是有一个问题，即内存的分配和释放会不在同一地点（一个函数内，一个在函数外，可能位于不同源文件），易导致内存泄漏，所以并不推荐使用。<br>　　实际上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int regcomp(regex_t *preg, const char *regex, int cflags);</div></pre></td></tr></table></figure></p>
+<p>的例子，也是在外部分配空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">regex_t *r = malloc(sizeof(regex_t));</div></pre></td></tr></table></figure></p>
+<p>后将指针传入的，那么如果这样行不行呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//主函数中</div><div class="line">regex_t *r;</div><div class="line">//regcom函数中</div><div class="line">int regcomp(regex_t *preg, const char *regex, int cflags)&#123;</div><div class="line">    preg = malloc(sizeof(regex_t));</div><div class="line">    //other codes</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>　　这很有迷惑性，地址传递嘛，应该可行吧？<br>　　实际不行，因为<code>malloc</code>之后，preg就指向不同的地址了，与实参<code>preg</code>失去了任何关联。或者说赋值 的是形参，实参仍然是未定义值。需要注意的一点是不仅C中存在这个问题，Java中也有这个问题，如果你想修改传入的对象，一定不要再次用new赋值。<br>　　<br>　　如果一定要在函数外声明，在函数内<code>malloc</code>，那么只能传入指针的指针，然后赋值给<code>(*p)</code>了。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//主函数中</span></span><br><span class="line">regex_t **r;</span><br><span class="line"><span class="comment">//regcom函数中</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(regex_t **preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>&#123;</span><br><span class="line">    *preg = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(regex_t));</span><br><span class="line">    <span class="comment">//other codes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//主函数中</div><div class="line">regex_t **r;</div><div class="line">//regcom函数中</div><div class="line">int regcomp(regex_t **preg, const char *regex, int cflags)&#123;</div><div class="line">    *preg = malloc(sizeof(regex_t));</div><div class="line">    //other codes</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>　　很复杂不是吗？所以，传入指针以接收结果是C中相对最好的方式了。</p>
 <p>　　</p>
   
@@ -155,7 +156,7 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/12/10/OSTEP-vm-intro/" title="OSTEP学习笔记-内存虚拟化">
+ <a href="/2015/12/11/OSTEP-vm-intro/" title="OSTEP学习笔记-内存虚拟化">
   <strong>上一篇：</strong><br/>
   <span>
   OSTEP学习笔记-内存虚拟化</span>
@@ -164,7 +165,7 @@
 
 
 <div class="next">
-<a href="/2015/12/05/An-example-of-using-regular-expressions-in-C/"  title="例程：在C语言中使用正则表达式">
+<a href="/2015/12/06/An-example-of-using-regular-expressions-in-C/"  title="例程：在C语言中使用正则表达式">
  <strong>下一篇：</strong><br/> 
  <span>例程：在C语言中使用正则表达式
 </span>
@@ -201,7 +202,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -217,11 +218,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -245,11 +246,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -257,23 +258,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -360,7 +361,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

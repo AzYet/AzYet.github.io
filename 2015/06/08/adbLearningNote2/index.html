@@ -23,6 +23,7 @@
 1am &amp;lt;command&amp;gt;
 　　也要可以不进入shell直接执行命令：
 1adb shell am start -a android.intent.action.VIEW">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="adb学习笔记(二)之am与pm">
 <meta name="twitter:description" content="activity manager （am）　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：
@@ -41,7 +42,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -106,9 +107,9 @@
 		</div>
 		
 		<h2 id="activity_manager_（am）">activity manager （am）</h2><p>　　在android设备shell中，可以使用am执行一系列的系统操作，如启动一个activity，关闭一个进程，广播一个intent，修改设备屏幕属性等等，命令形式如下：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am &lt;<span class="command"><span class="keyword">command</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">am &lt;command&gt;</div></pre></td></tr></table></figure>
 <p>　　也要可以不进入shell直接执行命令：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -<span class="tag">a</span> android<span class="class">.intent</span><span class="class">.action</span><span class="class">.VIEW</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell am start -a android.intent.action.VIEW</div></pre></td></tr></table></figure>
 <h3 id="am命令及参数">am命令及参数</h3><h4 id="start_[options]_&lt;INTENT&gt;">start [options] &lt;INTENT&gt;</h4><p>　　通过指定Intent启动activity。</p>
 <p>　　options有：</p>
 <p><code>-D</code>      开启debug</p>
@@ -148,18 +149,18 @@
 <p><code>--gdb</code>: 发现crash/ANR时在指定port启动gdb server</p>
 <h4 id="screen-compat_[on|off]_&lt;PACKAGE&gt;">screen-compat [on|off] &lt;PACKAGE&gt;</h4><p>控制包的<code>screen compatibility</code>模式。</p>
 <h4 id="display-size_[reset|&lt;WxH&gt;]">display-size [reset|&lt;WxH&gt;]</h4><p>覆写android设备的显示尺寸，此命令可以模拟不同尺寸的显示屏，在测试应用时非常有用，例如：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">am</span> <span class="keyword">display</span>-density <span class="number">480</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">am display-density 480</div></pre></td></tr></table></figure>
 <h4 id="to-uri_&lt;INTENT&gt;">to-uri &lt;INTENT&gt;</h4><p>将Intent的详细参数打印到一个URI</p>
 <h4 id="to-intent-uri_&lt;INTENT&gt;">to-intent-uri &lt;INTENT&gt;</h4><p>将Intent的详细参数打印到一个intent URI</p>
 <h2 id="package_manager_(pm)">package manager (pm)</h2><p>使用pm工作你可以 在设备上安装的软件包上执行动作查询 。</p>
 <p>语法 ：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#adb</span> shell中</span><br><span class="line">pm &lt;command&gt;</span><br><span class="line"></span><br><span class="line">#系统shell中</span><br><span class="line"></span><br><span class="line">adb shell pm uninstall com<span class="class">.example</span><span class="class">.MyApp</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#adb shell中</div><div class="line">pm &lt;command&gt;</div><div class="line"></div><div class="line">#系统shell中</div><div class="line"></div><div class="line">adb shell pm uninstall com.example.MyApp</div></pre></td></tr></table></figure>
 <h3 id="可用命令和参数">可用命令和参数</h3><h4 id="list_packages_[options]_&lt;FILTER&gt;">list packages [options] &lt;FILTER&gt;</h4><p>list所有软件包，或者包名中包含FILTER字样的包</p>
 <p><code>-f</code>: 查看相关文件<br><code>-d</code>: 只显示被禁用的包<br><code>-e</code>: 显示启用的包<br><code>-s</code>: 显示系统包<br><code>-3</code>: 显示第三方包<br><code>-i</code>: 查看包installer<br><code>-u</code>: 包含已卸载包<br><code>--user &lt;USER_ID&gt;</code>: 指定查询的用户空间</p>
 <h4 id="list_permission-groups">list permission-groups</h4><p>打印所有已经知权限组</p>
 <h4 id="list_permissions_[optiomns]_&lt;GROUP&gt;">list permissions [optiomns] &lt;GROUP&gt;</h4><p>list所有 或 包含于GROUP中 已知权限<br><code>-g</code>: 按组排序<br><code>-f</code>： 打印所有信息<br><code>-s</code> 打印概要<br><code>-d</code> 只列出危险权限<br><code>-u</code> 只列出用户可见的权限</p>
 <h4 id="list_instrumentation">list instrumentation</h4><p>列出所有测试包</p>
-<p><code>-f</code> 列出测试包的APK文件<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@generic_x86:/ <span class="preprocessor"># pm list instrumentation -f</span></span><br><span class="line"><span class="label">instrumentation:</span>/system/app/EmulatorSmokeTests/EmulatorSmokeTests.apk=<span class="keyword">com</span>.android.emulator.smoketests/android.support.test.runner.AndroidJUnitRunner (target=<span class="keyword">com</span>.android.emulator.smoketests)</span><br><span class="line"><span class="label">instrumentation:</span>/data/app/SmokeTest/SmokeTest.apk=<span class="keyword">com</span>.android.smoketest.tests/<span class="keyword">com</span>.android.smoketest.SmokeTestRunner (target=<span class="keyword">com</span>.android.smoketest)</span><br><span class="line"><span class="label">instrumentation:</span>/data/app/ApiDemos/ApiDemos.apk=<span class="keyword">com</span>.example.android.apis/.app.LocalSampleInstrumentation (target=<span class="keyword">com</span>.example.android.apis)</span><br></pre></td></tr></table></figure></p>
+<p><code>-f</code> 列出测试包的APK文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@generic_x86:/ # pm list instrumentation -f</div><div class="line">instrumentation:/system/app/EmulatorSmokeTests/EmulatorSmokeTests.apk=com.android.emulator.smoketests/android.support.test.runner.AndroidJUnitRunner (target=com.android.emulator.smoketests)</div><div class="line">instrumentation:/data/app/SmokeTest/SmokeTest.apk=com.android.smoketest.tests/com.android.smoketest.SmokeTestRunner (target=com.android.smoketest)</div><div class="line">instrumentation:/data/app/ApiDemos/ApiDemos.apk=com.example.android.apis/.app.LocalSampleInstrumentation (target=com.example.android.apis)</div></pre></td></tr></table></figure></p>
 <p><code>&lt;TARGET_PACKAGE&gt;</code> 只列出指定目标的测试包</p>
 <h4 id="list_features">list features</h4><p>列出系统所有特性</p>
 <h4 id="list_libraries">list libraries</h4><p>列出当前设备支持的所有库</p>
@@ -192,7 +193,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/adb/">adb</a><a href="/tags/android/">android</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/android/">android</a><a href="/tags/adb/">adb</a>
   </div>
 
 </div>
@@ -261,7 +262,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -277,11 +278,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -305,11 +306,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -317,23 +318,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -420,7 +421,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

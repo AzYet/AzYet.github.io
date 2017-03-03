@@ -1,0 +1,587 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>OSTEP学习笔记之-Lock的实现 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。
+比如说要对以下代码进行原子操作1balance = balance + 1
+以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。12345lock_t mutex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSTEP学习笔记之-Lock的实现">
+<meta property="og:url" content="http://azyet.github.io/2015/12/17/OSTEP-Linux-concurrency-lock/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。
+比如说要对以下代码进行原子操作1balance = balance + 1
+以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。12345lock_t mutex">
+<meta property="og:updated_time" content="2016-03-18T03:57:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OSTEP学习笔记之-Lock的实现">
+<meta name="twitter:description" content="并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。
+比如说要对以下代码进行原子操作1balance = balance + 1
+以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。12345lock_t mutex">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/17/OSTEP-Linux-concurrency-lock/" title="OSTEP学习笔记之-Lock的实现" itemprop="url">OSTEP学习笔记之-Lock的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 發表於 2015-12-17</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lock的实现"><span class="toc-number">1.</span> <span class="toc-text">Lock的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Test_and_Set"><span class="toc-number">1.1.</span> <span class="toc-text">Test and Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compare-and-exchange"><span class="toc-number">1.2.</span> <span class="toc-text">compare-and-exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch-And-Add"><span class="toc-number">1.3.</span> <span class="toc-text">Fetch-And-Add</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep代替spin"><span class="toc-number">2.</span> <span class="toc-text">sleep代替spin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Two-Phase_Locks"><span class="toc-number">3.</span> <span class="toc-text">Two-Phase Locks</span></a></li></ol>
+		
+		</div>
+		
+		<p>并发问题中我们需要对一系列的指令进行“原子操作”，但是由于中断和多处理器的存在，这无法保证，因此引入了Lock的概念。我们将critical section用Lock标注包围，从而使之成为原子操作。</p>
+<p>比如说要对以下代码进行原子操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">balance = balance + 1</div></pre></td></tr></table></figure></p>
+<p>以上代码包含三个基本指令：取值、相加、存储，因而有可能中途被打断，我们可以执行如下的操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">lock_t mutex; // some globally-allocated lock ’mutex’</div><div class="line">...</div><div class="line">lock(&amp;mutex);</div><div class="line">balance = balance + 1;</div><div class="line">unlock(&amp;mutex);</div></pre></td></tr></table></figure></p>
+<p>代码中的<code>mutex</code>就是<code>Lock</code>，如果<code>mutex</code>是<code>available</code>，那么就会立即返回线程进入执行被保护代码，如果当前是<code>acquired</code>，那么就会被<code>block</code>一直等待，直到<code>mutex</code>状态变为<code>available</code>。<code>mutex</code>意为<code>mutual exclusive</code>，它也包含其它信息，如当前拥有它的线程，以及预定该<code>Lock</code>的队列等，但对用户并不可见。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;</div><div class="line">pthread_mutex_lock(&amp;lock); </div><div class="line">balance = balance + 1;</div><div class="line">pthread_mutex_unlock(&amp;lock);</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="Lock的实现">Lock的实现</h2><p> 操作系统要实现<code>Lock</code>，需要硬件的支持，在设计实现方式时，需要考虑以下几点 </p>
+<p> 1、mutual exclusion    基本功能，必须保证排它性<br> 2、fairness  有相等的机会获取锁，不能有线程starve<br> 3、performance</p>
+<p>假设没有硬件支持，直接使用普通变量作为<code>mutex</code>，那么在测试与获取之间，就有可能发生“错误”操作：线程1和线程2可能交替地测试<code>lock</code>为可获取并进入<code>critical section</code>。所以要实现<code>mutex</code>，必须<code>test and set</code>是一个原子操作，需要由硬件提供。同时在等待<code>lock</code>的<code>wait</code>阶段，如果没有硬件支持，线程必须不停地<code>spin</code>，会占用大量的<code>CPU</code>资源，特别在单处理器系统中，会导致持有<code>lock</code>的线程难以运行，造成效率的极大浪费。</p>
+<h3 id="Test_and_Set">Test and Set</h3><p>硬件提供基本指令，获取当前值当更新为指定值，一个指令内完成，自然也是原子操作。用伪代码示意如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">int TestAndSet(int* old_ptr, int new) &#123;</div><div class="line">    int old = *old_ptr; // fetch old value at old_ptr</div><div class="line">    *old_ptr = new; // store ’new’ into old_ptr</div><div class="line">    return old; // return the old value</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用方法如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">typedef struct __lock_t &#123;</div><div class="line">    int flag;</div><div class="line">&#125; lock_t;</div><div class="line"></div><div class="line">void init(lock_t *lock) &#123;</div><div class="line">    // 0 indicates that lock is available, 1 that it is held</div><div class="line">    lock-&gt;flag = 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">void lock(lock_t *lock) &#123;</div><div class="line">    while (TestAndSet(&amp;lock-&gt;flag, 1) == 1)</div><div class="line">    ; // spin-wait (do nothing)</div><div class="line">&#125;</div><div class="line"></div><div class="line">void unlock(lock_t *lock) &#123;</div><div class="line">    lock-&gt;flag = 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种方法可以保证<code>mutex</code>，但是却依然有<code>spin</code>消耗<code>CPU</code>的问题。</p>
+<h3 id="compare-and-exchange">compare-and-exchange</h3><p>整体来说与<code>test and set</code>有些类似，不过使用了指针。伪代码表示如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">int CompareAndSwap(int *ptr, int expected, int new) &#123;</div><div class="line">    int actual = *ptr;</div><div class="line">    if (actual == expected)</div><div class="line">        *ptr = new;</div><div class="line">    return actual;</div><div class="line">&#125;</div><div class="line">Figure 28.4: Compare-and-swap</div></pre></td></tr></table></figure></p>
+<p>如果<code>ptr</code>指向值与<code>expected</code>相等，则更新为指向值为<code>new</code>，否则不操作，返回值为<code>*ptr</code>。<br>使用方法也与<code>test and set</code>相同</p>
+<h3 id="Fetch-And-Add">Fetch-And-Add</h3><p>简单地说，就是将<code>i++</code>做成一个基本指令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">int FetchAndAdd(int *ptr) &#123;</div><div class="line">int old = *ptr;</div><div class="line">*ptr = old + 1;</div><div class="line">return old;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">typedef struct __lock_t &#123;</div><div class="line">	int ticket;</div><div class="line">	int turn;</div><div class="line">&#125; lock_t;</div><div class="line">	void lock_init(lock_t *lock) &#123;</div><div class="line">	lock-&gt;ticket = 0;</div><div class="line">	lock-&gt;turn</div><div class="line">	 = 0;</div><div class="line">&#125;</div><div class="line">void lock(lock_t *lock) &#123;</div><div class="line">	int myturn = FetchAndAdd(&amp;lock-&gt;ticket);</div><div class="line">	while (lock-&gt;turn != myturn)</div><div class="line">	; // spin</div><div class="line">&#125;</div><div class="line">void unlock(lock_t *lock) &#123;</div><div class="line">	*lock-&gt;turn = *lock-&gt;turn + 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种方式使用了两个变量组成一个结构体来构成锁，其中一个代表自己的<code>ticket</code>，另一个代表轮盘。<code>lock</code>操作即取票并与轮盘比对，符合即进入执行，否则<code>spin</code>。<code>unlock</code>则将轮盘前拨1位（+1）。</p>
+<p>这种方式，较之前方案有一个明显特点，就是可以防止<code>Stare</code>。每个线程都会轮番地得到资源。</p>
+<h2 id="sleep代替spin">sleep代替spin</h2><p>上述的方案，都在解决<code>mutex</code>问题（互斥）,但是没有改善<code>spin</code>消费<code>CPU</code>的问题。思路很简单，也是由硬件和<code>OS</code>提供支持，在线程获取<code>lock</code>失败后，让其进行休眠，并加入<code>OS</code>管理的队列，在<code>lock</code>被释放后，由<code>OS</code>来依次唤醒队列中休眠的线程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">typedef struct __lock_t &#123;</div><div class="line">	int flag;</div><div class="line">	int guard;</div><div class="line">	queue_t *q;</div><div class="line">&#125; lock_t;</div><div class="line">void lock_init(lock_t *m) &#123;</div><div class="line">	m-&gt;flag = 0;</div><div class="line">	m-&gt;guard = 0;</div><div class="line">	queue_init(m-&gt;q);</div><div class="line">&#125;</div><div class="line">void lock(lock_t *m) &#123;</div><div class="line">	while (TestAndSet(&amp;m-&gt;guard, 1) == 1)</div><div class="line">	; //acquire guard lock by spinning</div><div class="line">	if (m-&gt;flag == 0) &#123;</div><div class="line">    	m-&gt;flag = 1; // lock is acquired</div><div class="line">    	m-&gt;guard = 0;</div><div class="line">    &#125; else &#123;</div><div class="line">    	queue_add(m-&gt;q, gettid());</div><div class="line">    	m-&gt;guard = 0;</div><div class="line">    	park();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">void unlock(lock_t *m) &#123;</div><div class="line">	while (TestAndSet(&amp;m-&gt;guard, 1) == 1)</div><div class="line">	; //acquire guard lock by spinning</div><div class="line">	if (queue_empty(m-&gt;q))</div><div class="line">		m-&gt;flag = 0; // let go of lock; no one wants it</div><div class="line">	else</div><div class="line">		unpark(queue_remove(m-&gt;q)); // hold lock (for next thread!)</div><div class="line">	m-&gt;guard = 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述方式为了能让等待线程能尽快进行<code>sleep</code>（<code>park)</code>，使用了一个<code>guard</code>来保证<code>mutex</code>，同时用<code>flag</code>来代表真正的<code>lock</code>。获得<code>gurad</code>之后，可以实现原子操作，但不代表可以执行<code>critical section</code>。如果<code>flag</code>（<code>lock</code>）可用，将<code>flag</code>置位，进入执行。如果不可用，则将线程加入队列并休眠。两种情况下都会在获得<code>gurad</code>独占后将<code>gurad</code>及时复位，因而理论上不会造成其它线程的长时间<code>spin</code>。</p>
+<p>需要注意的是<code>unlock</code>的过程，当有线程在队列中时，<code>unlock</code>并没有释放<code>falg(lock)</code>，因为<code>unpark</code>之后，被唤醒的线程会直接进入执行(从<code>lock</code>返回）,因而无需也不能释放<code>lock</code>。只有在无线程处于等待时，才释放<code>lock</code>。</p>
+<p>但这也引入了一个<code>race condition</code>的问题。假设只有两个线程，其中一线程在<code>park</code>前被<code>context switch</code>到拥有<code>lock</code>的线程，然后<code>lock</code>被释放，那么获取<code>lock</code>的线程将立即进入<code>park</code>，从而永久沉睡。此称为<code>wakeup/waiting race</code>.</p>
+<p>一个解决方案是增加一个<code>system call</code>：<code>setpark()</code>。表示将要执行<code>park</code>，但如果期间被中断并有其它线程调用了<code>unpark</code>，那么<code>setpart</code>会立即返回，并不进行<code>park</code>.</p>
+<p>另一个解决方案是将<code>guard</code>置于<code>kernel</code>中，当上述情况发生时<code>kernel</code>可以释放<code>lock</code>并<code>dequeue</code>运行中的线程。</p>
+<h2 id="Two-Phase_Locks">Two-Phase Locks</h2><p><code>Linux</code>使用了较老风格的<code>tow-phase lock</code>, 在第一个<code>phase</code>，它会<code>spin</code>等待<code>lock</code>，如果获取失败，进入<code>Phase 2</code>，则开始<code>sleep</code>，直到<code>Lock</code>可用。</p>
+<p>总之<code>lock</code>的实现需要硬件+<code>OS</code>的支持，而设计一个通用性强的<code>lock</code>则是富有挑战的。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/12/17/OSTEP-Linux-concurrency-lock/" data-title="OSTEP学习笔记之-Lock的实现 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/12/17/Linux-errno-intro/" title="Linux中的errno">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Linux中的errno</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/12/17/android-develop-layout-abse/"  title="Android开发入门之-Layout">
+ <strong>下一篇：</strong><br/> 
+ <span>Android开发入门之-Layout
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/12/17/OSTEP-Linux-concurrency-lock/" data-title="OSTEP学习笔记之-Lock的实现" data-url="http://azyet.github.io/2015/12/17/OSTEP-Linux-concurrency-lock/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lock的实现"><span class="toc-number">1.</span> <span class="toc-text">Lock的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Test_and_Set"><span class="toc-number">1.1.</span> <span class="toc-text">Test and Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compare-and-exchange"><span class="toc-number">1.2.</span> <span class="toc-text">compare-and-exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch-And-Add"><span class="toc-number">1.3.</span> <span class="toc-text">Fetch-And-Add</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep代替spin"><span class="toc-number">2.</span> <span class="toc-text">sleep代替spin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Two-Phase_Locks"><span class="toc-number">3.</span> <span class="toc-text">Two-Phase Locks</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

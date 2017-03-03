@@ -12,17 +12,18 @@
 
     
     <meta name="description" content="在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用1ovs-ofctl show bridge
-就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9">
+就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000d">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC">
 <meta property="og:url" content="http://azyet.github.io/2014/03/04/checkOFPortAndMAClinkedIn/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用1ovs-ofctl show bridge
-就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9">
+就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000d">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[open vSwitch]查看OVS端口ofport编号及对应虚拟机MAC">
 <meta name="twitter:description" content="在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用1ovs-ofctl show bridge
-就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9">
+就能得到。如123456789101112131415161718192021222324root@vaio:~# ovs-ofctl show br-intOFPT_FEATURES_REPLY (xid=0x2): dpid:0000d">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -35,7 +36,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -99,10 +100,10 @@
 		
 		</div>
 		
-		<p>　　在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用<br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ovs-ofctl <span class="literal">show</span> bridge</span><br></pre></td></tr></table></figure></p>
-<p>就能得到。如<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root<span class="annotation">@vaio</span>:~# ovs-ofctl show br-<span class="typename">int</span></span><br><span class="line">OFPT_FEATURES_REPLY (xid=<span class="number">0x2</span>): <span class="string">dpid:</span><span class="number">0000</span>da9142cdfb44</span><br><span class="line"><span class="string">n_tables:</span><span class="number">254</span>, <span class="string">n_buffers:</span><span class="number">256</span></span><br><span class="line"><span class="string">capabilities:</span> FLOW_STATS TABLE_STATS PORT_STATS QUEUE_STATS ARP_MATCH_IP</span><br><span class="line"><span class="string">actions:</span> OUTPUT SET_VLAN_VID SET_VLAN_PCP STRIP_VLAN SET_DL_SRC SET_DL_DST SET_NW_SRC SET_NW_DST SET_NW_TOS SET_TP_SRC SET_TP_DST ENQUEUE</span><br><span class="line"> <span class="number">1</span>(patch-tun): <span class="string">addr:</span><span class="number">6</span><span class="string">e:</span><span class="number">4</span><span class="string">b:</span><span class="number">44</span>:<span class="number">8</span><span class="string">e:</span><span class="string">f8:</span>d7</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     speed:</span> <span class="number">0</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> <span class="number">18</span>(tap0): <span class="string">addr:</span><span class="string">ea:</span><span class="number">58</span>:<span class="string">d5:</span><span class="string">f8:</span><span class="number">26</span>:<span class="number">4</span>e</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     current:</span>    <span class="number">10</span>MB-FD COPPER</span><br><span class="line"><span class="label">     speed:</span> <span class="number">10</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> <span class="number">19</span>(tap1): <span class="string">addr:</span><span class="number">96</span>:<span class="string">fc:</span><span class="number">5</span><span class="string">d:</span><span class="string">b6:</span><span class="number">43</span>:d6</span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     current:</span>    <span class="number">10</span>MB-FD COPPER</span><br><span class="line"><span class="label">     speed:</span> <span class="number">10</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line"> LOCAL(br-<span class="typename">int</span>): <span class="string">addr:</span><span class="string">da:</span><span class="number">91</span>:<span class="number">42</span>:<span class="string">cd:</span><span class="string">fb:</span><span class="number">44</span></span><br><span class="line"><span class="label">     config:</span>     <span class="number">0</span></span><br><span class="line"><span class="label">     state:</span>      <span class="number">0</span></span><br><span class="line"><span class="label">     speed:</span> <span class="number">0</span> Mbps now, <span class="number">0</span> Mbps max</span><br><span class="line">OFPT_GET_CONFIG_REPLY (xid=<span class="number">0x4</span>): frags=normal miss_send_len=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
-<p>　　当一个bridge上连接有多台虚拟机（或VM有多个IF）时，我们还常常需要知道VM的IF与bridge  port的对应，这时候可以使用：<br><a id="more"></a><br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ovs-appctl fdb/<span class="literal">show</span> bridge</span><br></pre></td></tr></table></figure></p>
-<p>例如：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@vaio</span><span class="symbol">:~</span><span class="comment"># ovs-appctl fdb/show br-int</span></span><br><span class="line"> port  <span class="constant">VLAN </span> <span class="constant">MAC </span>               <span class="constant">Age</span></span><br><span class="line"><span class="constant">LOCAL </span>    <span class="number">0</span>  <span class="symbol">da:</span><span class="number">91</span><span class="symbol">:</span><span class="number">42</span><span class="symbol">:cd</span><span class="symbol">:fb</span><span class="symbol">:</span><span class="number">44</span>   <span class="number">18</span></span><br><span class="line">   <span class="number">18</span>     <span class="number">0</span>  <span class="number">52</span><span class="symbol">:</span><span class="number">54</span><span class="symbol">:</span><span class="number">00</span><span class="symbol">:a9</span><span class="symbol">:b8</span><span class="symbol">:b0</span>    <span class="number">0</span></span><br><span class="line">   <span class="number">19</span>     <span class="number">0</span>  <span class="number">52</span><span class="symbol">:</span><span class="number">54</span><span class="symbol">:</span><span class="number">00</span><span class="symbol">:a9</span><span class="symbol">:b8</span><span class="symbol">:b1</span>    <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+		<p>　　在用open vSwitch做实验时，我们经常需要知道OVS port对应的ofport编号，这个比较容易，用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ovs-ofctl show bridge</div></pre></td></tr></table></figure></p>
+<p>就能得到。如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">root@vaio:~# ovs-ofctl show br-int</div><div class="line">OFPT_FEATURES_REPLY (xid=0x2): dpid:0000da9142cdfb44</div><div class="line">n_tables:254, n_buffers:256</div><div class="line">capabilities: FLOW_STATS TABLE_STATS PORT_STATS QUEUE_STATS ARP_MATCH_IP</div><div class="line">actions: OUTPUT SET_VLAN_VID SET_VLAN_PCP STRIP_VLAN SET_DL_SRC SET_DL_DST SET_NW_SRC SET_NW_DST SET_NW_TOS SET_TP_SRC SET_TP_DST ENQUEUE</div><div class="line"> 1(patch-tun): addr:6e:4b:44:8e:f8:d7</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     speed: 0 Mbps now, 0 Mbps max</div><div class="line"> 18(tap0): addr:ea:58:d5:f8:26:4e</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     current:    10MB-FD COPPER</div><div class="line">     speed: 10 Mbps now, 0 Mbps max</div><div class="line"> 19(tap1): addr:96:fc:5d:b6:43:d6</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     current:    10MB-FD COPPER</div><div class="line">     speed: 10 Mbps now, 0 Mbps max</div><div class="line"> LOCAL(br-int): addr:da:91:42:cd:fb:44</div><div class="line">     config:     0</div><div class="line">     state:      0</div><div class="line">     speed: 0 Mbps now, 0 Mbps max</div><div class="line">OFPT_GET_CONFIG_REPLY (xid=0x4): frags=normal miss_send_len=0</div></pre></td></tr></table></figure></p>
+<p>　　当一个bridge上连接有多台虚拟机（或VM有多个IF）时，我们还常常需要知道VM的IF与bridge  port的对应，这时候可以使用：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ovs-appctl fdb/show bridge</div></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root@vaio:~# ovs-appctl fdb/show br-int</div><div class="line"> port  VLAN  MAC                Age</div><div class="line">LOCAL     0  da:91:42:cd:fb:44   18</div><div class="line">   18     0  52:54:00:a9:b8:b0    0</div><div class="line">   19     0  52:54:00:a9:b8:b1    0</div></pre></td></tr></table></figure></p>
 <p>　　可以看到18号ofport连接的是MAC为52:54:00:a9:b8:b0的虚拟网卡。可结合上一个命令，知18号ofport的port name为tap0。</p>
 <p>　　需要注意的是，该网卡必须要有数据的收发，才能够得到上述的结果，所以使用该命令之前不妨先执行一下类似ping的动作。</p>
   
@@ -113,7 +114,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/MAC/">MAC</a><a href="/tags/Openflow/">Openflow</a><a href="/tags/SDN/">SDN</a><a href="/tags/open/">open</a><a href="/tags/openstack/">openstack</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/端口/">端口</a><a href="/tags/虚拟机/">虚拟机</a>
+  <span></span> <a href="/tags/Openflow/">Openflow</a><a href="/tags/open/">open</a><a href="/tags/vswitch/">vswitch</a><a href="/tags/SDN/">SDN</a><a href="/tags/openstack/">openstack</a><a href="/tags/端口/">端口</a><a href="/tags/MAC/">MAC</a><a href="/tags/虚拟机/">虚拟机</a>
   </div>
 
 </div>
@@ -174,7 +175,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -190,11 +191,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -218,11 +219,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -230,23 +231,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -333,7 +334,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

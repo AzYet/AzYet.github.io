@@ -1,0 +1,851 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>scala学习笔记（一）基本概念、标识符、数据类型和字面值 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="overview生产力、扩展性和可靠性
+
+面向对象的： 所有值都是对象；类型和行为由class和trait描述；可继承和混合重组（多继承的替代).
+函数式： 函数也是值/对象；轻量化的匿名函数定义；支持higher-order函数；嵌套函数；柯里函数；
+静态类型：但不需要提供冗余的类型信息
+与java良好的互操作性
+并发支持：良好的表达能力减少代码行数且类型安全，支持immutable方式从而使并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scala学习笔记（一）基本概念、标识符、数据类型和字面值">
+<meta property="og:url" content="http://azyet.github.io/2016/04/26/scala-tutorial-1/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="overview生产力、扩展性和可靠性
+
+面向对象的： 所有值都是对象；类型和行为由class和trait描述；可继承和混合重组（多继承的替代).
+函数式： 函数也是值/对象；轻量化的匿名函数定义；支持higher-order函数；嵌套函数；柯里函数；
+静态类型：但不需要提供冗余的类型信息
+与java良好的互操作性
+并发支持：良好的表达能力减少代码行数且类型安全，支持immutable方式从而使并">
+<meta property="og:updated_time" content="2016-04-26T12:33:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scala学习笔记（一）基本概念、标识符、数据类型和字面值">
+<meta name="twitter:description" content="overview生产力、扩展性和可靠性
+
+面向对象的： 所有值都是对象；类型和行为由class和trait描述；可继承和混合重组（多继承的替代).
+函数式： 函数也是值/对象；轻量化的匿名函数定义；支持higher-order函数；嵌套函数；柯里函数；
+静态类型：但不需要提供冗余的类型信息
+与java良好的互操作性
+并发支持：良好的表达能力减少代码行数且类型安全，支持immutable方式从而使并">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/26/scala-tutorial-1/" title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" itemprop="url">scala学习笔记（一）基本概念、标识符、数据类型和字面值</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-26T00:29:43.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#overview"><span class="toc-number">1.</span> <span class="toc-text">overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scala_vs_java"><span class="toc-number">2.</span> <span class="toc-text">scala vs java</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WEb框架"><span class="toc-number">3.</span> <span class="toc-text">WEb框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scala_basis"><span class="toc-number">4.</span> <span class="toc-text">scala basis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一个scala程序"><span class="toc-number">5.</span> <span class="toc-text">第一个scala程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本约定"><span class="toc-number">6.</span> <span class="toc-text">基本约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scala_标识符"><span class="toc-number">7.</span> <span class="toc-text">scala 标识符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字母数字"><span class="toc-number">7.1.</span> <span class="toc-text">字母数字</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作标识符"><span class="toc-number">8.</span> <span class="toc-text">操作标识符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mixed_identifier_混合标识符"><span class="toc-number">8.1.</span> <span class="toc-text">mixed identifier 混合标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#literal_标识符"><span class="toc-number">8.2.</span> <span class="toc-text">literal 标识符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关键字"><span class="toc-number">9.</span> <span class="toc-text">关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释"><span class="toc-number">10.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#空行与空格"><span class="toc-number">11.</span> <span class="toc-text">空行与空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#换行符"><span class="toc-number">12.</span> <span class="toc-text">换行符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包"><span class="toc-number">13.</span> <span class="toc-text">包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态应用"><span class="toc-number">14.</span> <span class="toc-text">动态应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据"><span class="toc-number">15.</span> <span class="toc-text">数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本literal"><span class="toc-number">16.</span> <span class="toc-text">基本literal</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#整数字面值"><span class="toc-number">16.1.</span> <span class="toc-text">整数字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点字面值"><span class="toc-number">16.2.</span> <span class="toc-text">浮点字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布尔字面值"><span class="toc-number">16.3.</span> <span class="toc-text">布尔字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#符号字面值"><span class="toc-number">16.4.</span> <span class="toc-text">符号字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#character_字面值"><span class="toc-number">16.5.</span> <span class="toc-text">character 字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串字面值"><span class="toc-number">16.6.</span> <span class="toc-text">字符串字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多行字符串"><span class="toc-number">16.7.</span> <span class="toc-text">多行字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Null_值"><span class="toc-number">16.8.</span> <span class="toc-text">Null 值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#转义符"><span class="toc-number">16.9.</span> <span class="toc-text">转义符</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="overview">overview</h2><p>生产力、扩展性和可靠性</p>
+<ul>
+<li>面向对象的： 所有值都是对象；类型和行为由class和trait描述；可继承和混合重组（多继承的替代).</li>
+<li>函数式： 函数也是值/对象；轻量化的匿名函数定义；支持higher-order函数；嵌套函数；柯里函数；</li>
+<li>静态类型：但不需要提供冗余的类型信息</li>
+<li>与<code>java</code>良好的互操作性</li>
+<li>并发支持：良好的表达能力减少代码行数且类型安全，支持immutable方式从而使并发编程更容易。</li>
+</ul>
+<h2 id="scala_vs_java">scala vs java</h2><ul>
+<li>所有类型都是对象</li>
+<li>类型推断 </li>
+<li>嵌套函数</li>
+<li>函数也是对象</li>
+<li>SDL（Domain specific language）支持</li>
+<li>trait</li>
+<li>闭包</li>
+<li>Erlang式的并发支持</li>
+</ul>
+<h2 id="WEb框架">WEb框架</h2><p>scala在WEB应用中使用广泛，以下是最流行的几个框架</p>
+<ul>
+<li>The Lift Framework</li>
+<li>The Play framework</li>
+<li>The Bowler framework<a id="more"></a>
+<h2 id="scala_basis">scala basis</h2></li>
+</ul>
+<p>与<code>java</code>不同的是，行末分号<code>;</code>是可选的<br><code>scala</code>程序可看作是一级对象的集合，对象间通过调用彼此方法通信。以下是一些名词的定义</p>
+<ul>
+<li>对象： 对象有状态和行为，是类的实例。</li>
+<li>类：蓝图/模板. 定义对象支持的状态和行为</li>
+<li>方法：行为。类包括若干传为，数据操作、行为执行等逻辑都体现在方法中。</li>
+<li>域：每个对象都有唯一的一组当前值，定义了当前状态 </li>
+<li>闭包：首先闭包是一个函数，它的返回值与若干定义于函数之外的变量值有关。</li>
+<li>Trait（物质）：特质封装了域和方法定义，并可被混合重用到类中。特质通过指定支持的方法的签名来定义对象类型</li>
+</ul>
+<h2 id="第一个scala程序">第一个scala程序</h2><p>scala程序可交互式、脚本式地运行。<br>交互式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">chen@vaio:~$ scala </div><div class="line">Welcome to Scala 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_92).</div><div class="line">Type in expressions for evaluation. Or try :help.</div><div class="line"></div><div class="line">scala&gt; println(&quot;hello scala\n&quot;)</div><div class="line">hello scala</div></pre></td></tr></table></figure></p>
+<p>脚本式<br>编辑以下文本保存为hello.scala<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">object Hello&#123;</div><div class="line">    def main(args: Array[String])&#123;</div><div class="line">        println(&quot;hello world!\n&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>编辑并运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scalac Hello.scala </div><div class="line">chen@vaio:/data/myscala$ scala Hello</div><div class="line">hello world!</div></pre></td></tr></table></figure></p>
+<h2 id="基本约定">基本约定</h2><ul>
+<li>大小写敏感</li>
+<li>类名：大写开头，驼峰式命名</li>
+<li>方法名：小写开头，驼峰式命名</li>
+<li>程序文件命名：与对象名一致，以<code>.scala</code>结尾。</li>
+<li>def main(args: Array[String]): 所有scala程序从些方法开始执行</li>
+</ul>
+<h2 id="scala_标识符">scala 标识符</h2><p>所有scala组件都需要命名，对象，类，变量和方法的命名被称为标识符。关键字不能用途标识符，scala支持四种类型的标识符。</p>
+<h3 id="字母数字">字母数字</h3><p><code>$</code>在scala中是保留字<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">age, salary, _value, __1_value</div></pre></td></tr></table></figure></p>
+<h2 id="操作标识符">操作标识符</h2><p>由一或多个运行符组成。如<code>+</code>, <code>:</code>, <code>?</code>, <code>~</code> or <code>#</code><br>以下是合法的操作符标识符</p>
+<p><code>+</code>, <code>++</code>, <code>:::</code>,<code>&lt;?&gt;</code>, <code>:&gt;</code><br>scala编译器会于内部将运算标识符（or操作标识符）转变了合法的<code>java</code>内置的带<code>$</code>的标识符。例如<code>:-&gt;</code>在内部表示为<code>$colon$minus$greater</code></p>
+<h3 id="mixed_identifier_混合标识符">mixed identifier 混合标识符</h3><p>字母数字标识符与运算标识符的组合<br><code>unary_+</code>, <code>myvar_=</code><br>以上<code>unary_+</code>是函数名，定义了一个<code>unary</code>的<code>+</code>运算，<code>unary_=</code>也是函数名，定义了<code>unary</code>的赋值操作。</p>
+<h3 id="literal_标识符">literal 标识符</h3><p>任意由<code>`包裹的字符串。</code>x<code>`&lt;clinit&gt;</code> <code>yield</code></p>
+<h2 id="关键字">关键字</h2><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abstract</td>
+<td>case</td>
+<td>catch</td>
+<td>Class</td>
+</tr>
+<tr>
+<td>def</td>
+<td>do</td>
+<td>else</td>
+<td>exten</td>
+</tr>
+<tr>
+<td>false</td>
+<td>final</td>
+<td>finally</td>
+<td>For</td>
+</tr>
+<tr>
+<td>forSome</td>
+<td>if</td>
+<td>implicit</td>
+<td>import</td>
+</tr>
+<tr>
+<td>lazy</td>
+<td>match</td>
+<td>new</td>
+<td>Null</td>
+</tr>
+<tr>
+<td>object</td>
+<td>override</td>
+<td>package</td>
+<td>private</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>return</td>
+<td>sealed</td>
+<td>super</td>
+</tr>
+<tr>
+<td>this</td>
+<td>throw</td>
+<td>trait</td>
+<td>Try</td>
+</tr>
+<tr>
+<td>true</td>
+<td>type</td>
+<td>val</td>
+<td>Var</td>
+</tr>
+<tr>
+<td>while</td>
+<td>with</td>
+<td>yield </td>
+</tr>
+<tr>
+<td>-</td>
+<td>:</td>
+<td>=</td>
+<td>=&gt;</td>
+</tr>
+<tr>
+<td>&lt;-</td>
+<td>&lt;:</td>
+<td>&lt;%</td>
+<td>>:</td>
+</tr>
+<tr>
+<td>#</td>
+<td>@</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="注释">注释</h2><p>基本与<code>java</code>相同，允许多行注释嵌套</p>
+<h2 id="空行与空格">空行与空格</h2><p>只包含空格、注释的行称为空行，编译器直接无视。tokens能被空白符与注释分割。</p>
+<h2 id="换行符">换行符</h2><p>scala是面向行的编程语言，声明同时可以被分号<code>；</code>和换行终止. 如果声明独占一行那么<code>；</code>就可省略，只在多个声明共行时需要<code>；</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val s = &quot;hello&quot;; println(s）</div></pre></td></tr></table></figure></p>
+<h2 id="包">包</h2><p><code>包</code> 是命名了的代码模块。包的声明在源文件的第一行非注释行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">package com.liftcode.stuff</div></pre></td></tr></table></figure></p>
+<p>包可以被导入当前编译范围，以下声明导入<code>scala.xml</code>包的全部内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import scala.xml._</div></pre></td></tr></table></figure></p>
+<p>也可以只导入指定类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import scala.collection.mutable.HashMap</div></pre></td></tr></table></figure></p>
+<p>和同一包中的多个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import scala.collection.immutable.&#123;TreeMap, TreeSet&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="动态应用">动态应用</h2><p>enable动态调用的marker trait. </p>
+<p> 这种物质的实例x允许任意名称和参数与<code>x.meth(args)</code>相符的函数调用，也允许<code>x.field</code>形式的域访问，该特性是在<code>2.10</code>版本中被引入的。</p>
+<p>它允许你调用对象并不存在的方法，<code>scala.Dynamic</code>没有任何成员，它是一个<code>标记接口</code>/<code>marker interface</code>,实质的内容由编译器填入。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">//指定调用方法名与参数值</div><div class="line">foo.method(&quot;blah&quot;) ~~&gt; foo.applyDynamic(&quot;method&quot;)(&quot;blah&quot;)</div><div class="line">//指定调用方法名与字典式参数指定 </div><div class="line">foo.method(x = &quot;blah&quot;) ~~&gt; foo.applyDynamicNamed(&quot;method&quot;)((&quot;x&quot;, &quot;blah&quot;))</div><div class="line">foo.method(x = 1, 2) ~~&gt; foo.applyDynamicNamed(&quot;method&quot;)((&quot;x&quot;, 1), (&quot;&quot;, 2))</div><div class="line">//域访问</div><div class="line">foo.field ~~&gt; foo.selectDynamic(&quot;field&quot;)</div><div class="line">//域赋值</div><div class="line">foo.varia = 10 ~~&gt; foo.updateDynamic(&quot;varia&quot;)(10)</div><div class="line">//数组类型的域赋值</div><div class="line">foo.arr(10) = 13 ~~&gt; foo.selectDynamic(&quot;arr&quot;).update(10, 13)</div><div class="line">//数组类型方法调用</div><div class="line">foo.arr(10) ~~&gt; foo.applyDynamic(&quot;arr&quot;)(10)</div></pre></td></tr></table></figure></p>
+<h2 id="数据">数据</h2><p>数据类型的内存与精确度与<code>java</code>完全相同</p>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Type  Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Byte</td>
+<td>8 bit signed value. Range from -128 to 127</td>
+</tr>
+<tr>
+<td>Short</td>
+<td>16 bit signed value. Range -32768 to 32767</td>
+</tr>
+<tr>
+<td>Int</td>
+<td>32 bit signed value. Range -2147483648 to 2147483647</td>
+</tr>
+<tr>
+<td>Long</td>
+<td>64 bit signed value. -9223372036854775808 to 9223372036854775807</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>32 bit IEEE 754 single-precision float</td>
+</tr>
+<tr>
+<td>Double</td>
+<td>64 bit IEEE 754 double-precision float</td>
+</tr>
+<tr>
+<td>Char</td>
+<td>16  bit  unsigned  Unicode  character.  Range  from  U+0000  to U+FFFF</td>
+</tr>
+<tr>
+<td>String</td>
+<td>A sequence of Chars</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>Either the literal true or the literal false</td>
+</tr>
+<tr>
+<td>Unit</td>
+<td>Corresponds to no value</td>
+</tr>
+<tr>
+<td>Null</td>
+<td>null or empty reference</td>
+</tr>
+<tr>
+<td>Nothing</td>
+<td>The subtype of every other type; includes no values</td>
+</tr>
+<tr>
+<td>Any</td>
+<td>The supertype of any type; any object is of type Any</td>
+</tr>
+<tr>
+<td>AnyRef</td>
+<td>The supertype of any reference type</td>
+</tr>
+</tbody>
+</table>
+<p>以上所有类型都是对象，没有<code>java</code>中的基本数据类型，可以直接调用它们的方法。</p>
+<h2 id="基本literal">基本literal</h2><p>scala的<code>字面值</code>/<code>literal</code>简单而符合直觉。</p>
+<h3 id="整数字面值">整数字面值</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">0</div><div class="line">035</div><div class="line">21</div><div class="line">0xFFFF</div><div class="line">0777L</div></pre></td></tr></table></figure>
+<h3 id="浮点字面值">浮点字面值</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">0.0 </div><div class="line">1e30f </div><div class="line">3.14159f </div><div class="line">1.0e100</div><div class="line">.1</div></pre></td></tr></table></figure>
+<h3 id="布尔字面值">布尔字面值</h3><p><code>true</code> ‘false’</p>
+<h3 id="符号字面值">符号字面值</h3><p><code>x</code>是<code>scala.Symbol(&quot;x&quot;)</code>的简写,符号是<code>case class</code>，定义如下。</p>
+<h3 id="character_字面值">character 字面值</h3><p>由单引号标记，可以是<code>unicode</code>字符或者<code>转义序列</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&apos;a&apos; </div><div class="line">&apos;\u0041&apos;</div><div class="line">&apos;\n&apos;</div><div class="line">&apos;\t&apos;</div></pre></td></tr></table></figure></p>
+<h3 id="字符串字面值">字符串字面值</h3><p>双引号标记，可以是<code>unicode</code>字符或者<code>转义序列</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;Hello,\nWorld!&quot;</div><div class="line">&quot;This string contains a \&quot; character.&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="多行字符串">多行字符串</h3><p>由三双引号标记，中间可以是除连续三个（以上）引号的任意字符，不一定是可打印字符，换行和其它符号都允许。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&quot;&quot;&quot;the present string</div><div class="line">spans three</div><div class="line">Lines.&quot;&quot;&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="Null_值">Null 值</h3><p><code>null</code>是<code>scala.Null</code>类型，因此与任何引用类型兼容，意为等于特殊值<code>null</code>引用值。</p>
+<h3 id="转义符">转义符</h3><p>以下是可被识别的字符与字符串转义</p>
+<table>
+<thead>
+<tr>
+<th>Escape Sequences</th>
+<th>Unicode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\b</td>
+<td>\u0008</td>
+<td>backspace BS</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>\u0009</td>
+<td>horizontal tab HT</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>\u000c</td>
+<td>formfeed FF</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>\u000c</td>
+<td>formfeed FF</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>\u000d</td>
+<td>carriage return CR</td>
+</tr>
+<tr>
+<td>\”</td>
+<td>\u0022</td>
+<td>double quote”</td>
+</tr>
+<tr>
+<td>\’</td>
+<td>\u0027</td>
+<td>single quote.</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>\u005c</td>
+<td>backslash \</td>
+</tr>
+</tbody>
+</table>
+<p>Unicode值在0-255之间的字符也可以用八进制的转义表示，如<code>\</code>后跟不超过3个八进制字符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">object Demo &#123;</div><div class="line">  def main(args: Array[String]) &#123;</div><div class="line">    println(&quot;Hello\tWorld\n\n&quot; );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/04/26/scala-tutorial-1/" data-title="scala学习笔记（一）基本概念、标识符、数据类型和字面值 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/26/scala-tutorial-2/" title="scala学习笔记（二）变量/作用域/类与对象">
+  <strong>上一篇：</strong><br/>
+  <span>
+  scala学习笔记（二）变量/作用域/类与对象</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/22/inspur-ipmi-raid-hot-spare/"  title="浪潮服务器IPMI与RAID及Hot Spare配置">
+ <strong>下一篇：</strong><br/> 
+ <span>浪潮服务器IPMI与RAID及Hot Spare配置
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/26/scala-tutorial-1/" data-title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" data-url="http://azyet.github.io/2016/04/26/scala-tutorial-1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#overview"><span class="toc-number">1.</span> <span class="toc-text">overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scala_vs_java"><span class="toc-number">2.</span> <span class="toc-text">scala vs java</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WEb框架"><span class="toc-number">3.</span> <span class="toc-text">WEb框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scala_basis"><span class="toc-number">4.</span> <span class="toc-text">scala basis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一个scala程序"><span class="toc-number">5.</span> <span class="toc-text">第一个scala程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本约定"><span class="toc-number">6.</span> <span class="toc-text">基本约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scala_标识符"><span class="toc-number">7.</span> <span class="toc-text">scala 标识符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字母数字"><span class="toc-number">7.1.</span> <span class="toc-text">字母数字</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作标识符"><span class="toc-number">8.</span> <span class="toc-text">操作标识符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mixed_identifier_混合标识符"><span class="toc-number">8.1.</span> <span class="toc-text">mixed identifier 混合标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#literal_标识符"><span class="toc-number">8.2.</span> <span class="toc-text">literal 标识符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关键字"><span class="toc-number">9.</span> <span class="toc-text">关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释"><span class="toc-number">10.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#空行与空格"><span class="toc-number">11.</span> <span class="toc-text">空行与空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#换行符"><span class="toc-number">12.</span> <span class="toc-text">换行符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包"><span class="toc-number">13.</span> <span class="toc-text">包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态应用"><span class="toc-number">14.</span> <span class="toc-text">动态应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据"><span class="toc-number">15.</span> <span class="toc-text">数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本literal"><span class="toc-number">16.</span> <span class="toc-text">基本literal</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#整数字面值"><span class="toc-number">16.1.</span> <span class="toc-text">整数字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点字面值"><span class="toc-number">16.2.</span> <span class="toc-text">浮点字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布尔字面值"><span class="toc-number">16.3.</span> <span class="toc-text">布尔字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#符号字面值"><span class="toc-number">16.4.</span> <span class="toc-text">符号字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#character_字面值"><span class="toc-number">16.5.</span> <span class="toc-text">character 字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串字面值"><span class="toc-number">16.6.</span> <span class="toc-text">字符串字面值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多行字符串"><span class="toc-number">16.7.</span> <span class="toc-text">多行字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Null_值"><span class="toc-number">16.8.</span> <span class="toc-text">Null 值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#转义符"><span class="toc-number">16.9.</span> <span class="toc-text">转义符</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

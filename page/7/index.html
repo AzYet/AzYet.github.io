@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -71,6 +71,82 @@
     </header>
     <div id="container">
       <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/22/theGreatCannon/" title="The Great Cannon" itemprop="url">The Great Cannon</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-22T14:35:05.000Z" itemprop="datePublished"> 發表於 2015-05-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　听说在GFW之外我们又有一个大杀器GreatCannon， 好奇之下找了一篇文章翻翻，顺便部分翻译了一下。</p>
+<p>　　看完之后的感受是，所谓GreatCannon不过是利用了独有的资源，并没啥高精尖的东西，不过，了解人家分析日志的追踪攻击的过程还挺有意思，当作一次了解运维和安全的机会吧。</p>
+<h2 id="利用百度来操纵百万级电脑发起DDoS">利用百度来操纵百万级电脑发起DDoS</h2><p>　　通过在诸如Amazon的Clound Front这样的大型CDN上部署一组在线镜像站点，GreatFire.org工程成功地解除中国国内对一些站点的屏蔽。</p>
+<p>　　2015-3-18,项目网站报道前一天遭受了大规模的DOS攻击。这篇文档详细介绍了这次有史以来最大规模的应用层了攻击是如何实施的。</p>
+<p>　　攻击者实现了一种隐秘机制来操作大量的合法流量，境内或境外，来发起和操纵DDOS攻击反审查项目CloundFront和GreatFire.org项目。</p>
+<p>文档揭示了</p>
+<pre><code>访问中国数千网站的全球用户被随机收到恶意代码来实施攻击。
+
+当正常用户加载以下百度服务器dup<span class="class">.baidustatic</span><span class="class">.com</span>, ecomcbjs<span class="class">.jomodns</span><span class="class">.com</span>, cbjs<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>, hm<span class="class">.baidu</span><span class="class">.com</span>, eclick<span class="class">.baidu</span><span class="class">.com</span>, pos<span class="class">.baidu</span><span class="class">.com</span>, cpro<span class="class">.baidu</span><span class="class">.com</span> and hm<span class="class">.e</span><span class="class">.shifen</span><span class="class">.com</span>的资源时，恶意代码以JavaScript的形式发送。
+
+百度的分析代码h.js被替换成恶意代码触发攻击。
+
+恶意代码被无差别地发送给全球任何用户，唯一的目的即发起到CloundFront和GreatFire的攻击
+
+百万级的用户成为攻击目标，转而攻击Amazon的基础设施
+
+窜改发生在来自中国以外的流量访问百度服务器时
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/22/theGreatCannon/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/网络/">网络</a><a href="/tags/great-cannon/">great cannon</a><a href="/tags/安全/">安全</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/22/theGreatCannon/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/22/theGreatCannon/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
 
    
     
@@ -119,7 +195,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/leader-election/">leader election</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/Double-Barriers/">Double Barriers</a><a href="/tags/Priority-Queues/">Priority Queues</a><a href="/tags/Recoverable-Shared-Locks/">Recoverable Shared Locks</a><a href="/tags/leader-election/">leader election</a><a href="/tags/Two-phased-Commit/">Two-phased Commit</a>
   </div>
 
 </div>
@@ -150,14 +226,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/20/zookeeperNote6/" title="ZooKeeper学习笔记（六）之Java例程" itemprop="url">ZooKeeper学习笔记（六）之Java例程</a>
+      <a href="/2015/05/21/zookeeperNote6/" title="ZooKeeper学习笔记（六）之Java例程" itemprop="url">ZooKeeper学习笔记（六）之Java例程</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-20T16:44:26.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
+    <time datetime="2015-05-20T16:44:26.000Z" itemprop="datePublished"> 發表於 2015-05-21</time>
     
   </p>
 </header>
@@ -178,7 +254,7 @@
         
         <p class="article-more-link">
           
-            <a href="/2015/05/20/zookeeperNote6/#more">Read More</a>
+            <a href="/2015/05/21/zookeeperNote6/#more">Read More</a>
           
        </p>
     </div>
@@ -188,7 +264,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java例程/">Java例程</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/Java例程/">Java例程</a>
   </div>
 
 </div>
@@ -199,7 +275,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/20/zookeeperNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote6/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/21/zookeeperNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/21/zookeeperNote6/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -265,7 +341,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ACL/">ACL</a><a href="/tags/Binding/">Binding</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/ACL/">ACL</a><a href="/tags/Binding/">Binding</a>
   </div>
 
 </div>
@@ -333,7 +409,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/watch/">watch</a><a href="/tags/znode/">znode</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/znode/">znode</a><a href="/tags/watch/">watch</a>
   </div>
 
 </div>
@@ -364,14 +440,14 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/19/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
+      <a href="/2015/05/20/zookeeperNote3/" title="ZooKeeper学习笔记（三）之开发入门-续" itemprop="url">ZooKeeper学习笔记（三）之开发入门-续</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-19T17:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
+    <time datetime="2015-05-19T17:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
     
   </p>
 </header>
@@ -379,7 +455,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         
         <p> 这一节中我们要对上一节中的Barrier和Queue用例进行测试和分析，填补忽略的细节，加深印象。</p>
 <h2 id="Barrier">Barrier</h2><p> 首先我们来看测试main方法，为了更方便地进行Debug和日志输出，暂没有使用不是太熟悉的Junit.</p>
-<h3 id="测试代码">测试代码</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> ZKBarrier zkBarrier = <span class="keyword">new</span> ZKBarrier(<span class="string">"dell:2181"</span>, <span class="string">"/testRoot3"</span>, <span class="number">3</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//purge the children under testrRoot</span></span><br><span class="line"></span><br><span class="line">zkBarrier.name = args[<span class="number">0</span>];</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Entering the Barrier"</span>);</span><br><span class="line">zkBarrier.enter();</span><br><span class="line">System.<span class="keyword">out</span>.println(<span class="string">"Work done, leaving"</span>);</span><br><span class="line">zkBarrier.leave();</span><br><span class="line"><span class="keyword">return</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="测试代码">测试代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> ZKBarrier zkBarrier = new ZKBarrier(&quot;dell:2181&quot;, &quot;/testRoot3&quot;, 3);</div><div class="line"> </div><div class="line">//purge the children under testrRoot</div><div class="line"></div><div class="line">zkBarrier.name = args[0];</div><div class="line">System.out.println(&quot;Entering the Barrier&quot;);</div><div class="line">zkBarrier.enter();</div><div class="line">System.out.println(&quot;Work done, leaving&quot;);</div><div class="line">zkBarrier.leave();</div><div class="line">return;</div></pre></td></tr></table></figure>
 <p> 大致的流程如下：</p>
 <pre><code>等待其它进程（总数3）就绪
 开始工作
@@ -389,7 +465,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         
         <p class="article-more-link">
           
-            <a href="/2015/05/19/zookeeperNote3/#more">Read More</a>
+            <a href="/2015/05/20/zookeeperNote3/#more">Read More</a>
           
        </p>
     </div>
@@ -399,7 +475,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a>
   </div>
 
 </div>
@@ -410,7 +486,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/19/zookeeperNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/zookeeperNote3/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/20/zookeeperNote3/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/20/zookeeperNote3/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -446,9 +522,9 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         <p>这一节中我们演示用ZooKeeper创建一个简单的barrier和producer-consumer队列。当然首先你必须有至少一个ZooKeeper Server在运行。</p>
 <h2 id="基类">基类</h2><p>barrier和queue都将用到以下共同代码，构造方法会创建到Server的连接。</p>
 <pre><code>注意：官网教程没有提到，这个基类是要实现Watcher接口的，这样<span class="built_in">process</span>方法才能作为回调方法收到消息
-</code></pre><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> ZooKeeper zk = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">Object</span> mutex = <span class="keyword">new</span> <span class="keyword">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">String</span> root;</span><br><span class="line"></span><br><span class="line">    SyncPrimitive(<span class="keyword">String</span> address)</span><br><span class="line">            <span class="keyword">throws</span> KeeperException, IOException &#123;</span><br><span class="line">        <span class="keyword">if</span>(zk == <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Starting ZK:"</span>);</span><br><span class="line">            zk = <span class="keyword">new</span> ZooKeeper(address, <span class="number">3000</span>, (Watcher) <span class="keyword">this</span>);</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"Finished starting ZK: "</span> + zk);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> process(WatcherEvent event) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">void</span> process(WatchedEvent watchedEvent) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mutex) &#123;</span><br><span class="line">            mutex.notify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">static ZooKeeper zk = null;</div><div class="line">    static final Object mutex = new Object();</div><div class="line"></div><div class="line">    String root;</div><div class="line"></div><div class="line">    SyncPrimitive(String address)</div><div class="line">            throws KeeperException, IOException &#123;</div><div class="line">        if(zk == null)&#123;</div><div class="line">            System.out.println(&quot;Starting ZK:&quot;);</div><div class="line">            zk = new ZooKeeper(address, 3000, (Watcher) this);</div><div class="line">            System.out.println(&quot;Finished starting ZK: &quot; + zk);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void process(WatcherEvent event) &#123;</div><div class="line">        synchronized (mutex) &#123;</div><div class="line">            mutex.notify();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">      public void process(WatchedEvent watchedEvent) &#123;</div><div class="line">        synchronized (mutex) &#123;</div><div class="line">            mutex.notify();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>WatchEvent包含的信息有：</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WatchedEvent <span class="keyword">state</span>:SyncConnected type:NodeChildrenChanged path:/testRoot1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">WatchedEvent state:SyncConnected type:NodeChildrenChanged path:/testRoot1</div></pre></td></tr></table></figure>
         
         
         <p class="article-more-link">
@@ -463,7 +539,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a>
   </div>
 
 </div>
@@ -529,7 +605,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/概览/">概览</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/ZooKeeper/">ZooKeeper</a><a href="/tags/分布式/">分布式</a><a href="/tags/概览/">概览</a>
   </div>
 
 </div>
@@ -560,14 +636,14 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/18/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
+      <a href="/2015/05/19/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-19T03:59:40.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    <time datetime="2015-05-19T03:59:40.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
     
   </p>
 </header>
@@ -585,7 +661,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         
         <p class="article-more-link">
           
-            <a href="/2015/05/18/junitNote1/#more">Read More</a>
+            <a href="/2015/05/19/junitNote1/#more">Read More</a>
           
        </p>
     </div>
@@ -595,7 +671,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/JUnit/">JUnit</a><a href="/tags/Maven/">Maven</a><a href="/tags/单元测试/">单元测试</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/JUnit/">JUnit</a><a href="/tags/单元测试/">单元测试</a><a href="/tags/Maven/">Maven</a>
   </div>
 
 </div>
@@ -606,7 +682,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/18/junitNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/junitNote1/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/19/junitNote1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/junitNote1/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -626,14 +702,14 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/18/rabbitmqNote6/" title="RabbitMQ学习笔记（六）之RPC" itemprop="url">RabbitMQ学习笔记（六）之RPC</a>
+      <a href="/2015/05/19/rabbitmqNote6/" title="RabbitMQ学习笔记（六）之RPC" itemprop="url">RabbitMQ学习笔记（六）之RPC</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-18T18:30:00.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
+    <time datetime="2015-05-18T18:30:00.000Z" itemprop="datePublished"> 發表於 2015-05-19</time>
     
   </p>
 </header>
@@ -643,7 +719,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 <p>但是如果我们需要运行一个远程的函数并且需要等待返回结果会怎样？这是一种完全不同的机制，通常叫做RPC（Remote Procedure Call）远程方法调用。</p>
 <p>这一节中我们将使用RabbitMQ来建造一个RPC系统：一个Client和一个可扩容的RPC Server。因为没有真正值得分布式化的任务，我们用Fibonacci数列来代替。</p>
 <h2 id="Client接口">Client接口</h2><p>为了演示RPC Service是如何使用的，我们将编写一个简单的Client类。它提供一个名为call的方法，发出RPC请求并在返回之前阻塞。</p>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">FibonacciRpcClient</span> fibonacciRpc = new <span class="type">FibonacciRpcClient</span>();   </span><br><span class="line"><span class="type">String</span> <span class="literal">result</span> = fibonacciRpc.call(<span class="string">"4"</span>);</span><br><span class="line"><span class="type">System</span>.<span class="keyword">out</span>.println( <span class="string">"fib(4) is "</span> + <span class="literal">result</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FibonacciRpcClient fibonacciRpc = new FibonacciRpcClient();   </div><div class="line">String result = fibonacciRpc.call(&quot;4&quot;);</div><div class="line">System.out.println( &quot;fib(4) is &quot; + result);</div></pre></td></tr></table></figure>
 <pre><code>注：虽然RPC很常见，但也备受批评。问题在于程序无法得知调用的方法是远程（较慢）还是本地，这种模糊将导致系统不可预期以及不必要的额外调试复杂度，可能导致不可维护的<span class="escape">`意</span>面代码<span class="escape">`。</span>
 确保方法远程或本地的明确性，作好文档。使组件之间的依赖关系清晰。处理异常情况，比如RPC不可用。存疑时尽量避免使用RPC。如果可能，使用异步方式，用状态转移代替阻塞。
 </code></pre>
@@ -651,7 +727,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
         
         <p class="article-more-link">
           
-            <a href="/2015/05/18/rabbitmqNote6/#more">Read More</a>
+            <a href="/2015/05/19/rabbitmqNote6/#more">Read More</a>
           
        </p>
     </div>
@@ -661,7 +737,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/RPC/">RPC</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/RPC/">RPC</a>
   </div>
 
 </div>
@@ -672,74 +748,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/18/rabbitmqNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote6/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/18/rabbitmqNote5/" title="RabbitMQ学习笔记（五）之Topics" itemprop="url">RabbitMQ学习笔记（五）之Topics</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-18T16:48:00.000Z" itemprop="datePublished"> 發表於 2015-05-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>上一节中，使用Dircet Exchange结合routingKey及bindingKey可以实现选择性地接收消息。但是它也有局限性，无法基于多种尺度来路由。</p>
-<p>比如说日志系统中我们可能不仅希望根据级别，还希望根据日志发出者的身份来进行路由。比如<code>syslog unix</code>工具，就是根据severity和facility(auth/cron/kern…)来进行路由的。</p>
-<p>这各方式更具灵活性，比如我想接收来自cron的Error信息和来自Kern的所有信息。</p>
-<p>要实现这样的功能我们需要学习更复杂的Topic exchange。</p>
-<h2 id="Topic_exchange">Topic exchange</h2><p>发送给topic exchange的信息的routingKey必须是一个word的list，用.号分隔。习惯上用一些能够代表消息特征单词来作为word，比如<code>stock.usd.nyse</code>是一个合法的routingKey。word不限个数，但总长不能超过255 Byte。</p>
-<p>bindingKey也必须是这样的形式，而路由逻辑则和Direct方式相似，消息将被发送给所有bindingKey和RoutingKey匹配的队列。但是有两wildcard：</p>
-<pre><code>\* 能替换成任何一个(单个)<span class="literal">word</span>
-# 能替换成任意（0-<span class="keyword">n</span>）个<span class="literal">word</span>
-</code></pre><p><img src="https://www.rabbitmq.com/img/tutorials/python-five.png" alt=""></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/18/rabbitmqNote5/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Topic-Exchange/">Topic Exchange</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/学习笔记/">学习笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/18/rabbitmqNote5/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/18/rabbitmqNote5/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/19/rabbitmqNote6/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/19/rabbitmqNote6/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -773,7 +782,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -789,11 +798,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -817,11 +826,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -829,23 +838,23 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -932,7 +941,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

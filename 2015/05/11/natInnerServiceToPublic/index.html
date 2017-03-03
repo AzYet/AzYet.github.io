@@ -12,17 +12,18 @@
 
     
     <meta name="description" content="情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。
-　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要">
+　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以">
 <meta property="og:type" content="article">
 <meta property="og:title" content="配置NAT使内网服务对外网可见">
 <meta property="og:url" content="http://azyet.github.io/2015/05/11/natInnerServiceToPublic/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。
-　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要">
+　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="配置NAT使内网服务对外网可见">
 <meta name="twitter:description" content="情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。
-　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要">
+　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -35,7 +36,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -101,27 +102,27 @@
 		
 		<p>　　情境：有一台服务器，其外网IP为10.103.25.248,作为宿主机其上运行着许多虚拟机,网络方式为NAT,宿主机的内网IP为192.168.83.1，其中一台虚拟机的ip为192.168.83.131,其8000端口运行着WEB服务，现在需要使10.0.0.0/24的外网计算机能够访问虚拟机上的8000服务。</p>
 <p>　　因为192.168.83.131是服务器的内部虚拟网络，对外是不可见的，所以需要将虚拟机8000服务映射到宿主机外网IP 10.103.25.248的某端口上上，这就是端口映射，亦即PNAT。</p>
-<h2 id="选定端口">选定端口</h2><p>　　查看宿主机端口占用情况：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@dell</span><span class="symbol">:~</span><span class="comment"># sudo lsof -i:8000</span></span><br><span class="line"><span class="constant">COMMAND </span> <span class="constant">PID </span>      <span class="constant">USER </span>  <span class="constant">FD </span>  <span class="constant">TYPE DEVICE SIZE/OFF NODE NAME</span></span><br><span class="line">java    <span class="number">2466</span> confluence   <span class="number">37</span>u  <span class="constant">IPv6 </span> <span class="number">23593</span>      0t<span class="number">0</span>  <span class="constant">TCP </span><span class="symbol">localhost:</span><span class="number">8000</span> (<span class="constant">LISTEN)</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="选定端口">选定端口</h2><p>　　查看宿主机端口占用情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@dell:~# sudo lsof -i:8000</div><div class="line">COMMAND  PID       USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</div><div class="line">java    2466 confluence   37u  IPv6  23593      0t0  TCP localhost:8000 (LISTEN)</div></pre></td></tr></table></figure></p>
 <p>　　8000已被使用，选择使用空闲的8880端口，即实现10.103.25.248：8880 &lt;===&gt; 192.168.83.131:8000的映射。<br><a id="more"></a></p>
-<h2 id="开启IP转发功能">开启IP转发功能</h2><p>　　在配置iptables实现NAT之前，enable ip forwarding是前提。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net<span class="class">.ipv4</span><span class="class">.ip_forward</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="DNAT">DNAT</h2><p>　　DNAT为目的地址翻译缩写，在IP包进行内核路由之前，将其目的地址改写，再送入路由表进行匹配。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">iptables</span> -t nat -A PREROUTING -d <span class="number">10.103.25.248</span> -p tcp --dport <span class="number">8880</span> -j DNAT --to-destination <span class="number">192.168.83.131:8000</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="开启IP转发功能">开启IP转发功能</h2><p>　　在配置iptables实现NAT之前，enable ip forwarding是前提。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl net.ipv4.ip_forward=1</div></pre></td></tr></table></figure></p>
+<h2 id="DNAT">DNAT</h2><p>　　DNAT为目的地址翻译缩写，在IP包进行内核路由之前，将其目的地址改写，再送入路由表进行匹配。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A PREROUTING -d 10.103.25.248 -p tcp --dport 8880 -j DNAT --to-destination 192.168.83.131:8000</div></pre></td></tr></table></figure></p>
 <p>-t指定nat表，-A添加到PREROUTING链末， -d指定目的地址，-p 指定TCP协议，—dport目的端口，-j选择DNAT操作，—to-destination指定改写后的IP和端口。</p>
 <p>　　注意这里同时<strong>隐含了反向操作</strong>，对源自IP和端口为192.168.83.131：8000的TCP数据包进行源IP：端口改写。</p>
 <p>　　此时已经能够成功连接了。</p>
 <p>　　再来查看iptable的nat表：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@dell:~<span class="comment"># iptables -L PREROUTING  -nvx --line-numbers -t nat </span></span><br><span class="line">Chain PREROUTING (policy ACCEPT <span class="number">1626</span> packets, <span class="number">278608</span> <span class="keyword">bytes</span>)</span><br><span class="line"><span class="built_in">num</span>      pkts      <span class="keyword">bytes</span> target     prot opt <span class="operator">in</span>     out     source               destination         </span><br><span class="line"><span class="number">1</span>           <span class="number">9</span>      <span class="number">540</span> DNAT       tcp  <span class="comment">--  *      *       0.0.0.0/0            10.103.25.248        tcp dpt:8880 to:192.168.83.131:8000</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@dell:~# iptables -L PREROUTING  -nvx --line-numbers -t nat </div><div class="line">Chain PREROUTING (policy ACCEPT 1626 packets, 278608 bytes)</div><div class="line">num      pkts      bytes target     prot opt in     out     source               destination         </div><div class="line">1           9      540 DNAT       tcp  --  *      *       0.0.0.0/0            10.103.25.248        tcp dpt:8880 to:192.168.83.131:8000</div></pre></td></tr></table></figure>
 <h2 id="测试与分析">测试与分析</h2><p>　　相应的规则已经添加进来了，现在从另一台10.210.106.20的机器访问10.103.25.248:8880试试<code>wget 10.103.25.248:8880</code>：</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chen<span class="variable">@vaio</span><span class="symbol">:~</span><span class="variable">$ </span>wget <span class="number">10.103</span>.<span class="number">25.248</span><span class="symbol">:</span><span class="number">8880</span></span><br><span class="line">--<span class="number">2015</span>-<span class="number">05</span>-<span class="number">11</span> <span class="number">19</span><span class="symbol">:</span><span class="number">21</span><span class="symbol">:</span><span class="number">23</span>--  <span class="symbol">http:</span>/<span class="regexp">/10.103.25.248:8880/</span></span><br><span class="line"><span class="constant">Connecting </span>to <span class="number">10.103</span>.<span class="number">25.248</span><span class="symbol">:</span><span class="number">8880</span>...</span><br></pre></td></tr></table></figure>
-<p>　　并未能连接上，是DNAT失败吗？在运行8000服务的虚拟机上用tcpdump来诊断一下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">53.575588</span> IP <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span> &gt; <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span>: Flags [S], seq <span class="number">404138411</span>, win <span class="number">29200</span>, options [mss <span class="number">1460</span>,sackOK,TS val <span class="number">26590957</span> ecr <span class="number">0</span>,nop,wscale <span class="number">7</span>], length <span class="number">0</span></span><br><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">53.575683</span> IP <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span> &gt; <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span>: Flags [S.], seq <span class="number">683540265</span>, ack <span class="number">404138412</span>, win <span class="number">14480</span>, options [mss <span class="number">1460</span>,sackOK,TS val <span class="number">345476707</span> ecr <span class="number">26590957</span>,nop,wscale <span class="number">7</span>], length <span class="number">0</span></span><br><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">53.575974</span> IP <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span> &gt; <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span>: Flags [R], seq <span class="number">404138412</span>, win <span class="number">32767</span>, length <span class="number">0</span></span><br><span class="line"><span class="number">03</span>:<span class="number">38</span>:<span class="number">55.579521</span> IP <span class="number">10.210</span>.<span class="number">106.20</span>.<span class="number">45581</span> &gt; <span class="number">192.168</span>.<span class="number">83.131</span><span class="class">.irdmi</span>: Flags [S], seq <span class="number">404138411</span>, win <span class="number">29200</span>, options [mss <span class="number">1460</span>,sackOK,TS val <span class="number">26591458</span> ecr <span class="number">0</span>,nop,wscale <span class="number">7</span>], length <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">chen@vaio:~$ wget 10.103.25.248:8880</div><div class="line">--2015-05-11 19:21:23--  http://10.103.25.248:8880/</div><div class="line">Connecting to 10.103.25.248:8880...</div></pre></td></tr></table></figure>
+<p>　　并未能连接上，是DNAT失败吗？在运行8000服务的虚拟机上用tcpdump来诊断一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">03:38:53.575588 IP 10.210.106.20.45581 &gt; 192.168.83.131.irdmi: Flags [S], seq 404138411, win 29200, options [mss 1460,sackOK,TS val 26590957 ecr 0,nop,wscale 7], length 0</div><div class="line">03:38:53.575683 IP 192.168.83.131.irdmi &gt; 10.210.106.20.45581: Flags [S.], seq 683540265, ack 404138412, win 14480, options [mss 1460,sackOK,TS val 345476707 ecr 26590957,nop,wscale 7], length 0</div><div class="line">03:38:53.575974 IP 10.210.106.20.45581 &gt; 192.168.83.131.irdmi: Flags [R], seq 404138412, win 32767, length 0</div><div class="line">03:38:55.579521 IP 10.210.106.20.45581 &gt; 192.168.83.131.irdmi: Flags [S], seq 404138411, win 29200, options [mss 1460,sackOK,TS val 26591458 ecr 0,nop,wscale 7], length 0</div></pre></td></tr></table></figure></p>
 <p>　　可以8000端口是收到了来自10.210.106.20的访问请求的（SYN），并且也有应答（SYN，ACK），但是为什么没有连接上呢？因为虚拟机并没有到达10.210.106.20的路由，即使网络能到达，但是返回数据包的src_ip是192.168.83.131,而client请求的是10.103.25.248，会被client当作错误的数据包丢弃。</p>
-<h2 id="SNAT">SNAT</h2><p>　　所以还需要进行一次SNAT，将连接请求的源IP改为宿主机的内网IP：192.168.83.1。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">iptables</span> -t nat -A POSTROUTING -d <span class="number">192.168.83.131</span> -p tcp --dport <span class="number">8000</span> -j SNAT --to-source <span class="number">192.168.83.1</span></span><br></pre></td></tr></table></figure></p>
-<p>　　以上命令执行的操作是：目的IP和端口为192.168.83.131：8000的TCP数据包从路由表出来之后，改写其源IP的192.168.83.1。同时<strong>隐含了反向操作</strong>，对源自IP和端口为192.168.83.131：8000的TCP数据包进行目的IP还原。<br>　　此时已经能够成功连接了。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">chen@vaio:~$ wget <span class="number">10.103</span>.<span class="number">25.248</span>:<span class="number">8880</span></span><br><span class="line">--<span class="number">2015</span>-<span class="number">05</span>-<span class="number">11</span> <span class="number">19</span>:<span class="number">17</span>:<span class="number">42</span>--  http:<span class="comment">//10.103.25.248:8880/</span></span><br><span class="line">Connecting to <span class="number">10.103</span>.<span class="number">25.248</span>:<span class="number">8880</span>... connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">200</span> OK</span><br><span class="line">Length: <span class="number">5659</span> (<span class="number">5.5</span>K) [text/html]</span><br><span class="line">Saving to: ‘index<span class="class">.html</span>.<span class="number">6</span>’</span><br><span class="line"></span><br><span class="line">index<span class="class">.html</span>.<span class="number">6</span>        <span class="number">100%</span>[=====================&gt;]   <span class="number">5.53</span>K  --.-KB/s   <span class="keyword">in</span> <span class="number">0.002s</span> </span><br><span class="line"></span><br><span class="line"><span class="number">2015</span>-<span class="number">05</span>-<span class="number">11</span> <span class="number">19</span>:<span class="number">17</span>:<span class="number">42</span> (<span class="number">3.00</span> MB/s) - ‘index<span class="class">.html</span>.<span class="number">6</span>’ saved [<span class="number">5659</span>/<span class="number">5659</span>]</span><br></pre></td></tr></table></figure></p>
-<p>　　此时的nat表为<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@dell:~<span class="comment"># iptables -L   -nvx --line-numbers -t nat </span></span><br><span class="line">Chain PREROUTING (policy ACCEPT <span class="number">999</span> packets, <span class="number">260994</span> <span class="keyword">bytes</span>)</span><br><span class="line"><span class="built_in">num</span>      pkts      <span class="keyword">bytes</span> target     prot opt <span class="operator">in</span>     out     source               destination         </span><br><span class="line"><span class="number">1</span>          <span class="number">28</span>     <span class="number">1680</span> DNAT       tcp  <span class="comment">--  *      *       0.0.0.0/0            10.103.25.248        tcp dpt:8880 to:192.168.83.131:8000</span></span><br><span class="line">……</span><br><span class="line">Chain POSTROUTING (policy ACCEPT <span class="number">55</span> packets, <span class="number">3630</span> <span class="keyword">bytes</span>)</span><br><span class="line"><span class="built_in">num</span>      pkts      <span class="keyword">bytes</span> target     prot opt <span class="operator">in</span>     out     source               destination         </span><br><span class="line"><span class="number">1</span>           <span class="number">1</span>       <span class="number">60</span> SNAT       tcp  <span class="comment">--  *      *       0.0.0.0/0            192.168.83.131       tcp dpt:8000 to:192.168.83.1</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="总结">总结</h2><p>　　如果不计较原理，实质操作只有三步：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#开启ip转发</span><br><span class="line">sysctl net<span class="class">.ipv4</span><span class="class">.ip_forward</span>=<span class="number">1</span></span><br><span class="line"><span class="id">#DNAT</span></span><br><span class="line">iptables -t nat -A PREROUTING -d <span class="number">10.103</span>.<span class="number">25.248</span> -<span class="tag">p</span> tcp --dport <span class="number">8880</span> -j DNAT --to-destination <span class="number">192.168</span>.<span class="number">83.131</span>:<span class="number">8000</span></span><br><span class="line"><span class="id">#SNAT</span></span><br><span class="line">iptables -t nat -A POSTROUTING -d <span class="number">192.168</span>.<span class="number">83.131</span> -<span class="tag">p</span> tcp --dport <span class="number">8000</span> -j SNAT --to-source <span class="number">192.168</span>.<span class="number">83.1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="SNAT">SNAT</h2><p>　　所以还需要进行一次SNAT，将连接请求的源IP改为宿主机的内网IP：192.168.83.1。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A POSTROUTING -d 192.168.83.131 -p tcp --dport 8000 -j SNAT --to-source 192.168.83.1</div></pre></td></tr></table></figure></p>
+<p>　　以上命令执行的操作是：目的IP和端口为192.168.83.131：8000的TCP数据包从路由表出来之后，改写其源IP的192.168.83.1。同时<strong>隐含了反向操作</strong>，对源自IP和端口为192.168.83.131：8000的TCP数据包进行目的IP还原。<br>　　此时已经能够成功连接了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">chen@vaio:~$ wget 10.103.25.248:8880</div><div class="line">--2015-05-11 19:17:42--  http://10.103.25.248:8880/</div><div class="line">Connecting to 10.103.25.248:8880... connected.</div><div class="line">HTTP request sent, awaiting response... 200 OK</div><div class="line">Length: 5659 (5.5K) [text/html]</div><div class="line">Saving to: ‘index.html.6’</div><div class="line"></div><div class="line">index.html.6        100%[=====================&gt;]   5.53K  --.-KB/s   in 0.002s </div><div class="line"></div><div class="line">2015-05-11 19:17:42 (3.00 MB/s) - ‘index.html.6’ saved [5659/5659]</div></pre></td></tr></table></figure></p>
+<p>　　此时的nat表为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">root@dell:~# iptables -L   -nvx --line-numbers -t nat </div><div class="line">Chain PREROUTING (policy ACCEPT 999 packets, 260994 bytes)</div><div class="line">num      pkts      bytes target     prot opt in     out     source               destination         </div><div class="line">1          28     1680 DNAT       tcp  --  *      *       0.0.0.0/0            10.103.25.248        tcp dpt:8880 to:192.168.83.131:8000</div><div class="line">……</div><div class="line">Chain POSTROUTING (policy ACCEPT 55 packets, 3630 bytes)</div><div class="line">num      pkts      bytes target     prot opt in     out     source               destination         </div><div class="line">1           1       60 SNAT       tcp  --  *      *       0.0.0.0/0            192.168.83.131       tcp dpt:8000 to:192.168.83.1</div></pre></td></tr></table></figure></p>
+<h2 id="总结">总结</h2><p>　　如果不计较原理，实质操作只有三步：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#开启ip转发</div><div class="line">sysctl net.ipv4.ip_forward=1</div><div class="line">#DNAT</div><div class="line">iptables -t nat -A PREROUTING -d 10.103.25.248 -p tcp --dport 8880 -j DNAT --to-destination 192.168.83.131:8000</div><div class="line">#SNAT</div><div class="line">iptables -t nat -A POSTROUTING -d 192.168.83.131 -p tcp --dport 8000 -j SNAT --to-source 192.168.83.1</div></pre></td></tr></table></figure></p>
 <p>　　其它注意事项有：</p>
 <ol>
 <li>centos开启新服务时需要添加iptables规则开放相应端口（默认规则为拒绝）。</li>
-<li>如果想对本机同一IP使用端口映射，以上方法依次适用，但是要注意lo的特殊性：访问127.0.0.1和本机IP不经过PREROUTING链，那么需要在OUTPUT链上作转换<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">iptables</span> -t nat -A OUTPUT -d <span class="number">127.0.0.1</span>,<span class="number">10.210.106.20</span> -p tcp --dport <span class="number">2222</span> -j DNAT --to <span class="number">127.0.0.1:22</span></span><br><span class="line"><span class="comment"># 或者 </span></span><br><span class="line">iptables -t nat -A OUTPUT -d <span class="number">127.0.0.1</span>,<span class="number">10.210.106.20</span> -p tcp --dport <span class="number">2222</span> -j REDIRECT --to-port <span class="number">22</span></span><br></pre></td></tr></table></figure>
+<li>如果想对本机同一IP使用端口映射，以上方法依次适用，但是要注意lo的特殊性：访问127.0.0.1和本机IP不经过PREROUTING链，那么需要在OUTPUT链上作转换<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A OUTPUT -d 127.0.0.1,10.210.106.20 -p tcp --dport 2222 -j DNAT --to 127.0.0.1:22</div><div class="line"># 或者 </div><div class="line">iptables -t nat -A OUTPUT -d 127.0.0.1,10.210.106.20 -p tcp --dport 2222 -j REDIRECT --to-port 22</div></pre></td></tr></table></figure>
 </li>
 </ol>
   
@@ -132,7 +133,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/NAT/">NAT</a><a href="/tags/内外/">内外</a><a href="/tags/外网/">外网</a>
+  <span></span> <a href="/tags/外网/">外网</a><a href="/tags/NAT/">NAT</a><a href="/tags/内外/">内外</a>
   </div>
 
 </div>
@@ -201,7 +202,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -217,11 +218,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -245,11 +246,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -257,23 +258,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -360,7 +361,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

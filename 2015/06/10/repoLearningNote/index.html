@@ -22,11 +22,13 @@
 1repo &amp;lt;COMMAND&amp;gt; &amp;lt;OPTIONS&amp;gt;
 可选项在[]中表示,例如许多命令接收一个项目列表作为参数,你可以通过一组名字或者p本地源目录的path来指定项目列表.12repo sync [&amp;lt;PROJECT0&amp;gt; &amp;lt;PROJECT1&amp;gt; &amp;lt;PROJECTN&amp;gt;]repo sync [&amp;lt;/PATH/TO/P">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1eszc4xc4ilj20o40fvtbl.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="repo命令参考手册">
 <meta name="twitter:description" content="repo用法的基本形式为:
 1repo &amp;lt;COMMAND&amp;gt; &amp;lt;OPTIONS&amp;gt;
 可选项在[]中表示,例如许多命令接收一个项目列表作为参数,你可以通过一组名字或者p本地源目录的path来指定项目列表.12repo sync [&amp;lt;PROJECT0&amp;gt; &amp;lt;PROJECT1&amp;gt; &amp;lt;PROJECTN&amp;gt;]repo sync [&amp;lt;/PATH/TO/P">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1eszc4xc4ilj20o40fvtbl.jpg">
 <link rel="publisher" href="107081205815475258476">
 
     
@@ -39,7 +41,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -104,11 +106,11 @@
 		</div>
 		
 		<p>repo用法的基本形式为:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span> <span class="tag">&lt;<span class="title">OPTIONS</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</span></span><br><span class="line">repo sync <span class="annotation">[&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo &lt;COMMAND&gt; &lt;OPTIONS&gt;</div></pre></td></tr></table></figure>
+<p>可选项在[]中表示,例如许多命令接收一个<strong>项目列表</strong>作为参数,你可以通过一组<strong>名字</strong>或者p本地源目录的<strong>path</strong>来指定项目列表.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">repo sync [&lt;PROJECT0&gt; &lt;PROJECT1&gt; &lt;PROJECTN&gt;]</div><div class="line">repo sync [&lt;/PATH/TO/PROJECT0&gt; ... &lt;/PATH/TO/PROJECTN&gt;]</div></pre></td></tr></table></figure></p>
 <h2 id="help">help</h2><p>使用<code>help</code>命令可以获得最新的帮助文档,由各子命令来组织.</p>
-<p>你也可以查看子命令的帮助<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo help <span class="tag">&lt;<span class="title">COMMAND</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="init">init</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ repo init -u &lt;URL&gt; <span class="annotation">[&lt;OPTIONS&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>你也可以查看子命令的帮助<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo help &lt;COMMAND&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="init">init</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ repo init -u &lt;URL&gt; [&lt;OPTIONS&gt;]</div></pre></td></tr></table></figure>
 <p>在当前目录安装repo, 将创建一个<code>.repo</code>目录,内含源代码的git仓库和标准android manifest 文件, 同时还有一个<code>manifest.xml</code>文件,指向<code>.repo/manifests/</code>目录中的定manifest.<br>参数:</p>
 <p><code>-u</code> URL,指定manifest位置</p>
 <p><code>-m</code> 选择仓库中的manifest文件,缺省为<code>default.xml</code></p>
@@ -117,12 +119,12 @@
 <p>repo的其它命令需要在.repo的父目录或者某一子目录中执行</p>
 </blockquote>
 <a id="more"></a>
-<h2 id="sync">sync</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo sync <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<h2 id="sync">sync</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo sync [&lt;PROJECT_LIST&gt;]</div></pre></td></tr></table></figure>
 <p>下载新更改,并更新本地环境中的工作文件,如果不带参数,将同步所有的项目的所有文件.</p>
 <p>当运行repo sync时,会执行以下操作:</p>
 <ol>
 <li>如果之前未进行过同步,那么等同于git clone, 所有远程的分支都被复制到本地.</li>
-<li>如果之前同步过,那么等同于:<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote update </span><br><span class="line">git rebase origin/<span class="tag">&lt;<span class="title">BRANCH</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<li>如果之前同步过,那么等同于:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git remote update </div><div class="line">git rebase origin/&lt;BRANCH&gt;</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <blockquote>
@@ -136,7 +138,7 @@
 <p><code>-d</code> 将指定的项目切换回指定的manifest revision, 当项目处于topic分支,但需要manifest revision时有用</p>
 <p><code>-s</code> sync到一个已知的良好的build, 由当前manifest中的<code>manifest-server</code>元素指定.</p>
 <p><code>-f</code> 当某个project同步失败时继续sync</p>
-<h2 id="upload">upload</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo upload <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<h2 id="upload">upload</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo upload [&lt;PROJECT_LIST&gt;]</div></pre></td></tr></table></figure>
 <p>repo会比较指定项目的本地和远程最新更新,提示你<strong>选择</strong>尚未提交的项目</p>
 <p>选择完成以后,repo会将项目的所有commit上通过<strong>HTTPS</strong>传到<strong>gerrit</strong>,你需要设置<strong>认证</strong>信息.访问此处<a href="https://android-review.googlesource.com/new-password" target="_blank" rel="external">Password Generator</a>可以生成一对新的username/password对.</p>
 <p>当gerrit收到对象数据时, 会将每个commit转换为修改,这样review人员可以对每一处评论. 如果想合并commit,可以在upload前执行<code>git rebase -i</code>操作.</p>
@@ -146,32 +148,32 @@
 <li>确认当前branch是要提交的branch</li>
 <li>对序列中每个要提交的commit,在括号中输入gerrit修改id</li>
 </ul>
-<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Replacing <span class="keyword">from</span> branch foo </span><br><span class="line">[ <span class="number">3021</span> ] <span class="number">35</span>f2596c Refactor part <span class="keyword">of</span> GetUploadableBranches <span class="keyword">to</span> lookup one specific...</span><br><span class="line">[ <span class="number">2829</span> ] ec18b4ba Update proto client <span class="keyword">to</span> support patch <span class="keyword">set</span> replacments </span><br><span class="line"># Insert change numbers <span class="keyword">in</span> the brackets <span class="keyword">to</span> <span class="keyword">add</span> a <span class="keyword">new</span> patch <span class="keyword">set</span>.</span><br><span class="line"># <span class="keyword">To</span> <span class="keyword">create</span> a <span class="keyword">new</span> change <span class="keyword">record</span>, leave the brackets <span class="keyword">empty</span>.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># Replacing from branch foo </div><div class="line">[ 3021 ] 35f2596c Refactor part of GetUploadableBranches to lookup one specific...</div><div class="line">[ 2829 ] ec18b4ba Update proto client to support patch set replacments </div><div class="line"># Insert change numbers in the brackets to add a new patch set.</div><div class="line"># To create a new change record, leave the brackets empty.</div></pre></td></tr></table></figure>
 <p>上传完成后,修改将会有附加的Patch集.</p>
-<h2 id="diff">diff</h2><p>基于git diff, 显示commit和当前工作树的修改.<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo diff <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="download">download</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo download <span class="tag">&lt;<span class="title">TARGET</span>&gt;</span> <span class="tag">&lt;<span class="title">CHANGE</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="diff">diff</h2><p>基于git diff, 显示commit和当前工作树的修改.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo diff [&lt;PROJECT_LIST&gt;]</div></pre></td></tr></table></figure></p>
+<h2 id="download">download</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo download &lt;TARGET&gt; &lt;CHANGE&gt;</div></pre></td></tr></table></figure>
 <p>下载指定的修改并应用到工作目录中.</p>
 <p>如download 23823号修改到本地目录<code>platform/framworks/base/</code></p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>repo download platform/build <span class="number">23823</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ repo download platform/build 23823</div></pre></td></tr></table></figure>
 <p>repo sync会移除通过download检索过的修改, 你可也以切换远程分支<code>git checkout m/master</code></p>
 <blockquote>
 <p>从Gerrit看到修改到用户可以下载,是有一小段延迟的,因为冗余备份的缘故.</p>
 </blockquote>
-<h2 id="forall">forall</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo forall <span class="annotation">[&lt;PROJECT_LIST&gt;]</span> -c &lt;COMMAND&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="forall">forall</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo forall [&lt;PROJECT_LIST&gt;] -c &lt;COMMAND&gt;</div></pre></td></tr></table></figure>
 <p>在指定的项目中逐个执行<code>&lt;command&gt;</code>, 可以使用以下环境变量 </p>
 <p><code>REPO_PROJECT</code> 设置唯一的项目名<br><code>REPO_PATH</code> 相对client root的相对路径<br><code>REPO_REMOTE</code> manifest中的远程系统名<br><code>REPO_LREV</code> manifest中的revision name翻译到本地tracking分支，当需要传递manifest的revision到本地执行的git命令的使用。<br><code>REPO_RREV</code> 等于manifest中的revision name。</p>
 <p>选项：</p>
 <p><code>-c</code> 需要执行的命令与参数，由/bin/sh解释<br><code>-p</code> 在显示执行结果前打印项目headers, 通过bind管道到命令的Stdin , stdout和stderr来实现<br><code>-v</code> 显示stderr信息</p>
-<h2 id="prune">prune</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo prune <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<h2 id="prune">prune</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo prune [&lt;PROJECT_LIST&gt;]</div></pre></td></tr></table></figure>
 <p>修剪/删除已经合并的topic</p>
-<h2 id="start">start</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo start &lt;BRANCH_NAME&gt; <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<h2 id="start">start</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo start &lt;BRANCH_NAME&gt; [&lt;PROJECT_LIST&gt;]</div></pre></td></tr></table></figure>
 <p>从manifest中指定的revision<strong>创建</strong>一个新<strong>分支</strong></p>
 <p><code>&lt;BRANCH_NAME&gt;</code> 应该是对该分支将要做的修改的简短描述，如果不确定，应该填入分支名字。</p>
 <p><code>&lt;PROJECT_LIST&gt;</code> 指定哪些项目将参与此topic分支</p>
 <blockquote>
 <p><code>.</code>  是<strong>当前工作目录</strong>所有项目的简写</p>
 </blockquote>
-<h2 id="status">status</h2><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo status <span class="annotation">[&lt;PROJECT_LIST&gt;]</span></span><br></pre></td></tr></table></figure>
+<h2 id="status">status</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo status [&lt;PROJECT_LIST&gt;]</div></pre></td></tr></table></figure>
 <p>将当前工作树与列表中的每个项目的HEAD所在进行比较，并以行概要的形式打印每个文件的不同。</p>
 <p>如果只打印当前项目的diff信息，直接运行<code>repo status</code><br><img src="http://ww4.sinaimg.cn/large/55f247cbgw1eszc4xc4ilj20o40fvtbl.jpg" alt=""></p>
   
@@ -182,7 +184,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/android/">android</a><a href="/tags/repo/">repo</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/android/">android</a><a href="/tags/repo/">repo</a>
   </div>
 
 </div>
@@ -251,7 +253,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -267,11 +269,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -295,11 +297,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -307,23 +309,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -410,7 +412,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

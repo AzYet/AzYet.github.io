@@ -1,0 +1,585 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>有关于Go语言的一些tips | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="Getters and SettersGo也可以创建Getters and Setters，而且它们并不需要以get或set开头。
+分号Go大部分的;可以省略，是因为它的语法分析器会自动为你加上。
+短声明12f, err := os.Open(name)d, err := f.Stat()
+在第二个语句中，d是新建变量，而err是重新赋值。
+多重赋值Go中没有逗号，运算符，++和--是声明而非语句">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有关于Go语言的一些tips">
+<meta property="og:url" content="http://azyet.github.io/2016/06/15/something-about-golang/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="Getters and SettersGo也可以创建Getters and Setters，而且它们并不需要以get或set开头。
+分号Go大部分的;可以省略，是因为它的语法分析器会自动为你加上。
+短声明12f, err := os.Open(name)d, err := f.Stat()
+在第二个语句中，d是新建变量，而err是重新赋值。
+多重赋值Go中没有逗号，运算符，++和--是声明而非语句">
+<meta property="og:updated_time" content="2016-06-15T05:58:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="有关于Go语言的一些tips">
+<meta name="twitter:description" content="Getters and SettersGo也可以创建Getters and Setters，而且它们并不需要以get或set开头。
+分号Go大部分的;可以省略，是因为它的语法分析器会自动为你加上。
+短声明12f, err := os.Open(name)d, err := f.Stat()
+在第二个语句中，d是新建变量，而err是重新赋值。
+多重赋值Go中没有逗号，运算符，++和--是声明而非语句">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/06/15/something-about-golang/" title="有关于Go语言的一些tips" itemprop="url">有关于Go语言的一些tips</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 發表於 2016-06-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Getters_and_Setters"><span class="toc-number">1.</span> <span class="toc-text">Getters and Setters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分号"><span class="toc-number">2.</span> <span class="toc-text">分号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短声明"><span class="toc-number">3.</span> <span class="toc-text">短声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多重赋值"><span class="toc-number">4.</span> <span class="toc-text">多重赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#switch中合并多个case"><span class="toc-number">5.</span> <span class="toc-text">switch中合并多个case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带标签的break"><span class="toc-number">6.</span> <span class="toc-text">带标签的break</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Type_switch"><span class="toc-number">7.</span> <span class="toc-text">Type switch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new和make"><span class="toc-number">8.</span> <span class="toc-text">new和make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice"><span class="toc-number">9.</span> <span class="toc-text">slice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init函数"><span class="toc-number">10.</span> <span class="toc-text">init函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法：Pointers_vs-_Values"><span class="toc-number">11.</span> <span class="toc-text">方法：Pointers vs. Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for_range中的变量"><span class="toc-number">12.</span> <span class="toc-text">for range中的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发与并行"><span class="toc-number">13.</span> <span class="toc-text">并发与并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#panic_&&_recover"><span class="toc-number">14.</span> <span class="toc-text">panic && recover</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Getters_and_Setters">Getters and Setters</h2><p>Go也可以创建<code>Getters</code> and <code>Setters</code>，而且它们并不需要以get或set开头。</p>
+<h2 id="分号">分号</h2><p>Go大部分的<code>;</code>可以省略，是因为它的语法分析器会自动为你加上。</p>
+<h2 id="短声明">短声明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">f, err := os.Open(name)</div><div class="line">d, err := f.Stat()</div></pre></td></tr></table></figure>
+<p>在第二个语句中，<code>d</code>是新建变量，而<code>err</code>是重新赋值。</p>
+<h2 id="多重赋值">多重赋值</h2><p>Go中没有逗号<code>，</code>运算符，<code>++</code>和<code>--</code>是声明而非语句，但你可以用并列多重赋值来在<code>for</code>循环中操作多个变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for i, j := 0, len(a)-1; i &lt; j; i, j = i+1, j-1 &#123;</div><div class="line">    a[i], a[j] = a[j], a[i]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="switch中合并多个case">switch中合并多个case</h2><p>使用逗号<code>，</code>隔开即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">func shouldEscape(c byte) bool &#123;</div><div class="line">    switch c &#123;</div><div class="line">    case &apos; &apos;, &apos;?&apos;, &apos;&amp;&apos;, &apos;=&apos;, &apos;#&apos;, &apos;+&apos;, &apos;%&apos;:</div><div class="line">        return true</div><div class="line">    &#125;</div><div class="line">    return false</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="带标签的break">带标签的break</h2><p>可以<code>break</code>指定的<code>loop</code>,即先为循环设置label，再break label。注意第二个<code>case</code>中的（<code>break Loop</code>），多重嵌套中会很顺手。同时注意这里使用到了不跟表达式的<code>switch</code>.</p>
+<p>同样的,<code>continue</code>也可跟标签，但只限于循环中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Loop:</div><div class="line">	for n := 0; n &lt; len(src); n += size &#123;</div><div class="line">		switch &#123;</div><div class="line">		case src[n] &lt; sizeOne:</div><div class="line">			if validateOnly &#123;</div><div class="line">				break</div><div class="line">			&#125;</div><div class="line">			size = 1</div><div class="line">			update(src[n])</div><div class="line"></div><div class="line">		case src[n] &lt; sizeTwo:</div><div class="line">			if n+1 &gt;= len(src) &#123;</div><div class="line">				err = errShortInput</div><div class="line">				break Loop</div><div class="line">			&#125;</div><div class="line">			if validateOnly &#123;</div><div class="line">				break</div><div class="line">			&#125;</div><div class="line">			size = 2</div><div class="line">			update(src[n] + src[n+1]&lt;&lt;shift)</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="Type_switch">Type switch</h2><p>用于动态地发现接口变量类型，使用<code>类型断言</code>并在括号中传入 <code>type</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var t interface&#123;&#125;</div><div class="line">t = functionOfSomeType()</div><div class="line">switch t := t.(type) &#123;</div><div class="line">default:</div><div class="line">    fmt.Printf(&quot;unexpected type %T\n&quot;, t)     // %T prints whatever type t has</div><div class="line">case bool:</div><div class="line">    fmt.Printf(&quot;boolean %t\n&quot;, t)             // t has type bool</div><div class="line">case int:</div><div class="line">    fmt.Printf(&quot;integer %d\n&quot;, t)             // t has type int</div><div class="line">case *bool:</div><div class="line">    fmt.Printf(&quot;pointer to boolean %t\n&quot;, *t) // t has type *bool</div><div class="line">case *int:</div><div class="line">    fmt.Printf(&quot;pointer to integer %d\n&quot;, *t) // t has type *int</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="new和make">new和make</h2><p>Go有两个基本分配操作，new和make，new为变量分配内存并置零（不同于其它语言的初始化）。</p>
+<p>make则为slice , map和chan专用的，它不返回零值变量，而是初始化。</p>
+<h2 id="slice">slice</h2><p><code>slice</code>其实是对<code>array</code>进行了再包装（pointer, length, and capacity),它类似指针传递，但需要注意类似<code>append</code>这样的操作返回的是新的slice。</p>
+<p>不同于C的是，array也是值传递的，也就是说会产生一个新的数组Copy。</p>
+<h2 id="init函数">init函数</h2><p>每个源文件都可以有init方法，它在所有变量初始化之后执行。它可以用来实现无法在声明中完成的初始化，确认和修复初始执行环境。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">func init() &#123;</div><div class="line">    if user == &quot;&quot; &#123;</div><div class="line">        log.Fatal(&quot;$USER not set&quot;)</div><div class="line">    &#125;</div><div class="line">    if home == &quot;&quot; &#123;</div><div class="line">        home = &quot;/home/&quot; + user</div><div class="line">    &#125;</div><div class="line">    if gopath == &quot;&quot; &#123;</div><div class="line">        gopath = home + &quot;/go&quot;</div><div class="line">    &#125;</div><div class="line">    // gopath may be overridden by --gopath flag on command line.</div><div class="line">    flag.StringVar(&amp;gopath, &quot;gopath&quot;, gopath, &quot;override default GOPATH&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="方法：Pointers_vs-_Values">方法：Pointers vs. Values</h2><p><code>receiver</code>为值的方法可被值和指针调用，而指针<code>receiver</code>的方法只能被指针调用。</p>
+<h2 id="for_range中的变量">for range中的变量</h2><p><code>for i:=range varaible</code>中，变量<code>i</code>会在每一轮循环中重复使用，如果直接在匿名函数中使用i，将易产生问题，这里有个种方式可行。一、使用带参数的匿名函数将i作为参数传递；二、在循环体开始处使用新变量保存i值，如<code>i:=i</code>，这是合法的。</p>
+<h2 id="并发与并行">并发与并行</h2><p>Go是并发语言而非并行语言，所谓并发：程序由多个独立执行组件组成；而并行：在多个CPU上平行运算以提高效率</p>
+<h2 id="panic_&amp;&amp;_recover">panic &amp;&amp; recover</h2><p><code>panic</code>函数会立即停止当前函数执行，并回溯gorouting的调用栈，执行之前defer方法，如果回溯到顶层，那么程序就退出了。<br>内建的<code>recover()</code>函数可以中止这个回溯过程并将最初传递给panic的参数以<code>error</code>的形式返回。<br>注意，recover只能在<code>defer</code>中使用，否则返回nil.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2016/06/15/something-about-golang/" data-title="有关于Go语言的一些tips | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/11/12/reflect-of-go/" title="Go的反射法则">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Go的反射法则</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/06/13/how-to-write-go-code/"  title="怎样编写Go程序">
+ <strong>下一篇：</strong><br/> 
+ <span>怎样编写Go程序
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/06/15/something-about-golang/" data-title="有关于Go语言的一些tips" data-url="http://azyet.github.io/2016/06/15/something-about-golang/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Getters_and_Setters"><span class="toc-number">1.</span> <span class="toc-text">Getters and Setters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分号"><span class="toc-number">2.</span> <span class="toc-text">分号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短声明"><span class="toc-number">3.</span> <span class="toc-text">短声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多重赋值"><span class="toc-number">4.</span> <span class="toc-text">多重赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#switch中合并多个case"><span class="toc-number">5.</span> <span class="toc-text">switch中合并多个case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带标签的break"><span class="toc-number">6.</span> <span class="toc-text">带标签的break</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Type_switch"><span class="toc-number">7.</span> <span class="toc-text">Type switch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new和make"><span class="toc-number">8.</span> <span class="toc-text">new和make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice"><span class="toc-number">9.</span> <span class="toc-text">slice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init函数"><span class="toc-number">10.</span> <span class="toc-text">init函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法：Pointers_vs-_Values"><span class="toc-number">11.</span> <span class="toc-text">方法：Pointers vs. Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for_range中的变量"><span class="toc-number">12.</span> <span class="toc-text">for range中的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发与并行"><span class="toc-number">13.</span> <span class="toc-text">并发与并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#panic_&&_recover"><span class="toc-number">14.</span> <span class="toc-text">panic && recover</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

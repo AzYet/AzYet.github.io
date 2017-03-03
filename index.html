@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
     <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
     
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
@@ -78,14 +78,82 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/11/11/reflect-of-go/" title="Go的反射法则" itemprop="url">Go的反射法则</a>
+      <a href="/2017/03/04/protobuff-and-grpc/" title="gRPC和protobuff" itemprop="url">gRPC和protobuff</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-11T20:31:50.000Z" itemprop="datePublished"> 發表於 2016-11-11</time>
+    <time datetime="2017-03-03T20:00:52.000Z" itemprop="datePublished"> 發表於 2017-03-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>protobuf是google的语言、平台中立，可扩展的结构数据序列化机制。你可以定义数据结构一次，然后用专门生成的代码来方便地读写结构数据，支持多种语言。</p>
+<p>proto3版本支持go语言。</p>
+<p>下面以一个简单的例子来演示如何使用proto3来生成Go代码。</p>
+<p>大致分为三步</p>
+<ol>
+<li>定义数据结构</li>
+<li>使用Protobuf编译器</li>
+<li>使用Go协议buffer接口读写数据</li>
+</ol>
+<p>相对于其它序列化方式，protobuf可以根据<code>.proto</code>格式的模板文件来生成自带高效的二进制格式的<code>codec</code>方法的类，同时类利用getter和setter管理数据读写的细节，<br>另外重要的数据可以扩展，方便以后的更新而不影响旧有功能。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2017/03/04/protobuff-and-grpc/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a><a href="/tags/内存虚拟化/">内存虚拟化</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/03/04/protobuff-and-grpc/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/03/04/protobuff-and-grpc/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/12/reflect-of-go/" title="Go的反射法则" itemprop="url">Go的反射法则</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-11T20:31:50.000Z" itemprop="datePublished"> 發表於 2016-11-12</time>
     
   </p>
 </header>
@@ -93,19 +161,19 @@
         
         <h2 id="前言">前言</h2><p>反射指程序在运行时检查自身结构（尤其 类型）的能力，是元程序设计的一种形式，同时也是很多人为这迷惑的地方。<br>本文针对Go来说明反射如何工作，不同语言反射模型不同，有些语言早根本不支持反射，所以本文内容仅适用Go.</p>
 <h2 id="类型与接口">类型与接口</h2><p>因为反射建立在类型系统之上，首先回顾一下Go的类型。</p>
-<p>Go是<strong>静态类型</strong>。 每个变量都有静态类型，意味着，<strong>编译时*</strong>即有唯一&amp;确定的类型。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type MyInt int</span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> <span class="tag">i</span> int</span><br><span class="line"><span class="tag">var</span> j MyInt</span><br></pre></td></tr></table></figure></p>
+<p>Go是<strong>静态类型</strong>。 每个变量都有静态类型，意味着，<strong>编译时*</strong>即有唯一&amp;确定的类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type MyInt int</div><div class="line"></div><div class="line">var i int</div><div class="line">var j MyInt</div></pre></td></tr></table></figure></p>
 <p>i与j有着不同的静态类型，它们虽然有着相同<code>uderlying type</code>,但未经强制转换不是不能直接相互赋值的。</p>
-<p>接口代表指定的方法集合，是一种重要的类型。接口变量可以存储任何实现了接口所定义方法的类型的变量。比如说io.Reader io.Writer。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// <span class="type">Reader</span> <span class="keyword">is</span> the <span class="keyword">interface</span> that wraps the basic <span class="type">Read</span> <span class="keyword">method</span>.</span><br><span class="line"><span class="keyword">type</span> <span class="type">Reader</span> <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="type">Read</span>(p []byte) (n <span class="type">int</span>, err error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// <span class="type">Writer</span> <span class="keyword">is</span> the <span class="keyword">interface</span> that wraps the basic <span class="type">Write</span> <span class="keyword">method</span>.</span><br><span class="line"><span class="keyword">type</span> <span class="type">Writer</span> <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="type">Write</span>(p []byte) (n <span class="type">int</span>, err error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>任何实现了Read方法的类型都可以赋给io.reader。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> r io<span class="class">.Reader</span></span><br><span class="line">r = os<span class="class">.Stdin</span></span><br><span class="line">r = bufio.<span class="function"><span class="title">NewReader</span><span class="params">(r)</span></span></span><br><span class="line">r = <span class="function"><span class="title">new</span><span class="params">(bytes.Buffer)</span></span></span><br><span class="line"><span class="comment">// and so on</span></span><br></pre></td></tr></table></figure></p>
+<p>接口代表指定的方法集合，是一种重要的类型。接口变量可以存储任何实现了接口所定义方法的类型的变量。比如说io.Reader io.Writer。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// Reader is the interface that wraps the basic Read method.</div><div class="line">type Reader interface &#123;</div><div class="line">    Read(p []byte) (n int, err error)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Writer is the interface that wraps the basic Write method.</div><div class="line">type Writer interface &#123;</div><div class="line">    Write(p []byte) (n int, err error)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>任何实现了Read方法的类型都可以赋给io.reader。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var r io.Reader</div><div class="line">r = os.Stdin</div><div class="line">r = bufio.NewReader(r)</div><div class="line">r = new(bytes.Buffer)</div><div class="line">// and so on</div></pre></td></tr></table></figure></p>
 <p>需要明白的是，不管r被赋予何值，其类型永远是<code>io.Reader</code>。因为，Go是静态类型的，而r的静态类型是<code>io.Reader</code>.</p>
-<p>一个极其重要的接口类型例子是空接口。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一个极其重要的接口类型例子是空接口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">interface&#123;&#125;</div></pre></td></tr></table></figure></p>
 <p>它代表空方法集合，既然任何类型都有至少0个方法，那么自然都实现了interface{}接口。</p>
 <p>有些人认为Go的接口是动态类型的，这是误解。接口也是静态类型的，一个接口变量永远有着固定的静态类型，虽然在运行其存储的值可以被改变类型，但其值一定是满足接口的。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/11/11/reflect-of-go/#more">Read More</a>
+            <a href="/2016/11/12/reflect-of-go/#more">Read More</a>
           
        </p>
     </div>
@@ -126,7 +194,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/11/11/reflect-of-go/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/11/11/reflect-of-go/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/11/12/reflect-of-go/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/11/12/reflect-of-go/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -146,14 +214,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/06/14/something-about-golang/" title="有关于Go语言的一些tips" itemprop="url">有关于Go语言的一些tips</a>
+      <a href="/2016/06/15/something-about-golang/" title="有关于Go语言的一些tips" itemprop="url">有关于Go语言的一些tips</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 發表於 2016-06-14</time>
+    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 發表於 2016-06-15</time>
     
   </p>
 </header>
@@ -161,15 +229,15 @@
         
         <h2 id="Getters_and_Setters">Getters and Setters</h2><p>Go也可以创建<code>Getters</code> and <code>Setters</code>，而且它们并不需要以get或set开头。</p>
 <h2 id="分号">分号</h2><p>Go大部分的<code>;</code>可以省略，是因为它的语法分析器会自动为你加上。</p>
-<h2 id="短声明">短声明</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f, err := os.<span class="function"><span class="title">Open</span><span class="params">(name)</span></span></span><br><span class="line">d, err := f.<span class="function"><span class="title">Stat</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="短声明">短声明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">f, err := os.Open(name)</div><div class="line">d, err := f.Stat()</div></pre></td></tr></table></figure>
 <p>在第二个语句中，<code>d</code>是新建变量，而<code>err</code>是重新赋值。</p>
-<h2 id="多重赋值">多重赋值</h2><p>Go中没有逗号<code>，</code>运算符，<code>++</code>和<code>--</code>是声明而非语句，但你可以用并列多重赋值来在<code>for</code>循环中操作多个变量<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>, <span class="built_in">j</span> := <span class="number">0</span>, len(a)-<span class="number">1</span>; <span class="built_in">i</span> &lt; <span class="built_in">j</span>; <span class="built_in">i</span>, <span class="built_in">j</span> = <span class="built_in">i</span>+<span class="number">1</span>, <span class="built_in">j</span>-<span class="number">1</span> <span class="cell">&#123;</span><br><span class="line">    a[i], a[j] = a[j], a[i]</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="switch中合并多个case">switch中合并多个case</h2><p>使用逗号<code>，</code>隔开即可<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">func <span class="title">shouldEscape</span><span class="params">(c <span class="keyword">byte</span>)</span> <span class="keyword">bool</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> c &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">' '</span>, <span class="string">'?'</span>, <span class="string">'&amp;'</span>, <span class="string">'='</span>, <span class="string">'#'</span>, <span class="string">'+'</span>, <span class="string">'%'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="多重赋值">多重赋值</h2><p>Go中没有逗号<code>，</code>运算符，<code>++</code>和<code>--</code>是声明而非语句，但你可以用并列多重赋值来在<code>for</code>循环中操作多个变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for i, j := 0, len(a)-1; i &lt; j; i, j = i+1, j-1 &#123;</div><div class="line">    a[i], a[j] = a[j], a[i]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="switch中合并多个case">switch中合并多个case</h2><p>使用逗号<code>，</code>隔开即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">func shouldEscape(c byte) bool &#123;</div><div class="line">    switch c &#123;</div><div class="line">    case &apos; &apos;, &apos;?&apos;, &apos;&amp;&apos;, &apos;=&apos;, &apos;#&apos;, &apos;+&apos;, &apos;%&apos;:</div><div class="line">        return true</div><div class="line">    &#125;</div><div class="line">    return false</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/06/14/something-about-golang/#more">Read More</a>
+            <a href="/2016/06/15/something-about-golang/#more">Read More</a>
           
        </p>
     </div>
@@ -190,7 +258,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/06/14/something-about-golang/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/06/14/something-about-golang/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/06/15/something-about-golang/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/06/15/something-about-golang/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -210,14 +278,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/06/12/how-to-write-go-code/" title="怎样编写Go程序" itemprop="url">怎样编写Go程序</a>
+      <a href="/2016/06/13/how-to-write-go-code/" title="怎样编写Go程序" itemprop="url">怎样编写Go程序</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-12T23:45:16.000Z" itemprop="datePublished"> 發表於 2016-06-12</time>
+    <time datetime="2016-06-12T23:45:16.000Z" itemprop="datePublished"> 發表於 2016-06-13</time>
     
   </p>
 </header>
@@ -241,12 +309,12 @@
 </ul>
 <p><code>go tool</code>build源文package包到pkg目录，install目标二进制文件到Bin目录。</p>
 <p>典型的src目录下包含多个git仓库，以跟踪每个package的开发。</p>
-<p>以下例子是一个包含两个package的workspace ：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">bin/</span><br><span class="line">    hello                          # <span class="keyword">command</span> <span class="built_in">executable</span></span><br><span class="line">    outyet                         # <span class="keyword">command</span> <span class="built_in">executable</span></span><br><span class="line">pkg/</span><br><span class="line">    linux_amd64/</span><br><span class="line">        github.<span class="keyword">com</span>/golang/example/</span><br><span class="line">            stringutil.<span class="keyword">a</span>           # package object</span><br><span class="line">src/</span><br><span class="line">    github.<span class="keyword">com</span>/golang/example/</span><br><span class="line">        .git/                      # Git repository metadata</span><br><span class="line">	hello/</span><br><span class="line">	    hello.<span class="keyword">go</span>               # <span class="keyword">command</span> <span class="keyword">source</span></span><br><span class="line">	outyet/</span><br><span class="line">	    main.<span class="keyword">go</span>                # <span class="keyword">command</span> <span class="keyword">source</span></span><br><span class="line">	    main_test.<span class="keyword">go</span>           # test <span class="keyword">source</span></span><br><span class="line">	stringutil/</span><br><span class="line">	    <span class="built_in">reverse</span>.<span class="keyword">go</span>             # package <span class="keyword">source</span></span><br><span class="line">	    reverse_test.<span class="keyword">go</span>        # test <span class="keyword">source</span></span><br><span class="line">    golang.org/<span class="keyword">x</span>/image/</span><br><span class="line">        .git/                      # Git repository metadata</span><br><span class="line">	bmp/</span><br><span class="line">	    reader.<span class="keyword">go</span>              # package <span class="keyword">source</span></span><br><span class="line">	    writer.<span class="keyword">go</span>              # package <span class="keyword">source</span></span><br><span class="line">    ... (many more repositories <span class="built_in">and</span> packages omitted) ...</span><br></pre></td></tr></table></figure></p>
+<p>以下例子是一个包含两个package的workspace ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">bin/</div><div class="line">    hello                          # command executable</div><div class="line">    outyet                         # command executable</div><div class="line">pkg/</div><div class="line">    linux_amd64/</div><div class="line">        github.com/golang/example/</div><div class="line">            stringutil.a           # package object</div><div class="line">src/</div><div class="line">    github.com/golang/example/</div><div class="line">        .git/                      # Git repository metadata</div><div class="line">	hello/</div><div class="line">	    hello.go               # command source</div><div class="line">	outyet/</div><div class="line">	    main.go                # command source</div><div class="line">	    main_test.go           # test source</div><div class="line">	stringutil/</div><div class="line">	    reverse.go             # package source</div><div class="line">	    reverse_test.go        # test source</div><div class="line">    golang.org/x/image/</div><div class="line">        .git/                      # Git repository metadata</div><div class="line">	bmp/</div><div class="line">	    reader.go              # package source</div><div class="line">	    writer.go              # package source</div><div class="line">    ... (many more repositories and packages omitted) ...</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/06/12/how-to-write-go-code/#more">Read More</a>
+            <a href="/2016/06/13/how-to-write-go-code/#more">Read More</a>
           
        </p>
     </div>
@@ -267,7 +335,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/06/12/how-to-write-go-code/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/06/12/how-to-write-go-code/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/06/13/how-to-write-go-code/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/06/13/how-to-write-go-code/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -310,8 +378,8 @@
 </ul>
 <p>想象一下如果上述步骤中途因为数据库锁或其它原因出错会有什么后果？你可能会得到一个空订单并毫无察觉，你之后可能会要花费巨大的精力去修复这个错误。</p>
 <p>mysql事务就能对付这种情况。所谓事务就是<strong>一组绝不会部分生效mysql操作</strong>：如果中途出错，那么状态会回滚至修改前；如果未出错，当然是一切变动都提交到数据库中。</p>
-<h2 id="使用mysql事务">使用mysql事务</h2><p>在用事务实现上述用例之前，先了解一下最常用的语句。<br><code>start transaction</code>开始事务，<code>rollback</code>撤销操作。<br>需要注意的是有一些语句是不能在事务中使用的，大部分是数据定义语句。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">CREATE</span> / <span class="keyword">ALTER</span> / <span class="keyword">DROP</span> <span class="keyword">DATABASE</span></span><br><span class="line"><span class="keyword">CREATE</span> /<span class="keyword">ALTER</span> / <span class="keyword">DROP</span> / <span class="keyword">RENAME</span> / <span class="keyword">TRUNCATE</span> <span class="keyword">TABLE</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">INDEX</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">EVENT</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">FUNCTION</span></span><br><span class="line"><span class="keyword">CREATE</span> / <span class="keyword">DROP</span> <span class="keyword">PROCEDURE</span></span></span><br></pre></td></tr></table></figure></p>
-<p><code>commit</code>将事务中的变动提交到数据库中，mysql会默认提交，如果要改为不自动提交，可以<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">SET</span> autocommit = <span class="number">0</span>;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="使用mysql事务">使用mysql事务</h2><p>在用事务实现上述用例之前，先了解一下最常用的语句。<br><code>start transaction</code>开始事务，<code>rollback</code>撤销操作。<br>需要注意的是有一些语句是不能在事务中使用的，大部分是数据定义语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CREATE / ALTER / DROP DATABASE</div><div class="line">CREATE /ALTER / DROP / RENAME / TRUNCATE TABLE</div><div class="line">CREATE / DROP INDEX</div><div class="line">CREATE / DROP EVENT</div><div class="line">CREATE / DROP FUNCTION</div><div class="line">CREATE / DROP PROCEDURE</div></pre></td></tr></table></figure></p>
+<p><code>commit</code>将事务中的变动提交到数据库中，mysql会默认提交，如果要改为不自动提交，可以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SET autocommit = 0;</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
@@ -357,14 +425,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/27/introduce-kafka/" title="Kafka简介" itemprop="url">Kafka简介</a>
+      <a href="/2016/04/28/introduce-kafka/" title="Kafka简介" itemprop="url">Kafka简介</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-27T22:49:17.000Z" itemprop="datePublished"> 發表於 2016-04-27</time>
+    <time datetime="2016-04-27T22:49:17.000Z" itemprop="datePublished"> 發表於 2016-04-28</time>
     
   </p>
 </header>
@@ -384,7 +452,7 @@
         
         <p class="article-more-link">
           
-            <a href="/2016/04/27/introduce-kafka/#more">Read More</a>
+            <a href="/2016/04/28/introduce-kafka/#more">Read More</a>
           
        </p>
     </div>
@@ -405,7 +473,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/27/introduce-kafka/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/27/introduce-kafka/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/28/introduce-kafka/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/28/introduce-kafka/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -425,27 +493,27 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/26/scala-tutorial-4/" title="scala学习笔记（四）循环、函数" itemprop="url">scala学习笔记（四）循环、函数</a>
+      <a href="/2016/04/27/scala-tutorial-4/" title="scala学习笔记（四）循环、函数" itemprop="url">scala学习笔记（四）循环、函数</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-26T22:01:12.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
+    <time datetime="2016-04-26T22:01:12.000Z" itemprop="datePublished"> 發表於 2016-04-27</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="循环">循环</h2><p>scala支持<code>while</code>和<code>do-while</code>循环，与java差别最大的是<code>for</code>循环及中断循环的控制。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while()&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;</span><br><span class="line">--------</span></span><br><span class="line">do&#123;</span><br><span class="line"></span><br><span class="line">&#125;while();</span><br></pre></td></tr></table></figure></p>
-<h3 id="范围for">范围for</h3><p>有<code>to</code>和<code>until</code>两种，主要差别是后者不包括上界<br>此处的<code>&lt;-</code>称为<code>generator</code>，因为它在每次循环中产生值。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for(i &lt;- 1 to 10)&#123;</span><br><span class="line"></span><br><span class="line"><span class="header">&#125;// 将循环1,2,3...10，共10次</span><br><span class="line">-----</span></span><br><span class="line">for(i &lt;- 1 until 10)&#123;</span><br><span class="line"></span><br><span class="line">&#125;// 将循环1，2,3...9，共9次</span><br></pre></td></tr></table></figure></p>
-<h3 id="多循环">多循环</h3><p>可以在<code>for</code>中使用<code>；</code>分隔条件实现多循环，循环条件将从后往前开始计算<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( a &lt;- <span class="number">1</span> <span class="keyword">to</span> <span class="number">3</span>; b &lt;- <span class="number">1</span> <span class="keyword">to</span> <span class="number">3</span>)&#123;</span><br><span class="line">    println( <span class="string">"Value of a: "</span> + a );</span><br><span class="line">    println( <span class="string">"Value of b: "</span> + b );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="循环">循环</h2><p>scala支持<code>while</code>和<code>do-while</code>循环，与java差别最大的是<code>for</code>循环及中断循环的控制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">while()&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">--------</div><div class="line">do&#123;</div><div class="line"></div><div class="line">&#125;while();</div></pre></td></tr></table></figure></p>
+<h3 id="范围for">范围for</h3><p>有<code>to</code>和<code>until</code>两种，主要差别是后者不包括上界<br>此处的<code>&lt;-</code>称为<code>generator</code>，因为它在每次循环中产生值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">for(i &lt;- 1 to 10)&#123;</div><div class="line"></div><div class="line">&#125;// 将循环1,2,3...10，共10次</div><div class="line">-----</div><div class="line">for(i &lt;- 1 until 10)&#123;</div><div class="line"></div><div class="line">&#125;// 将循环1，2,3...9，共9次</div></pre></td></tr></table></figure></p>
+<h3 id="多循环">多循环</h3><p>可以在<code>for</code>中使用<code>；</code>分隔条件实现多循环，循环条件将从后往前开始计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for( a &lt;- 1 to 3; b &lt;- 1 to 3)&#123;</div><div class="line">    println( &quot;Value of a: &quot; + a );</div><div class="line">    println( &quot;Value of b: &quot; + b );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
           
-            <a href="/2016/04/26/scala-tutorial-4/#more">Read More</a>
+            <a href="/2016/04/27/scala-tutorial-4/#more">Read More</a>
           
        </p>
     </div>
@@ -466,7 +534,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/26/scala-tutorial-4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/26/scala-tutorial-4/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/27/scala-tutorial-4/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/27/scala-tutorial-4/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -500,7 +568,7 @@
     <div class="article-content">
         
         <h2 id="访问修饰符">访问修饰符</h2><p>在<code>package</code> , <code>class</code> , <code>object</code> 的成员声明时使用<code>private</code>和<code>protected</code>关键字可改变其访问权限，如果包含访问修饰，则是<code>public</code>。</p>
-<h3 id="private">private</h3><p>私有成员只被该类<code>内部的代码</code>可见。直接看例子。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> &#123;</span></span><br><span class="line">        <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">f</span>(</span>) &#123; println(<span class="string">"f"</span>) &#125;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">InnerMost</span> &#123;</span></span><br><span class="line">            f() <span class="comment">// OK</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    (<span class="keyword">new</span> <span class="type">Inner</span>).f() <span class="comment">// Error: f is not accessible</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="private">private</h3><p>私有成员只被该类<code>内部的代码</code>可见。直接看例子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Outer &#123;</div><div class="line">    class Inner &#123;</div><div class="line">        private def f() &#123; println(&quot;f&quot;) &#125;</div><div class="line">        class InnerMost &#123;</div><div class="line">            f() // OK</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    (new Inner).f() // Error: f is not accessible</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><code>(new Inner).f()</code>非法而<code>InnerMost</code>的调用则是合法，因为<code>InnerMost</code>在<code>Inner</code>类的内部定义，<code>java</code>会允许内部类访问外部类的私有成员。</p>
 <h3 id="protected">protected</h3><p>scala的<code>protected</code>成员是真正地只被其子类访问。</p>
 <blockquote>
@@ -564,9 +632,9 @@
     <div class="article-content">
         
         <h2 id="变量">变量</h2><p>变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。</p>
-<h3 id="变量声明">变量声明</h3><p>scala的变量分为<code>var</code>和<code>val</code>分别代表<code>mutable variable</code>和<code>immutable  variable</code><br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> myVar</span> : String = <span class="string">"Foo"</span></span><br><span class="line"><span class="variable"><span class="keyword">val</span> myVal</span> : String = “Foo”</span><br></pre></td></tr></table></figure></p>
-<h3 id="变量数据类型">变量数据类型</h3><p>变量的类型指定于变量名与等号<code>=</code>之间<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> or <span class="keyword">val</span> VariableName</span> : DataType = [Initial Value]</span><br></pre></td></tr></table></figure></p>
-<p>也可以不指定初始值<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> <span class="rule"><span class="attribute">myVar </span>:<span class="value">Int</span></span>; </span><br><span class="line"><span class="tag">val</span> <span class="rule"><span class="attribute">myVal </span>:<span class="value">String</span></span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="变量声明">变量声明</h3><p>scala的变量分为<code>var</code>和<code>val</code>分别代表<code>mutable variable</code>和<code>immutable  variable</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myVar : String = &quot;Foo&quot;</div><div class="line">val myVal : String = “Foo”</div></pre></td></tr></table></figure></p>
+<h3 id="变量数据类型">变量数据类型</h3><p>变量的类型指定于变量名与等号<code>=</code>之间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var or val VariableName : DataType = [Initial Value]</div></pre></td></tr></table></figure></p>
+<p>也可以不指定初始值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myVar :Int; </div><div class="line">val myVal :String;</div></pre></td></tr></table></figure></p>
         
         
         <p class="article-more-link">
@@ -612,14 +680,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/25/scala-tutorial-1/" title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" itemprop="url">scala学习笔记（一）基本概念、标识符、数据类型和字面值</a>
+      <a href="/2016/04/26/scala-tutorial-1/" title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" itemprop="url">scala学习笔记（一）基本概念、标识符、数据类型和字面值</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-26T00:29:43.000Z" itemprop="datePublished"> 發表於 2016-04-25</time>
+    <time datetime="2016-04-26T00:29:43.000Z" itemprop="datePublished"> 發表於 2016-04-26</time>
     
   </p>
 </header>
@@ -652,7 +720,7 @@
         
         <p class="article-more-link">
           
-            <a href="/2016/04/25/scala-tutorial-1/#more">Read More</a>
+            <a href="/2016/04/26/scala-tutorial-1/#more">Read More</a>
           
        </p>
     </div>
@@ -673,69 +741,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/04/25/scala-tutorial-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/25/scala-tutorial-1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/21/inspur-ipmi-raid-hot-spare/" title="浪潮服务器IPMI与RAID及Hot Spare配置" itemprop="url">浪潮服务器IPMI与RAID及Hot Spare配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-21T22:45:34.000Z" itemprop="datePublished"> 發表於 2016-04-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>公司新上架了一批浪潮的服务器，型号为<code>SA5212M4</code>，使用了<code>LSI</code> 的<code>SAS3008</code> 磁盘控制器，安装了<code>CentOS 6.7</code>，在进行一些基础配置如<code>RAID</code> <code>hot spare</code>的时候，走过不少弯路(浪潮的技术支持只能呵呵)。</p>
-<h2 id="IPMI">IPMI</h2><p><code>IPMI</code>是什么？浏览一下介绍文档之后大概明白它解决的问题就是：怎么为远程机器配置BIOS,远程机器网络配置出错导致断网咋办…之类的问题。一句话：IPMI是一个独立于OS甚至BIOS之外的系统，它能管理电源、显示等底层甚至硬件层次的资源，但它也能与OS通信，比如你可以通过ipmitools来设置ipmi的一些参数。</p>
-<h3 id="ipmitool">ipmitool</h3><p><code>ipmitool</code>是一个允许你通过shell来使用ipmi的工具，其它安装过程为<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install OpenIPMI OpenIPMI-tools</span><br><span class="line">chkconfig ipmi <span class="command"><span class="keyword">on</span></span></span><br><span class="line">service ipmi <span class="built_in">start</span></span><br></pre></td></tr></table></figure></p>
-<p>确认服务启动之后，你可以通过它来打印ipmi信息，管理ipmi的用户和密码等<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/21/inspur-ipmi-raid-hot-spare/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/运维/">运维</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/21/inspur-ipmi-raid-hot-spare/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/21/inspur-ipmi-raid-hot-spare/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/04/26/scala-tutorial-1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/26/scala-tutorial-1/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -769,7 +775,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>30</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
 			
 		
 			
@@ -785,11 +791,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -813,11 +819,11 @@
 			
 		
 			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -825,23 +831,23 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 			
@@ -928,7 +934,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		

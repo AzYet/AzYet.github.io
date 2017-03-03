@@ -1,0 +1,596 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>OSTEP学习笔记-分页 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="setmentation因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的page frame，每一个frame可包含一个虚拟内存空间中的page。
+　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。
+　　OS维护一个per-process的结构page table，保存着虚">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSTEP学习笔记-分页">
+<meta property="og:url" content="http://azyet.github.io/2015/12/11/OSTEP-paging-intro/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="setmentation因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的page frame，每一个frame可包含一个虚拟内存空间中的page。
+　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。
+　　OS维护一个per-process的结构page table，保存着虚">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/55f247cbgw1eyw1oj9raej20uz05d3zy.jpg">
+<meta property="og:updated_time" content="2015-12-11T13:56:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OSTEP学习笔记-分页">
+<meta name="twitter:description" content="setmentation因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的page frame，每一个frame可包含一个虚拟内存空间中的page。
+　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。
+　　OS维护一个per-process的结构page table，保存着虚">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/11/OSTEP-paging-intro/" title="OSTEP学习笔记-分页" itemprop="url">OSTEP学习笔记-分页</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址翻译"><span class="toc-number">1.</span> <span class="toc-text">地址翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Page_Table_Entry_(PTE)"><span class="toc-number">2.</span> <span class="toc-text">Page Table Entry (PTE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-number">3.</span> <span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#translation-lookaside_buffer（TLB）"><span class="toc-number">4.</span> <span class="toc-text">translation-lookaside buffer（TLB）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB基本算法"><span class="toc-number">4.1.</span> <span class="toc-text">TLB基本算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB结构"><span class="toc-number">4.2.</span> <span class="toc-text">TLB结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context_switch时TLB的处理"><span class="toc-number">4.3.</span> <span class="toc-text">context switch时TLB的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现实中的TLB"><span class="toc-number">4.4.</span> <span class="toc-text">现实中的TLB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAM并非RAM"><span class="toc-number">5.</span> <span class="toc-text">RAM并非RAM</span></a></li></ol>
+		
+		</div>
+		
+		<p>　　<code>setmentation</code>因为使用动态大小的区块划分会不可避免地带来碎片问题。于是就有了第二种方式，分页。将内存分割了一组固定大小的<code>page frame</code>，每一个<code>frame</code>可包含一个虚拟内存空间中的<code>page</code>。</p>
+<p>　　分页的最大优势可能是灵活性，能高效地支持内存地址抽象，不用关心进程如何使用内存。另一个优势则是自由空间的管理。</p>
+<p>　　OS维护一个<code>per-process</code>的结构<code>page table</code>，保存着虚拟page映射到物理frame的地址翻译。</p>
+<h2 id="地址翻译">地址翻译</h2><p>　　将虚拟内存地址分割为<code>virtual page number</code> (VPN)和offset两部分。前者代表page号，后者为page内偏移量。通过page table将VPN替换为对应的<code>physical frame number</code>(PFN),从而可以得到真实的物理地址。</p>
+<p>　　对于一个真实的32位系统，page大小为4K，那么VPN数量为2^20 = 1MB,假设每个page需要4byte信息，那么每个page table大小为4M, 如果系统中有100个进程，那么光page table就要消耗400MB空间。显然这个大小是不可能置于CPU寄存器的，只能放置在内存中（依然很大）。</p>
+<h2 id="Page_Table_Entry_(PTE)">Page Table Entry (PTE)</h2><p>　　最简单的形式就是<code>linear page table</code>,用一人数组来存储，其中下标为VPN，内容为PTE。<br><img src="http://ww1.sinaimg.cn/large/55f247cbgw1eyvugbc81ij20sd068myv.jpg" alt=""></p>
+<a id="more"></a>
+<p>　　关于部分字母含义见下。</p>
+<ol>
+<li>valid标识。<br>　　将进程堆与栈间空白的所有page都标识为invalid，从而无需为之分配frame,节省了内存空间。</li>
+<li>protection bit(R/W)。<br>　　读写执行(rwx)标识，如果非法操作就会触发到达OS的trap。</li>
+<li>present bit（P）<br>　　位于内存or磁盘</li>
+<li>dirty（D）bit/reference（access） bit(A)<br>　　载入内存后是否被修改/存取。后者可以用于衡量page的popularity</li>
+<li>U/S<br>　　User / supervisor 权限，user mode是否可存取</li>
+</ol>
+<h2 id="开销">开销</h2><p>　　大体过程如下</p>
+<ol>
+<li>计算PTE地址。通过位移得到VPN，再<code>VPN*sizeof(PTE)</code></li>
+<li>计算实际地址。<code>PTE.PFE &lt;&lt; PFE_SHIFT | (VA &amp;OFFSET_MASK)</code><br>　　当然实际还包含一些标识位的校验。</li>
+</ol>
+<h2 id="translation-lookaside_buffer（TLB）">translation-lookaside buffer（TLB）</h2><p>要想page可行，必须地址翻译铁够快。和往常一样，这同样是由硬件支持来实现的,MMU中添加address-translation cache来进行翻译工作，甚至不需要参考page table.</p>
+<h3 id="TLB基本算法">TLB基本算法</h3><ol>
+<li>查TLB是否保存了当前VPN的翻译PTE，如果是则从中取出PFN，位移page位长后再并加上Offset就得到了物理地址PA。</li>
+<li>如果未有对应PTE，则需要从page table中取出并更新TLB，再次执行1。（不仅要读取内存，且有额外操作，开销较大）</li>
+</ol>
+<p>　　所以TLB如果要效率高，就必须缓存的PTE命中率必须高。 </p>
+<p>　　那么TLB miss时谁来处理？即可以是硬件也可以是软件（OS）。CISC的x86是硬件完全的，只需要设定page table的起始地址到指定寄存器。而RISC的MIPS等是由软件实现的，当miss发生时，cpu保存当前PC（更新tlb后会retry）并产生trap返回到OS处理。<br>软件实现具有简单、灵活的特点。</p>
+<h3 id="TLB结构">TLB结构</h3><p>　　TLB中保存有32、64、128不等的条目，它们<code>fully associative</code>, 可以并行地查找。条目内容如下：</p>
+<pre><code>VPN <span class="string">| PFN | other bits</span>
+</code></pre><h3 id="context_switch时TLB的处理">context switch时TLB的处理</h3><p>　　因为<code>page table</code>是每进程不同的，所以在环境切换时一定确保二者不混淆。最简单的办法是切换时清除TLB，硬件架构可以通过重设page table base register实现。<br>　　也可以在TLB中添加ASID address space identifier，或者理解为进程ID，这样可以同时保存多个进程的PTE而不致混淆，但是同时CPU必须知道当前运行的进程ID，所以环境切换时必须设定相应的寄存器。</p>
+<h3 id="现实中的TLB">现实中的TLB</h3><p>　　图中的是<code>MIPS R4000</code>的<code>TLB　Entry</code>, 32bit寻址，page大小4kb，也就是1M个page，实际TLB中VPN却只有19位，因为只有一半user process可用，另一半归于OS。</p>
+<p><img src="http://ww4.sinaimg.cn/large/55f247cbgw1eyw1oj9raej20uz05d3zy.jpg" alt=""></p>
+<p>　　PFN却有24位，因而支持64GB的物理内存。G代表此地址是所有进程共享的如<code>code share</code>等。ASID只有8位；共有32或者64个这样的entry，少部分是OS专有的，用来指向关键的代码和数据如TLB miss时的处理等。<br>CPU同时提供一些配套的指令来操作TLB，如TLBP查找指定条目，TLBR读取条目内容、TLBWI修改指定条目等，当然这些指令也都是kernel mode才有权限执行的。</p>
+<h2 id="RAM并非RAM">RAM并非RAM</h2><p>　　RAM的意义为读取任意地址速度相同，但是通过page和TLB虚拟化之后，这一特性并不100%成立了，特别是当频繁跨度很大的操作地址时，开销可能会意外地大。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a><a href="/tags/内存虚拟化/">内存虚拟化</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/12/11/OSTEP-paging-intro/" data-title="OSTEP学习笔记-分页 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/12/14/OSTEP-smaller-page-table/" title="OSTEP学习笔记-分页表">
+  <strong>上一篇：</strong><br/>
+  <span>
+  OSTEP学习笔记-分页表</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/12/11/OSTEP-vm-intro/"  title="OSTEP学习笔记-内存虚拟化">
+ <strong>下一篇：</strong><br/> 
+ <span>OSTEP学习笔记-内存虚拟化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/12/11/OSTEP-paging-intro/" data-title="OSTEP学习笔记-分页" data-url="http://azyet.github.io/2015/12/11/OSTEP-paging-intro/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址翻译"><span class="toc-number">1.</span> <span class="toc-text">地址翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Page_Table_Entry_(PTE)"><span class="toc-number">2.</span> <span class="toc-text">Page Table Entry (PTE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-number">3.</span> <span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#translation-lookaside_buffer（TLB）"><span class="toc-number">4.</span> <span class="toc-text">translation-lookaside buffer（TLB）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB基本算法"><span class="toc-number">4.1.</span> <span class="toc-text">TLB基本算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB结构"><span class="toc-number">4.2.</span> <span class="toc-text">TLB结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context_switch时TLB的处理"><span class="toc-number">4.3.</span> <span class="toc-text">context switch时TLB的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现实中的TLB"><span class="toc-number">4.4.</span> <span class="toc-text">现实中的TLB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAM并非RAM"><span class="toc-number">5.</span> <span class="toc-text">RAM并非RAM</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

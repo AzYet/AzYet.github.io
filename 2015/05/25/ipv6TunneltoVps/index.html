@@ -1,0 +1,594 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>为VPS创建IPv6隧道 | AzYet&#39;s Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PC_Chen">
+    
+
+    
+    <meta name="description" content="一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。
+此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。
+为什么要为VPS创建v6隧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为VPS创建IPv6隧道">
+<meta property="og:url" content="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/index.html">
+<meta property="og:site_name" content="AzYet's Notebook">
+<meta property="og:description" content="一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。
+此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。
+为什么要为VPS创建v6隧">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/55f247cbjw1esgb0hcrepj20hj0l8jw9.jpg">
+<meta property="og:updated_time" content="2015-12-03T22:21:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为VPS创建IPv6隧道">
+<meta name="twitter:description" content="一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。
+此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。
+为什么要为VPS创建v6隧">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/55f247cbjw1esgb0hcrepj20hj0l8jw9.jpg">
+<link rel="publisher" href="107081205815475258476">
+
+    
+    <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/avatar_bear.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/avatar_bear.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
+				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:azyet.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/25/ipv6TunneltoVps/" title="为VPS创建IPv6隧道" itemprop="url">为VPS创建IPv6隧道</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-25T02:30:31.000Z" itemprop="datePublished"> 發表於 2015-05-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#隧道申请"><span class="toc-number">1.</span> <span class="toc-text">隧道申请</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VPS配置"><span class="toc-number">2.</span> <span class="toc-text">VPS配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tb_userspace"><span class="toc-number">2.1.</span> <span class="toc-text">tb_userspace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#确认完成"><span class="toc-number">2.2.</span> <span class="toc-text">确认完成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可以用它来干嘛"><span class="toc-number">3.</span> <span class="toc-text">可以用它来干嘛</span></a></li></ol>
+		
+		</div>
+		
+		<p>一般的VPS只有一个IPv4地址，如果想要拥有IPv6地址，必须使用隧道，隧道是一种overlap技术，即将IPv6的包用IPv4进行再次封装，在两个v4网络的端点间传输，在其它使用网络服务的进程看来与真实的IPv6没有任何区别。</p>
+<p>此教程也不限于在VPS上使用，在其它Linux和Mac OS主机上也是可用的，但前提是电脑有公网IPv4地址，MAC OS可能细节稍有不同。</p>
+<p>为什么要为VPS创建v6隧道，场景有二：1)利用IPv6从绕过校园网计费网关连接到VPS，进而接入世界；2)IPv4用户也能享用IPv6的PT资源。</p>
+<p>先来看建立v6隧道之前的VPS网络情况，顺带一提我给VPS装的CentOS6系统：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ifconfig </div><div class="line">lo        Link encap:Local Loopback  </div><div class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</div><div class="line">          inet6 addr: ::1/128 Scope:Host</div><div class="line">          UP LOOPBACK RUNNING  MTU:65536  Metric:1</div><div class="line">          RX packets:27661 errors:0 dropped:0 overruns:0 frame:0</div><div class="line">          TX packets:27661 errors:0 dropped:0 overruns:0 carrier:0</div><div class="line">          collisions:0 txqueuelen:0 </div><div class="line">          RX bytes:81575090 (77.7 MiB)  TX bytes:81575090 (77.7 MiB)</div><div class="line"></div><div class="line">venet0    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  </div><div class="line">          inet addr:127.0.0.1  P-t-P:127.0.0.1  Bcast:0.0.0.0  Mask:255.255.255.255</div><div class="line">          UP BROADCAST POINTOPOINT RUNNING NOARP  MTU:1500  Metric:1</div><div class="line">          RX packets:156925340 errors:0 dropped:0 overruns:0 frame:0</div><div class="line">          TX packets:298546103 errors:0 dropped:11986 overruns:0 carrier:0</div><div class="line">          collisions:0 txqueuelen:0 </div><div class="line">          RX bytes:157483015316 (146.6 GiB)  TX bytes:164615931237 (153.3 GiB)</div><div class="line"></div><div class="line">venet0:0  Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  </div><div class="line">          inet addr:104.194.xx.xx  P-t-P:104.194.xx.xx  Bcast:104.194.xx.xx  Mask:255.255.255.255</div><div class="line">          UP BROADCAST POINTOPOINT RUNNING NOARP  MTU:1500  Metric:1</div></pre></td></tr></table></figure></p>
+<h2 id="隧道申请">隧道申请</h2><p>首先你要有一个隧道服务的提供商，推荐<a href="https://www.tunnelbroker.net/" target="_blank" rel="external">tunnelbroker.net</a>，本人长期使用，比较稳定。<br>注册完成以后，点击<code>Create Regular Tunnel</code>，在<code>IPv4 Endpoint (Your side)</code>填入你的VPS的IPv4地址，在列表中选择一个离你的VPS最近的Server创建隧道，尽量使延迟最小。</p>
+<a id="more"></a>
+<p>我的VPS在LA机房，自然选择LA站点来创建。</p>
+<p><img src="http://ww1.sinaimg.cn/large/55f247cbjw1esgb0hcrepj20hj0l8jw9.jpg" alt=""></p>
+<p>填完以上两项就可以点击<code>create tunnel</code>了，创建完成以后，main page会显示你刚创建的隧道，点击进入详情，主要留意以下信息，server端v4地址和client的v6地址一会将用到。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">IPv6 Tunnel Endpoints</div><div class="line">Server IPv4 Address:66.220.18.xx</div><div class="line">Server IPv6 Address:2001:470:x:xxx::1/64</div><div class="line">Client IPv4 Address:104.194.xx.xx</div><div class="line">Client IPv6 Address:2001:470:x:xx::2/64</div></pre></td></tr></table></figure></p>
+<p>至此隧道申请完成，亦即Server端已经配置好，现在要到Client端（VPS）作相应配置。</p>
+<p>在此之前，看一下隧道Server端到VPS的延迟吧，如果太大，可以考虑换一个Server哦。<br>在VPS上ping server的v4地址：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ping 66.220.18.xx</div><div class="line">64 bytes from 66.220.18.xx: icmp_seq=1 ttl=59 time=0.581 ms</div></pre></td></tr></table></figure></p>
+<p>不到1ms，说明Server选择没问题。</p>
+<h2 id="VPS配置">VPS配置</h2><p>如果是的云主机是VM，那么十分简单，tunnelbroker提供相应的脚本，粘贴执行即可。<br>在<code>tunnel details</code>页点击<code>example configuration</code>,Linux可以选择<code>linux-route2</code>,会显示类似以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">modprobe ipv6</div><div class="line">ip tunnel add he-ipv6 mode sit remote 66.220.18.42 local 104.194.xx.xx ttl 255</div><div class="line">ip link set he-ipv6 up</div><div class="line">ip addr add 2001:470:x:xxx::2/64 dev he-ipv6</div><div class="line">ip route add ::/0 dev he-ipv6</div><div class="line">ip -f inet6 addr</div></pre></td></tr></table></figure>
+<p>将其复制到VM的terminal执行即可。</p>
+<p>VPS不同于VM的是它共享宿主机内核，也就是你无权限执行内核模块加载<code>modprobe ipv6</code>这样的操作，还好我们可以用户态的程序来代替。</p>
+<h3 id="tb_userspace">tb_userspace</h3><p><code>tb_userspace</code>就是这样的一个工具，非常小巧，只有不到7kB，而且自2010年就停止更新了，看来作者也认为没有修改的必要了。连续运行两月的实际情况来看，它确实运行完美！</p>
+<p>下载地址：<a href="https://code.google.com/p/tb-tun/" target="_blank" rel="external">https://code.google.com/p/tb-tun/</a></p>
+<p>如果打不开这个地址，自行搜索替代下载资源吧。</p>
+<p>下载之后解压可以得到源文件和可执行文件，不用自己build了，如果有兴趣可以查看源码，相信对学习Linux网络协议栈函数调用是很有帮助的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-rwxr-xr-x  1 root root 9.6K  4月  9 03:37 tb_userspace</div><div class="line">-rwxr-xr-x  1 root  513 7.8K  6月 19 2010 tb_userspace.c</div></pre></td></tr></table></figure></p>
+<p>好的，以下就是你要在VPS运行的命令，与之前给的差不多，只是将<code>ip tunnel</code>替换成了<code>tb_userspace</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">setsid /root/tb_userspace tb 64.62.xx.xx 104.194.xx.xx sit &gt; /dev/null 2&gt;&amp;1 &amp;</div><div class="line">ifconfig tb up</div><div class="line">ifconfig tb inet6 add 2001:470:x:xxx::2/64</div><div class="line">ifconfig tb mtu 1480</div><div class="line">route -A inet6 add ::/0 dev tb</div></pre></td></tr></table></figure>
+<h3 id="确认完成">确认完成</h3><p>好的，至此VPS应该已经具有IPv6的地址了，运行<code>ifconfig</code>，较之前多出了一个网络接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">tb        Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  </div><div class="line">          inet6 addr: 2001:470:x:xxx::2/64 Scope:Global</div><div class="line">          UP POINTOPOINT RUNNING NOARP MULTICAST  MTU:1500  Metric:1</div><div class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0</div><div class="line">          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0</div><div class="line">          collisions:0 txqueuelen:500 </div><div class="line">          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)</div></pre></td></tr></table></figure></p>
+<p>测试可用性，从VPS用ipv6 ping google：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ping6 google.com</div><div class="line">PING google.com(lax02s22-in-x0e.1e100.net) 56 data bytes</div><div class="line">64 bytes from lax02s22-in-x0e.1e100.net: icmp_seq=1 ttl=58 time=0.987 ms</div><div class="line">64 bytes from lax02s22-in-x0e.1e100.net: icmp_seq=2 ttl=58 time=1.64 ms</div><div class="line">64 bytes from lax02s22-in-x0e.1e100.net: icmp_seq=3 ttl=58 time=1.68 ms</div></pre></td></tr></table></figure>
+<p>好的，真快不是吗:P</p>
+<p>如果本地机器具有ipv6地址，可以测一下到本地的连通性。</p>
+<p>从本地用IPv6 Ping VPS：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">chen@vaio:~$ ping6 2001:470:x:xxx::2</div><div class="line">PING 2001:470:x:xxx::2(2001:470:x:xxx::2) 56 data bytes</div><div class="line">64 bytes from 2001:470:x:xxx::2: icmp_seq=1 ttl=49 time=147 ms</div><div class="line">64 bytes from 2001:470:x:xxx::2: icmp_seq=2 ttl=49 time=147 ms</div></pre></td></tr></table></figure>
+<p>147ms还是可以接受的了，但是毕竟在太平洋对面呢:P</p>
+<h2 id="可以用它来干嘛">可以用它来干嘛</h2><p>好的，自此VPS就已经接入v6世界了，下一步做什么呢，当然是在IPv6上搭shadowsocks和openVPN了。shdowsocks非常易用，它是Python的；openVPN由于使用了非对称加密，生成密钥之类比较麻烦一点，不过如果你理解公钥，私钥和证书的原理，操作起来也不会太糊涂哦。</p>
+<p>与使用IPv4的ss和vpn不同之处在于，server clinet都要使用ipv6地址，为了方便，可以将VPS的v6地址写进本地电脑的hosts文件。</p>
+<p>如果你本地电脑不在IPv6世界，在创建完VPS到本地的VPN之后，你可以再利用VPN的IP来创建IPv6隧道，从而将本地电脑连接v6世界。为什么会这么麻烦，主要是一般我们的电脑是不具有公网v4地址的，否则直接tunnelbroker就够了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/网络/">网络</a><a href="/tags/VPS/">VPS</a><a href="/tags/隧道/">隧道</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/" data-title="为VPS创建IPv6隧道 | AzYet&#39;s Notebook" data-tsina="1441941451" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/27/ipCommandInLinux/" title="Linux下的ip命令">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Linux下的ip命令</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/24/dynamicProgramming2/"  title="动态规划实战（二）：背包问题">
+ <strong>下一篇：</strong><br/> 
+ <span>动态规划实战（二）：背包问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/25/ipv6TunneltoVps/" data-title="为VPS创建IPv6隧道" data-url="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#隧道申请"><span class="toc-number">1.</span> <span class="toc-text">隧道申请</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VPS配置"><span class="toc-number">2.</span> <span class="toc-text">VPS配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tb_userspace"><span class="toc-number">2.1.</span> <span class="toc-text">tb_userspace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#确认完成"><span class="toc-number">2.2.</span> <span class="toc-text">确认完成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可以用它来干嘛"><span class="toc-number">3.</span> <span class="toc-text">可以用它来干嘛</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>31</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Go语言/" title="Go语言">Go语言<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> A coder in Beijing. <br/>
+			Living a simple life.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1441941451" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/azyet" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		<a href="https://www.facebook.com/pc.chen.940" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"azyet"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?43a04b04995277b88dba7208cda9e829";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
