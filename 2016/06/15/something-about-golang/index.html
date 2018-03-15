@@ -33,7 +33,7 @@
 短声明12f, err := os.Open(name)d, err := f.Stat()
 在第二个语句中，d是新建变量，而err是重新赋值。
 多重赋值Go中没有逗号，运算符，++和--是声明而非语句">
-<link rel="publisher" href="107081205815475258476">
+<link rel="publisher" href="107081205815475260000">
 
     
     <link rel="alternative" href="/atom.xml" title="AzYet&#39;s Notebook" type="application/atom+xml">
@@ -53,11 +53,15 @@
       
 <div>
 		
+			<div id="imglogo">
+				<a href="/"><img src="/img/avatar_bear.png" alt="AzYet&#39;s Notebook" title="AzYet&#39;s Notebook"/></a>
+			</div>
+			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -93,17 +97,17 @@
   </h1>
   <p class="article-author">By
        
-		<a href="https://plus.google.com/107081205815475258476?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 發表於 2016-06-15</time>
+    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 发表于 2016-06-15</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Getters_and_Setters"><span class="toc-number">1.</span> <span class="toc-text">Getters and Setters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分号"><span class="toc-number">2.</span> <span class="toc-text">分号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短声明"><span class="toc-number">3.</span> <span class="toc-text">短声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多重赋值"><span class="toc-number">4.</span> <span class="toc-text">多重赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#switch中合并多个case"><span class="toc-number">5.</span> <span class="toc-text">switch中合并多个case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带标签的break"><span class="toc-number">6.</span> <span class="toc-text">带标签的break</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Type_switch"><span class="toc-number">7.</span> <span class="toc-text">Type switch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new和make"><span class="toc-number">8.</span> <span class="toc-text">new和make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice"><span class="toc-number">9.</span> <span class="toc-text">slice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init函数"><span class="toc-number">10.</span> <span class="toc-text">init函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法：Pointers_vs-_Values"><span class="toc-number">11.</span> <span class="toc-text">方法：Pointers vs. Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for_range中的变量"><span class="toc-number">12.</span> <span class="toc-text">for range中的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发与并行"><span class="toc-number">13.</span> <span class="toc-text">并发与并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#panic_&&_recover"><span class="toc-number">14.</span> <span class="toc-text">panic && recover</span></a></li></ol>
 		
@@ -178,31 +182,58 @@
 
 </nav>
 
-	
-<section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/06/15/something-about-golang/" data-title="有关于Go语言的一些tips" data-url="http://azyet.github.io/2016/06/15/something-about-golang/"></div>
+	<section id="comments" class="comment">
+<script data-isso="//66.112.213.121:9106/"
+        data-isso-css="true"
+        data-isso-lang="zh"
+        data-isso-reply-to-self="false"
+        data-isso-require-author="true"
+        data-isso-require-email="false"
+        data-isso-max-comments-top="10"
+        data-isso-max-comments-nested="5"
+        data-isso-reveal-on-click="5"
+        data-isso-avatar="true"
+        data-isso-avatar-bg="#f0f0f0"
+        data-isso-avatar-fg="#9abf88 #5698c4 #e279a3 #9163b6 ..."
+        data-isso-vote="true"
+        data-vote-levels=""
+        src="//66.112.213.121:9106/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+<noscript>请开启 JavaScript 查看 <a href="https://posativ.org/isso/" rel="nofollow">isso 评论系统的内容</a>。</noscript>
 </section>
 
 
+
+
+
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Getters_and_Setters"><span class="toc-number">1.</span> <span class="toc-text">Getters and Setters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分号"><span class="toc-number">2.</span> <span class="toc-text">分号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短声明"><span class="toc-number">3.</span> <span class="toc-text">短声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多重赋值"><span class="toc-number">4.</span> <span class="toc-text">多重赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#switch中合并多个case"><span class="toc-number">5.</span> <span class="toc-text">switch中合并多个case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带标签的break"><span class="toc-number">6.</span> <span class="toc-text">带标签的break</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Type_switch"><span class="toc-number">7.</span> <span class="toc-text">Type switch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new和make"><span class="toc-number">8.</span> <span class="toc-text">new和make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slice"><span class="toc-number">9.</span> <span class="toc-text">slice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init函数"><span class="toc-number">10.</span> <span class="toc-text">init函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法：Pointers_vs-_Values"><span class="toc-number">11.</span> <span class="toc-text">方法：Pointers vs. Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#for_range中的变量"><span class="toc-number">12.</span> <span class="toc-text">for range中的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发与并行"><span class="toc-number">13.</span> <span class="toc-text">并发与并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#panic_&&_recover"><span class="toc-number">14.</span> <span class="toc-text">panic && recover</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="azyet" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -230,19 +261,15 @@
 			
 		
 			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			
@@ -258,11 +285,7 @@
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
 			
 		
 			
@@ -270,7 +293,15 @@
 			
 		
 			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -290,24 +321,12 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
             
             	<a href="http://bbs.byr.cn" target="_blank" title="BYR">BYR</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
             
           </li>
         
@@ -318,8 +337,14 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
 
 </aside>
 </div>
@@ -333,8 +358,8 @@
 	
 	
 	<section class="info">
-		<p> A coder in Beijing. <br/>
-			Living a simple life.</p>
+		<p> coding in Beijing <br/>
+			Sim(n)p(g)le &amp; Happy</p>
 	</section>
 	 
 	<div class="social-font" class="clearfix">
@@ -355,17 +380,17 @@
 		<a href="http://www.zhihu.com/people/pc-chen" target="_blank" class="icon-zhihu" title="知乎"></a>
 		
 		
-		<a href="https://plus.google.com/107081205815475258476?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		<a href="https://plus.google.com/107081205815475260000?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
 		
 		
-		<a href="mailto:cgnphe@126.com" target="_blank" class="icon-email" title="Email Me"></a>
+		<a href="mailto:cgnphe#126.com" target="_blank" class="icon-email" title="Email Me"></a>
 		
 	</div>
 			
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
 		
 		<a href="/about" target="_blank" title="PC_Chen">PC_Chen</a>
 		
@@ -503,17 +528,7 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"azyet"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
+
 
 
 
@@ -565,7 +580,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
