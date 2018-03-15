@@ -58,7 +58,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -74,7 +74,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -97,14 +97,14 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-08T06:35:01.000Z" itemprop="datePublished"> Published 2015-06-08</time>
+    <time datetime="2015-06-08T06:35:01.000Z" itemprop="datePublished"> 发表于 2015-06-08</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#activity_manager_（am）"><span class="toc-number">1.</span> <span class="toc-text">activity manager （am）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#am命令及参数"><span class="toc-number">1.1.</span> <span class="toc-text">am命令及参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start_[options]_<INTENT>"><span class="toc-number">1.1.1.</span> <span class="toc-text">start [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#startservice_[options]_<INTENT>"><span class="toc-number">1.1.2.</span> <span class="toc-text">startservice [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#force-stop_<PACKAGE>"><span class="toc-number">1.1.3.</span> <span class="toc-text">force-stop <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill_[options]_<PACKAGE>"><span class="toc-number">1.1.4.</span> <span class="toc-text">kill [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill-all"><span class="toc-number">1.1.5.</span> <span class="toc-text">kill-all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#broadcast_[options]_<INTENT>"><span class="toc-number">1.1.6.</span> <span class="toc-text">broadcast [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instrument_[options]_<COMPONENT>"><span class="toc-number">1.1.7.</span> <span class="toc-text">instrument [options] <COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_start_<FILE>"><span class="toc-number">1.1.8.</span> <span class="toc-text">profile start  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_stop_<PROCESS>"><span class="toc-number">1.1.9.</span> <span class="toc-text">profile stop <PROCESS></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dumpheap_[options]_<FILE>"><span class="toc-number">1.1.10.</span> <span class="toc-text">dumpheap [options]  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-debug-app_[options]_<PACKAGE>"><span class="toc-number">1.1.11.</span> <span class="toc-text">set-debug-app [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear-debug-app"><span class="toc-number">1.1.12.</span> <span class="toc-text">clear-debug-app</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_[options]"><span class="toc-number">1.1.13.</span> <span class="toc-text">monitor [options]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#screen-compat_[on|off]_<PACKAGE>"><span class="toc-number">1.1.14.</span> <span class="toc-text">screen-compat [on|off] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#display-size_[reset|<WxH>]"><span class="toc-number">1.1.15.</span> <span class="toc-text">display-size [reset|<WxH>]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-uri_<INTENT>"><span class="toc-number">1.1.16.</span> <span class="toc-text">to-uri <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-intent-uri_<INTENT>"><span class="toc-number">1.1.17.</span> <span class="toc-text">to-intent-uri <INTENT></span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#package_manager_(pm)"><span class="toc-number">2.</span> <span class="toc-text">package manager (pm)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可用命令和参数"><span class="toc-number">2.1.</span> <span class="toc-text">可用命令和参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list_packages_[options]_<FILTER>"><span class="toc-number">2.1.1.</span> <span class="toc-text">list packages [options] <FILTER></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permission-groups"><span class="toc-number">2.1.2.</span> <span class="toc-text">list permission-groups</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permissions_[optiomns]_<GROUP>"><span class="toc-number">2.1.3.</span> <span class="toc-text">list permissions [optiomns] <GROUP></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_instrumentation"><span class="toc-number">2.1.4.</span> <span class="toc-text">list instrumentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_features"><span class="toc-number">2.1.5.</span> <span class="toc-text">list features</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_libraries"><span class="toc-number">2.1.6.</span> <span class="toc-text">list libraries</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_users"><span class="toc-number">2.1.7.</span> <span class="toc-text">list users</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#path_<PACKAGE>"><span class="toc-number">2.1.8.</span> <span class="toc-text">path <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#install_[options]_<path>"><span class="toc-number">2.1.9.</span> <span class="toc-text">install [options] <path></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uninstall_[options]_<PACKAGE>"><span class="toc-number">2.1.10.</span> <span class="toc-text">uninstall [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear_<PACKAGE>"><span class="toc-number">2.1.11.</span> <span class="toc-text">clear <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#enable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.12.</span> <span class="toc-text">enable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.13.</span> <span class="toc-text">disable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable-user_[options]_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.14.</span> <span class="toc-text">disable-user [options] <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#grant_<PACKAGE_PERMISSION>"><span class="toc-number">2.1.15.</span> <span class="toc-text">grant <PACKAGE_PERMISSION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-install-location_<LOCATION>"><span class="toc-number">2.1.16.</span> <span class="toc-text">set-install-location <LOCATION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-install-location"><span class="toc-number">2.1.17.</span> <span class="toc-text">get-install-location</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-permission-enforced_<PERMISSION>_[true|false]"><span class="toc-number">2.1.18.</span> <span class="toc-text">set-permission-enforced <PERMISSION> [true|false]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#trim-caches_<DESIRED_FREE_SPACE>"><span class="toc-number">2.1.19.</span> <span class="toc-text">trim-caches <DESIRED_FREE_SPACE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#create-user_<USER_NAME>"><span class="toc-number">2.1.20.</span> <span class="toc-text">create-user <USER_NAME></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#remove-user_<USER_ID>"><span class="toc-number">2.1.21.</span> <span class="toc-text">remove-user <USER_ID></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-max-users"><span class="toc-number">2.1.22.</span> <span class="toc-text">get-max-users</span></a></li></ol></li></ol></li></ol>
 		
@@ -263,22 +263,22 @@
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#activity_manager_（am）"><span class="toc-number">1.</span> <span class="toc-text">activity manager （am）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#am命令及参数"><span class="toc-number">1.1.</span> <span class="toc-text">am命令及参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start_[options]_<INTENT>"><span class="toc-number">1.1.1.</span> <span class="toc-text">start [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#startservice_[options]_<INTENT>"><span class="toc-number">1.1.2.</span> <span class="toc-text">startservice [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#force-stop_<PACKAGE>"><span class="toc-number">1.1.3.</span> <span class="toc-text">force-stop <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill_[options]_<PACKAGE>"><span class="toc-number">1.1.4.</span> <span class="toc-text">kill [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill-all"><span class="toc-number">1.1.5.</span> <span class="toc-text">kill-all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#broadcast_[options]_<INTENT>"><span class="toc-number">1.1.6.</span> <span class="toc-text">broadcast [options] <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instrument_[options]_<COMPONENT>"><span class="toc-number">1.1.7.</span> <span class="toc-text">instrument [options] <COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_start_<FILE>"><span class="toc-number">1.1.8.</span> <span class="toc-text">profile start  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#profile_stop_<PROCESS>"><span class="toc-number">1.1.9.</span> <span class="toc-text">profile stop <PROCESS></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dumpheap_[options]_<FILE>"><span class="toc-number">1.1.10.</span> <span class="toc-text">dumpheap [options]  <FILE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-debug-app_[options]_<PACKAGE>"><span class="toc-number">1.1.11.</span> <span class="toc-text">set-debug-app [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear-debug-app"><span class="toc-number">1.1.12.</span> <span class="toc-text">clear-debug-app</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_[options]"><span class="toc-number">1.1.13.</span> <span class="toc-text">monitor [options]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#screen-compat_[on|off]_<PACKAGE>"><span class="toc-number">1.1.14.</span> <span class="toc-text">screen-compat [on|off] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#display-size_[reset|<WxH>]"><span class="toc-number">1.1.15.</span> <span class="toc-text">display-size [reset|<WxH>]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-uri_<INTENT>"><span class="toc-number">1.1.16.</span> <span class="toc-text">to-uri <INTENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#to-intent-uri_<INTENT>"><span class="toc-number">1.1.17.</span> <span class="toc-text">to-intent-uri <INTENT></span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#package_manager_(pm)"><span class="toc-number">2.</span> <span class="toc-text">package manager (pm)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可用命令和参数"><span class="toc-number">2.1.</span> <span class="toc-text">可用命令和参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#list_packages_[options]_<FILTER>"><span class="toc-number">2.1.1.</span> <span class="toc-text">list packages [options] <FILTER></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permission-groups"><span class="toc-number">2.1.2.</span> <span class="toc-text">list permission-groups</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_permissions_[optiomns]_<GROUP>"><span class="toc-number">2.1.3.</span> <span class="toc-text">list permissions [optiomns] <GROUP></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_instrumentation"><span class="toc-number">2.1.4.</span> <span class="toc-text">list instrumentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_features"><span class="toc-number">2.1.5.</span> <span class="toc-text">list features</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_libraries"><span class="toc-number">2.1.6.</span> <span class="toc-text">list libraries</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list_users"><span class="toc-number">2.1.7.</span> <span class="toc-text">list users</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#path_<PACKAGE>"><span class="toc-number">2.1.8.</span> <span class="toc-text">path <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#install_[options]_<path>"><span class="toc-number">2.1.9.</span> <span class="toc-text">install [options] <path></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uninstall_[options]_<PACKAGE>"><span class="toc-number">2.1.10.</span> <span class="toc-text">uninstall [options] <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear_<PACKAGE>"><span class="toc-number">2.1.11.</span> <span class="toc-text">clear <PACKAGE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#enable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.12.</span> <span class="toc-text">enable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.13.</span> <span class="toc-text">disable <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#disable-user_[options]_<PACKAGE_OR_COMPONENT>"><span class="toc-number">2.1.14.</span> <span class="toc-text">disable-user [options] <PACKAGE_OR_COMPONENT></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#grant_<PACKAGE_PERMISSION>"><span class="toc-number">2.1.15.</span> <span class="toc-text">grant <PACKAGE_PERMISSION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-install-location_<LOCATION>"><span class="toc-number">2.1.16.</span> <span class="toc-text">set-install-location <LOCATION></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-install-location"><span class="toc-number">2.1.17.</span> <span class="toc-text">get-install-location</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#set-permission-enforced_<PERMISSION>_[true|false]"><span class="toc-number">2.1.18.</span> <span class="toc-text">set-permission-enforced <PERMISSION> [true|false]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#trim-caches_<DESIRED_FREE_SPACE>"><span class="toc-number">2.1.19.</span> <span class="toc-text">trim-caches <DESIRED_FREE_SPACE></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#create-user_<USER_NAME>"><span class="toc-number">2.1.20.</span> <span class="toc-text">create-user <USER_NAME></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#remove-user_<USER_ID>"><span class="toc-number">2.1.21.</span> <span class="toc-text">remove-user <USER_ID></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-max-users"><span class="toc-number">2.1.22.</span> <span class="toc-text">get-max-users</span></a></li></ol></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github Card</p>
+<p class="asidetitle">Github 名片</p>
 <div class="github-card" data-github="azyet" data-theme="medium"></div>
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -289,7 +289,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -377,7 +377,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -393,11 +393,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -636,7 +636,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
