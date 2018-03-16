@@ -60,7 +60,7 @@ null(\u0000)不能用在path中，因为在C中会导致Binding异常。
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -99,14 +99,14 @@ null(\u0000)不能用在path中，因为在C中会导致Binding异常。
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> 发表于 2015-05-20</time>
+    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> 發表於 2015-05-20</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper数据模型"><span class="toc-number">1.</span> <span class="toc-text">ZooKeeper数据模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZNodes"><span class="toc-number">2.</span> <span class="toc-text">ZNodes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch"><span class="toc-number">2.1.</span> <span class="toc-text">Watch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存取Data_Access"><span class="toc-number">2.2.</span> <span class="toc-text">数据存取Data Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#瞬时节点Ephemeral_Nodes"><span class="toc-number">2.3.</span> <span class="toc-text">瞬时节点Ephemeral Nodes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列节点Sequence_Nodes"><span class="toc-number">2.4.</span> <span class="toc-text">序列节点Sequence Nodes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper中的时间。"><span class="toc-number">3.</span> <span class="toc-text">ZooKeeper中的时间。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zxid"><span class="toc-number">3.1.</span> <span class="toc-text">Zxid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本号Version_numbers"><span class="toc-number">3.2.</span> <span class="toc-text">版本号Version numbers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计时Ticks"><span class="toc-number">4.</span> <span class="toc-text">计时Ticks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时钟时间Real_time"><span class="toc-number">4.1.</span> <span class="toc-text">时钟时间Real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态结构Stat_Structure"><span class="toc-number">4.2.</span> <span class="toc-text">状态结构Stat Structure</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话ZooKeeper_Sessions"><span class="toc-number">5.</span> <span class="toc-text">会话ZooKeeper Sessions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监听/ZooKeeper_Watches"><span class="toc-number">6.</span> <span class="toc-text">监听/ZooKeeper Watches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#One-time_trigger"><span class="toc-number">6.1.</span> <span class="toc-text">One-time trigger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sent_to_the_client"><span class="toc-number">6.2.</span> <span class="toc-text">Sent to the client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch对象"><span class="toc-number">7.</span> <span class="toc-text">watch对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch有哪些保证"><span class="toc-number">7.1.</span> <span class="toc-text">Watch有哪些保证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于Watch的须知"><span class="toc-number">7.2.</span> <span class="toc-text">关于Watch的须知</span></a></li></ol></li></ol>
 		
@@ -250,23 +250,25 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 </nav>
 
 	<section id="comments" class="comment">
-<script data-isso="//66.112.213.121:8106/"
-        data-isso-css="true"
-        data-isso-lang="zh"
-        data-isso-reply-to-self="false"
-        data-isso-require-author="true"
-        data-isso-require-email="false"
-        data-isso-max-comments-top="10"
-        data-isso-max-comments-nested="5"
-        data-isso-reveal-on-click="5"
-        data-isso-avatar="true"
-        data-isso-avatar-bg="#f0f0f0"
-        data-isso-avatar-fg="#9abf88 #5698c4 #e279a3 #9163b6 ..."
-        data-isso-vote="true"
-        data-vote-levels=""
-        src="//66.112.213.121:8106/js/embed.min.js"></script>
-<section id="isso-thread"></section>
-<noscript>请开启 JavaScript 查看 <a href="https://posativ.org/isso/" rel="nofollow">isso 评论系统的内容</a>。</noscript>
+    <div id="disqus_thread">
+        <script data-isso="//66.112.213.121:8106/"
+                data-isso-css="true"
+                data-isso-lang="zh"
+                data-isso-reply-to-self="false"
+                data-isso-require-author="true"
+                data-isso-require-email="false"
+                data-isso-max-comments-top="10"
+                data-isso-max-comments-nested="5"
+                data-isso-reveal-on-click="5"
+                data-isso-avatar="true"
+                data-isso-avatar-bg="#f0f0f0"
+                data-isso-avatar-fg="#9abf88 #5698c4 #e279a3 #9163b6 ..."
+                data-isso-vote="true"
+                data-vote-levels=""
+                src="//66.112.213.121:8106/js/embed.min.js"></script>
+        <section id="isso-thread"></section>
+        <noscript>请开启 JavaScript 查看 <a href="https://posativ.org/isso/" rel="nofollow">isso 评论系统的内容</a>。</noscript>
+    </div>
 </section>
 
 
@@ -274,33 +276,24 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper数据模型"><span class="toc-number">1.</span> <span class="toc-text">ZooKeeper数据模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZNodes"><span class="toc-number">2.</span> <span class="toc-text">ZNodes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch"><span class="toc-number">2.1.</span> <span class="toc-text">Watch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存取Data_Access"><span class="toc-number">2.2.</span> <span class="toc-text">数据存取Data Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#瞬时节点Ephemeral_Nodes"><span class="toc-number">2.3.</span> <span class="toc-text">瞬时节点Ephemeral Nodes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列节点Sequence_Nodes"><span class="toc-number">2.4.</span> <span class="toc-text">序列节点Sequence Nodes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper中的时间。"><span class="toc-number">3.</span> <span class="toc-text">ZooKeeper中的时间。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zxid"><span class="toc-number">3.1.</span> <span class="toc-text">Zxid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本号Version_numbers"><span class="toc-number">3.2.</span> <span class="toc-text">版本号Version numbers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计时Ticks"><span class="toc-number">4.</span> <span class="toc-text">计时Ticks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时钟时间Real_time"><span class="toc-number">4.1.</span> <span class="toc-text">时钟时间Real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态结构Stat_Structure"><span class="toc-number">4.2.</span> <span class="toc-text">状态结构Stat Structure</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话ZooKeeper_Sessions"><span class="toc-number">5.</span> <span class="toc-text">会话ZooKeeper Sessions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监听/ZooKeeper_Watches"><span class="toc-number">6.</span> <span class="toc-text">监听/ZooKeeper Watches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#One-time_trigger"><span class="toc-number">6.1.</span> <span class="toc-text">One-time trigger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sent_to_the_client"><span class="toc-number">6.2.</span> <span class="toc-text">Sent to the client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch对象"><span class="toc-number">7.</span> <span class="toc-text">watch对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch有哪些保证"><span class="toc-number">7.1.</span> <span class="toc-text">Watch有哪些保证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于Watch的须知"><span class="toc-number">7.2.</span> <span class="toc-text">关于Watch的须知</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
-
-  
-<div class="github-card">
-<p class="asidetitle">Github 名片</p>
-<div class="github-card" data-github="azyet" data-theme="medium"></div>
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-
-
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
@@ -388,7 +381,7 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -404,7 +397,7 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
@@ -647,7 +640,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
