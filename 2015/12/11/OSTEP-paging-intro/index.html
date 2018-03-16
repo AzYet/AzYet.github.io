@@ -58,7 +58,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -74,7 +74,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -97,14 +97,14 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 發表於 2015-12-11</time>
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> Published 2015-12-11</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址翻译"><span class="toc-number">1.</span> <span class="toc-text">地址翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Page_Table_Entry_(PTE)"><span class="toc-number">2.</span> <span class="toc-text">Page Table Entry (PTE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-number">3.</span> <span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#translation-lookaside_buffer（TLB）"><span class="toc-number">4.</span> <span class="toc-text">translation-lookaside buffer（TLB）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB基本算法"><span class="toc-number">4.1.</span> <span class="toc-text">TLB基本算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB结构"><span class="toc-number">4.2.</span> <span class="toc-text">TLB结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context_switch时TLB的处理"><span class="toc-number">4.3.</span> <span class="toc-text">context switch时TLB的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现实中的TLB"><span class="toc-number">4.4.</span> <span class="toc-text">现实中的TLB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAM并非RAM"><span class="toc-number">5.</span> <span class="toc-text">RAM并非RAM</span></a></li></ol>
 		
@@ -220,24 +220,24 @@
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址翻译"><span class="toc-number">1.</span> <span class="toc-text">地址翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Page_Table_Entry_(PTE)"><span class="toc-number">2.</span> <span class="toc-text">Page Table Entry (PTE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开销"><span class="toc-number">3.</span> <span class="toc-text">开销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#translation-lookaside_buffer（TLB）"><span class="toc-number">4.</span> <span class="toc-text">translation-lookaside buffer（TLB）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB基本算法"><span class="toc-number">4.1.</span> <span class="toc-text">TLB基本算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLB结构"><span class="toc-number">4.2.</span> <span class="toc-text">TLB结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#context_switch时TLB的处理"><span class="toc-number">4.3.</span> <span class="toc-text">context switch时TLB的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现实中的TLB"><span class="toc-number">4.4.</span> <span class="toc-text">现实中的TLB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RAM并非RAM"><span class="toc-number">5.</span> <span class="toc-text">RAM并非RAM</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -325,7 +325,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -341,11 +341,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -584,7 +584,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
