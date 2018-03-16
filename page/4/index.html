@@ -48,7 +48,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -64,7 +64,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -89,7 +89,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> Published 2015-12-17</time>
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-17</time>
     
   </p>
 </header>
@@ -142,29 +142,37 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/17/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
+      <a href="/2015/12/17/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> Published 2015-12-17</time>
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-17</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
-<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
-<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">              android:layout_width=&quot;match_parent&quot;</div><div class="line">              android:layout_height=&quot;match_parent&quot;</div><div class="line">              android:orientation=&quot;vertical&quot; &gt;</div><div class="line">    &lt;TextView android:id=&quot;@+id/text&quot;</div><div class="line">              android:layout_width=&quot;wrap_content&quot;</div><div class="line">              android:layout_height=&quot;wrap_content&quot;</div><div class="line">              android:text=&quot;Hello, I am a TextView&quot; /&gt;</div><div class="line">    &lt;Button android:id=&quot;@+id/button&quot;</div><div class="line">            android:layout_width=&quot;wrap_content&quot;</div><div class="line">            android:layout_height=&quot;wrap_content&quot;</div><div class="line">            android:text=&quot;Hello, I am a Button&quot; /&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
-<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
+        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
+<p>一般C包装函数功能如下：</p>
+<ul>
+<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
+<li>trapping to kernel mode(开始执行）</li>
+<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
+</ul>
+<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
+<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
+<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
+<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
+<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
+<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2015/12/17/android-develop-layout-abse/#more">Read More</a>
+            <a href="/2015/12/17/Linux-errno-intro/#more">Read More</a>
           
        </p>
     </div>
@@ -174,7 +182,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a><a href="/tags/Android/">Android</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
   </div>
 
 </div>
@@ -209,7 +217,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-14T09:09:23.000Z" itemprop="datePublished"> Published 2015-12-14</time>
+    <time datetime="2015-12-14T09:09:23.000Z" itemprop="datePublished"> 发表于 2015-12-14</time>
     
   </p>
 </header>
@@ -271,7 +279,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-14T03:09:23.000Z" itemprop="datePublished"> Published 2015-12-14</time>
+    <time datetime="2015-12-14T03:09:23.000Z" itemprop="datePublished"> 发表于 2015-12-14</time>
     
   </p>
 </header>
@@ -330,7 +338,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> Published 2015-12-11</time>
+    <time datetime="2015-12-10T19:09:23.000Z" itemprop="datePublished"> 发表于 2015-12-11</time>
     
   </p>
 </header>
@@ -391,7 +399,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T18:50:06.000Z" itemprop="datePublished"> Published 2015-12-11</time>
+    <time datetime="2015-12-10T18:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-11</time>
     
   </p>
 </header>
@@ -452,7 +460,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-10T13:26:04.000Z" itemprop="datePublished"> Published 2015-12-10</time>
+    <time datetime="2015-12-10T13:26:04.000Z" itemprop="datePublished"> 发表于 2015-12-10</time>
     
   </p>
 </header>
@@ -512,7 +520,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-05T21:00:59.000Z" itemprop="datePublished"> Published 2015-12-06</time>
+    <time datetime="2015-12-05T21:00:59.000Z" itemprop="datePublished"> 发表于 2015-12-06</time>
     
   </p>
 </header>
@@ -572,7 +580,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-10-25T06:42:45.000Z" itemprop="datePublished"> Published 2015-10-25</time>
+    <time datetime="2015-10-25T06:42:45.000Z" itemprop="datePublished"> 发表于 2015-10-25</time>
     
   </p>
 </header>
@@ -636,7 +644,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-28T04:16:42.000Z" itemprop="datePublished"> Published 2015-06-28</time>
+    <time datetime="2015-06-28T04:16:42.000Z" itemprop="datePublished"> 发表于 2015-06-28</time>
     
   </p>
 </header>
@@ -697,17 +705,17 @@
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -747,15 +755,7 @@
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -763,15 +763,15 @@
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -779,15 +779,23 @@
 			
 		
 			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -795,7 +803,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -811,11 +819,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -977,7 +985,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

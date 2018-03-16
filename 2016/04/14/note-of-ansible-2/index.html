@@ -52,7 +52,7 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -68,7 +68,7 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -91,14 +91,14 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> Published 2016-04-14</time>
+    <time datetime="2016-04-14T02:16:52.000Z" itemprop="datePublished"> 发表于 2016-04-14</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#host_and_group"><span class="toc-number">1.</span> <span class="toc-text">host and group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#host_variables"><span class="toc-number">2.</span> <span class="toc-text">host variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#group_variables"><span class="toc-number">3.</span> <span class="toc-text">group variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组的组"><span class="toc-number">4.</span> <span class="toc-text">组的组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单独存储host/group数据"><span class="toc-number">5.</span> <span class="toc-text">单独存储host/group数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为变量"><span class="toc-number">6.</span> <span class="toc-text">行为变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ansible_connection"><span class="toc-number">6.1.</span> <span class="toc-text">ansible_connection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH相关变量"><span class="toc-number">6.2.</span> <span class="toc-text">SSH相关变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#远程主机环境变量"><span class="toc-number">6.3.</span> <span class="toc-text">远程主机环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ansible2-1新增"><span class="toc-number">6.4.</span> <span class="toc-text">Ansible2.1新增</span></a></li></ol></li></ol>
 		
@@ -205,24 +205,24 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#host_and_group"><span class="toc-number">1.</span> <span class="toc-text">host and group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#host_variables"><span class="toc-number">2.</span> <span class="toc-text">host variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#group_variables"><span class="toc-number">3.</span> <span class="toc-text">group variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组的组"><span class="toc-number">4.</span> <span class="toc-text">组的组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单独存储host/group数据"><span class="toc-number">5.</span> <span class="toc-text">单独存储host/group数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为变量"><span class="toc-number">6.</span> <span class="toc-text">行为变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ansible_connection"><span class="toc-number">6.1.</span> <span class="toc-text">ansible_connection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH相关变量"><span class="toc-number">6.2.</span> <span class="toc-text">SSH相关变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#远程主机环境变量"><span class="toc-number">6.3.</span> <span class="toc-text">远程主机环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ansible2-1新增"><span class="toc-number">6.4.</span> <span class="toc-text">Ansible2.1新增</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -262,15 +262,7 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -278,15 +270,15 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -294,15 +286,23 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 			
 		
 			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -310,7 +310,7 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -326,11 +326,11 @@ host and groupinventory文件的模式类似ini：12345678910mail.example.com[we
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -569,7 +569,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

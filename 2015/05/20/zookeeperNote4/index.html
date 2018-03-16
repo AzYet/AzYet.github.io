@@ -60,7 +60,7 @@ null(\u0000)不能用在path中，因为在C中会导致Binding异常。
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -76,7 +76,7 @@ null(\u0000)不能用在path中，因为在C中会导致Binding异常。
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -99,14 +99,14 @@ null(\u0000)不能用在path中，因为在C中会导致Binding异常。
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> Published 2015-05-20</time>
+    <time datetime="2015-05-20T10:50:10.000Z" itemprop="datePublished"> 发表于 2015-05-20</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper数据模型"><span class="toc-number">1.</span> <span class="toc-text">ZooKeeper数据模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZNodes"><span class="toc-number">2.</span> <span class="toc-text">ZNodes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch"><span class="toc-number">2.1.</span> <span class="toc-text">Watch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存取Data_Access"><span class="toc-number">2.2.</span> <span class="toc-text">数据存取Data Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#瞬时节点Ephemeral_Nodes"><span class="toc-number">2.3.</span> <span class="toc-text">瞬时节点Ephemeral Nodes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列节点Sequence_Nodes"><span class="toc-number">2.4.</span> <span class="toc-text">序列节点Sequence Nodes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper中的时间。"><span class="toc-number">3.</span> <span class="toc-text">ZooKeeper中的时间。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zxid"><span class="toc-number">3.1.</span> <span class="toc-text">Zxid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本号Version_numbers"><span class="toc-number">3.2.</span> <span class="toc-text">版本号Version numbers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计时Ticks"><span class="toc-number">4.</span> <span class="toc-text">计时Ticks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时钟时间Real_time"><span class="toc-number">4.1.</span> <span class="toc-text">时钟时间Real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态结构Stat_Structure"><span class="toc-number">4.2.</span> <span class="toc-text">状态结构Stat Structure</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话ZooKeeper_Sessions"><span class="toc-number">5.</span> <span class="toc-text">会话ZooKeeper Sessions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监听/ZooKeeper_Watches"><span class="toc-number">6.</span> <span class="toc-text">监听/ZooKeeper Watches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#One-time_trigger"><span class="toc-number">6.1.</span> <span class="toc-text">One-time trigger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sent_to_the_client"><span class="toc-number">6.2.</span> <span class="toc-text">Sent to the client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch对象"><span class="toc-number">7.</span> <span class="toc-text">watch对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch有哪些保证"><span class="toc-number">7.1.</span> <span class="toc-text">Watch有哪些保证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于Watch的须知"><span class="toc-number">7.2.</span> <span class="toc-text">关于Watch的须知</span></a></li></ol></li></ol>
 		
@@ -276,24 +276,24 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper数据模型"><span class="toc-number">1.</span> <span class="toc-text">ZooKeeper数据模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZNodes"><span class="toc-number">2.</span> <span class="toc-text">ZNodes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch"><span class="toc-number">2.1.</span> <span class="toc-text">Watch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存取Data_Access"><span class="toc-number">2.2.</span> <span class="toc-text">数据存取Data Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#瞬时节点Ephemeral_Nodes"><span class="toc-number">2.3.</span> <span class="toc-text">瞬时节点Ephemeral Nodes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列节点Sequence_Nodes"><span class="toc-number">2.4.</span> <span class="toc-text">序列节点Sequence Nodes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZooKeeper中的时间。"><span class="toc-number">3.</span> <span class="toc-text">ZooKeeper中的时间。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zxid"><span class="toc-number">3.1.</span> <span class="toc-text">Zxid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本号Version_numbers"><span class="toc-number">3.2.</span> <span class="toc-text">版本号Version numbers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计时Ticks"><span class="toc-number">4.</span> <span class="toc-text">计时Ticks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时钟时间Real_time"><span class="toc-number">4.1.</span> <span class="toc-text">时钟时间Real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态结构Stat_Structure"><span class="toc-number">4.2.</span> <span class="toc-text">状态结构Stat Structure</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话ZooKeeper_Sessions"><span class="toc-number">5.</span> <span class="toc-text">会话ZooKeeper Sessions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监听/ZooKeeper_Watches"><span class="toc-number">6.</span> <span class="toc-text">监听/ZooKeeper Watches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#One-time_trigger"><span class="toc-number">6.1.</span> <span class="toc-text">One-time trigger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sent_to_the_client"><span class="toc-number">6.2.</span> <span class="toc-text">Sent to the client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch对象"><span class="toc-number">7.</span> <span class="toc-text">watch对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Watch有哪些保证"><span class="toc-number">7.1.</span> <span class="toc-text">Watch有哪些保证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于Watch的须知"><span class="toc-number">7.2.</span> <span class="toc-text">关于Watch的须知</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -333,15 +333,7 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 			
 		
 			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
 			
 		
 			
@@ -349,15 +341,15 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 			
 		
 			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/android/" title="android">android<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
@@ -365,15 +357,23 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 			
 		
 			
+				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/adb/" title="adb">adb<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -381,7 +381,7 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -397,11 +397,11 @@ watch事件的顺序和<span class="keyword">server</span>看到的事件发生�
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -640,7 +640,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
