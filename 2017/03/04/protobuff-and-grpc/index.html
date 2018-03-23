@@ -76,7 +76,7 @@ proto3版本支持go语言。
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -92,7 +92,7 @@ proto3版本支持go语言。
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -115,14 +115,14 @@ proto3版本支持go语言。
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-03T20:00:52.000Z" itemprop="datePublished"> 发表于 2017-03-04</time>
+    <time datetime="2017-03-03T20:00:52.000Z" itemprop="datePublished"> Published 2017-03-04</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-proto格式来定义数据结构"><span class="toc-number">1.</span> <span class="toc-text">使用.proto格式来定义数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译proto文件"><span class="toc-number">2.</span> <span class="toc-text">编译proto文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用protobuff"><span class="toc-number">3.</span> <span class="toc-text">使用protobuff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成带方法的结构GRPC"><span class="toc-number">4.</span> <span class="toc-text">生成带方法的结构GRPC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gRPC支持"><span class="toc-number">5.</span> <span class="toc-text">gRPC支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
 		
@@ -187,6 +187,14 @@ proto3版本支持go语言。
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2018/03/24/akka-cluster-node-quarantined/" title="遭遇Akka Cluster 节点 Quarantined问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  遭遇Akka Cluster 节点 Quarantined问题</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2016/11/12/reflect-of-go/"  title="Go的反射法则">
@@ -225,24 +233,24 @@ proto3版本支持go语言。
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-proto格式来定义数据结构"><span class="toc-number">1.</span> <span class="toc-text">使用.proto格式来定义数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译proto文件"><span class="toc-number">2.</span> <span class="toc-text">编译proto文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用protobuff"><span class="toc-number">3.</span> <span class="toc-text">使用protobuff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成带方法的结构GRPC"><span class="toc-number">4.</span> <span class="toc-text">生成带方法的结构GRPC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gRPC支持"><span class="toc-number">5.</span> <span class="toc-text">gRPC支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -262,23 +270,11 @@ proto3版本支持go语言。
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -286,7 +282,15 @@ proto3版本支持go语言。
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -298,11 +302,15 @@ proto3版本支持go语言。
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
 			
 		
 			
@@ -310,11 +318,7 @@ proto3版本支持go语言。
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -322,7 +326,11 @@ proto3版本支持go语言。
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -330,7 +338,7 @@ proto3版本支持go语言。
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -346,11 +354,11 @@ proto3版本支持go语言。
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -589,7 +597,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

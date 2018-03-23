@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://azyet.github.io/2018/03/24/akka-cluster-node-quarantined/</loc>
+    <lastmod>2018-03-23T18:26:48.932Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/about/index.html</loc>
     <lastmod>2018-03-15T16:00:07.305Z</lastmod>
   </url>
@@ -222,27 +227,17 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/30/aboutSimics/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/04/21/insAndconfigVlcCentos/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/08/adbLearningNote1/</loc>
+    <loc>http://azyet.github.io/2015/05/30/aboutSimics/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/08/adbLearningNote2/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/27/ipCommandInLinux/</loc>
+    <loc>http://azyet.github.io/2014/04/01/OvsNeutronPluginConflictsWithSDNController/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -252,27 +247,32 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/06/08/adbLearningNote1/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/27/ipCommandInLinux/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/04/23/javaQueue/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/25/ipv6TunneltoVps/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/28/androidBootProcess/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/16/ObjectAndXmlInServlet/</loc>
+    <loc>http://azyet.github.io/2015/06/08/adbLearningNote2/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://azyet.github.io/2015/05/19/junitNote1/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/04/27/learnTCPviaHTTP/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -287,17 +287,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/21/basicConceptsAboutSecuirty/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/06/08/basicAptCommands/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/04/15/bootRepair/</loc>
+    <loc>http://azyet.github.io/2015/05/16/ObjectAndXmlInServlet/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -307,7 +297,22 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/24/changeApacheRootDir/</loc>
+    <loc>http://azyet.github.io/2015/06/08/basicAptCommands/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/04/21/basicConceptsAboutSecuirty/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/04/15/bootRepair/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/28/androidBootProcess/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -317,7 +322,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2014/03/04/checkOFPortAndMAClinkedIn/</loc>
+    <loc>http://azyet.github.io/2015/04/24/changeApacheRootDir/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -327,7 +332,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/14/createWinBootUsbDiskInLinux/</loc>
+    <loc>http://azyet.github.io/2014/03/04/checkOFPortAndMAClinkedIn/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -337,7 +342,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/09/dijkstraAnlalizeAndImplement/</loc>
+    <loc>http://azyet.github.io/2015/04/14/createWinBootUsbDiskInLinux/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -352,11 +357,6 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote4/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/18/rabbitmqNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
@@ -367,7 +367,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/24/dynamicProgramming/</loc>
+    <loc>http://azyet.github.io/2015/05/18/rabbitmqNote4/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -377,12 +377,27 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/04/21/sambaCounterNoPermission/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/16/detectLoopInLinkedList/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/06/10/repoLearningNote/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/21/sambaCounterNoPermission/</loc>
+    <loc>http://azyet.github.io/2015/05/09/dijkstraAnlalizeAndImplement/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/24/dynamicProgramming/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -397,27 +412,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2014/04/01/OvsNeutronPluginConflictsWithSDNController/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/10/heapSortAnalizeAndImplement/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/06/08/shortcutsInBash/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/05/10/hex2decStr/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -427,12 +422,27 @@
   </url>
   
   <url>
+    <loc>http://azyet.github.io/2015/05/15/LinkedListReverseAndLocateMid/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/10/hex2decStr/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/10/heapSortAnalizeAndImplement/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote1/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote2/</loc>
+    <loc>http://azyet.github.io/2015/05/22/theGreatCannon/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -447,12 +457,17 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/22/theGreatCannon/</loc>
+    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/06/03/ubuntuXfce4VNC/</loc>
+    <loc>http://azyet.github.io/2015/04/14/createUbuntuBootUsbDiskInWindows/</loc>
+    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://azyet.github.io/2015/05/30/hindsightLearningNote2/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -477,12 +492,7 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/16/detectLoopInLinkedList/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://azyet.github.io/2015/04/14/createUbuntuBootUsbDiskInWindows/</loc>
+    <loc>http://azyet.github.io/2015/05/20/zookeeperNote5/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -492,12 +502,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/21/zookeeperNote6/</loc>
+    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/21/zookeeperNote7/</loc>
+    <loc>http://azyet.github.io/2015/05/21/zookeeperNote6/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
@@ -507,17 +517,12 @@
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/05/20/zookeeperNote5/</loc>
-    <lastmod>2015-12-03T22:21:06.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://azyet.github.io/2015/05/20/zookeeperNote3/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://azyet.github.io/2015/04/27/learnTCPviaHTTP/</loc>
+    <loc>http://azyet.github.io/2015/05/25/ipv6TunneltoVps/</loc>
     <lastmod>2015-12-03T22:21:06.000Z</lastmod>
   </url>
   

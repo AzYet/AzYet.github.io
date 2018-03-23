@@ -48,7 +48,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -64,7 +64,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -82,6 +82,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/19/rabbitmqNote6/" title="RabbitMQ学习笔记（六）之RPC" itemprop="url">RabbitMQ学习笔记（六）之RPC</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-18T18:30:00.000Z" itemprop="datePublished"> Published 2015-05-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>第二节中我们学习了如何使用工作队列来在多个工作进程中分发费时的任务。</p>
+<p>但是如果我们需要运行一个远程的函数并且需要等待返回结果会怎样？这是一种完全不同的机制，通常叫做RPC（Remote Procedure Call）远程方法调用。</p>
+<p>这一节中我们将使用RabbitMQ来建造一个RPC系统：一个Client和一个可扩容的RPC Server。因为没有真正值得分布式化的任务，我们用Fibonacci数列来代替。</p>
+<h2 id="Client接口">Client接口</h2><p>为了演示RPC Service是如何使用的，我们将编写一个简单的Client类。它提供一个名为call的方法，发出RPC请求并在返回之前阻塞。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FibonacciRpcClient fibonacciRpc = new FibonacciRpcClient();   </div><div class="line">String result = fibonacciRpc.call(&quot;4&quot;);</div><div class="line">System.out.println( &quot;fib(4) is &quot; + result);</div></pre></td></tr></table></figure>
+<pre><code>注：虽然RPC很常见，但也备受批评。问题在于程序无法得知调用的方法是远程（较慢）还是本地，这种模糊将导致系统不可预期以及不必要的额外调试复杂度，可能导致不可维护的<span class="escape">`意</span>面代码<span class="escape">`。</span>
+确保方法远程或本地的明确性，作好文档。使组件之间的依赖关系清晰。处理异常情况，比如RPC不可用。存疑时尽量避免使用RPC。如果可能，使用异步方式，用状态转移代替阻塞。
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/19/rabbitmqNote6/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/rabbitmq/">rabbitmq</a><a href="/tags/RPC/">RPC</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/19/rabbitmqNote5/" title="RabbitMQ学习笔记（五）之Topics" itemprop="url">RabbitMQ学习笔记（五）之Topics</a>
   </h1>
   <p class="article-author">By
@@ -89,7 +152,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-18T16:48:00.000Z" itemprop="datePublished"> 发表于 2015-05-19</time>
+    <time datetime="2015-05-18T16:48:00.000Z" itemprop="datePublished"> Published 2015-05-19</time>
     
   </p>
 </header>
@@ -153,7 +216,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-18T14:18:00.000Z" itemprop="datePublished"> 发表于 2015-05-18</time>
+    <time datetime="2015-05-18T14:18:00.000Z" itemprop="datePublished"> Published 2015-05-18</time>
     
   </p>
 </header>
@@ -213,7 +276,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-18T13:08:47.000Z" itemprop="datePublished"> 发表于 2015-05-18</time>
+    <time datetime="2015-05-18T13:08:47.000Z" itemprop="datePublished"> Published 2015-05-18</time>
     
   </p>
 </header>
@@ -278,7 +341,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-18T10:20:49.000Z" itemprop="datePublished"> 发表于 2015-05-18</time>
+    <time datetime="2015-05-18T10:20:49.000Z" itemprop="datePublished"> Published 2015-05-18</time>
     
   </p>
 </header>
@@ -338,7 +401,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-18T09:35:59.000Z" itemprop="datePublished"> 发表于 2015-05-18</time>
+    <time datetime="2015-05-18T09:35:59.000Z" itemprop="datePublished"> Published 2015-05-18</time>
     
   </p>
 </header>
@@ -399,7 +462,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-15T17:48:19.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
+    <time datetime="2015-05-15T17:48:19.000Z" itemprop="datePublished"> Published 2015-05-16</time>
     
   </p>
 </header>
@@ -460,7 +523,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-15T16:17:29.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
+    <time datetime="2015-05-15T16:17:29.000Z" itemprop="datePublished"> Published 2015-05-16</time>
     
   </p>
 </header>
@@ -519,7 +582,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-15T15:37:36.000Z" itemprop="datePublished"> 发表于 2015-05-15</time>
+    <time datetime="2015-05-15T15:37:36.000Z" itemprop="datePublished"> Published 2015-05-15</time>
     
   </p>
 </header>
@@ -579,7 +642,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-11T09:33:58.000Z" itemprop="datePublished"> 发表于 2015-05-11</time>
+    <time datetime="2015-05-11T09:33:58.000Z" itemprop="datePublished"> Published 2015-05-11</time>
     
   </p>
 </header>
@@ -625,88 +688,23 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/10/heapSortAnalizeAndImplement/" title="堆排序实战：理解再实现" itemprop="url">堆排序实战：理解再实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-10T04:17:28.000Z" itemprop="datePublished"> 发表于 2015-05-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>　　堆排序我已经遗忘得差不多了，只记得有这么一种方式，且时间复杂度为n*log(n)。下面要做的是根据其算法描述来自行实现，作为一种练习。</p>
-<h2 id="关于堆">关于堆</h2><p>　　看了一下wiki的前两段，大致知道了此处堆实质是二叉树，常用一维数组来表示，有一个很重要的规律，对于以0开头的数组：左右子节点的序号分别为<code>2*i+1</code>, <code>2*i+2</code>。</p>
-<p>　　作为一个喜欢用理解帮助记忆的人，想弄明白为何如此。</p>
-<ol>
-<li>对每个节点，i = 前（上层及左边）节点数，这是显然的。</li>
-<li>本层的节点数 = 所有上层节点数之和 + 1。（等比数列）</li>
-<li>所以对<strong>每层最左节点</strong>，<code>2*i</code>为本层最右节点，<code>2*i+1</code>, <code>2*i+2</code>是下层第一二节点，自然是i的子节点</li>
-<li>自i每右移1,<code>2×i</code>移2,依然是其左右子结点。</li>
-</ol>
-<p>　　以上是堆的父子节点序号对应规律，是进行节点操作的基础。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/10/heapSortAnalizeAndImplement/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/堆排序/">堆排序</a><a href="/tags/实现/">实现</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -726,23 +724,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -750,7 +736,15 @@
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -762,11 +756,15 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
 			
 		
 			
@@ -774,11 +772,7 @@
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -786,7 +780,11 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -794,7 +792,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -810,11 +808,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -976,7 +974,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

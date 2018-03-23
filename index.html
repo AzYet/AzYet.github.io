@@ -48,7 +48,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -64,7 +64,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -82,6 +82,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/03/24/akka-cluster-node-quarantined/" title="遭遇Akka Cluster 节点 Quarantined问题" itemprop="url">遭遇Akka Cluster 节点 Quarantined问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2018-03-23T18:24:54.000Z" itemprop="datePublished"> Published 2018-03-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>之前开发了一套基于akka cluster的调度|负载均衡系统，运行了半年均较稳定，但最近有节点两次down掉。由于没有太多经验，第一次down掉时经验主义地以为是内存吃紧导致程序异常（由于计算资源紧张，很多服务混布，内存确实非常紧张，时常有类似故障），第二次仔细检查了日志发现如下日志：</p>
+<p><code>[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.default-remote-dispatcher-91] [akka.remote.Remoting] Tried to associate with unreachable remote address [akka.tcp://cluster@10.104.3.35:7712]. Address is now gated for 5000 ms, all messages to this address will be delivered to dead letters. Reason: [The remote system has quarantined this system. No further associations to the remote system are possible until this system is restarted.]</code></p>
+<p>同时在其它正常的节点上有如下日志<br><code>[INFO] [03/13/2018 21:36:12.659] [cluster-akka.remote.default-remote-dispatcher-35339] [akka.remote.Remoting] Quarantined address [akka.tcp://cluster@10.104.3.36:7712] is still unreachable or has not been restarted. Keeping it quarantined.</code></p>
+<p>同时master上还有记录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[ERROR] [03/17/2018 21:51:37.662] [cluster-akka.remote.default-remote-dispatcher-127527] [akka.remote.Remoting] Association to [akka.tcp://cluster@10.104.3.36:7712] with UID [1258718596] irrecoverably failed. Quarantining address.</div><div class="line">java.util.concurrent.TimeoutException: Remote system has been silent for too long. (more than 48.0 hours)</div><div class="line">        at akka.remote.ReliableDeliverySupervisor$$anonfun$idle$1.applyOrElse(Endpoint.scala:383)</div><div class="line">        at akka.actor.Actor.aroundReceive(Actor.scala:517)</div><div class="line">        at akka.actor.Actor.aroundReceive$(Actor.scala:515)</div><div class="line">        at akka.remote.ReliableDeliverySupervisor.aroundReceive(Endpoint.scala:203)</div><div class="line">        at akka.actor.ActorCell.receiveMessage(ActorCell.scala:527)</div><div class="line">        at akka.actor.ActorCell.invoke(ActorCell.scala:496)</div><div class="line">        at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:257)</div><div class="line">        at akka.dispatch.Mailbox.run(Mailbox.scala:224)</div><div class="line">        at akka.dispatch.Mailbox.exec(Mailbox.scala:234)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)</div><div class="line">[03/17/2018 21:51:37.749] [cluster-akka.actor.default-dispatcher-105] [akka.tcp://cluster@10.104.3.35:7712/system/cluster/core/daemon] Cluster Node [akka.tcp://cluster@10.104.3.35:7712] - Marking node as TERMINATED [akka.tcp://cluster@10.104.3.36:7712], due to quarantine. Node roles [dc-default]</div></pre></td></tr></table></figure>
+<h2 id="什么是quarantine">什么是quarantine</h2><p>字面意思是隔离，(题外话：这个单词‘隔离’含义的起源是有典故的）， 那么大致猜测是GC或者网络抖动导致集群认为此节点不健康，被驱逐。于是检索了一下资料。</p>
+<p>akka cluster如果判定某节点会损害集群健康，就会把它隔离，可能的原因有如下三种：</p>
+<ol>
+<li><p>System message delivery failure 系统消息传递失败</p>
+</li>
+<li><p>Remote DeathWatch trigger 远程死亡监控触发</p>
+</li>
+<li><p>Cluster MemberRemoved event 集群移除节点</p>
+</li>
+</ol>
+<h2 id="解决办法">解决办法</h2><p>根据akka的文档，可以调整<code>akka.cluster.failure-detector.threshold</code>来设定判定阈值，来避免因为偶然拉动而导致的误判，但也不宜过大。<br>另外，为了避免cluster系统与业务线程竞争，可为其设置单独的线程池. 在配置中增加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">akka.cluster.use-dispatcher = cluster-dispatcher</div><div class="line"></div><div class="line">cluster-dispatcher &#123;</div><div class="line">  type = &quot;Dispatcher&quot;</div><div class="line">  executor = &quot;fork-join-executor&quot;</div><div class="line">  fork-join-executor &#123;</div><div class="line">    parallelism-min = 2</div><div class="line">    parallelism-max = 4</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>akka.cluster.use-dispatcher</code>的默认配置为空。</p>
+<p>最后，以上办法都无法保证节点永远不down，最好的方式还是做好容错。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/akka-cluster/">akka cluster</a><a href="/tags/quarantine/">quarantine</a><a href="/tags/scala/">scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/03/04/protobuff-and-grpc/" title="gRPC和protobuff" itemprop="url">gRPC和protobuff</a>
   </h1>
   <p class="article-author">By
@@ -89,7 +161,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-03T20:00:52.000Z" itemprop="datePublished"> 发表于 2017-03-04</time>
+    <time datetime="2017-03-03T20:00:52.000Z" itemprop="datePublished"> Published 2017-03-04</time>
     
   </p>
 </header>
@@ -154,7 +226,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-11T20:31:50.000Z" itemprop="datePublished"> 发表于 2016-11-12</time>
+    <time datetime="2016-11-11T20:31:50.000Z" itemprop="datePublished"> Published 2016-11-12</time>
     
   </p>
 </header>
@@ -219,7 +291,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> 发表于 2016-06-15</time>
+    <time datetime="2016-06-14T17:53:55.000Z" itemprop="datePublished"> Published 2016-06-15</time>
     
   </p>
 </header>
@@ -280,7 +352,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-12T23:45:16.000Z" itemprop="datePublished"> 发表于 2016-06-13</time>
+    <time datetime="2016-06-12T23:45:16.000Z" itemprop="datePublished"> Published 2016-06-13</time>
     
   </p>
 </header>
@@ -354,7 +426,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-04T15:45:04.000Z" itemprop="datePublished"> 发表于 2016-05-04</time>
+    <time datetime="2016-05-04T15:45:04.000Z" itemprop="datePublished"> Published 2016-05-04</time>
     
   </p>
 </header>
@@ -421,7 +493,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-27T22:49:17.000Z" itemprop="datePublished"> 发表于 2016-04-28</time>
+    <time datetime="2016-04-27T22:49:17.000Z" itemprop="datePublished"> Published 2016-04-28</time>
     
   </p>
 </header>
@@ -486,7 +558,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-26T22:01:12.000Z" itemprop="datePublished"> 发表于 2016-04-27</time>
+    <time datetime="2016-04-26T22:01:12.000Z" itemprop="datePublished"> Published 2016-04-27</time>
     
   </p>
 </header>
@@ -544,7 +616,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-26T06:22:04.000Z" itemprop="datePublished"> 发表于 2016-04-26</time>
+    <time datetime="2016-04-26T06:22:04.000Z" itemprop="datePublished"> Published 2016-04-26</time>
     
   </p>
 </header>
@@ -605,7 +677,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-26T05:22:43.000Z" itemprop="datePublished"> 发表于 2016-04-26</time>
+    <time datetime="2016-04-26T05:22:43.000Z" itemprop="datePublished"> Published 2016-04-26</time>
     
   </p>
 </header>
@@ -651,101 +723,23 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/26/scala-tutorial-1/" title="scala学习笔记（一）基本概念、标识符、数据类型和字面值" itemprop="url">scala学习笔记（一）基本概念、标识符、数据类型和字面值</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-26T00:29:43.000Z" itemprop="datePublished"> 发表于 2016-04-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="overview">overview</h2><p>生产力、扩展性和可靠性</p>
-<ul>
-<li>面向对象的： 所有值都是对象；类型和行为由class和trait描述；可继承和混合重组（多继承的替代).</li>
-<li>函数式： 函数也是值/对象；轻量化的匿名函数定义；支持higher-order函数；嵌套函数；柯里函数；</li>
-<li>静态类型：但不需要提供冗余的类型信息</li>
-<li>与<code>java</code>良好的互操作性</li>
-<li>并发支持：良好的表达能力减少代码行数且类型安全，支持immutable方式从而使并发编程更容易。</li>
-</ul>
-<h2 id="scala_vs_java">scala vs java</h2><ul>
-<li>所有类型都是对象</li>
-<li>类型推断 </li>
-<li>嵌套函数</li>
-<li>函数也是对象</li>
-<li>SDL（Domain specific language）支持</li>
-<li>trait</li>
-<li>闭包</li>
-<li>Erlang式的并发支持</li>
-</ul>
-<h2 id="WEb框架">WEb框架</h2><p>scala在WEB应用中使用广泛，以下是最流行的几个框架</p>
-<ul>
-<li>The Lift Framework</li>
-<li>The Play framework</li>
-<li>The Bowler framework
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/26/scala-tutorial-1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/scala/">scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -765,23 +759,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -789,7 +771,15 @@
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -801,11 +791,15 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
 			
 		
 			
@@ -813,11 +807,7 @@
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -825,7 +815,11 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -833,7 +827,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -849,11 +843,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -1015,7 +1009,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

@@ -48,7 +48,7 @@
 				<h1 class="site-name"><a href="/" title="AzYet&#39;s Notebook">AzYet&#39;s Notebook</a></h1>
 				<h2 class="blog-motto">Just writing some notes as memo, nothing complicated.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -64,7 +64,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:azyet.github.io">
 					</form>
 					
@@ -82,6 +82,65 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/05/a-tour-of-go-7/" title="漫游Go语言（七）之goroutine/channel" itemprop="url">漫游Go语言（七）之goroutine/channel</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-04T17:32:54.000Z" itemprop="datePublished"> Published 2016-04-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="goroutine">goroutine</h2><p><code>goroutine</code>是由<code>go runtime</code>所管理的轻量级线程。<br><code>go f(x,y,z）</code>开启一个运行<code>f(x,y,z)</code>的新goroutine。<code>f</code>,<code>x</code>,<code>y</code>,<code>z</code>值的计算发生在当前<code>goroutine</code>，但f的执行则在新的<code>goroutine</code>中。</p>
+<p><code>goroutine</code>运行在同一地址空间中，所以共享内在的存取必须同步，<code>sync</code>包提供一些有用的基本工具，但一般你用不到它们，因为还有其它的工具。</p>
+<h2 id="channel">channel</h2><p><code>channel</code>是一种有类型的管道，使用<code>&lt;-</code>操作符就可以通过它发送和接收数值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ch &lt;- v    // Send v to channel ch.</div><div class="line">v := &lt;-ch  // Receive from ch, and</div><div class="line">           // assign value to v.</div></pre></td></tr></table></figure></p>
+<p>参数按箭头的方向流动。和<code>map</code>及<code>slice</code>一样，<code>channel</code>也需要先定义再使用。<br>样例代码将<code>slice</code>中数累加，将工作分布在两个<code>goroutine</code>中，当二者完成时，得到最终结果。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/05/a-tour-of-go-7/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Go语言/">Go语言</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/26/a-tour-of-go-6/" title="漫游Go语言（六）之Error、Reader和Image练习" itemprop="url">漫游Go语言（六）之Error、Reader和Image练习</a>
   </h1>
   <p class="article-author">By
@@ -89,7 +148,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-25T18:00:16.000Z" itemprop="datePublished"> 发表于 2016-03-26</time>
+    <time datetime="2016-03-25T18:00:16.000Z" itemprop="datePublished"> Published 2016-03-26</time>
     
   </p>
 </header>
@@ -148,7 +207,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-25T17:46:54.000Z" itemprop="datePublished"> 发表于 2016-03-26</time>
+    <time datetime="2016-03-25T17:46:54.000Z" itemprop="datePublished"> Published 2016-03-26</time>
     
   </p>
 </header>
@@ -207,7 +266,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-25T02:27:34.000Z" itemprop="datePublished"> 发表于 2016-03-25</time>
+    <time datetime="2016-03-25T02:27:34.000Z" itemprop="datePublished"> Published 2016-03-25</time>
     
   </p>
 </header>
@@ -266,7 +325,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-25T02:17:43.000Z" itemprop="datePublished"> 发表于 2016-03-25</time>
+    <time datetime="2016-03-25T02:17:43.000Z" itemprop="datePublished"> Published 2016-03-25</time>
     
   </p>
 </header>
@@ -327,7 +386,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-24T20:53:45.000Z" itemprop="datePublished"> 发表于 2016-03-25</time>
+    <time datetime="2016-03-24T20:53:45.000Z" itemprop="datePublished"> Published 2016-03-25</time>
     
   </p>
 </header>
@@ -385,7 +444,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-24T19:58:05.000Z" itemprop="datePublished"> 发表于 2016-03-25</time>
+    <time datetime="2016-03-24T19:58:05.000Z" itemprop="datePublished"> Published 2016-03-25</time>
     
   </p>
 </header>
@@ -445,7 +504,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-17T20:52:57.000Z" itemprop="datePublished"> 发表于 2016-03-18</time>
+    <time datetime="2016-03-17T20:52:57.000Z" itemprop="datePublished"> Published 2016-03-18</time>
     
   </p>
 </header>
@@ -504,7 +563,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-17T18:07:08.000Z" itemprop="datePublished"> 发表于 2016-03-18</time>
+    <time datetime="2016-03-17T18:07:08.000Z" itemprop="datePublished"> Published 2016-03-18</time>
     
   </p>
 </header>
@@ -565,7 +624,7 @@
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> 发表于 2016-03-17</time>
+    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> Published 2016-03-17</time>
     
   </p>
 </header>
@@ -610,83 +669,23 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/17/android-develop-layout-abse/" title="Android开发入门之-Layout" itemprop="url">Android开发入门之-Layout</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> 发表于 2015-12-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Layouts">Layouts</h2><p>定义UI中的可视结构，如<code>App</code>和<code>widget</code>可以在<code>XML</code>和<code>java</code>中同时定义，一般来说使用<code>XML</code>定义可以做到界面与控制分离。也可以在<code>XML</code>中定义默认格式，在运行中用<code>java</code>来改变它，这涉及到<code>View</code>和<code>Viewgroup</code>类。一般来说<code>XML</code>的元素与类对应，而<code>XML</code>的属性则与方法对应，名字都相分直观，偶尔稍有差异，如<code>EditText</code>中的<code>text</code>属性对应<code>java</code>中<code>EditText.setText()</code>.</p>
-<h2 id="编写XML">编写XML</h2><p>与<code>HTML</code>十分类似，使用嵌套的方式可以快速定义界面。</p>
-<p>每个布局有一个<code>root element</code>，必须是<code>View</code>或者<code>ViewGroup</code>。<code>root element</code>之下可以加入其它<code>layout</code>对象或者<code>widget</code>来构造完整布局。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">              android:layout_width=&quot;match_parent&quot;</div><div class="line">              android:layout_height=&quot;match_parent&quot;</div><div class="line">              android:orientation=&quot;vertical&quot; &gt;</div><div class="line">    &lt;TextView android:id=&quot;@+id/text&quot;</div><div class="line">              android:layout_width=&quot;wrap_content&quot;</div><div class="line">              android:layout_height=&quot;wrap_content&quot;</div><div class="line">              android:text=&quot;Hello, I am a TextView&quot; /&gt;</div><div class="line">    &lt;Button android:id=&quot;@+id/button&quot;</div><div class="line">            android:layout_width=&quot;wrap_content&quot;</div><div class="line">            android:layout_height=&quot;wrap_content&quot;</div><div class="line">            android:text=&quot;Hello, I am a Button&quot; /&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
-<p>其中<code>LinearLayout extends ViewGroup</code>，将文件以<code>xml</code>后缀保存到<code>res/layout</code>目录下以编译。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/17/android-develop-layout-abse/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a><a href="/tags/Android/">Android</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -706,23 +705,11 @@
 			
 		
 			
-				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
@@ -730,7 +717,15 @@
 			
 		
 			
-				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
 			
 		
 			
@@ -742,11 +737,15 @@
 			
 		
 			
-				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
+				<li><a href="/tags/scala/" title="scala">scala<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存虚拟化/" title="内存虚拟化">内存虚拟化<sup>4</sup></a></li>
 			
 		
 			
@@ -754,11 +753,7 @@
 			
 		
 			
-				<li><a href="/tags/scala/" title="scala">scala<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
 			
 		
 			
@@ -766,7 +761,11 @@
 			
 		
 			
-				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
+				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -774,7 +773,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -790,11 +789,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1441941451&verifier=b3593ceb&dpc=1"></iframe>
 </div>
 
@@ -956,7 +955,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
