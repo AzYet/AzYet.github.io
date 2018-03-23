@@ -12,18 +12,18 @@
 
     
     <meta name="description" content="之前开发了一套基于akka cluster的调度|负载均衡系统，运行了半年均较稳定，但最近有节点两次down掉。由于没有太多经验，第一次down掉时经验主义地以为是内存吃紧导致程序异常（由于计算资源紧张，很多服务混布，内存确实非常紧张，时常有类似故障），第二次仔细检查了日志发现如下日志：
-[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.d">
+1[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="遭遇Akka Cluster 节点 Quarantined问题">
 <meta property="og:url" content="http://azyet.github.io/2018/03/24/akka-cluster-node-quarantined/index.html">
 <meta property="og:site_name" content="AzYet's Notebook">
 <meta property="og:description" content="之前开发了一套基于akka cluster的调度|负载均衡系统，运行了半年均较稳定，但最近有节点两次down掉。由于没有太多经验，第一次down掉时经验主义地以为是内存吃紧导致程序异常（由于计算资源紧张，很多服务混布，内存确实非常紧张，时常有类似故障），第二次仔细检查了日志发现如下日志：
-[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.d">
-<meta property="og:updated_time" content="2018-03-23T18:26:48.932Z">
+1[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.">
+<meta property="og:updated_time" content="2018-03-23T18:30:10.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="遭遇Akka Cluster 节点 Quarantined问题">
 <meta name="twitter:description" content="之前开发了一套基于akka cluster的调度|负载均衡系统，运行了半年均较稳定，但最近有节点两次down掉。由于没有太多经验，第一次down掉时经验主义地以为是内存吃紧导致程序异常（由于计算资源紧张，很多服务混布，内存确实非常紧张，时常有类似故障），第二次仔细检查了日志发现如下日志：
-[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.d">
+1[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.">
 <link rel="publisher" href="107081205815475260000">
 
     
@@ -105,8 +105,8 @@
 		</div>
 		
 		<p>之前开发了一套基于akka cluster的调度|负载均衡系统，运行了半年均较稳定，但最近有节点两次down掉。由于没有太多经验，第一次down掉时经验主义地以为是内存吃紧导致程序异常（由于计算资源紧张，很多服务混布，内存确实非常紧张，时常有类似故障），第二次仔细检查了日志发现如下日志：</p>
-<p><code>[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.default-remote-dispatcher-91] [akka.remote.Remoting] Tried to associate with unreachable remote address [akka.tcp://cluster@10.104.3.35:7712]. Address is now gated for 5000 ms, all messages to this address will be delivered to dead letters. Reason: [The remote system has quarantined this system. No further associations to the remote system are possible until this system is restarted.]</code></p>
-<p>同时在其它正常的节点上有如下日志<br><code>[INFO] [03/13/2018 21:36:12.659] [cluster-akka.remote.default-remote-dispatcher-35339] [akka.remote.Remoting] Quarantined address [akka.tcp://cluster@10.104.3.36:7712] is still unreachable or has not been restarted. Keeping it quarantined.</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[WARN] [03/17/2018 21:51:38.769] [cluster-akka.remote.default-remote-dispatcher-91] [akka.remote.Remoting] Tried to associate with unreachable remote address [akka.tcp://cluster@10.104.3.35:7712]. Address is now gated for 5000 ms, all messages to this address will be delivered to dead letters. Reason: [The remote system has quarantined this system. No further associations to the remote system are possible until this system is restarted.]</div></pre></td></tr></table></figure>
+<p>同时在其它正常的节点上有如下日志<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[INFO] [03/13/2018 21:36:12.659] [cluster-akka.remote.default-remote-dispatcher-35339] [akka.remote.Remoting] Quarantined address [akka.tcp://cluster@10.104.3.36:7712] is still unreachable or has not been restarted. Keeping it quarantined.</div></pre></td></tr></table></figure></p>
 <p>同时master上还有记录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[ERROR] [03/17/2018 21:51:37.662] [cluster-akka.remote.default-remote-dispatcher-127527] [akka.remote.Remoting] Association to [akka.tcp://cluster@10.104.3.36:7712] with UID [1258718596] irrecoverably failed. Quarantining address.</div><div class="line">java.util.concurrent.TimeoutException: Remote system has been silent for too long. (more than 48.0 hours)</div><div class="line">        at akka.remote.ReliableDeliverySupervisor$$anonfun$idle$1.applyOrElse(Endpoint.scala:383)</div><div class="line">        at akka.actor.Actor.aroundReceive(Actor.scala:517)</div><div class="line">        at akka.actor.Actor.aroundReceive$(Actor.scala:515)</div><div class="line">        at akka.remote.ReliableDeliverySupervisor.aroundReceive(Endpoint.scala:203)</div><div class="line">        at akka.actor.ActorCell.receiveMessage(ActorCell.scala:527)</div><div class="line">        at akka.actor.ActorCell.invoke(ActorCell.scala:496)</div><div class="line">        at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:257)</div><div class="line">        at akka.dispatch.Mailbox.run(Mailbox.scala:224)</div><div class="line">        at akka.dispatch.Mailbox.exec(Mailbox.scala:234)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)</div><div class="line">        at akka.dispatch.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)</div><div class="line">[03/17/2018 21:51:37.749] [cluster-akka.actor.default-dispatcher-105] [akka.tcp://cluster@10.104.3.35:7712/system/cluster/core/daemon] Cluster Node [akka.tcp://cluster@10.104.3.35:7712] - Marking node as TERMINATED [akka.tcp://cluster@10.104.3.36:7712], due to quarantine. Node roles [dc-default]</div></pre></td></tr></table></figure>
 <h2 id="什么是quarantine">什么是quarantine</h2><p>字面意思是隔离，(题外话：这个单词‘隔离’含义的起源是有典故的）， 那么大致猜测是GC或者网络抖动导致集群认为此节点不健康，被驱逐。于是检索了一下资料。</p>
