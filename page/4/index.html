@@ -82,37 +82,27 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/17/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
+      <a href="/2016/03/17/mysql-difference-between-2-tables/" title="mysql合并记录及两表比较" itemprop="url">mysql合并记录及两表比较</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
 		
   <p class="article-time">
-    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> Published 2015-12-17</time>
+    <time datetime="2016-03-17T14:54:11.000Z" itemprop="datePublished"> Published 2016-03-17</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
-<p>一般C包装函数功能如下：</p>
-<ul>
-<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
-<li>trapping to kernel mode(开始执行）</li>
-<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
-</ul>
-<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
-<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
-<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
-<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
-<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
-<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
+        <p>原表中有许多维度的细粒度记录,如domain,status,time三者共同作为Key，但是有需要查询所有domain的某时间状态数据，此时由于记录太多，查询速度非常慢，所以有需要将表进行降维，即消除domain维度，将Key变为status+time的二维。</p>
+<h2 id="降维">降维</h2><p>降维的操作可以用到<code>group by</code>和<code>sum</code>.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select status, time ... sum (xxx) as xxx from table where (...) group by time, status;</div></pre></td></tr></table></figure></p>
+<p><code>group by</code>会以time+status为id对所有记录进行分类，使用聚合函数sum则可以将同类数据相加，还可按需使用<code>max</code>,<code>min</code>等函数从而达到降维目的。<br>
         
         
         <p class="article-more-link">
           
-            <a href="/2015/12/17/Linux-errno-intro/#more">Read More</a>
+            <a href="/2016/03/17/mysql-difference-between-2-tables/#more">Read More</a>
           
        </p>
     </div>
@@ -122,7 +112,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
+  <span></span> <a href="/tags/mysql/">mysql</a>
   </div>
 
 </div>
@@ -183,6 +173,74 @@
   <div class="article-tags">
   
   <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/17/Linux-errno-intro/" title="Linux中的errno" itemprop="url">Linux中的errno</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-17T04:50:06.000Z" itemprop="datePublished"> Published 2015-12-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="前言">前言</h2><p>Linux <code>system call</code>是<code>kernel</code>入口，通常不会被直接调用，而是由对应的C函数库包装来完成一些必要的步骤（trapping to kernel mode)，同时也使用调用方式与普通库没有什么区别。</p>
+<p>一般C包装函数功能如下：</p>
+<ul>
+<li>将参数与<code>system call</code>代号copy到<code>kernel</code>指定的寄存器</li>
+<li>trapping to kernel mode(开始执行）</li>
+<li>返回<code>user mode</code>时，如果返回为<code>error number</code>，则设置<code>errno</code></li>
+</ul>
+<p>C函数库也可以会为参数作预处理和返回值的后期处理。</p>
+<p><code>man 2 syscalls</code>可以查看所有的系统调用。</p>
+<h2 id="返回值">返回值</h2><p>当出现错误时，大部分<code>system call</code>都会返回一个负值（如 <code>error(3)</code>中定义的三个负值之一），C包装库函数会向调用者隐藏此细节：返回-1并将<code>errno</code>的绝对值copy保存。</p>
+<p>成功的<code>system call</code>一般返回0，但也有返回非0值，具体查看对应的manual page.</p>
+<p>某些情况下，开发者必须定义一个<code>feature test macro</code>来从头文件（在manual page的<code>SYNOPSYS</code>段中指定）中获取<code>system call</code>的声明，该定义必须在<code>include</code>任何头文件之前。此种情况下，<code>macro</code>在manual中描述。更多关于<code>feature test macro</code>的说明，可以参见 <code>man 7 feature_test_macro</code>。</p>
+<p>关于一些衍生<code>UNIX</code>术语与及相关缩写的说明，可以参阅<code>man 7 standards</code>。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/17/Linux-errno-intro/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/学习笔记/">学习笔记</a><a href="/tags/开发入门/">开发入门</a>
   </div>
 
 </div>
@@ -627,70 +685,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/25/maxSubsetSum/" title="一道笔试题：求数组元素和最大的子集" itemprop="url">一道笔试题：求数组元素和最大的子集</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-25T06:42:45.000Z" itemprop="datePublished"> Published 2015-10-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><p>昨天参加腾讯旗下某公司的笔试，其中唯一的算法题是这样的（大致描述）：</p>
-<blockquote>
-<p>某数组中有正数也有负数，相邻的一个或多个元素组成一个子集，求所有子集中元素和的最大值。<br>例如数组[-2, -4, 3, 5, -6, -3, 2, 4], 其子集和最大值为8,对应子集为[3, 5]</p>
-</blockquote>
-<h2 id="思路">思路</h2><p>第一反应是穷举，即列举所有长度从1到全集的所有子集的和，但是这肯定是效率很低的方法。</p>
-<p>当时解题的思路就是分析人工计算时，会以何种方式进行：</p>
-<ol>
-<li>从第一个元素开始往后累加，更新记录过程中的最大和<br>2.如果和为负，则抛弃前面的和，从后续元素开始重新累加<br>3.直到数组尾，得到最大值</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/25/maxSubsetSum/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/笔试题/">笔试题</a><a href="/tags/算法/">算法</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
@@ -727,31 +721,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -763,7 +737,27 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
@@ -771,11 +765,15 @@
 			
 		
 			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -783,11 +781,7 @@
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>

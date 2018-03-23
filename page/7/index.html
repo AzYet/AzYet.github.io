@@ -82,6 +82,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/24/dynamicProgramming2/" title="动态规划实战（二）：背包问题" itemprop="url">动态规划实战（二）：背包问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-24T11:39:57.000Z" itemprop="datePublished"> Published 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>上一节中对动态规划有了一个初步的认识，现在通过更多的例子来加深印象，在网上搜索了一下关于动态规划的经典问题，其中第一个就是所谓“背包问题”，事实上它也很类似上一节中的钢条切割，稍有不同。</p>
+<h2 id="背包问题">背包问题</h2><pre><code>给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价值最高。
+</code></pre><p>不同于上节钢条切割的地方是，物品的重量不是连续的，所以事先并不能知道任意物品组成的总重会的集合。</p>
+<p>为了便于编程实现，将问题具体化，比如使用上一节中的数据，重量价格表P：</p>
+<pre><code>重量：  2    3    4    5    6    7    8    9    10
+价值：  5    8    9   10   17   17   20   24    30
+</code></pre><p>但是上一节中我们的输入不能&gt;10，在背包问题中，没有这种限制。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/24/dynamicProgramming2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/算法/">算法</a><a href="/tags/动态规划/">动态规划</a><a href="/tags/背包问题/">背包问题</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/24/dynamicProgramming/" title="动态规划实战（一）：理解再实现" itemprop="url">动态规划实战（一）：理解再实现</a>
   </h1>
   <p class="article-author">By
@@ -672,69 +734,6 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/19/junitNote1/" title="单元测试之JUnit学习笔记" itemprop="url">单元测试之JUnit学习笔记</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-19T03:59:40.000Z" itemprop="datePublished"> Published 2015-05-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>JUnit是xUnit在Java中的应用，是一种单元测试框架。JUnit在编译时以Jar的形式链接，根据2013年对github 10,000个项目的调查，Junit和slf4j并列为最受欢迎的库，出现率为30.7%。</p>
-<h2 id="单元测试，一致性测试和性能测试">单元测试，一致性测试和性能测试</h2><h3 id="单元测试">单元测试</h3><p>单元测试是一段会执行目标工程中指定功能（测试对象）的代码，并验证它的行为。</p>
-<p>被测试的代码比例也叫做覆盖率。</p>
-<p>单元测试只针对一小段代码（类，方法），外部依赖应该被移除，例如用测试框架模拟外部依赖。</p>
-<p>单元测试并不适合复杂的UI或组件交互，这部分工作属于一致性测试。</p>
-<h3 id="一致性测试">一致性测试</h3><p>旨在测试组件或组件间的一致性，有时也称为功能测试。</p>
-<p>这种测试将用例转化为测试集，例如模拟一个用户与应用交互。</p>
-<h3 id="性能测试">性能测试</h3><p>反复进行基准测试。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/19/junitNote1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/JUnit/">JUnit</a><a href="/tags/单元测试/">单元测试</a><a href="/tags/Maven/">Maven</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
@@ -771,31 +770,11 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -807,7 +786,27 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
@@ -815,11 +814,15 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -827,11 +830,7 @@ ADMIN : you can <span class="keyword">set</span> permissions</span>
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>

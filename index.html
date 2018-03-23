@@ -82,6 +82,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/03/24/golng-interface-benchmark/" title="Golang接口及空接口性能测试" itemprop="url">Golang接口及空接口性能测试</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2018-03-23T19:57:54.000Z" itemprop="datePublished"> Published 2018-03-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>  由于golang缺乏泛型，在许多情况下，为了代码的灵活性，难免要用到接口甚至空接口，而在对空接口中的数据进行操作之前，通常有一个类型断言的过程。我们经常听到一些“Golang”的反射性能很低的言论，那么与类型操作有关的类型断言这个操作性能到底如何呢？不妨来作一个Benchmark</p>
+<h2 id="定义四种操作场景">定义四种操作场景</h2><p>以下定义了一个类型和一个接口，分别以四种方法 <code>具体类型</code>，<code>接口</code>， <code>空接口-&gt;具体类型</code>， <code>空接口-&gt;接口</code> 对一组数据进行求和（遍历）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">type Numer interface &#123;</div><div class="line">	getNum() int64</div><div class="line">&#125;</div><div class="line">type Num struct &#123;</div><div class="line">	num int64</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (n *Num) getNum() int64 &#123;</div><div class="line">	return n.num</div><div class="line">&#125;</div><div class="line"></div><div class="line">func main() &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">func sumConcrete(s []*Num) int64 &#123;</div><div class="line">	var sum int64</div><div class="line">	for _, v := range s &#123;</div><div class="line">		sum += v.getNum()</div><div class="line">	&#125;</div><div class="line">	return sum</div><div class="line">&#125;</div><div class="line">func sumInterface(s []Numer) int64 &#123;</div><div class="line">	var sum int64</div><div class="line">	for _, v := range s &#123;</div><div class="line">		sum += v.getNum()</div><div class="line">	&#125;</div><div class="line">	return sum</div><div class="line">&#125;</div><div class="line"></div><div class="line">func sum2concrete(s []interface&#123;&#125;) int64 &#123;</div><div class="line">	var sum int64</div><div class="line">	for _, v := range s &#123;</div><div class="line">		sum += v.(*Num).getNum()</div><div class="line">	&#125;</div><div class="line">	return sum</div><div class="line">&#125;</div><div class="line">func sum2interface(s []interface&#123;&#125;) int64 &#123;</div><div class="line">	var sum int64</div><div class="line">	for _, v := range s &#123;</div><div class="line">		sum += v.(Numer).getNum()</div><div class="line">	&#125;</div><div class="line">	return sum</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Benchmark_测试函数">Benchmark 测试函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">	&quot;math/rand&quot;</div><div class="line">	&quot;testing&quot;</div><div class="line">)</div><div class="line"></div><div class="line">func BenchmarkSumT(b *testing.B) &#123;</div><div class="line">	//prepare data</div><div class="line">	length := 10000</div><div class="line">	data := make([]*Num, length)</div><div class="line">	its := make([]Numer, length)</div><div class="line">	eits := make([]interface&#123;&#125;, length)</div><div class="line">	for i := 0; i &lt; length; i++ &#123;</div><div class="line">		data[i] = &amp;Num&#123;int64(rand.Int31n(100))&#125;</div><div class="line">		its[i] = data[i]</div><div class="line">		eits[i] = data[i]</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	b.Run(&quot;Concrete&quot;, func(b *testing.B) &#123;</div><div class="line">		for i := 0; i &lt; b.N; i++ &#123;</div><div class="line">			sumConcrete(data)</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;)</div><div class="line">	b.Run(&quot;Interface&quot;, func(b *testing.B) &#123;</div><div class="line">		for i := 0; i &lt; b.N; i++ &#123;</div><div class="line">			sumInterface(its)</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	b.Run(&quot;i2concrete&quot;, func(b *testing.B) &#123;</div><div class="line">		for i := 0; i &lt; b.N; i++ &#123;</div><div class="line">			sum2concrete(eits)</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	b.Run(&quot;i2interface&quot;, func(b *testing.B) &#123;</div><div class="line">		for i := 0; i &lt; b.N; i++ &#123;</div><div class="line">			sum2interface(eits)</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="运行测试">运行测试</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  vscode go test -bench Sum</div><div class="line">goos: linux</div><div class="line">goarch: amd64</div><div class="line">pkg: pc.chen/test/vscode</div><div class="line">BenchmarkSumT/Concrete-4                  300000              4881 ns/op</div><div class="line">BenchmarkSumT/Interface-4                  50000             24830 ns/op</div><div class="line">BenchmarkSumT/i2concrete-4                200000              7630 ns/op</div><div class="line">BenchmarkSumT/i2interface-4                10000            101115 ns/op</div><div class="line">PASS</div><div class="line">ok      pc.chen/test/vscode     5.645s</div></pre></td></tr></table></figure>
+<p>结果有些意外，Golang推崇的接口操作相比直接操作具体类型多出4倍多时间， 更意外的是<code>空接口</code>+<code>断言</code>意外比正常接口要快很多！！！ 只是比具体类型多出不到一倍的时间。 最后，<code>空接口</code>转<code>接口</code>后再调用方法是最慢的，相较接口又多出4倍多（较直接操作具体类型多出20倍多时间），这种场景现实中其实是有使用场景的，如此看来需要尽量在性能敏感的地方避免。</p>
+<h2 id="其它">其它</h2><p>最后，我还测试了直接用<code>Num</code>实现<code>Numer</code>，而不是用指针<code>*Num</code>实现<code>Numer</code>，结果也有微小的差异，其它情况不变的情况下，Benchmark下来成绩大概是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  vscode go test -bench Sum</div><div class="line">goos: linux</div><div class="line">goarch: amd64</div><div class="line">pkg: pc.chen/test/vscode</div><div class="line">BenchmarkSumT/Num-4               300000              4513 ns/op</div><div class="line">BenchmarkSumT/Numer-4              50000             30177 ns/op</div><div class="line">BenchmarkSumT/toNum-4             200000              8354 ns/op</div><div class="line">BenchmarkSumT/toNumer-4            10000            116636 ns/op</div><div class="line">PASS</div><div class="line">ok      pc.chen/test/vscode     6.147s</div></pre></td></tr></table></figure></p>
+<p>如此看来使用指针实现接口性能可以高 15%-20%之间， 还是不可忽略的。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Golang/">Golang</a><a href="/tags/Benchmark/">Benchmark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/03/24/akka-cluster-node-quarantined/" title="遭遇Akka Cluster 节点 Quarantined问题" itemprop="url">遭遇Akka Cluster 节点 Quarantined问题</a>
   </h1>
   <p class="article-author">By
@@ -664,65 +726,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/26/scala-tutorial-2/" title="scala学习笔记（二）变量/作用域/类与对象" itemprop="url">scala学习笔记（二）变量/作用域/类与对象</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-26T05:22:43.000Z" itemprop="datePublished"> Published 2016-04-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="变量">变量</h2><p>变量不过是保留的内存空间，定义一个变量变在内存里开辟了一块空间，其类型决定它 的大小和能赋值什么类型。</p>
-<h3 id="变量声明">变量声明</h3><p>scala的变量分为<code>var</code>和<code>val</code>分别代表<code>mutable variable</code>和<code>immutable  variable</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myVar : String = &quot;Foo&quot;</div><div class="line">val myVal : String = “Foo”</div></pre></td></tr></table></figure></p>
-<h3 id="变量数据类型">变量数据类型</h3><p>变量的类型指定于变量名与等号<code>=</code>之间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var or val VariableName : DataType = [Initial Value]</div></pre></td></tr></table></figure></p>
-<p>也可以不指定初始值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myVar :Int; </div><div class="line">val myVal :String;</div></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/26/scala-tutorial-2/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/scala/">scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -759,31 +762,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -795,7 +778,27 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
@@ -803,11 +806,15 @@
 			
 		
 			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -815,11 +822,7 @@
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>

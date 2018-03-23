@@ -82,6 +82,66 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/23/sshPortForwarding/" title="利用ssh端口转发使内网服务对公网可见" itemprop="url">利用ssh端口转发使内网服务对公网可见</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-23T05:23:39.000Z" itemprop="datePublished"> Published 2015-04-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>　　近日实验室一合作项目需要将校内的某web站点发现到公网，但是校内的地址都是10.0.0.0/8的私网地址，对外不可见。如果要向校方申请公网ip未免太过麻烦，想到自己有一VPS，拿来做端口转发应该是满足这个需求的。</p>
+<p>　　ssh的端口转发有三种，本地、远程和动态，动态转发应该是更为大家熟悉的，因为它可以用来做socks5代理。但是HTTP服务明显不能用socks5的形式来发布，所以这里我们可以用local/remote端口转发。
+　　</p>
+<h2 id="场景与效果">场景与效果</h2><blockquote>
+<p>使内网ip为10.x.x.x的主机的80服务对外可用,拥有一台ip为104.x.x.x的公网VPS(虚拟服务器)。<br>设置完成后，访问<a href="http://104.x.x.x:8080将等同于访问10.x.x.x的80端口。">http://104.x.x.x:8080将等同于访问10.x.x.x的80端口。</a>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/23/sshPortForwarding/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/ssh/">ssh</a><a href="/tags/port-forwarding/">port forwarding</a><a href="/tags/端口转发/">端口转发</a><a href="/tags/公网/">公网</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/23/javaQueue/" title="java中的Queue" itemprop="url">java中的Queue</a>
   </h1>
   <p class="article-author">By
@@ -461,7 +521,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/grub/">grub</a><a href="/tags/修复/">修复</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/启动/">启动</a><a href="/tags/引导/">引导</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/grub/">grub</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/修复/">修复</a><a href="/tags/启动/">启动</a><a href="/tags/引导/">引导</a>
   </div>
 
 </div>
@@ -519,7 +579,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/启动盘/">启动盘</a><a href="/tags/u盘/">u盘</a><a href="/tags/lsblk/">lsblk</a><a href="/tags/blkid/">blkid</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/启动盘/">启动盘</a><a href="/tags/u盘/">u盘</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ubuntu14-10/">ubuntu14.10</a><a href="/tags/lsblk/">lsblk</a><a href="/tags/blkid/">blkid</a>
   </div>
 
 </div>
@@ -576,67 +636,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/启动盘/">启动盘</a><a href="/tags/u盘/">u盘</a><a href="/tags/ms-sys/">ms-sys</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/14/freeNetViaIPv6/" title="通过IPv6“免费”上网" itemprop="url">通过IPv6“免费”上网</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="https://plus.google.com/107081205815475260000?rel=author" title="PC_Chen" target="_blank" itemprop="author">PC_Chen</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-14T04:29:33.000Z" itemprop="datePublished"> Published 2015-04-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>2015年开始，校园网由免费变为按流量开始计费，双向计费，2元/GB，无其它方案可选。PC端按流量计费且单价如此之高，实在让人无法适应，每月都要花掉40、50元的上网费用，而且是在不看在线视频不下载的情况下，体验实在差到极点。</p>
-<p>然而政策如此，短期内没有改变的迹象，只有自己想对策了。</p>
-<h2 id="开发IPv6潜能">开发IPv6潜能</h2><p>长期以来IPv6在校园网中几乎唯一的应用就是BT，实际上IPv6覆盖已经很广，只是大量的网络服务依然是运行于IPv4的网络中，而IPv6与v4网络的互通一直不好，所以v6的可用资源少得可怜。</p>
-<hr>
-<p>更新详细教程：  <strong><a href="http://azyet.github.io/2015/05/25/ipv6TunneltoVps/">为VPS创建IPv6隧道</a></strong></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/14/freeNetViaIPv6/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/IPv6/">IPv6</a><a href="/tags/free/">free</a><a href="/tags/vpn/">vpn</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/启动盘/">启动盘</a><a href="/tags/u盘/">u盘</a><a href="/tags/Win8/">Win8</a><a href="/tags/Windows/">Windows</a><a href="/tags/ms-sys/">ms-sys</a>
   </div>
 
 </div>
@@ -694,31 +694,11 @@
 			
 		
 			
-				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
+				<li><a href="/tags/rabbitmq/" title="rabbitmq">rabbitmq<sup>7</sup></a></li>
 			
 		
 			
@@ -730,7 +710,27 @@
 			
 		
 			
+				<li><a href="/tags/笔试题/" title="笔试题">笔试题<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/分布式/" title="分布式">分布式<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/simics/" title="simics">simics<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发入门/" title="开发入门">开发入门<sup>5</sup></a></li>
 			
 		
 			
@@ -738,11 +738,15 @@
 			
 		
 			
+				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络/" title="网络">网络<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IPv6/" title="IPv6">IPv6<sup>4</sup></a></li>
+				<li><a href="/tags/openstack/" title="openstack">openstack<sup>3</sup></a></li>
 			
 		
 			
@@ -750,11 +754,7 @@
 			
 		
 			
-				<li><a href="/tags/Windows/" title="Windows">Windows<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hindsight/" title="hindsight">hindsight<sup>3</sup></a></li>
+				<li><a href="/tags/Win8/" title="Win8">Win8<sup>3</sup></a></li>
 			
 		
 		</ul>
